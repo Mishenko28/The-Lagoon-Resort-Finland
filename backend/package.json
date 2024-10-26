@@ -1,0 +1,18 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "The Lagoon Resort Finland Inc",
+    "main": "server.js",
+    "scripts": {
+        "dev": "nodemon server.js",
+        "start": "node server.js"
+    },
+    "author": "John Thomas Alog",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.21.1",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.7.2",
+        "nodemon": "^3.1.7"
+    }
+}
