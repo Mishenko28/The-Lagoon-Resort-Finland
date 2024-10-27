@@ -2,13 +2,19 @@ const jwt = require('jsonwebtoken')
 
 const auth = async (req, res, next) => {
     const { authorization } = req.headers
-    const token = authorization.split(' ')[1]
 
     try {
-        jwt.verify(token, process.env.TOKENPASSWORD)
+        if (!authorization) {
+            throw Error("authorization required")
+        }
+
+        const token = authorization.split(' ')[1]
+
+        jwt.verify(token, "LagoonThesis")
+
         next()
     } catch (error) {
-        res.status(400).json({ error: error })
+        res.status(400).json({ error: error.message })
     }
 }
 

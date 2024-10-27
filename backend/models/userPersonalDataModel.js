@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 module.exports = mongoose.model('UserPersonalData', new mongoose.Schema({
-    userId: {
+    email: {
         type: String,
         required: true,
         unique: true
@@ -22,7 +22,7 @@ module.exports = mongoose.model('UserPersonalData', new mongoose.Schema({
         type: String,
         required: true
     },
-    contactNumber: {
+    contact: {
         type: String,
         required: true
     }

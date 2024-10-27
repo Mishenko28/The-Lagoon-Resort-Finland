@@ -10,21 +10,26 @@ module.exports = mongoose.model('Admin', new mongoose.Schema({
         type: String,
         required: true
     },
-    personalData: {
-        type: {
-            name: {
-                type: String
-            },
-            sex: {
-                type: String
-            },
-            birthday: {
-                type: Date
-            },
-            contactNumber: {
-                type: String
-            }
-        },
+    position: {
+        type: String,
         required: true
+    },
+    personalData: {
+        name: {
+            type: String,
+            required: true
+        },
+        sex: {
+            type: String,
+            required: true
+        },
+        age: {
+            type: Number,
+            required: true
+        },
+        contact: {
+            type: String,
+            required: true
+        }
     }
 }, { timestamps: true }), 'admins')
