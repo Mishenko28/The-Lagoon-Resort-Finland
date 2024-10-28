@@ -7,7 +7,7 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "Pending"
+        default: "pending"
     },
     from: {
         type: Date,
@@ -19,6 +19,7 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     },
     note: {
         type: String,
+        default: "none"
     },
     room: {
         type: Array,
@@ -32,8 +33,16 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
         type: Number,
         required: true
     },
+    balance: {
+        type: Number,
+        required: true
+    },
     downPayment: {
         type: Number,
         required: true
+    },
+    reasonToCancel: {
+        type: String,
+        default: "not cancelled"
     }
 }, { timestamps: true }), 'books')

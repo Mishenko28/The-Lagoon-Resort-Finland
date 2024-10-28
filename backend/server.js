@@ -6,6 +6,7 @@ const adminRoute = require('./routes/adminRoute')
 const roomRoute = require('./routes/roomRoute')
 const galleryRoute = require('./routes/galleryRoute')
 const amenityRoute = require('./routes/amenityRoute')
+const bookRoute = require('./routes/bookRoute')
 
 const connectionString = "mongodb://localhost:27017/Lagoon"
 
@@ -30,6 +31,7 @@ app.use('/admin', adminRoute)
 app.use('/room', roomRoute)
 app.use('/gallery', galleryRoute)
 app.use('/amenity', amenityRoute)
+app.use('/book', bookRoute)
 
 
 // CONNECTION
