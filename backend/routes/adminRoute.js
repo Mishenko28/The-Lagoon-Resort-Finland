@@ -8,7 +8,8 @@ const {
     deleteAdmin,
     restoreAdmin,
     updateAdmin,
-    getAllAdmin
+    getAllAdmin,
+    updatePassword
 } = require('../controllers/adminController')
 
 router.post('/login', loginAdmin)
@@ -20,5 +21,6 @@ router.delete('/delete', deleteAdmin)
 router.post('/restore', restoreAdmin)
 router.patch('/update', updateAdmin)
 router.get('/all', getAllAdmin)
+router.post('/password', updatePassword)
 
 module.exports = router

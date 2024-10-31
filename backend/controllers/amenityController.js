@@ -40,13 +40,13 @@ const updateAmenity = async (req, res) => {
 
 // DELETE AMENITY
 const deleteAmenity = async (req, res) => {
-    const { _id, adminName } = await req.body
+    const { _id, adminEmail } = await req.body
 
     try {
         const amenity = await Amenity.findOneAndDelete({ _id })
 
         if (amenity) {
-            await Archive.create({ adminName, type: "amenity", data: amenity })
+            await Archive.create({ adminEmail, type: "amenity", data: amenity })
         }
 
         res.status(400).json({ amenity })

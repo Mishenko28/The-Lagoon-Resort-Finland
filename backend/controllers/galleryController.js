@@ -40,13 +40,13 @@ const updatePicture = async (req, res) => {
 
 // DELETE PICTURE
 const deletePicture = async (req, res) => {
-    const { _id, adminName } = await req.body
+    const { _id, adminEmail } = await req.body
 
     try {
         const picture = await Picture.findOneAndDelete({ _id })
 
         if (picture) {
-            await Archive.create({ adminName, type: "picture", data: picture })
+            await Archive.create({ adminEmail, type: "picture", data: picture })
         }
 
         res.status(400).json({ picture })

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 module.exports = mongoose.model('Archive', new mongoose.Schema({
-    adminName: {
+    adminEmail: {
         type: String,
         required: true
     },

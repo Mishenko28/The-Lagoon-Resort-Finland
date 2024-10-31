@@ -40,13 +40,13 @@ const updateRoom = async (req, res) => {
 
 // DELETE ROOM
 const deleteRoom = async (req, res) => {
-    const { _id, adminName } = await req.body
+    const { _id, adminEmail } = await req.body
 
     try {
         const room = await Room.findOneAndDelete({ _id })
 
         if (room) {
-            await Archive.create({ adminName, type: "room", data: room })
+            await Archive.create({ adminEmail, type: "room", data: room })
         }
 
         res.status(400).json({ room })
