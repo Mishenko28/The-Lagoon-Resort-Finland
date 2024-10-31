@@ -6,6 +6,7 @@ const {
     loginAdmin,
     addNewAdmin,
     deleteAdmin,
+    restoreAdmin,
     updateAdmin,
     getAllAdmin
 } = require('../controllers/adminController')
@@ -16,6 +17,7 @@ router.use(auth)
 
 router.post('/add', addNewAdmin)
 router.delete('/delete', deleteAdmin)
+router.post('/restore', restoreAdmin)
 router.patch('/update', updateAdmin)
 router.get('/all', getAllAdmin)
 

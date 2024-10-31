@@ -1,4 +1,5 @@
 const Admin = require('../models/adminModel')
+const Archive = require('../models/archiveModel')
 
 const bcrypt = require('bcrypt')
 const validator = require('validator')
@@ -64,10 +65,31 @@ const addNewAdmin = async (req, res) => {
 
 // DELETE ADMIN
 const deleteAdmin = async (req, res) => {
-    const email = await req.query.email
+    const { _id, adminName } = await req.body
 
     try {
-        const admin = await Admin.findOneAndDelete({ email })
+        const admin = await Admin.findOneAndDelete({ _id })
+
+        if (admin) {
+            await Archive.create({ adminName, type: "admin", data: admin })
+        }
+
+        res.status(200).json({ admin })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// RESTORE ADMIN
+const restoreAdmin = async (req, res) => {
+    const { _id, data } = await req.body
+
+    try {
+        const admin = await Admin.create({ ...data })
+
+        if (admin) {
+            await Archive.findOneAndDelete({ _id })
+        }
 
         res.status(200).json({ admin })
     } catch (error) {
@@ -103,6 +125,7 @@ module.exports = {
     loginAdmin,
     addNewAdmin,
     deleteAdmin,
+    restoreAdmin,
     updateAdmin,
     getAllAdmin
 }

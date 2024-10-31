@@ -199,6 +199,18 @@ const setNoshow = async (req, res) => {
     }
 }
 
+// EDIT BOOK
+const editBook = async (req, res) => {
+    const { _id, from, to, room, total, deposit, balance } = await req.body
+
+    try {
+        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room, total, deposit, balance }, { new: true })
+
+        res.status(200).json({ book })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
 
 
 module.exports = {
@@ -213,5 +225,6 @@ module.exports = {
     setConfirmed,
     setCompleted,
     setCancelled,
-    setNoshow
+    setNoshow,
+    editBook
 }

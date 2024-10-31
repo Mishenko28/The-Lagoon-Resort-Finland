@@ -14,7 +14,8 @@ const {
     setConfirmed,
     setCompleted,
     setCancelled,
-    setNoshow
+    setNoshow,
+    editBook
 } = require('../controllers/bookController')
 
 router.use(auth)
@@ -33,4 +34,5 @@ router.get('/cancelled', getCancelled)
 router.get('/noshow', getNoshow)
 router.get('/completed', getCompleted)
 
+router.patch('/edit', editBook)
 module.exports = router

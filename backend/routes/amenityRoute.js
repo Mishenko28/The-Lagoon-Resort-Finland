@@ -6,7 +6,8 @@ const {
     getAllAmenities,
     addAmenity,
     updateAmenity,
-    deleteAmenity
+    deleteAmenity,
+    restoreAmenity
 } = require('../controllers/amenityController')
 
 router.get('/all', getAllAmenities)
@@ -16,5 +17,6 @@ router.use(auth)
 router.post('/add', addAmenity)
 router.patch('/update', updateAmenity)
 router.delete('/delete', deleteAmenity)
+router.post('/restore', restoreAmenity)
 
 module.exports = router

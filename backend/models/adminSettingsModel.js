@@ -3,14 +3,14 @@ const mongoose = require('mongoose')
 module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
     downPayment: {
         type: Number,
-        required: true,
+        default: 0.5
     },
     roomTypes: {
         type: Array,
-        required: true
+        default: []
     },
     roomStart: {
         type: Number,
-        required: true
+        default: 8
     }
 }, { timestamps: true }), 'adminSettings')

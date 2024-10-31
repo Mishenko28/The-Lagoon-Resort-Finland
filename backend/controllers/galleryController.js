@@ -1,4 +1,5 @@
 const Picture = require('../models/photoModel')
+const Archive = require('../models/archiveModel')
 
 // GET ALL PICTURES
 const getAllPictures = async (_, res) => {
@@ -39,12 +40,33 @@ const updatePicture = async (req, res) => {
 
 // DELETE PICTURE
 const deletePicture = async (req, res) => {
-    const _id = await req.query._id
+    const { _id, adminName } = await req.body
 
     try {
         const picture = await Picture.findOneAndDelete({ _id })
 
+        if (picture) {
+            await Archive.create({ adminName, type: "picture", data: picture })
+        }
+
         res.status(400).json({ picture })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// RESTORE PICTURE
+const restorePicture = async (req, res) => {
+    const { _id, data } = await req.body
+
+    try {
+        const picture = await Picture.create({ ...data })
+
+        if (picture) {
+            await Archive.findOneAndDelete({ _id })
+        }
+
+        res.status(200).json({ picture })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -54,5 +76,6 @@ module.exports = {
     getAllPictures,
     addPicture,
     updatePicture,
-    deletePicture
+    deletePicture,
+    restorePicture
 }

@@ -1,4 +1,5 @@
 const Room = require('../models/roomModel')
+const Archive = require('../models/archiveModel')
 
 // GET ALL ROOMS
 const getAllRooms = async (_, res) => {
@@ -39,12 +40,33 @@ const updateRoom = async (req, res) => {
 
 // DELETE ROOM
 const deleteRoom = async (req, res) => {
-    const _id = await req.query._id
+    const { _id, adminName } = await req.body
 
     try {
         const room = await Room.findOneAndDelete({ _id })
 
+        if (room) {
+            await Archive.create({ adminName, type: "room", data: room })
+        }
+
         res.status(400).json({ room })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// RESTORE ROOM
+const restoreRoom = async (req, res) => {
+    const { _id, data } = await req.body
+
+    try {
+        const room = await Room.create({ ...data })
+
+        if (room) {
+            await Archive.findOneAndDelete({ _id })
+        }
+
+        res.status(200).json({ room })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -54,5 +76,6 @@ module.exports = {
     getAllRooms,
     addRoom,
     updateRoom,
-    deleteRoom
+    deleteRoom,
+    restoreRoom
 }
