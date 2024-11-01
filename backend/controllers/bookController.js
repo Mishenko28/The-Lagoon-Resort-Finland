@@ -1,6 +1,8 @@
 const moment = require('moment-timezone')
 const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
+const ActivityLog = require('../models/activityLogModel')
+const User = require('../models/userModel')
 
 // STATUS
 // pending
@@ -99,11 +101,13 @@ const getCompleted = async (_, res) => {
 
 // ADD NEW PENDING BOOK
 const addBook = async (req, res) => {
-    const { userId, from, to, note, room, total, deposit } = await req.body
+    const { email, from, to, note, room, total, deposit } = await req.body
     const { downPayment } = await AdminSetting.findOne({})
 
     try {
-        const book = await Book.create({ userId, from, to, note, room, total, deposit, balance: total, downPayment })
+        const user = await User.findOne({ email })
+
+        const book = await Book.create({ userId: user._id, from, to, note, room, total, deposit, balance: total, downPayment })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -113,10 +117,15 @@ const addBook = async (req, res) => {
 
 // PENDING & EXPIRED & CANCELLED & NOSHOW => CONFIRMED
 const setConfirmed = async (req, res) => {
-    const { _id, from, to, room, total, deposit, balance } = await req.body
+    const { _id, from, to, room, total, deposit, balance, adminEmail } = await req.body
 
     try {
         const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room, total, deposit, balance, reasonToCancel: "not cancelled" }, { new: true })
+
+        const { email } = await User.findOne({ _id: book.userId })
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Confirmed a book. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -162,10 +171,15 @@ const setOngoingBooks = async () => {
 
 // ONGOING => COMPLETED
 const setCompleted = async (req, res) => {
-    const _id = await req.query._id
+    const { _id, balance, payed, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "completed" })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance, payed }, { new: true })
+
+        const { email } = await User.findOne({ _id: book.userId })
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Confirm a book as completed. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -175,10 +189,15 @@ const setCompleted = async (req, res) => {
 
 // PENDING & CONFIRMED & ONGOING => CANCELLED
 const setCancelled = async (req, res) => {
-    const { _id, reasonToCancel } = await req.body
+    const { _id, reasonToCancel, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel }, { new: true })
+
+        const { email } = await User.findOne({ _id: book.userId })
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Cancelled a book. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -188,10 +207,15 @@ const setCancelled = async (req, res) => {
 
 // ONGOING => NOSHOW
 const setNoshow = async (req, res) => {
-    const _id = await req.query._id
+    const { _id, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "noshow" })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "noshow" }, { new: true })
+
+        const { email } = await User.findOne({ _id: book.userId })
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Set a book as noshow. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -201,12 +225,63 @@ const setNoshow = async (req, res) => {
 
 // EDIT BOOK
 const editBook = async (req, res) => {
-    const { _id, from, to, room, total, deposit, balance } = await req.body
+    const { _id, from, to, room, total, deposit, balance, payed, adminEmail } = await req.body
+    let editedParts = []
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room, total, deposit, balance }, { new: true })
+        const oldBook = await Amenity.findOne({ _id })
+
+        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room, total, deposit, balance, payed }, { new: true })
+
+        // activity log
+        oldBook.from != from && editedParts.push("from")
+        oldBook.to != to && editedParts.push("to")
+        oldBook.room != room && editedParts.push("room")
+        oldBook.total != total && editedParts.push("total")
+        oldBook.deposit != deposit && editedParts.push("deposit")
+        oldBook.balance != balance && editedParts.push("balance")
+        oldBook.payed != payed && editedParts.push("payed")
+
+        if (editedParts.length > 0) {
+            await ActivityLog.create({
+                adminEmail,
+                activity: `Changed information. ${editedParts.map(part => {
+                    switch (part) {
+                        case "from":
+                            return `(start: from ${oldBook.from} to ${from})`
+                        case "to":
+                            return `(end: from ${oldBook.to} to ${to})`
+                        case "room":
+                            return `(room)`
+                        case "total":
+                            return `(total: from ${oldBook.total} to ${total})`
+                        case "deposit":
+                            return `(deposit: from ${oldBook.deposit} to ${deposit})`
+                        case "balance":
+                            return `(balance: from ${oldBook.balance} to ${balance})`
+                        case "payed":
+                            return `(payed: from ${oldBook.payed} to ${payed})`
+                    }
+                })}`
+            })
+        }
 
         res.status(200).json({ book })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// GET ALL USER BOOKING
+const getUserBooks = async (req, res) => {
+    const email = req.query.email
+
+    try {
+        const { _id } = await User.findOne({ email })
+
+        const books = await Book.find({ userId: _id })
+
+        res.status(200).json({ books })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -226,5 +301,6 @@ module.exports = {
     setCompleted,
     setCancelled,
     setNoshow,
-    editBook
+    editBook,
+    getUserBooks
 }

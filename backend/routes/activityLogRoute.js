@@ -3,13 +3,11 @@ const router = express.Router()
 const auth = require('../middlewares/auth')
 
 const {
-    getSettings,
-    updateSettings
-} = require('../controllers/adminSettingsController')
+    getAllActivityLogs
+} = require('../controllers/activityLogController')
 
 router.use(auth)
 
-router.get('/all', getSettings)
-router.patch('/update', updateSettings)
+router.get('/all', getAllActivityLogs)
 
 module.exports = router

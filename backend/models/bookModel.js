@@ -37,6 +37,10 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
         type: Number,
         required: true
     },
+    payed: {
+        type: Number,
+        default: 0
+    },
     downPayment: {
         type: Number,
         required: true

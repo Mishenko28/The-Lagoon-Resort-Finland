@@ -131,7 +131,7 @@ const getUserData = async (req, res) => {
     const email = await req.query.email
 
     try {
-        const personalData = await UserPersonalData.find({ email })
+        const personalData = await UserPersonalData.findOne({ email })
 
         res.status(200).json(personalData)
     } catch (error) {

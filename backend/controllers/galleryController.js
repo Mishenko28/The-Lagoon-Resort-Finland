@@ -1,5 +1,6 @@
 const Picture = require('../models/photoModel')
 const Archive = require('../models/archiveModel')
+const ActivityLog = require('../models/activityLogModel')
 
 // GET ALL PICTURES
 const getAllPictures = async (_, res) => {
@@ -14,10 +15,13 @@ const getAllPictures = async (_, res) => {
 
 // ADD PICTURE
 const addPicture = async (req, res) => {
-    const { img, caption } = await req.body
+    const { img, caption, adminEmail } = await req.body
 
     try {
         const picture = await Picture.create({ img, caption })
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Added a new picture. (${caption})` })
 
         res.status(400).json({ picture })
     } catch (error) {
@@ -27,10 +31,31 @@ const addPicture = async (req, res) => {
 
 // UPDATE PICTURE
 const updatePicture = async (req, res) => {
-    const { _id, img, caption } = await req.body
+    const { _id, img, caption, adminEmail } = await req.body
+    let editedParts = []
 
     try {
+        const oldPicture = await Amenity.findOne({ _id })
+
         const picture = await Picture.findOneAndUpdate({ _id }, { img, caption }, { new: true })
+
+        // activity log
+        oldPicture.img != img && editedParts.push("img")
+        oldPicture.caption != caption && editedParts.push("caption")
+
+        if (editedParts.length > 0) {
+            await ActivityLog.create({
+                adminEmail,
+                activity: `Changed information. ${editedParts.map(part => {
+                    switch (part) {
+                        case "img":
+                            return `(image)`
+                        case "caption":
+                            return `(caption: from ${oldPicture.caption} to ${caption})`
+                    }
+                })}`
+            })
+        }
 
         res.status(400).json({ picture })
     } catch (error) {
@@ -45,9 +70,13 @@ const deletePicture = async (req, res) => {
     try {
         const picture = await Picture.findOneAndDelete({ _id })
 
+        // archive
         if (picture) {
             await Archive.create({ adminEmail, type: "picture", data: picture })
         }
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Deleted a picture. (${picture.caption})` })
 
         res.status(400).json({ picture })
     } catch (error) {
@@ -57,14 +86,18 @@ const deletePicture = async (req, res) => {
 
 // RESTORE PICTURE
 const restorePicture = async (req, res) => {
-    const { _id, data } = await req.body
+    const { _id, data, adminEmail } = await req.body
 
     try {
         const picture = await Picture.create({ ...data })
 
+        // archive
         if (picture) {
             await Archive.findOneAndDelete({ _id })
         }
+
+        // activity log
+        await ActivityLog.create({ adminEmail, activity: `Restored a picture. (${picture.caption})` })
 
         res.status(200).json({ picture })
     } catch (error) {

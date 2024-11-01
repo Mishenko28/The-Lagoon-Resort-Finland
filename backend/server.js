@@ -9,6 +9,7 @@ const amenityRoute = require('./routes/amenityRoute')
 const bookRoute = require('./routes/bookRoute')
 const adminSettingsRoute = require('./routes/adminSettingsRoute')
 const archiveRoute = require('./routes/archiveRoute')
+const activityLogRoute = require('./routes/activityLogRoute')
 
 const connectionString = "mongodb://localhost:27017/Lagoon"
 
@@ -36,6 +37,7 @@ app.use('/amenity', amenityRoute)
 app.use('/book', bookRoute)
 app.use('/admin-settings', adminSettingsRoute)
 app.use('/archive', archiveRoute)
+app.use('/log', activityLogRoute)
 
 
 // CONNECTION
