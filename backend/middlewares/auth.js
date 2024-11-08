@@ -10,7 +10,7 @@ const auth = async (req, res, next) => {
 
         const token = authorization.split(' ')[1]
 
-        jwt.verify(token, "LagoonThesis")
+        jwt.verify(token, process.env.PASSWORD)
 
         next()
     } catch (error) {

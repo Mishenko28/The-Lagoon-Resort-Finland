@@ -1,7 +1,11 @@
+import { socket } from './socket'
 
 function App() {
+
     return (
-        <h1>hi thesis</h1>
+        <>
+            <h1>FRONT PAGE</h1>
+        </>
     )
 }
 

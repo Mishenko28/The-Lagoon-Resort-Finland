@@ -15,10 +15,10 @@ const getAllAmenities = async (_, res) => {
 
 // ADD AMENITY
 const addAmenity = async (req, res) => {
-    const { name, img, rate, caption, adminEmail } = await req.body
+    const { name, img, rate, caption, active, adminEmail } = await req.body
 
     try {
-        const amenity = await Amenity.create({ name, img, rate, caption })
+        const amenity = await Amenity.create({ name, img, rate, caption, active })
 
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Added a new amenity. (${name})` })
@@ -31,19 +31,20 @@ const addAmenity = async (req, res) => {
 
 // UPDATE AMENITY
 const updateAmenity = async (req, res) => {
-    const { _id, name, img, rate, caption, adminEmail } = await req.body
+    const { _id, name, img, rate, caption, active, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldAmenity = await Amenity.findOne({ _id })
 
-        const amenity = await Amenity.findOneAndUpdate({ _id }, { name, img, rate, caption }, { new: true })
+        const amenity = await Amenity.findOneAndUpdate({ _id }, { name, img, rate, caption, active }, { new: true })
 
         // activity log
         oldAmenity.name != name && editedParts.push("name")
         oldAmenity.img != img && editedParts.push("img")
         oldAmenity.rate != rate && editedParts.push("rate")
         oldAmenity.caption != caption && editedParts.push("caption")
+        oldAmenity.active != active && editedParts.push("active")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -58,6 +59,8 @@ const updateAmenity = async (req, res) => {
                             return `(rate: from ${oldAmenity.rate} to ${rate})`
                         case "caption":
                             return `(caption: from ${oldAmenity.caption} to ${caption})`
+                        case "active":
+                            return `(${active ? "activated" : "deactivated"})`
                     }
                 })}`
             })

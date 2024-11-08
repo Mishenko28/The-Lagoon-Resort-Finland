@@ -16,5 +16,9 @@ module.exports = mongoose.model('Amenity', new mongoose.Schema({
     caption: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true }), 'amenities')

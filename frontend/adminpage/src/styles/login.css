@@ -1,0 +1,68 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+    padding: 20px;
+    border-radius: 8px;
+    width: 260px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.login-container label {
+    color: #fff;
+}
+
+.login-container .error {
+    color: red;
+    margin: 10px 0;
+}
+
+.login-container input[type="email"],
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    padding-right: 50px;
+}
+
+.login-container button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-container button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.login-container .show-pass {
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background-color: transparent;
+    color: #656565;
+}
+
+.login-container div {
+    position: relative;
+}

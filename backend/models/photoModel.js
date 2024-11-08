@@ -8,5 +8,9 @@ module.exports = mongoose.model('Picture', new mongoose.Schema({
     caption: {
         type: String,
         required: true
+    },
+    hide: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true }), 'gallery')

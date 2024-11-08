@@ -41,7 +41,7 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, position, name, sex, age, contact, adminEmail } = await req.body
+    const { email, password, access, name, sex, age, contact, adminEmail } = await req.body
 
     try {
         const match = await Admin.findOne({ email })
@@ -60,7 +60,7 @@ const addNewAdmin = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const admin = await Admin.create({ email, password: hash, position, personalData: { name, sex, age, contact } })
+        const admin = await Admin.create({ email, password: hash, access, personalData: { name, sex, age, contact } })
 
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Added a new admin. (${email})` })
@@ -115,16 +115,16 @@ const restoreAdmin = async (req, res) => {
 
 // UPDATE ADMIN PROFILE
 const updateAdmin = async (req, res) => {
-    const { _id, position, name, sex, age, contact, adminEmail } = await req.body
+    const { _id, access, name, sex, age, contact, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldAdmin = await Admin.findOne({ _id })
 
-        const admin = await Admin.findOneAndUpdate({ _id }, { position, personalData: { name, sex, age, contact } }, { new: true })
+        const admin = await Admin.findOneAndUpdate({ _id }, { access, personalData: { name, sex, age, contact } }, { new: true })
 
         // activity log
-        oldAdmin.position != position && editedParts.push("position")
+        oldAdmin.access != access && editedParts.push("access")
         oldAdmin.personalData.name != name && editedParts.push("name")
         oldAdmin.personalData.sex != sex && editedParts.push("sex")
         oldAdmin.personalData.age != age && editedParts.push("age")
@@ -135,8 +135,8 @@ const updateAdmin = async (req, res) => {
                 adminEmail,
                 activity: `Changed profile. ${editedParts.map(part => {
                     switch (part) {
-                        case "position":
-                            return `(position: from ${oldAdmin.position} to ${position})`
+                        case "access":
+                            return `(access: from ${oldAdmin.access.map(a => a)} to ${access.map(a => a)})`
                         case "name":
                             return `(name: from ${oldAdmin.personalData.name} to ${name})`
                         case "sex":

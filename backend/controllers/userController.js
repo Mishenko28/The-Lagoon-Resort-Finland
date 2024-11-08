@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 
 
 const createToken = (id) => {
-    return jwt.sign({ id }, "LagoonThesis", { expiresIn: '1d' })
+    return jwt.sign({ id }, process.env.PASSWORD, { expiresIn: '1d' })
 }
 
 // LOGIN

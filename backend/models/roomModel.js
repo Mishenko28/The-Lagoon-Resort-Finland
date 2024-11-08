@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 module.exports = mongoose.model('Room', new mongoose.Schema({
+    roomNo: {
+        type: Number,
+        required: true
+    },
     img: {
         type: String,
         required: true,
@@ -24,5 +28,9 @@ module.exports = mongoose.model('Room', new mongoose.Schema({
     caption: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true }), 'rooms')

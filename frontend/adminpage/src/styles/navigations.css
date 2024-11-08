@@ -1,0 +1,121 @@
+.main-cont {
+    display: flex;
+    flex-direction: column;
+    width: 100svw;
+    height: 100svh;
+}
+
+.nav-and-con {
+    display: flex;
+    flex: 1;
+}
+
+.header-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px;
+    background-color: var(--primary);
+}
+
+.header-cont h1 {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.header-cont .profile-cont {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+.header-cont h3 {
+    color: #fff;
+    font-size: 0.7rem;
+}
+
+.header-cont i {
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 5px 10px;
+}
+
+.header-cont img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.navigation-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80px;
+    background-color: var(--secondary);
+    padding: 5px;
+}
+
+.navigation-cont a {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    color: var(--gold);
+    font-size: 0.5rem;
+    background-color: var(--primary);
+    padding: 10px 6px;
+    border-radius: 2px;
+}
+
+.navigation-cont .child-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.navigation-cont .child-cont a {
+    font-size: 0.45rem;
+    color: #fff;
+    margin-inline: 5px;
+    padding: 8px 5px;
+}
+
+.navigation-cont .parent-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.content-cont {
+    position: relative;
+    flex: 1;
+}
+
+.settings-cont {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: var(--secondary);
+    padding: 5px;
+}
+
+.settings-cont button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    width: 120px;
+    border: none;
+    background-color: var(--gold);
+    border-radius: 2px;
+}
+
+.settings-cont button:last-child {
+    background-color: var(--red);
+}

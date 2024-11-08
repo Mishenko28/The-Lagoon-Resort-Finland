@@ -15,10 +15,10 @@ const getAllPictures = async (_, res) => {
 
 // ADD PICTURE
 const addPicture = async (req, res) => {
-    const { img, caption, adminEmail } = await req.body
+    const { img, caption, adminEmail, hide } = await req.body
 
     try {
-        const picture = await Picture.create({ img, caption })
+        const picture = await Picture.create({ img, caption, hide })
 
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Added a new picture. (${caption})` })
@@ -31,17 +31,18 @@ const addPicture = async (req, res) => {
 
 // UPDATE PICTURE
 const updatePicture = async (req, res) => {
-    const { _id, img, caption, adminEmail } = await req.body
+    const { _id, img, caption, hide, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldPicture = await Amenity.findOne({ _id })
 
-        const picture = await Picture.findOneAndUpdate({ _id }, { img, caption }, { new: true })
+        const picture = await Picture.findOneAndUpdate({ _id }, { img, caption, hide }, { new: true })
 
         // activity log
         oldPicture.img != img && editedParts.push("img")
         oldPicture.caption != caption && editedParts.push("caption")
+        oldPicture.hide != hide && editedParts.push("hide")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -52,6 +53,8 @@ const updatePicture = async (req, res) => {
                             return `(image)`
                         case "caption":
                             return `(caption: from ${oldPicture.caption} to ${caption})`
+                        case "hide":
+                            return `(${caption ? "hidden" : "shown"})`
                     }
                 })}`
             })

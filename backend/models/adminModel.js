@@ -10,8 +10,8 @@ module.exports = mongoose.model('Admin', new mongoose.Schema({
         type: String,
         required: true
     },
-    position: {
-        type: String,
+    access: {
+        type: Array,
         required: true
     },
     personalData: {
