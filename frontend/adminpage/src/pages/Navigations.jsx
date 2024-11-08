@@ -1,6 +1,6 @@
 import '../styles/navigations.css'
 import { NavLink, Outlet } from "react-router-dom";
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import useAdmin from '../hooks/useAdmin'
 
 export default function Navigations() {
@@ -8,6 +8,25 @@ export default function Navigations() {
 
     const [openNav, setOpenNav] = useState("")
     const [openSettings, setOpenSettings] = useState(false)
+
+    const settingsRef = useRef(null)
+    const settingsBtnRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (settingsRef.current && !settingsRef.current.contains(e.target) && !settingsBtnRef.current.contains(e.target)) {
+                setOpenSettings(false)
+            }
+        }
+
+
+        document.addEventListener('mousedown', handleClickOutside)
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
 
     const handleOpenNav = (e) => {
         openNav == e.target.innerText ? setOpenNav("") : setOpenNav(e.target.innerText)
@@ -25,7 +44,7 @@ export default function Navigations() {
                     <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile-pic" />
                     <h3>{state.admin.email}</h3>
                 </div>
-                <i onClick={() => setOpenSettings(!openSettings)} className="fa-solid fa-ellipsis-vertical" />
+                <i ref={settingsBtnRef} onClick={() => setOpenSettings(!openSettings)} className="fa-solid fa-ellipsis-vertical" />
             </div >
             <div className='nav-and-con'>
                 <div className="navigation-cont">
@@ -72,7 +91,7 @@ export default function Navigations() {
                 </div>
                 <div className="content-cont">
                     {openSettings &&
-                        <div className='settings-cont'>
+                        <div ref={settingsRef} className='settings-cont'>
                             <button>Button1</button>
                             <button>Button2</button>
                             <button>Button3</button>

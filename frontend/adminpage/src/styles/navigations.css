@@ -35,7 +35,7 @@
 
 .header-cont h3 {
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
 }
 
 .header-cont i {
@@ -45,8 +45,8 @@
 }
 
 .header-cont img {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
 }
 
@@ -112,7 +112,7 @@
     padding: 5px 10px;
     width: 120px;
     border: none;
-    background-color: var(--gold);
+    background-color: #fff;
     border-radius: 2px;
 }
 
