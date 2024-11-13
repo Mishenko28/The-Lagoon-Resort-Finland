@@ -44,6 +44,10 @@
     padding: 5px 10px;
 }
 
+.header-cont i:hover {
+    cursor: pointer;
+}
+
 .header-cont img {
     width: 25px;
     height: 25px;
@@ -83,6 +87,15 @@
     padding: 8px 5px;
 }
 
+.navigation-cont .child-cont .active {
+    color: var(--primary);
+}
+
+.navigation-cont .active {
+    background-color: var(--gold);
+    color: var(--primary);
+}
+
 .navigation-cont .parent-cont {
     display: flex;
     flex-direction: column;
@@ -116,6 +129,92 @@
     border-radius: 2px;
 }
 
+.settings-cont button:hover {
+    cursor: pointer;
+}
+
 .settings-cont button:last-child {
     background-color: var(--red);
+}
+
+/* TABLET */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .header-cont {
+        padding: 10px 15px;
+    }
+
+    .header-cont h1 {
+        font-size: 1.8rem;
+    }
+
+    .header-cont i {
+        padding: 5px 15px;
+    }
+
+    .navigation-cont {
+        width: 120px;
+        padding: 10px;
+    }
+
+    .navigation-cont a {
+        font-size: 0.7rem;
+        padding: 10px;
+    }
+
+    .navigation-cont .child-cont {
+        gap: 10px;
+    }
+
+    .navigation-cont .child-cont a {
+        font-size: 0.6rem;
+        padding: 8px;
+    }
+
+    .navigation-cont .parent-cont {
+        gap: 10px;
+    }
+}
+
+/* PC */
+@media (min-width: 1025px) {
+    .header-cont {
+        padding: 10px 15px;
+    }
+
+    .header-cont h1 {
+        font-size: 1.8rem;
+    }
+
+    .header-cont i {
+        padding: 5px 15px;
+    }
+
+    .navigation-cont {
+        width: 150px;
+        padding: 10px;
+    }
+
+    .navigation-cont a {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .navigation-cont .child-cont {
+        gap: 10px;
+    }
+
+    .navigation-cont .child-cont a {
+        font-size: 0.8rem;
+        padding: 10px;
+        margin-inline: 12px;
+    }
+
+    .navigation-cont .parent-cont {
+        gap: 10px;
+    }
+
+    .settings-cont button {
+        padding: 10px 15px;
+        width: 180px;
+    }
 }

@@ -61,10 +61,10 @@ export default function Navigations() {
                         <NavLink onClick={handleOpenNav} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
                         {openNav === 'Configuration' &&
                             <div className='child-cont'>
-                                <NavLink to='/dashboard/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
-                                <NavLink to='/dashboard/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
-                                <NavLink to='/dashboard/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
-                                <NavLink to='/dashboard/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>
+                                <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
+                                <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
+                                <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
+                                <NavLink to='/configuration/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>
                             </div>
                         }
                     </div>
@@ -74,9 +74,9 @@ export default function Navigations() {
                             <div className='child-cont'>
                                 <NavLink to='/utility/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
                                 <NavLink to='/utility/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
-                                <NavLink to='/utility/gallery'>Database<i className="fa-solid fa-database" /></NavLink>
-                                <NavLink to='/utility/about-us'>Users<i className="fa-solid fa-user-gear" /></NavLink>
-                                <NavLink to='/utility/about-us'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
+                                <NavLink to='/utility/database'>Database<i className="fa-solid fa-database" /></NavLink>
+                                <NavLink to='/utility/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
+                                <NavLink to='/utility/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
                             </div>
                         }
                     </div>
