@@ -1,5 +1,6 @@
 const AdminSetting = require('../models/adminSettingsModel')
 const ActivityLog = require('../models/activityLogModel')
+const Room = require('../models/roomModel')
 
 const getSettings = async (_, res) => {
     try {
@@ -27,8 +28,17 @@ const updateSettings = async (req, res) => {
 
         // activity log
         oldSettings.downPayment != downPayment && editedParts.push("downPayment")
-        oldSettings.roomTypes != roomTypes && editedParts.push("roomTypes")
         oldSettings.roomStart != roomStart && editedParts.push("roomStart")
+        if (oldSettings.roomTypes != roomTypes) {
+            editedParts.push("roomTypes")
+
+            if (oldSettings.roomTypes.length > roomTypes.length) {
+                let deletedRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
+
+                await Room.deleteMany({ roomType: deletedRoomType[0] })
+            }
+        }
+
 
         if (editedParts.length > 0) {
             await ActivityLog.create({

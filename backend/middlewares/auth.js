@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
+const Admin = require('../models/adminModel')
 
 const auth = async (req, res, next) => {
     const { authorization } = req.headers
-
     try {
         if (!authorization) {
             throw Error("authorization required")
@@ -10,7 +10,10 @@ const auth = async (req, res, next) => {
 
         const token = authorization.split(' ')[1]
 
-        jwt.verify(token, process.env.PASSWORD)
+        const decoded = jwt.verify(token, process.env.PASSWORD)
+
+        const { email } = await Admin.findOne({ _id: decoded.id })
+        req.body.adminEmail = email
 
         next()
     } catch (error) {

@@ -8,20 +8,28 @@
 
 :root {
     --primary: #222831;
+    --primary-dark: #1A1D24;
     --secondary: #393E46;
     --green: #4CAF50;
     --blue: #2196F3;
+    --blue-light: #2196F326;
     --gold: #FFD700;
     --red: #FF0000;
+    --red-light: #ff000026;
+
 }
 
 body {
-    background-color: #f2f2f2;
+    background-color: #ccc;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100svh;
+}
+
+textarea {
+    resize: none;
 }
 
 /* LOADER */
@@ -117,4 +125,117 @@ body {
     100% {
         background-color: transparent;
     }
+}
+
+/* LOADER LINE */
+
+/* From Uiverse.io by sawantyash11 */
+.loader-line {
+    --height-of-loader: 4px;
+    --loader-color: var(--blue);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--height-of-loader);
+}
+
+.loader-line::before {
+    content: "";
+    position: absolute;
+    background: var(--loader-color);
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    animation: moving 1s ease-in-out infinite;
+}
+
+@keyframes moving {
+    50% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+        right: 0;
+        left: unset;
+    }
+}
+
+
+/* COMPONENTS */
+
+.full-cont {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100svw;
+    height: 100svh;
+    z-index: 1;
+    background-color: #00000033;
+}
+
+.success-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 250px;
+    background-color: #fff;
+    border: 3px solid var(--green);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.success-cont h1 {
+    font-size: 1.5rem;
+    color: var(--green);
+}
+
+.success-cont p {
+    font-size: 0.8rem;
+}
+
+.success-cont i {
+    color: var(--green);
+    font-size: 3rem;
+}
+
+.failed-cont {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 250px;
+    background-color: #fff;
+    border: 3px solid var(--red);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.failed-cont h1 {
+    font-size: 1.5rem;
+    color: #000;
+}
+
+.failed-cont p {
+    font-size: 0.8rem;
+    color: var(--red);
+}
+
+.failed-cont .fa-circle-xmark {
+    color: var(--red);
+    font-size: 3rem;
+}
+
+.failed-cont .fa-xmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5rem;
 }

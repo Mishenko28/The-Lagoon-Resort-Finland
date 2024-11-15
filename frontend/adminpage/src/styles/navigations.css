@@ -8,6 +8,7 @@
 .nav-and-con {
     display: flex;
     flex: 1;
+    height: 88svh;
 }
 
 .header-cont {
@@ -15,7 +16,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 5px;
+    min-height: 12svh;
+    padding-inline: 5px;
     background-color: var(--primary);
 }
 
@@ -75,6 +77,8 @@
 }
 
 .navigation-cont .child-cont {
+    margin-left: 5px;
+    border-left: 2px solid #fff;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -83,7 +87,7 @@
 .navigation-cont .child-cont a {
     font-size: 0.45rem;
     color: #fff;
-    margin-inline: 5px;
+    margin-left: 5px;
     padding: 8px 5px;
 }
 
@@ -102,11 +106,6 @@
     gap: 5px;
 }
 
-.content-cont {
-    position: relative;
-    flex: 1;
-}
-
 .settings-cont {
     position: absolute;
     top: 0;
@@ -116,6 +115,7 @@
     gap: 5px;
     background-color: var(--secondary);
     padding: 5px;
+    z-index: 1;
 }
 
 .settings-cont button {
@@ -137,48 +137,16 @@
     background-color: var(--red);
 }
 
-/* TABLET */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .header-cont {
-        padding: 10px 15px;
-    }
-
-    .header-cont h1 {
-        font-size: 1.8rem;
-    }
-
-    .header-cont i {
-        padding: 5px 15px;
-    }
-
-    .navigation-cont {
-        width: 120px;
-        padding: 10px;
-    }
-
-    .navigation-cont a {
-        font-size: 0.7rem;
-        padding: 10px;
-    }
-
-    .navigation-cont .child-cont {
-        gap: 10px;
-    }
-
-    .navigation-cont .child-cont a {
-        font-size: 0.6rem;
-        padding: 8px;
-    }
-
-    .navigation-cont .parent-cont {
-        gap: 10px;
-    }
+.content-cont {
+    position: relative;
+    flex: 1;
+    overflow: scroll;
 }
 
 /* PC */
 @media (min-width: 1025px) {
     .header-cont {
-        padding: 10px 15px;
+        padding-inline: 15px;
     }
 
     .header-cont h1 {
@@ -200,6 +168,8 @@
     }
 
     .navigation-cont .child-cont {
+        margin-left: 10px;
+        border-left: 3px solid #fff;
         gap: 10px;
     }
 

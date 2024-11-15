@@ -1,0 +1,554 @@
+.room-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 5px 5px 30px 5px;
+}
+
+.room-header button {
+    padding: 10px;
+    border: none;
+    background-color: var(--primary);
+    color: #fff;
+    border-radius: 2px;
+    font-size: 0.7em;
+    cursor: pointer;
+}
+
+.room-cont {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.room-cont .room-type-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    color: #fff;
+    padding: 5px;
+}
+
+.room-cont .room-type-header h1 {
+    font-size: 0.8rem;
+}
+
+.room-cont .room-type-header i {
+    cursor: pointer;
+}
+
+.room-cont .room-type-content {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 100px;
+    background-color: #fff;
+    padding: 5px;
+}
+
+.room-cont .room-type-content .room {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    color: var(--primary);
+}
+
+.room-cont .room-type-content .room h1 {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.room-cont .room-type-content .room h2 {
+    font-size: 0.8rem;
+}
+
+.room-cont .room-type-content .room h3,
+.room-cont .room-type-content .room h4 {
+    font-size: 0.5rem;
+}
+
+.room-cont .room-type-content .room h5 {
+    font-size: 0.5rem;
+    text-align: justify;
+    height: 30px;
+    overflow-y: auto;
+}
+
+.room-cont .room-type-content .room img {
+    align-self: center;
+    width: 100px;
+    height: 60px;
+}
+
+.room-cont .room-type-content .room-settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: var(--secondary);
+    padding: 5px;
+    z-index: 1;
+}
+
+.room-cont .room-type-content .room-settings button {
+    border: none;
+    width: 60px;
+    padding-block: 4px;
+    font-size: 0.6rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.room-cont .room-type-content .no-room {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+}
+
+.room-cont .room-type-content .no-room button {
+    padding: 10px;
+    border: none;
+    background-color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+}
+
+.room-cont .room-type-delete {
+    background-color: #fff;
+    padding: 5px;
+}
+
+.room-cont .room-type-delete h1 {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.room-cont .room-type-delete h2 {
+    font-size: 0.8rem;
+    color: var(--red);
+    margin-bottom: 10px;
+}
+
+.room-cont .room-type-delete .bttns {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.room-cont .room-type-delete .bttns button {
+    border: none;
+    width: 50px;
+    padding-block: 5px;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.room-cont .room-type-delete .bttns button:first-child {
+    background-color: var(--red);
+}
+
+.room-cont .room-type-delete .bttns button:last-child {
+    background-color: var(--primary);
+}
+
+.room-cont .room-add {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.room-cont .room-add form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 250px;
+}
+
+.room-cont .room-add .room-add-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.room-cont .room-add .room-add-input:nth-child(7) {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.room-cont .room-add .room-add-input img {
+    width: 100%;
+    height: 120px;
+    border: 1px solid var(--primary);
+}
+
+.room-cont .room-add .room-add-input label {
+    font-size: 0.8rem;
+}
+
+.room-cont .room-add .room-add-input input[type="number"],
+.room-cont .room-add textarea {
+    padding: 5px;
+    border: 1px solid var(--primary);
+}
+
+.room-cont .room-add .room-add-input input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+.room-cont .room-add .bttns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.room-cont .room-add button {
+    width: 60px;
+    align-self: flex-end;
+    padding-block: 10px;
+    background-color: var(--green);
+    border: none;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.room-cont .room-add .bttns button:first-child {
+    background-color: var(--red);
+}
+
+.room-cont .room-add i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.admin-settings {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.admin-settings h1 {
+    font-size: 1rem;
+    color: var(--primary);
+}
+
+.admin-settings h1 b {
+    font-weight: 900;
+    font-size: 1.8rem;
+}
+
+.change-down-payment {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    background-color: var(--primary);
+    margin: 5px;
+    padding: 25px 5px 5px 5px;
+}
+
+.change-down-payment input {
+    padding: 5px;
+    border: none;
+    font-size: 0.8rem;
+    flex: 1;
+}
+
+.change-down-payment i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.change-down-payment h1 {
+    position: absolute;
+    top: 5px;
+    font-size: 0.7rem;
+    color: #fff;
+}
+
+.change-down-payment button {
+    padding: 5px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 2px;
+}
+
+.add-room-type {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    background-color: var(--primary);
+    margin: 5px;
+    padding: 25px 5px 5px 5px;
+}
+
+.add-room-type input {
+    padding: 5px;
+    border: none;
+    font-size: 0.8rem;
+    flex: 1;
+}
+
+.add-room-type i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add-room-type h1 {
+    position: absolute;
+    top: 5px;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+.add-room-type button {
+    padding: 5px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 2px;
+}
+
+.card-and-table-togg-cont {
+    display: flex;
+    margin: 5px;
+    border: 1px solid var(--primary);
+    width: fit-content;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.card-and-table-togg-cont button {
+    padding: 5px 20px;
+    border: none;
+    background-color: #fff;
+    font-size: 0.6em;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.room-table-cont {
+    overflow-x: auto;
+    padding: 10px 5px;
+}
+
+.room-table-cont img {
+    width: 100px;
+    height: 60px;
+}
+
+.room-table-cont table {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--primary);
+}
+
+.room-table-cont table th,
+.room-table-cont table td {
+    font-size: 0.6rem;
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    min-width: 50px;
+    max-width: 200px;
+    overflow-wrap: break-word;
+}
+
+.room-table-cont table thead {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.room-table-cont table td:last-of-type {
+    text-align: left;
+}
+
+
+/* PC */
+@media (min-width: 1025px) {
+    .room-header button:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .room-cont .room-type-header {
+        padding: 10px;
+    }
+
+    .room-cont .room-type-header h1 {
+        font-size: 1rem;
+    }
+
+    .room-cont .room-type-content {
+        gap: 20px;
+        padding: 20px 10px;
+    }
+
+    .room-cont .room-type-content .room {
+        width: 200px;
+        padding: 10px;
+    }
+
+    .room-cont .room-type-content .room:hover {
+        transform: scale(1.02);
+    }
+
+    .room-cont .room-type-content .room h1 {
+        font-size: 2rem;
+    }
+
+    .room-cont .room-type-content .room h2 {
+        font-size: 1.6rem;
+    }
+
+    .room-cont .room-type-content .room h3,
+    .room-cont .room-type-content .room h4 {
+        font-size: 1rem;
+    }
+
+    .room-cont .room-type-content .room h5 {
+        font-size: 0.8rem;
+        height: 100px;
+    }
+
+    .room-cont .room-type-content .room img {
+        width: 200px;
+        height: 120px;
+    }
+
+    .room-cont .room-type-content .room-settings button {
+        width: 100px;
+        padding-block: 6px;
+        font-size: 0.8rem;
+    }
+
+    .room-cont .room-type-content .no-room button {
+        padding: 15px;
+    }
+
+    .room-cont .room-type-delete {
+        padding: 20px;
+    }
+
+    .room-cont .room-type-delete h1 {
+        font-size: 2rem;
+    }
+
+    .room-cont .room-type-delete h2 {
+        font-size: 1rem;
+        margin: 20px;
+    }
+
+    .room-cont .room-type-delete .bttns button {
+        width: 100px;
+        padding-block: 15px;
+    }
+
+    .room-cont .room-add form {
+        width: 350px;
+    }
+
+    .room-cont .room-add .room-add-input img {
+        height: 180px;
+    }
+
+    .room-cont .room-add .room-add-input label {
+        font-size: 1rem;
+    }
+
+    .room-cont .room-add .room-add-input input[type="checkbox"] {
+        width: 25px;
+        height: 25px;
+    }
+
+    .room-cont .room-add button {
+        width: 80px;
+        padding-block: 12px;
+    }
+
+    .room-cont .room-add i {
+        font-size: 2rem;
+    }
+
+    .admin-settings h1 {
+        font-size: 1.5rem;
+    }
+
+    .admin-settings h1 b {
+        font-size: 2.5rem;
+    }
+
+    .change-down-payment {
+        max-width: 350px;
+        padding: 50px 10px 10px 10px;
+    }
+
+    .change-down-payment input {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .change-down-payment i {
+        font-size: 1.5rem;
+    }
+
+    .change-down-payment h1 {
+        top: 15px;
+        font-size: 1rem;
+    }
+
+    .change-down-payment button {
+        padding: 10px;
+    }
+
+    .add-room-type {
+        max-width: 350px;
+        padding: 50px 10px 10px 10px;
+    }
+
+    .add-room-type input {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .add-room-type i {
+        font-size: 1.5rem;
+    }
+
+    .add-room-type h1 {
+        top: 15px;
+        font-size: 1rem;
+    }
+
+    .add-room-type button {
+        padding: 10px;
+    }
+}

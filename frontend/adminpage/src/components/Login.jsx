@@ -5,20 +5,20 @@ import useAdmin from '../hooks/useAdmin'
 import { useState } from 'react'
 
 function Login() {
-    const { state, dispatch } = useAdmin()
+    const { dispatch } = useAdmin()
 
     const [email, setEmail] = useState('johnthomasalog@gmail.com')
     const [password, setPassword] = useState('thomas1228')
     const [error, setError] = useState('')
 
-    const [loading, setLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [isPassHide, setIsPassHide] = useState(true)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
+        setIsLoading(true)
 
-        axios.post(`${state.uri}/admin/login`, {
+        axios.post('/admin/login', {
             email: email,
             password: password
         })
@@ -29,14 +29,14 @@ function Login() {
                 setError(err.response.data.error)
             })
 
-        setLoading(false)
+        setIsLoading(false)
         setPassword('')
     }
 
     return (
         <div className='login-container'>
             <h2>Login</h2>
-            {loading ?
+            {isLoading ?
                 <Loader />
                 :
                 <>

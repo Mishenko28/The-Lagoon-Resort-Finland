@@ -21,9 +21,9 @@ const addRoom = async (req, res) => {
         const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Added a new room. (${roomNo})` })
+        await ActivityLog.create({ adminEmail, activity: `Added a new room. (room number: ${roomNo})` })
 
-        res.status(400).json({ room })
+        res.status(200).json({ room })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -35,7 +35,7 @@ const updateRoom = async (req, res) => {
     let editedParts = []
 
     try {
-        const oldRoom = await Amenity.findOne({ _id })
+        const oldRoom = await Room.findOne({ _id })
 
         const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })
 
@@ -75,7 +75,7 @@ const updateRoom = async (req, res) => {
             })
         }
 
-        res.status(400).json({ room })
+        res.status(200).json({ room })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -86,7 +86,7 @@ const deleteRoom = async (req, res) => {
     const { _id, adminEmail } = await req.body
 
     try {
-        const room = await Room.findOneAndDelete({ _id })
+        const room = await Room.findOneAndDelete({ _id }, { new: true })
 
         // archive
         if (room) {
@@ -94,9 +94,9 @@ const deleteRoom = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Deleted a room. (${room.roomNo})` })
+        await ActivityLog.create({ adminEmail, activity: `Deleted a room. (room number: ${room.roomNo})` })
 
-        res.status(400).json({ room })
+        res.status(200).json({ room })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
