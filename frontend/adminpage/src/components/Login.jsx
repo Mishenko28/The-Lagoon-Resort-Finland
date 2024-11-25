@@ -1,4 +1,4 @@
-import '../styles/Login.css'
+import '../styles/login.css'
 import Loader from '../components/loader'
 import axios from 'axios'
 import useAdmin from '../hooks/useAdmin'
