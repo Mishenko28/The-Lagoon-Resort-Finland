@@ -77,6 +77,8 @@ export default function Rooms() {
                 return sort.order === "asc" ? a.rate - b.rate : b.rate - a.rate
             } else if (sort.type === "max") {
                 return sort.order === "asc" ? a.maxPerson - b.maxPerson : b.maxPerson - a.maxPerson
+            } else if (sort.type === "active") {
+                return sort.order === "asc" ? b.active - a.active : a.active - b.active
             }
             return 0
         })
@@ -144,6 +146,7 @@ export default function Rooms() {
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "roomNo" }))}>{sort.type == "roomNo" && <i className="fa-solid fa-caret-right" />}Room Number</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "rate" }))}>{sort.type == "rate" && <i className="fa-solid fa-caret-right" />}Rate</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "max" }))}>{sort.type == "max" && <i className="fa-solid fa-caret-right" />}Max Person</h1>
+                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "active" }))}>{sort.type == "active" && <i className="fa-solid fa-caret-right" />}Active</h1>
                                     <hr />
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "asc" }))}>{sort.order == "asc" && <i className="fa-solid fa-caret-right" />}Ascending</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "des" }))}>{sort.order == "des" && <i className="fa-solid fa-caret-right" />}Descending</h1>

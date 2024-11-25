@@ -78,7 +78,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                         </div>
                     }
                     {isCard && rooms.map(room => (
-                        <div key={room._id} style={room.active ? { backgroundColor: "var(--blue-light)" } : { backgroundColor: "var(--red-light)" }} onClick={() => setEditRoom(room)} className='room'>
+                        <div key={room._id} onClick={() => setEditRoom(room)} className='room'>
                             <h1>{room.roomNo}</h1>
                             <img src={room.img} />
                             <h2>₱{room.rate}</h2>
@@ -86,6 +86,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                             <h4>Max Person: {room.maxPerson}</h4>
                             <hr />
                             <h5>{room.caption}</h5>
+                            {!room.active && <span>not active</span>}
                         </div>
                     ))}
                     {!isCard && rooms.length > 0 &&
@@ -103,8 +104,11 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                                 </thead>
                                 <tbody>
                                     {rooms.map(room => (
-                                        <tr style={room.active ? { backgroundColor: "var(--blue-light)" } : { backgroundColor: "var(--red-light)" }} key={room._id} onClick={() => setEditRoom(room)}>
-                                            <td>{room.roomNo}</td>
+                                        <tr key={room._id} onClick={() => setEditRoom(room)}>
+                                            <td>
+                                                {room.roomNo}
+                                                {!room.active && <span>not active</span>}
+                                            </td>
                                             <td><img src={room.img} /></td>
                                             <td>₱{room.rate}</td>
                                             <td>₱{room.addFeePerPerson}</td>

@@ -10,18 +10,23 @@
     --primary: #222831;
     --primary-dark: #1A1D24;
     --secondary: #393E46;
+
     --green: #4CAF50;
     --green-light: #4CAF5026;
+
     --blue: #2196F3;
     --blue-light: #2196F326;
+
     --gold: #FFD700;
+    --light-gray: #AAAAAA;
+
     --red: #FF0000;
     --red-light: #ff000026;
 
 }
 
 body {
-    background-color: #aaa;
+    background-color: var(--light-gray);
     display: flex;
     flex-direction: column;
     justify-content: center;
