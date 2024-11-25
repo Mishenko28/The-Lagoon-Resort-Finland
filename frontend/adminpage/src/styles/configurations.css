@@ -76,9 +76,9 @@
 
 .room-cont .room-type-content .room h5 {
     font-size: 0.5rem;
-    text-align: justify;
     height: 30px;
     overflow-y: auto;
+    overflow-wrap: break-word;
 }
 
 .room-cont .room-type-content .room img {
@@ -377,10 +377,19 @@
     font-size: 0.6rem;
     padding: 5px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
     min-width: 50px;
     max-width: 200px;
     overflow-wrap: break-word;
+}
+
+.room-table-cont table th:last-of-type,
+.room-table-cont table td:last-of-type {
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.room-table-cont table td {
+    border: 1px solid #fff;
 }
 
 .room-table-cont table thead {
@@ -415,6 +424,8 @@
     .room-cont .room-type-content .room {
         width: 200px;
         padding: 10px;
+        transition: all 0.1s;
+        cursor: pointer;
     }
 
     .room-cont .room-type-content .room:hover {
@@ -550,5 +561,27 @@
 
     .add-room-type button {
         padding: 10px;
+    }
+
+    .room-table-cont img {
+        width: 200px;
+        height: 120px;
+    }
+
+    .room-table-cont table {
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .room-table-cont table th,
+    .room-table-cont table td {
+        font-size: 0.8rem;
+        min-width: 100px;
+        max-width: 300px;
+    }
+
+    .room-table-cont table th:last-of-type,
+    .room-table-cont table td:last-of-type {
+        min-width: 400px;
+        max-width: 400px;
     }
 }

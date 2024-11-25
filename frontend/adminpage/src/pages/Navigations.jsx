@@ -1,10 +1,11 @@
 import '../styles/navigations.css'
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { useState, useRef, useEffect } from 'react'
 import useAdmin from '../hooks/useAdmin'
 
 export default function Navigations() {
     const { state, dispatch } = useAdmin()
+    const path = useLocation().pathname[1]?.toUpperCase() + useLocation().pathname.split("/")[1].slice(1)
 
     const [openNav, setOpenNav] = useState("")
     const [openSettings, setOpenSettings] = useState(false)
@@ -13,6 +14,9 @@ export default function Navigations() {
     const settingsBtnRef = useRef(null)
 
     useEffect(() => {
+        setOpenNav(path)
+
+
         const handleClickOutside = (e) => {
             if (settingsRef.current && !settingsRef.current.contains(e.target) && !settingsBtnRef.current.contains(e.target)) {
                 setOpenSettings(false)
@@ -29,7 +33,7 @@ export default function Navigations() {
 
 
     const handleOpenNav = (e) => {
-        openNav == e.target.innerText ? setOpenNav("") : setOpenNav(e.target.innerText)
+        e.target.innerText ? setOpenNav(e.target.innerText) : setOpenNav("")
     }
 
     const handleLogout = () => {
@@ -69,14 +73,14 @@ export default function Navigations() {
                         }
                     </div>
                     <div className='parent-cont'>
-                        <NavLink onClick={handleOpenNav} to='/utility'>Utilities<i className="fa-solid fa-server" /></NavLink>
+                        <NavLink onClick={handleOpenNav} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
                         {openNav === 'Utilities' &&
                             <div className='child-cont'>
-                                <NavLink to='/utility/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
-                                <NavLink to='/utility/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
-                                <NavLink to='/utility/database'>Database<i className="fa-solid fa-database" /></NavLink>
-                                <NavLink to='/utility/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
-                                <NavLink to='/utility/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
+                                <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
+                                <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
+                                <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>
+                                <NavLink to='/utilities/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
+                                <NavLink to='/utilities/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
                             </div>
                         }
                     </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from "react"
+import { createContext, useContext, useReducer, useEffect, useState } from "react"
 import axios from 'axios'
 
 const AdminContext = createContext()
@@ -31,11 +31,18 @@ export function AdminContextProvider({ children }) {
         failed: null
     })
 
+    const [isLoading, setIsLoading] = useState(true)
+
     useEffect(() => {
         const admin = localStorage.getItem('lagoonAdmin')
         admin && dispatch({ type: "LOGIN", payload: JSON.parse(admin) })
         axios.defaults.baseURL = "http://localhost:8000"
         axios.defaults.headers.common['Content-Type'] = 'application/json'
+        if (admin) {
+            const { token } = JSON.parse(admin)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        }
+        setIsLoading(false)
     }, [])
 
     useEffect(() => {
@@ -45,9 +52,13 @@ export function AdminContextProvider({ children }) {
         }
     }, [state.admin])
 
+    if (isLoading) {
+        return
+    }
+
     return (
         <AdminContext.Provider value={{ state, dispatch }}>
             {children}
         </AdminContext.Provider>
-    );
+    )
 }

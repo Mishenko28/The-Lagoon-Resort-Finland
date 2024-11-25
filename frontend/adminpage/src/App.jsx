@@ -31,7 +31,7 @@ function App() {
                             <Route path='gallery' element={<h1>Gallery</h1>} />
                             <Route path='about-us' element={<h1>About Us</h1>} />
                         </Route>
-                        <Route path='utility' element={<Utilities />}>
+                        <Route path='utilities' element={<Utilities />}>
                             <Route path='archive' element={<h1>Rooms</h1>} />
                             <Route path='activity-logs' element={<h1>Amenities</h1>} />
                             <Route path='database' element={<h1>Gallery</h1>} />

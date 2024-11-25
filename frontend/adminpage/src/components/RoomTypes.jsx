@@ -78,8 +78,8 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                         </div>
                     }
                     {isCard && rooms.map(room => (
-                        <div key={room._id} onClick={() => setEditRoom(room)} className='room'>
-                            <h1 style={room.active ? { color: "var(--blue)" } : { color: "var(--red)" }}>{room.roomNo}</h1>
+                        <div key={room._id} style={room.active ? { backgroundColor: "var(--blue-light)" } : { backgroundColor: "var(--red-light)" }} onClick={() => setEditRoom(room)} className='room'>
+                            <h1>{room.roomNo}</h1>
                             <img src={room.img} />
                             <h2>₱{room.rate}</h2>
                             <h3>Add Person: ₱{room.addFeePerPerson}</h3>

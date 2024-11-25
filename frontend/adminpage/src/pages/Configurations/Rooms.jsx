@@ -119,7 +119,7 @@ export default function Rooms() {
                 <RoomTypes
                     key={i}
                     roomType={roomType}
-                    rooms={rooms.filter(room => room.roomType === roomType)}
+                    rooms={rooms.filter(room => room.roomType === roomType).sort((a, b) => a.roomNo - b.roomNo)}
                     setRooms={setRooms}
                     adminSettings={adminSettings}
                     setAdminSettings={setAdminSettings}
