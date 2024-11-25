@@ -18,6 +18,7 @@ const loginAdmin = async (req, res) => {
     try {
         const admin = await Admin.findOne({ email })
 
+        console.log(admin)
         if (!admin) {
             throw Error("Admin not Found")
         }

@@ -21,12 +21,13 @@
 }
 
 body {
-    background-color: #ccc;
+    background-color: #aaa;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100svh;
+    user-select: none;
 }
 
 textarea {

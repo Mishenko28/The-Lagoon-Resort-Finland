@@ -15,6 +15,53 @@
     cursor: pointer;
 }
 
+.room-header .sort-wrapper {
+    position: relative;
+}
+
+.room-header .sort-wrapper .selections {
+    position: absolute;
+    top: 34px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background-color: var(--secondary);
+    padding: 5px;
+    width: max-content;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.room-header .sort-wrapper .selections h1 {
+    position: relative;
+    font-size: 0.6rem;
+    font-weight: 300;
+    margin-left: 16px;
+    padding: 5px 10px;
+    text-align: start;
+    color: #fff;
+}
+
+.room-header .sort-wrapper .selections h1:hover {
+    background-color: var(--primary-dark);
+    cursor: pointer;
+}
+
+.room-header .sort-wrapper .selections h1 i {
+    position: absolute;
+    left: -10px;
+    top: 6px;
+}
+
+.room-header .sort-wrapper .selections hr {
+    width: 100%;
+}
+
+.room-header button i {
+    margin-right: 8px;
+}
+
 .room-cont {
     position: relative;
     display: flex;
