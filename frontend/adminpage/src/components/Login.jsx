@@ -18,7 +18,7 @@ function Login() {
         e.preventDefault()
         setIsLoading(true)
 
-        axios.post('/admin/login', {
+        await axios.post('/admin/login', {
             email: email,
             password: password
         })

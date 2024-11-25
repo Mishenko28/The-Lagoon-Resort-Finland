@@ -44,7 +44,7 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (updatedRoom.img === "" || updatedRoom.roomNo === "" || updatedRoom.rate === "" || updatedRoom.addFeePerPerson === "" || updatedRoom.maxPerson === "" || updatedRoom.caption.trim() === "") {
@@ -54,7 +54,7 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
 
         setIsLoading(true)
 
-        axios.patch('room/update', { ...updatedRoom })
+        await axios.patch('room/update', { ...updatedRoom })
             .then((res) => {
                 setRooms(prev => prev.map(room => room._id === editRoom._id ? res.data.room : room))
                 dispatch({ type: 'SUCCESS', payload: true })
@@ -73,11 +73,11 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
         setDeleteTogg(bool)
     }
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
-        axios.delete(`room/delete`, {
+        await axios.delete(`room/delete`, {
             data: { _id: editRoom._id }
         })
             .then(() => {

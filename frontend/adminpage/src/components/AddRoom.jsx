@@ -42,7 +42,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (newRoom.img === "" || newRoom.roomNo === "" || newRoom.rate === "" || newRoom.addFeePerPerson === "" || newRoom.maxPerson === "" || newRoom.caption.trim() === "") {
@@ -52,7 +52,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
 
         setIsLoading(true)
 
-        axios.post('room/add', { ...newRoom })
+        await axios.post('room/add', { ...newRoom })
             .then((res) => {
                 setRooms(prev => [...prev, res.data.room])
                 dispatch({ type: 'SUCCESS', payload: true })

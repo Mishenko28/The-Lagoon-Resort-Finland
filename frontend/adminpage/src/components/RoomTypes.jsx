@@ -30,12 +30,12 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
         }
     }, [])
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         setIsLoading(true)
 
         const newRoomTypes = adminSettings.roomTypes.filter(type => type !== roomType)
 
-        axios.patch('/admin-settings/update', {
+        await axios.patch('/admin-settings/update', {
             ...adminSettings,
             roomTypes: newRoomTypes
         })
