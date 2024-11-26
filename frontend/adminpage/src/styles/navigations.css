@@ -140,7 +140,7 @@
 .content-cont {
     position: relative;
     flex: 1;
-    overflow: scroll;
+    overflow: auto;
 }
 
 /* PC */
