@@ -23,7 +23,7 @@ const addPicture = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Added a new picture. (${caption})` })
 
-        res.status(400).json({ picture })
+        res.status(200).json({ picture })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -60,7 +60,7 @@ const updatePicture = async (req, res) => {
             })
         }
 
-        res.status(400).json({ picture })
+        res.status(200).json({ picture })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -81,7 +81,7 @@ const deletePicture = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Deleted a picture. (${picture.caption})` })
 
-        res.status(400).json({ picture })
+        res.status(200).json({ picture })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

@@ -23,7 +23,7 @@ const addAmenity = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Added a new amenity. (${name})` })
 
-        res.status(400).json({ amenity })
+        res.status(200).json({ amenity })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -66,7 +66,7 @@ const updateAmenity = async (req, res) => {
             })
         }
 
-        res.status(400).json({ amenity })
+        res.status(200).json({ amenity })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -87,7 +87,7 @@ const deleteAmenity = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Deleted an amenity. (${amenity.name})` })
 
-        res.status(400).json({ amenity })
+        res.status(200).json({ amenity })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

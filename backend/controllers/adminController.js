@@ -170,7 +170,7 @@ const updatePassword = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, activity: `Changed password.` })
 
-        res.status(400).json({ admin })
+        res.status(200).json({ admin })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

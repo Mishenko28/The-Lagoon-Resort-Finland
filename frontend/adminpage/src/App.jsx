@@ -9,6 +9,7 @@ import Utilities from './pages/Utilities'
 import Help from './pages/Help'
 
 import Rooms from './pages/Configurations/Rooms'
+import Amenities from './pages/Configurations/Amenities'
 import Success from './components/Success'
 import Failed from './components/Failed'
 
@@ -27,7 +28,7 @@ function App() {
                         </Route>
                         <Route path='configuration' element={<Configuration />}>
                             <Route path='room' element={<Rooms />} />
-                            <Route path='amenity' element={<h1>Amenity</h1>} />
+                            <Route path='amenity' element={<Amenities />} />
                             <Route path='gallery' element={<h1>Gallery</h1>} />
                             <Route path='about-us' element={<h1>About Us</h1>} />
                         </Route>

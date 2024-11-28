@@ -1,4 +1,3 @@
-import '../../styles/configurations.css'
 import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import useAdmin from '../../hooks/useAdmin'
@@ -32,7 +31,7 @@ export default function Rooms() {
     const newRoomTypeRef = useRef()
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchAdminSettings = async () => {
             await axios.get('/admin-settings/all')
                 .then((res) => {
                     setAdminSettings(res.data.adminSetting)
@@ -41,6 +40,9 @@ export default function Rooms() {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
                     console.log(err.response.data.error)
                 })
+        }
+
+        const fetchRooms = async () => {
             await axios.get('/room/all')
                 .then((res) => {
                     setRooms(res.data.rooms.sort((a, b) => a.roomNo - b.roomNo))
@@ -49,10 +51,15 @@ export default function Rooms() {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
                     console.log(err.response.data.error)
                 })
+        }
 
+        const fetchAll = async () => {
+            await fetchAdminSettings()
+            await fetchRooms()
             setIsLoading(false)
         }
-        fetchData()
+
+        fetchAll()
     }, [])
 
     useEffect(() => {
@@ -136,7 +143,7 @@ export default function Rooms() {
                 <Loader2 />
                 :
                 <>
-                    <div className="room-header">
+                    <div className="config-header">
                         <button onClick={() => setNewRoomTypeTogg(true)}>Create Room Type</button>
                         <button onClick={() => setNewDownPayment(adminSettings.downPayment)}>Change Down Payment</button>
                         <div className='sort-wrapper'>
@@ -154,7 +161,7 @@ export default function Rooms() {
                             }
                         </div>
                     </div>
-                    <div className='admin-settings'>
+                    <div className='infos'>
                         <h1>Rooms: <b>{rooms.length}</b></h1>
                         <h1>Down Payment: <b>{adminSettings.downPayment * 100}%</b></h1>
                     </div>

@@ -1,11 +1,11 @@
-.room-header {
+.config-header {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
     margin: 5px 5px 30px 5px;
 }
 
-.room-header button {
+.config-header button {
     padding: 10px;
     border: none;
     background-color: var(--primary);
@@ -14,11 +14,11 @@
     font-size: 0.7em;
 }
 
-.room-header .sort-wrapper {
+.config-header .sort-wrapper {
     position: relative;
 }
 
-.room-header .sort-wrapper .selections {
+.config-header .sort-wrapper .selections {
     position: absolute;
     top: 34px;
     left: 0;
@@ -32,7 +32,7 @@
     z-index: 1;
 }
 
-.room-header .sort-wrapper .selections h1 {
+.config-header .sort-wrapper .selections h1 {
     position: relative;
     font-size: 0.6rem;
     font-weight: 300;
@@ -42,17 +42,17 @@
     color: #fff;
 }
 
-.room-header .sort-wrapper .selections h1 i {
+.config-header .sort-wrapper .selections h1 i {
     position: absolute;
     left: -10px;
     top: 6px;
 }
 
-.room-header .sort-wrapper .selections hr {
+.config-header .sort-wrapper .selections hr {
     width: 100%;
 }
 
-.room-header button i {
+.config-header button i {
     margin-right: 8px;
 }
 
@@ -118,6 +118,7 @@
     height: 30px;
     overflow-y: auto;
     overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .room-cont .room-type-content .room span {
@@ -212,7 +213,7 @@
     background-color: var(--primary);
 }
 
-.room-cont .room-add {
+.room-add {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -221,52 +222,53 @@
     padding: 20px 40px;
 }
 
-.room-cont .room-add form {
+.room-add form {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 250px;
 }
 
-.room-cont .room-add .room-add-input {
+.room-add .room-add-input {
     display: flex;
     flex-direction: column;
 }
 
-.room-cont .room-add .room-add-input:nth-child(7) {
+.room-add .room-add-input:last-of-type {
     flex-direction: row;
     align-items: center;
     gap: 10px;
 }
 
-.room-cont .room-add .room-add-input img {
+.room-add .room-add-input img {
     width: 100%;
     height: 120px;
     border: 1px solid var(--primary);
 }
 
-.room-cont .room-add .room-add-input label {
+.room-add .room-add-input label {
     font-size: 0.8rem;
 }
 
-.room-cont .room-add .room-add-input input[type="number"],
-.room-cont .room-add textarea {
+.room-add .room-add-input input[type="number"],
+.room-add .room-add-input input[type="text"],
+.room-add textarea {
     padding: 5px;
     border: 1px solid var(--primary);
 }
 
-.room-cont .room-add .room-add-input input[type="checkbox"] {
+.room-add .room-add-input input[type="checkbox"] {
     width: 20px;
     height: 20px;
 }
 
-.room-cont .room-add .bttns {
+.room-add .bttns {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
 }
 
-.room-cont .room-add button {
+.room-add button {
     width: 60px;
     align-self: flex-end;
     padding-block: 10px;
@@ -276,11 +278,11 @@
     border-radius: 2px;
 }
 
-.room-cont .room-add .bttns button:first-child {
+.room-add .bttns button:first-child {
     background-color: var(--red);
 }
 
-.room-cont .room-add i {
+.room-add i {
     position: absolute;
     right: 5px;
     top: 5px;
@@ -288,18 +290,18 @@
     font-size: 1.5rem;
 }
 
-.admin-settings {
+.infos {
     display: flex;
     flex-direction: column;
     margin: 5px;
 }
 
-.admin-settings h1 {
+.infos h1 {
     font-size: 1rem;
     color: var(--primary);
 }
 
-.admin-settings h1 b {
+.infos h1 b {
     font-weight: 900;
     font-size: 1.8rem;
 }
@@ -402,11 +404,12 @@
 .room-table-cont {
     overflow-x: auto;
     padding: 10px 5px;
+    width: 100%;
 }
 
 .room-table-cont img {
-    width: 100px;
-    height: 60px;
+    width: 100%;
+    height: auto;
 }
 
 .room-table-cont table {
@@ -420,9 +423,10 @@
     font-size: 0.6rem;
     padding: 5px;
     text-align: center;
-    min-width: 50px;
-    max-width: 200px;
+    min-width: 60px;
+    max-width: 60px;
     overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .room-table-cont table th:last-of-type,
@@ -455,14 +459,131 @@
     text-align: left;
 }
 
+/* amenity */
+
+.amenity-card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 5px;
+}
+
+.amenity-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    color: var(--primary);
+    max-width: min-content;
+    overflow: hidden;
+}
+
+.amenity-card h1 {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 6px;
+}
+
+.amenity-card img {
+    width: 100px;
+    height: 60px;
+}
+
+.amenity-card h2 {
+    font-size: 1rem;
+}
+
+.amenity-card h5 {
+    font-size: 0.5rem;
+    height: 30px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.amenity-card span {
+    position: absolute;
+    font-size: 0.5rem;
+    background-color: var(--red);
+    padding: 2px;
+    right: 0;
+    top: 0;
+    color: #fff;
+    font-weight: 300;
+    border-bottom-left-radius: 4px;
+}
+
+.amenity-table-cont {
+    overflow-x: auto;
+    padding: 5px;
+}
+
+.amenity-table-cont img {
+    width: 100%;
+    height: auto;
+}
+
+.amenity-table-cont table {
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--primary);
+}
+
+.amenity-table-cont th,
+.amenity-table-cont td {
+    font-size: 0.6rem;
+    padding: 5px;
+    text-align: center;
+    min-width: 60px;
+    max-width: 60px;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.amenity-table-cont tbody tr {
+    background-color: #fff;
+}
+
+.amenity-table-cont td {
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.amenity-table-cont table td span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--red);
+    color: #fff;
+    padding: 2px;
+    font-size: 0.5rem;
+}
+
+.amenity-table-cont table thead {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.amenity-table-cont th:last-of-type,
+.amenity-table-cont td:last-of-type {
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.amenity-table-cont table td:last-of-type {
+    text-align: left;
+}
+
 
 /* PC */
 @media (min-width: 1025px) {
-    .room-header button {
+    .config-header button {
         cursor: pointer;
     }
 
-    .room-header button:hover {
+    .config-header button:hover {
         background-color: var(--primary-dark);
     }
 
@@ -554,39 +675,39 @@
         cursor: pointer;
     }
 
-    .room-cont .room-add form {
+    .room-add form {
         width: 350px;
     }
 
-    .room-cont .room-add .room-add-input img {
+    .room-add .room-add-input img {
         height: 180px;
     }
 
-    .room-cont .room-add .room-add-input label {
+    .room-add .room-add-input label {
         font-size: 1rem;
     }
 
-    .room-cont .room-add .room-add-input input[type="checkbox"] {
+    .room-add .room-add-input input[type="checkbox"] {
         width: 25px;
         height: 25px;
     }
 
-    .room-cont .room-add button {
+    .room-add button {
         width: 80px;
         padding-block: 12px;
         cursor: pointer;
     }
 
-    .room-cont .room-add i {
+    .room-add i {
         font-size: 2rem;
         cursor: pointer;
     }
 
-    .admin-settings h1 {
+    .infos h1 {
         font-size: 1.5rem;
     }
 
-    .admin-settings h1 b {
+    .infos h1 b {
         font-size: 2.5rem;
     }
 
@@ -639,19 +760,24 @@
     }
 
     .room-table-cont img {
-        width: 200px;
-        height: 120px;
+        width: 100%;
+        height: auto;
     }
 
     .room-table-cont table {
         border-bottom: 3px solid var(--primary);
+        width: 100%;
     }
 
     .room-table-cont table th,
     .room-table-cont table td {
         font-size: 0.8rem;
-        min-width: 100px;
-        max-width: 300px;
+        min-width: 130px;
+    }
+
+    .room-table-cont table th:last-of-type,
+    .room-table-cont table td:last-of-type {
+        width: 100%;
     }
 
     .room-table-cont table tbody tr:hover {
@@ -664,21 +790,82 @@
         font-size: 0.8rem;
     }
 
-    .room-table-cont table th:last-of-type,
-    .room-table-cont table td:last-of-type {
-        min-width: 400px;
-        max-width: 400px;
-    }
-
-    .room-header .sort-wrapper .selections h1 {
+    .config-header .sort-wrapper .selections h1 {
         cursor: pointer;
     }
 
-    .room-header .sort-wrapper .selections h1:hover {
+    .config-header .sort-wrapper .selections h1:hover {
         background-color: var(--primary-dark);
     }
 
     .card-and-table-togg-cont button {
         cursor: pointer;
+    }
+
+    .amenity-card {
+        width: 200px;
+        padding: 10px;
+        transition: all 0.1s;
+        cursor: pointer;
+    }
+
+    .amenity-card:hover {
+        transform: scale(1.02);
+    }
+
+    .amenity-card h1 {
+        font-size: 1.5rem;
+        margin-top: 10px;
+    }
+
+    .amenity-card img {
+        width: 200px;
+        height: 120px;
+    }
+
+    .amenity-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .amenity-card h5 {
+        font-size: 0.8rem;
+        height: 80px;
+    }
+
+    .amenity-card span {
+        font-size: 0.7rem;
+        padding: 4px;
+        font-weight: 400;
+    }
+
+    .amenity-table-cont img {
+        width: 100%;
+        height: auto;
+    }
+
+    .amenity-table-cont table tbody tr:hover {
+        cursor: pointer;
+        background-color: #eee;
+    }
+
+    .amenity-table-cont table {
+        width: 100%;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .amenity-table-cont th,
+    .amenity-table-cont td {
+        font-size: 0.8rem;
+        min-width: 140px;
+    }
+
+    .amenity-table-cont th:last-of-type,
+    .amenity-table-cont td:last-of-type {
+        width: 100%;
+    }
+
+    .amenity-table-cont table td span {
+        padding: 4px;
+        font-size: 0.8rem;
     }
 }
