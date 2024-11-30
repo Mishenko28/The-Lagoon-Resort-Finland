@@ -35,7 +35,7 @@ const updatePicture = async (req, res) => {
     let editedParts = []
 
     try {
-        const oldPicture = await Amenity.findOne({ _id })
+        const oldPicture = await Picture.findOne({ _id })
 
         const picture = await Picture.findOneAndUpdate({ _id }, { img, caption, hide }, { new: true })
 

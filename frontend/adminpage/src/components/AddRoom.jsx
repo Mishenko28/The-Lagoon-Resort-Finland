@@ -1,13 +1,16 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAdmin from '../hooks/useAdmin'
+import useConvertBase64 from '../hooks/useConvertBase64'
 
 export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
     const { dispatch } = useAdmin()
+    const [base64, convertToBase64] = useConvertBase64("")
 
     const [isLoading, setIsLoading] = useState(false)
+
     const [newRoom, setNewRoom] = useState({
-        img: "",
+        img: base64,
         roomNo: "",
         rate: "",
         addFeePerPerson: "",
@@ -17,30 +20,9 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
         roomType: roomType
     })
 
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader()
-
-            reader.onloadend = () => {
-                resolve(reader.result)
-            }
-
-            reader.onerror = () => {
-                reject(new Error('Failed to convert image to Base64'))
-            }
-
-            reader.readAsDataURL(file)
-        })
-    }
-
-    const handleChangeImage = (file) => {
-        if (file) {
-            convertToBase64(file)
-                .then(base64 => setNewRoom(prev => ({ ...prev, img: base64 })))
-        } else {
-            setNewRoom(prev => ({ ...prev, img: "" }))
-        }
-    }
+    useEffect(() => {
+        setNewRoom(prev => ({ ...prev, img: base64 }))
+    }, [base64])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -75,7 +57,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
                     <div className="room-add-input">
                         <label>Image:</label>
                         <img src={newRoom.img} />
-                        <input onChange={(e) => handleChangeImage(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
+                        <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
                     </div>
                     <div className="room-add-input">
                         <label>Room Number:</label>

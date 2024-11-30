@@ -1,15 +1,17 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAdmin from '../hooks/useAdmin'
+import useConvertBase64 from '../hooks/useConvertBase64'
 
 export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
     const { dispatch } = useAdmin()
+    const [base64, convertToBase64] = useConvertBase64(editRoom.img)
 
     const [deleteTogg, setDeleteTogg] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [updatedRoom, setUpdatedRoom] = useState({
         _id: editRoom._id,
-        img: editRoom.img,
+        img: base64,
         roomNo: editRoom.roomNo,
         rate: editRoom.rate,
         addFeePerPerson: editRoom.addFeePerPerson,
@@ -19,30 +21,9 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
         roomType: editRoom.roomType
     })
 
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader()
-
-            reader.onloadend = () => {
-                resolve(reader.result)
-            }
-
-            reader.onerror = () => {
-                reject(new Error('Failed to convert image to Base64'))
-            }
-
-            reader.readAsDataURL(file)
-        })
-    }
-
-    const handleChangeImage = (file) => {
-        if (file) {
-            convertToBase64(file)
-                .then(base64 => setUpdatedRoom(prev => ({ ...prev, img: base64 })))
-        } else {
-            setUpdatedRoom(prev => ({ ...prev, img: "" }))
-        }
-    }
+    useEffect(() => {
+        setUpdatedRoom(prev => ({ ...prev, img: base64 }))
+    }, [base64])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -106,7 +87,7 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
                             <div className="room-add-input">
                                 <label>Image:</label>
                                 <img src={updatedRoom.img} />
-                                <input onChange={(e) => handleChangeImage(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
+                                <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
                             </div>
                             <div className="room-add-input">
                                 <label>Room Number:</label>

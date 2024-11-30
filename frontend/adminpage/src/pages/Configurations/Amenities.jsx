@@ -10,7 +10,7 @@ export default function Amenities() {
 
     const [amenities, setAmenities] = useState([])
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     const [isCard, setIsCard] = useState(true)
     const [sort, setSort] = useState({
@@ -54,8 +54,6 @@ export default function Amenities() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true)
-
             await axios.get('/amenity/all')
                 .then((res) => {
                     setAmenities(res.data.amenities)

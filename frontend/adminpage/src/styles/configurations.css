@@ -577,6 +577,124 @@
 }
 
 
+/* gallery */
+
+.gallery-add-cont {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+    border: 3px solid var(--primary);
+    border-radius: 4px;
+    margin: 5px;
+    color: var(--primary);
+}
+
+.gallery-add {
+    display: flex;
+    gap: 5px;
+}
+
+.gallery-add textarea {
+    padding: 5px;
+    border: 1px solid var(--primary);
+    font-size: 0.8rem;
+}
+
+.gallery-add img {
+    width: 100px;
+    height: fit-content;
+    object-fit: contain;
+    object-position: top;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+}
+
+.gallery-add-cont h1 {
+    font-size: 1rem;
+}
+
+.gallery-add-cont h2 {
+    font-size: 0.8rem;
+}
+
+.gallery-add-cont .bttns {
+    display: flex;
+    gap: 10px;
+    align-self: flex-end;
+}
+
+.gallery-add-cont .bttns button {
+    padding-block: 5px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 2px;
+    width: 70px;
+}
+
+.gallery-add-cont button:last-of-type {
+    background-color: var(--red);
+}
+
+.gallery-add-cont .hide-wrapper {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.gallery-add-cont .hide-wrapper input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+}
+
+.gallery-cont {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 5px 100px 5px;
+}
+
+.gallery-cont .photo {
+    position: relative;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    background-color: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.gallery-cont .photo img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+    object-position: top;
+}
+
+.gallery-cont .photo hr {
+    margin-inline: 5px;
+}
+
+.gallery-cont .photo p {
+    height: 80px;
+    font-size: 0.65rem;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    margin: 5px;
+}
+
+.gallery-cont .photo h2 {
+    position: absolute;
+    background-color: var(--red);
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 0.5rem;
+    top: 0;
+    right: 0;
+    font-weight: 300;
+}
+
+
+
 /* PC */
 @media (min-width: 1025px) {
     .config-header button {

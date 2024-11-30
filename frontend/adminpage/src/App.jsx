@@ -12,6 +12,7 @@ import Rooms from './pages/Configurations/Rooms'
 import Amenities from './pages/Configurations/Amenities'
 import Success from './components/Success'
 import Failed from './components/Failed'
+import Gallery from './pages/Configurations/Gallery'
 
 function App() {
     const { state } = useAdmin()
@@ -29,7 +30,7 @@ function App() {
                         <Route path='configuration' element={<Configuration />}>
                             <Route path='room' element={<Rooms />} />
                             <Route path='amenity' element={<Amenities />} />
-                            <Route path='gallery' element={<h1>Gallery</h1>} />
+                            <Route path='gallery' element={<Gallery />} />
                             <Route path='about-us' element={<h1>About Us</h1>} />
                         </Route>
                         <Route path='utilities' element={<Utilities />}>
