@@ -18,6 +18,10 @@ const addRoom = async (req, res) => {
     const { roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
 
     try {
+        const existingRoomNo = await Room.findOne({ roomType, roomNo })
+
+        if (existingRoomNo) throw new Error("Room number already exists.")
+
         const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
 
         // activity log

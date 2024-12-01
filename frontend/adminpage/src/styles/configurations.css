@@ -692,6 +692,7 @@
     top: 0;
     right: 0;
     font-weight: 300;
+    border-bottom-left-radius: 2px;
 }
 
 
@@ -852,6 +853,7 @@
 
     .change-down-payment button {
         padding: 10px;
+        cursor: pointer;
     }
 
     .add-room-type {
@@ -876,6 +878,7 @@
 
     .add-room-type button {
         padding: 10px;
+        cursor: pointer;
     }
 
     .room-table-cont img {
@@ -1008,6 +1011,12 @@
         gap: 20px;
     }
 
+    .gallery-cont .photo:hover {
+        transform: scale(1.02);
+        transition: all 0.1s;
+        cursor: pointer;
+    }
+
     .gallery-cont .photo img {
         width: 240px;
         height: 160px;
@@ -1021,5 +1030,6 @@
     .gallery-cont .photo h2 {
         padding: 3px 8px;
         font-size: 0.7rem;
+        border-bottom-left-radius: 4px;
     }
 }

@@ -24,7 +24,7 @@ export default function EditPhoto({ editPhoto, setEditPhoto, setPhotos }) {
         e.preventDefault()
 
         if (updatePhoto.img === "" || updatePhoto.caption.trim() === "") {
-            alert('Please fill out all fields')
+            dispatch({ type: 'FAILED', payload: 'Please fill in all fields' })
             return
         }
 

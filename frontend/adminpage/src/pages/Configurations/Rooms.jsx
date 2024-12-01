@@ -86,11 +86,18 @@ export default function Rooms() {
                 return sort.order === "asc" ? a.maxPerson - b.maxPerson : b.maxPerson - a.maxPerson
             } else if (sort.type === "active") {
                 return sort.order === "asc" ? b.active - a.active : a.active - b.active
+            } else if (sort.type === "created") {
+                return sort.order === "asc" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt)
             }
             return 0
         })
+
+        if (JSON.stringify(sortedRooms) === JSON.stringify(rooms)) {
+            return
+        }
+
         setRooms(sortedRooms)
-    }, [sort])
+    }, [sort, rooms])
 
     useEffect(() => {
         newRoomTypeTogg && newRoomTypeRef.current.focus()
@@ -154,6 +161,7 @@ export default function Rooms() {
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "rate" }))}>{sort.type == "rate" && <i className="fa-solid fa-caret-right" />}Rate</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "max" }))}>{sort.type == "max" && <i className="fa-solid fa-caret-right" />}Max Person</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "active" }))}>{sort.type == "active" && <i className="fa-solid fa-caret-right" />}Active</h1>
+                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "created" }))}>{sort.type == "created" && <i className="fa-solid fa-caret-right" />}Created</h1>
                                     <hr />
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "asc" }))}>{sort.order == "asc" && <i className="fa-solid fa-caret-right" />}Ascending</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "des" }))}>{sort.order == "des" && <i className="fa-solid fa-caret-right" />}Descending</h1>

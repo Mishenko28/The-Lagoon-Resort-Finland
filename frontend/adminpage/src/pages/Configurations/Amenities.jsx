@@ -46,17 +46,24 @@ export default function Amenities() {
                 return sort.order === "asc" ? a.rate - b.rate : b.rate - a.rate
             } else if (sort.type === "active") {
                 return sort.order === "asc" ? b.active - a.active : a.active - b.active
+            } else if (sort.type === "created") {
+                return sort.order === "asc" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt)
             }
             return 0
         })
+
+        if (JSON.stringify(sortedAmenities) === JSON.stringify(amenities)) {
+            return
+        }
+
         setAmenities(sortedAmenities)
-    }, [sort])
+    }, [sort, amenities])
 
     useEffect(() => {
         const fetchData = async () => {
             await axios.get('/amenity/all')
                 .then((res) => {
-                    setAmenities(res.data.amenities)
+                    setAmenities(res.data.amenities.sort((a, b) => a.name.localeCompare(b.name)))
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -83,6 +90,7 @@ export default function Amenities() {
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "name" }))}>{sort.type == "name" && <i className="fa-solid fa-caret-right" />}Name</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "rate" }))}>{sort.type == "rate" && <i className="fa-solid fa-caret-right" />}Rate</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "active" }))}>{sort.type == "active" && <i className="fa-solid fa-caret-right" />}Active</h1>
+                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "created" }))}>{sort.type == "created" && <i className="fa-solid fa-caret-right" />}Created</h1>
                                     <hr />
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "asc" }))}>{sort.order == "asc" && <i className="fa-solid fa-caret-right" />}Ascending</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, order: "des" }))}>{sort.order == "des" && <i className="fa-solid fa-caret-right" />}Descending</h1>

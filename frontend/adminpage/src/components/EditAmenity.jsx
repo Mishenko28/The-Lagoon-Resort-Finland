@@ -28,7 +28,7 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
         e.preventDefault()
 
         if (updateAmenity.img === "" || updateAmenity.rate === "" || updateAmenity.caption.trim() === "" || updateAmenity.name.trim() === "") {
-            alert('Please fill out all fields')
+            dispatch({ type: 'FAILED', payload: 'Please fill out all fields' })
             return
         }
 

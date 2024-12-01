@@ -24,7 +24,7 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
         e.preventDefault()
 
         if (newAmenity.name.trim() === "" || newAmenity.img === "" || newAmenity.rate === "" || newAmenity.caption.trim() === "") {
-            alert('Please fill out all fields')
+            dispatch({ type: 'FAILED', payload: 'Please fill out all fields' })
             return
         }
 

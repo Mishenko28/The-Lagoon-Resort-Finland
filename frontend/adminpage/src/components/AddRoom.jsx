@@ -28,7 +28,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
         e.preventDefault()
 
         if (newRoom.img === "" || newRoom.roomNo === "" || newRoom.rate === "" || newRoom.addFeePerPerson === "" || newRoom.maxPerson === "" || newRoom.caption.trim() === "") {
-            alert('Please fill out all fields')
+            dispatch({ type: 'FAILED', payload: 'Please fill in all fields' })
             return
         }
 

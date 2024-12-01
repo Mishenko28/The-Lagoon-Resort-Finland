@@ -70,6 +70,7 @@ export default function Gallery() {
             }
             return 0
         })
+
         setPhotos(sortedPhotos)
     }, [sort])
 
@@ -82,6 +83,13 @@ export default function Gallery() {
     }
 
     const submitNewPhoto = async () => {
+        if (!newPhoto.caption.trim() || !newPhoto.img) {
+            dispatch({ type: 'FAILED', payload: 'Please fill in all fields' })
+            setNewPhotoLoading(false)
+            return
+
+        }
+
         setNewPhotoLoading(true)
 
         await axios.post('gallery/add', { ...newPhoto })

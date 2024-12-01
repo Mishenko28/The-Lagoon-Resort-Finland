@@ -29,7 +29,7 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
         e.preventDefault()
 
         if (updatedRoom.img === "" || updatedRoom.roomNo === "" || updatedRoom.rate === "" || updatedRoom.addFeePerPerson === "" || updatedRoom.maxPerson === "" || updatedRoom.caption.trim() === "") {
-            alert('Please fill out all fields')
+            dispatch({ type: 'FAILED', payload: 'Please fill in all fields' })
             return
         }
 

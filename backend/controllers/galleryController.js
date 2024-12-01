@@ -18,6 +18,10 @@ const addPicture = async (req, res) => {
     const { img, caption, adminEmail, hide } = await req.body
 
     try {
+        const existingPicture = await Picture.findOne({ img })
+
+        if (existingPicture) throw new Error("This picture already exists.")
+
         const picture = await Picture.create({ img, caption, hide })
 
         // activity log

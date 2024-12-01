@@ -18,6 +18,10 @@ const addAmenity = async (req, res) => {
     const { name, img, rate, caption, active, adminEmail } = await req.body
 
     try {
+        const existingAmenity = await Amenity.findOne({ name })
+
+        if (existingAmenity) throw Error("Amenity already exists.")
+
         const amenity = await Amenity.create({ name, img, rate, caption, active })
 
         // activity log
