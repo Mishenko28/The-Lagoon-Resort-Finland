@@ -39,6 +39,7 @@ export function AdminContextProvider({ children }) {
         axios.defaults.baseURL = "https://the-lagoon-resort-finland-inc-api.onrender.com"
         // "https://the-lagoon-resort-finland-inc-api.onrender.com" for production
         // "http://localhost:8000" for development
+
         axios.defaults.headers.common['Content-Type'] = 'application/json'
         if (admin) {
             const { token } = JSON.parse(admin)
