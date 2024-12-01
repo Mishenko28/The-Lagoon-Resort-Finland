@@ -55,6 +55,13 @@ export function AdminContextProvider({ children }) {
         }
     }, [state.admin])
 
+    useEffect(() => {
+        if (state.failed === "jwt expired") {
+            dispatch({ type: "LOGOUT" })
+            dispatch({ type: "FAILED", payload: null })
+        }
+    }, [state.failed])
+
     if (isLoading) {
         return
     }
