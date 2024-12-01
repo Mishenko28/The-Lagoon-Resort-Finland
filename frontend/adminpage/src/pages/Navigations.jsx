@@ -33,7 +33,12 @@ export default function Navigations() {
 
 
     const handleOpenNav = (e) => {
-        e.target.innerText ? setOpenNav(e.target.innerText) : setOpenNav("")
+        if (openNav === e.target.innerText) {
+            setOpenNav("")
+            return
+        }
+
+        setOpenNav(e.target.innerText)
     }
 
     const handleLogout = () => {
@@ -54,43 +59,35 @@ export default function Navigations() {
                 <div className="navigation-cont">
                     <div className='parent-cont'>
                         <NavLink onClick={handleOpenNav} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
-                        {openNav === 'Dashboard' &&
-                            <div className='child-cont'>
-                                <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>
-                                <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>
-                            </div>
-                        }
+                        <div className={`child-cont ${openNav === 'Dashboard' ? 'open' : ''}`}>
+                            <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>
+                            <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>
+                        </div>
                     </div>
                     <div className='parent-cont'>
                         <NavLink onClick={handleOpenNav} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
-                        {openNav === 'Configuration' &&
-                            <div className='child-cont'>
-                                <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
-                                <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
-                                <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
-                                <NavLink to='/configuration/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>
-                            </div>
-                        }
+                        <div className={`child-cont ${openNav === 'Configuration' ? 'open' : ''}`}>
+                            <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
+                            <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
+                            <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
+                            <NavLink to='/configuration/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>
+                        </div>
                     </div>
                     <div className='parent-cont'>
                         <NavLink onClick={handleOpenNav} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
-                        {openNav === 'Utilities' &&
-                            <div className='child-cont'>
-                                <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
-                                <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
-                                <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>
-                                <NavLink to='/utilities/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
-                                <NavLink to='/utilities/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
-                            </div>
-                        }
+                        <div className={`child-cont ${openNav === 'Utilities' ? 'open' : ''}`}>
+                            <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
+                            <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
+                            <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>
+                            <NavLink to='/utilities/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
+                            <NavLink to='/utilities/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
+                        </div>
                     </div>
                     <div className='parent-cont'>
                         <NavLink onClick={handleOpenNav} to='/help'>Help<i className="fa-regular fa-circle-question" /></NavLink>
-                        {openNav == 'Help' &&
-                            <div className='child-cont'>
-                                <NavLink to='/help/user-manual'>User Manual<i className="fa-solid fa-circle-info" /></NavLink>
-                            </div>
-                        }
+                        <div className={`child-cont ${openNav === 'Help' ? 'open' : ''}`}>
+                            <NavLink to='/help/user-manual'>User Manual<i className="fa-solid fa-circle-info" /></NavLink>
+                        </div>
                     </div>
                 </div>
                 <div className="content-cont">

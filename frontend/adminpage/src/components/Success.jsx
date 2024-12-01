@@ -12,7 +12,7 @@ export default function Success() {
 
     return (
         <div className="full-cont">
-            <div className="success-cont">
+            <div className="success-cont animate__animated animate__bounceIn">
                 <i className="fa-regular fa-circle-check" />
                 <h1>Success!</h1>
                 <p>Your request has been successfully processed.</p>

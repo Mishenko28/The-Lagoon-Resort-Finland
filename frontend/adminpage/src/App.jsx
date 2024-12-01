@@ -34,11 +34,11 @@ function App() {
                             <Route path='about-us' element={<h1>About Us</h1>} />
                         </Route>
                         <Route path='utilities' element={<Utilities />}>
-                            <Route path='archive' element={<h1>Rooms</h1>} />
-                            <Route path='activity-logs' element={<h1>Amenities</h1>} />
-                            <Route path='database' element={<h1>Gallery</h1>} />
-                            <Route path='users' element={<h1>Users</h1>} />
-                            <Route path='admins' element={<h1>Admins</h1>} />
+                            <Route path='archive' element={<h1>WHAHAHA</h1>} />
+                            <Route path='activity-logs' element={<h1>WHAHAHA</h1>} />
+                            <Route path='database' element={<h1>WHAHAHA</h1>} />
+                            <Route path='users' element={<h1>WHAHAHA</h1>} />
+                            <Route path='admins' element={<h1>WHAHAHA</h1>} />
                         </Route>
                         <Route path='help' element={<Help />}>
                             <Route path='user-manual' element={<h1>User Manual</h1>} />

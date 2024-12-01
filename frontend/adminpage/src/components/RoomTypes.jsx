@@ -78,7 +78,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                         </div>
                     }
                     {isCard && rooms.map(room => (
-                        <div key={room._id} onClick={() => setEditRoom(room)} className='room'>
+                        <div key={room._id} onClick={() => setEditRoom(room)} className='room animate__animated animate__zoomIn'>
                             <h1>{room.roomNo}</h1>
                             <img src={room.img} />
                             <h2>₱{room.rate}</h2>
@@ -90,7 +90,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                         </div>
                     ))}
                     {!isCard && rooms.length > 0 &&
-                        <div className='room-table-cont'>
+                        <div className='room-table-cont animate__animated animate__fadeIn'>
                             <table>
                                 <thead>
                                     <tr>
