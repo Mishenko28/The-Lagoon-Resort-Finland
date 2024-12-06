@@ -108,7 +108,7 @@ export default function Amenities() {
                     {isCard ?
                         <div className="amenity-card-wrapper">
                             {amenities.map(amenity => (
-                                <div key={amenity._id} onClick={() => setEditAmenity(amenity)} className='amenity-card animate__animated animate__zoomIn'>
+                                <div key={amenity._id} onClick={() => setEditAmenity(amenity)} className='amenity-card'>
                                     <h1>{amenity.name}</h1>
                                     <img src={amenity.img} />
                                     <h2>₱{amenity.rate}</h2>
@@ -119,7 +119,7 @@ export default function Amenities() {
                             ))}
                         </div>
                         :
-                        <div className="amenity-table-cont animate__animated animate__fadeIn">
+                        <div className="amenity-table-cont">
                             <table>
                                 <thead>
                                     <tr>

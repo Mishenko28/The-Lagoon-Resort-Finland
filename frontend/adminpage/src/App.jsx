@@ -14,6 +14,14 @@ import Success from './components/Success'
 import Failed from './components/Failed'
 import Gallery from './pages/Configurations/Gallery'
 
+import ActivityLogs from './pages/Utilities/ActivityLogs'
+
+// PDF
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
+// PDF
+
 function App() {
     const { state } = useAdmin()
 
@@ -35,7 +43,7 @@ function App() {
                         </Route>
                         <Route path='utilities' element={<Utilities />}>
                             <Route path='archive' element={<h1>WHAHAHA</h1>} />
-                            <Route path='activity-logs' element={<h1>WHAHAHA</h1>} />
+                            <Route path='activity-logs' element={<ActivityLogs />} />
                             <Route path='database' element={<h1>WHAHAHA</h1>} />
                             <Route path='users' element={<h1>WHAHAHA</h1>} />
                             <Route path='admins' element={<h1>WHAHAHA</h1>} />

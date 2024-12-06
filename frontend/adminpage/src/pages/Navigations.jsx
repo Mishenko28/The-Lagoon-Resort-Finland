@@ -32,13 +32,13 @@ export default function Navigations() {
     }, [])
 
 
-    const handleOpenNav = (e) => {
-        if (openNav === e.target.innerText) {
+    const handleOpenNav = (nav) => {
+        if (openNav === nav) {
             setOpenNav("")
             return
         }
 
-        setOpenNav(e.target.innerText)
+        setOpenNav(nav)
     }
 
     const handleLogout = () => {
@@ -58,15 +58,15 @@ export default function Navigations() {
             <div className='nav-and-con'>
                 <div className="navigation-cont">
                     <div className='parent-cont'>
-                        <NavLink onClick={handleOpenNav} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
-                        <div className={`child-cont ${openNav === 'Dashboard' ? 'open' : ''}`}>
+                        <NavLink onClick={() => handleOpenNav('dashboard')} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
+                        <div className={`child-cont ${openNav === 'dashboard' ? 'open' : ''}`}>
                             <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>
                             <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>
                         </div>
                     </div>
                     <div className='parent-cont'>
-                        <NavLink onClick={handleOpenNav} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
-                        <div className={`child-cont ${openNav === 'Configuration' ? 'open' : ''}`}>
+                        <NavLink onClick={() => handleOpenNav('configuration')} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
+                        <div className={`child-cont ${openNav === 'configuration' ? 'open' : ''}`}>
                             <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
                             <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
                             <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
@@ -74,8 +74,8 @@ export default function Navigations() {
                         </div>
                     </div>
                     <div className='parent-cont'>
-                        <NavLink onClick={handleOpenNav} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
-                        <div className={`child-cont ${openNav === 'Utilities' ? 'open' : ''}`}>
+                        <NavLink onClick={() => handleOpenNav('utilities')} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
+                        <div className={`child-cont ${openNav === 'utilities' ? 'open' : ''}`}>
                             <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
                             <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
                             <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>
@@ -84,8 +84,8 @@ export default function Navigations() {
                         </div>
                     </div>
                     <div className='parent-cont'>
-                        <NavLink onClick={handleOpenNav} to='/help'>Help<i className="fa-regular fa-circle-question" /></NavLink>
-                        <div className={`child-cont ${openNav === 'Help' ? 'open' : ''}`}>
+                        <NavLink onClick={() => handleOpenNav('help')} to='/help'>Help<i className="fa-regular fa-circle-question" /></NavLink>
+                        <div className={`child-cont ${openNav === 'help' ? 'open' : ''}`}>
                             <NavLink to='/help/user-manual'>User Manual<i className="fa-solid fa-circle-info" /></NavLink>
                         </div>
                     </div>

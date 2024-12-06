@@ -1,9 +1,12 @@
-const ActivityLog = require('../models/activityLogModel')
-const Admin = require('../models/adminModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
+const { Admin } = require('../models/adminModel')
 
-const getAllActivityLogs = async (_, res) => {
+const getAllActivityLogs = async (req, res) => {
+    const { page, email, action } = req.query
+    const actions = Object.values(Actions).map(action => { return action })
+
     try {
-        let logs = await ActivityLog.find({})
+        let logs = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).sort({ createdAt: -1 }).skip((page - 1) * 20).limit(20)
 
         logs = await Promise.all(logs.map(async log => {
             const { personalData } = await Admin.findOne({ email: log.adminEmail })
@@ -16,7 +19,9 @@ const getAllActivityLogs = async (_, res) => {
             }
         }))
 
-        res.status(200).json({ logs })
+        const admins = await Admin.find({}).select('email')
+
+        res.status(200).json({ logs, admins, actions })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

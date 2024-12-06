@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
 const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 const User = require('../models/userModel')
 
 // STATUS
@@ -125,7 +125,7 @@ const setConfirmed = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Confirmed a book. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -179,7 +179,7 @@ const setCompleted = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Confirm a book as completed. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -197,7 +197,7 @@ const setCancelled = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Cancelled a book. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -215,7 +215,7 @@ const setNoshow = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Set a book as noshow. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow. (${email})` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -245,6 +245,7 @@ const editBook = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
+                action: [Actions.BOOKING, Actions.UPDATED],
                 activity: `Changed information. ${editedParts.map(part => {
                     switch (part) {
                         case "from":

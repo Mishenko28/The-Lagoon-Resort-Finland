@@ -142,7 +142,7 @@ export default function Gallery() {
                     </div>
                     <div className='gallery-cont'>
                         {photos.map(photo => (
-                            <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo animate__animated animate__zoomInDown'>
+                            <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo'>
                                 <img src={photo.img} />
                                 <hr />
                                 <p>{photo.caption}</p>

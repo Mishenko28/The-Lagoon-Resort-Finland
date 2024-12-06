@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-module.exports = mongoose.model('Admin', new mongoose.Schema({
+module.exports.Admin = mongoose.model('Admin', new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -10,7 +10,7 @@ module.exports = mongoose.model('Admin', new mongoose.Schema({
         type: String,
         required: true
     },
-    access: {
+    role: {
         type: Array,
         required: true
     },
@@ -33,3 +33,23 @@ module.exports = mongoose.model('Admin', new mongoose.Schema({
         }
     }
 }, { timestamps: true }), 'admins')
+
+module.exports.Roles = Roles = {
+    DASHBOARD: {
+        BOOKING: 'booking',
+        REPORTS: 'reports'
+    },
+    CONFIGURATION: {
+        ROOM: 'room',
+        AMENITY: 'amenity',
+        GALLERY: 'gallery',
+        ABOUT_US: 'aboutUs'
+    },
+    UTILITIES: {
+        ARCHIVE: 'archive',
+        ACTIVITY_LOGS: 'activityLogs',
+        DATABASE: 'database',
+        USERS: 'users',
+        ADMINS: 'admins'
+    }
+}

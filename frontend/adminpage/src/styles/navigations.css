@@ -148,6 +148,7 @@
     position: relative;
     flex: 1;
     overflow: auto;
+    padding: 5px 5px 50px 5px;
 }
 
 /* PC */
@@ -197,5 +198,9 @@
     .settings-cont button {
         padding: 10px 15px;
         width: 180px;
+    }
+
+    .content-cont {
+        padding: 15px 15px 100px 15px;
     }
 }

@@ -1,6 +1,6 @@
 const Room = require('../models/roomModel')
 const Archive = require('../models/archiveModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 
 // GET ALL ROOMS
 const getAllRooms = async (_, res) => {
@@ -25,7 +25,7 @@ const addRoom = async (req, res) => {
         const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Added a new room. (room number: ${roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a new room. (room number: ${roomNo})` })
 
         res.status(200).json({ room })
     } catch (error) {
@@ -56,6 +56,7 @@ const updateRoom = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
+                action: [Actions.ROOM, Actions.UPDATED],
                 activity: `Changed properties. ${editedParts.map(part => {
                     switch (part) {
                         case "roomNo":
@@ -98,7 +99,7 @@ const deleteRoom = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Deleted a room. (room number: ${room.roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a room. (room number: ${room.roomNo})` })
 
         res.status(200).json({ room })
     } catch (error) {
@@ -119,7 +120,7 @@ const restoreRoom = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Restored a room. (${room.roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.RESTORED], activity: `Restored a room. (${room.roomNo})` })
 
         res.status(200).json({ room })
     } catch (error) {

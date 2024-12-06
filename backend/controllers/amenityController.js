@@ -1,6 +1,6 @@
 const Amenity = require('../models/amenityModel')
 const Archive = require('../models/archiveModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 
 // GET ALL AMENITIES
 const getAllAmenities = async (_, res) => {
@@ -25,7 +25,7 @@ const addAmenity = async (req, res) => {
         const amenity = await Amenity.create({ name, img, rate, caption, active })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Added a new amenity. (${name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.CREATED], activity: `Added a new amenity. (${name})` })
 
         res.status(200).json({ amenity })
     } catch (error) {
@@ -53,6 +53,7 @@ const updateAmenity = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
+                action: [Actions.AMENITY, Actions.UPDATED],
                 activity: `Changed information. ${editedParts.map(part => {
                     switch (part) {
                         case "name":
@@ -89,7 +90,7 @@ const deleteAmenity = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Deleted an amenity. (${amenity.name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.DELETED], activity: `Deleted an amenity. (${amenity.name})` })
 
         res.status(200).json({ amenity })
     } catch (error) {
@@ -110,7 +111,7 @@ const restoreAmenity = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Restored an amenity. (${amenity.name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.RESTORED], activity: `Restored an amenity. (${amenity.name})` })
 
         res.status(200).json({ amenity })
     } catch (error) {

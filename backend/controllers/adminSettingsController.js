@@ -1,5 +1,5 @@
 const AdminSetting = require('../models/adminSettingsModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 const Room = require('../models/roomModel')
 
 const getSettings = async (_, res) => {
@@ -43,6 +43,7 @@ const updateSettings = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
+                action: [Actions.ADMIN, Actions.UPDATED],
                 activity: `Changed settings. ${editedParts.map(part => {
                     switch (part) {
                         case "downPayment":

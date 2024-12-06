@@ -7,7 +7,7 @@ export default function Success() {
     useEffect(() => {
         state.success && setTimeout(() => {
             dispatch({ type: 'SUCCESS', payload: false })
-        }, 2000)
+        }, 1500)
     }, [state.success])
 
     return (

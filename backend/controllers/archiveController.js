@@ -1,5 +1,5 @@
 const Archive = require('../models/archiveModel')
-const Admin = require('../models/adminModel')
+const { Admin } = require('../models/adminModel')
 
 const getAllArchives = async (_, res) => {
     try {

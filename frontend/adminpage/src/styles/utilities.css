@@ -1,0 +1,119 @@
+.logs-table-cont {
+    overflow-x: auto;
+    margin-top: 20px;
+    animation: fadeIn 0.5s;
+}
+
+.logs-table-cont table {
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--primary);
+    width: 100%;
+    min-width: 500px;
+}
+
+.logs-table-cont th,
+.logs-table-cont td {
+    font-size: 0.6rem;
+    text-align: center;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.logs-table-cont th {
+    padding-block: 5px;
+}
+
+.logs-table-cont td {
+    border: 1px solid #ddd;
+    padding-block: 10px;
+}
+
+.logs-table-cont tbody tr {
+    background-color: #fff;
+}
+
+.logs-table-cont table thead {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.utilities-header {
+    display: flex;
+    flex-direction: column;
+    color: var(--primary);
+}
+
+.utilities-header .admins,
+.utilities-header .actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 15px 5px 5px 5px;
+    margin-top: 20px;
+    border: 4px solid var(--primary);
+    border-radius: 8px;
+}
+
+.utilities-header h1 {
+    position: absolute;
+    top: -16px;
+    left: 20px;
+    padding-inline: 5px;
+    background-color: var(--light-gray);
+    font-size: 1.2rem;
+}
+
+.utilities-header h2 {
+    font-size: 0.6rem;
+    padding: 7px 15px;
+    background-color: var(--secondary);
+    border-radius: 3px;
+    color: #fff;
+    text-align: center;
+    font-weight: 300;
+}
+
+
+/* PC */
+@media (min-width: 1025px) {
+    .logs-table-cont table {
+        width: 100%;
+    }
+
+    .logs-table-cont th,
+    .logs-table-cont td {
+        font-size: 0.8rem;
+    }
+
+    .logs-table-cont th {
+        padding-block: 10px;
+    }
+
+    .logs-table-cont td {
+        padding-block: 20px;
+    }
+
+    .utilities-header .admins,
+    .utilities-header .actions {
+        gap: 10px;
+        padding: 25px 15px 15px 15px;
+    }
+
+    .utilities-header h1 {
+        top: -20px;
+        left: 30px;
+        font-size: 1.5rem;
+    }
+
+    .utilities-header h2 {
+        font-size: 1rem;
+        padding: 12px 25px;
+        border-radius: 6px;
+    }
+
+    .utilities-header h2:hover {
+        cursor: pointer;
+        background-color: var(--primary);
+    }
+}

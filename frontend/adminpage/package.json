@@ -12,6 +12,8 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
+    "pdfmake": "^0.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",

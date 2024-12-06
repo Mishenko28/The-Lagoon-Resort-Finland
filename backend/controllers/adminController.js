@@ -1,6 +1,6 @@
-const Admin = require('../models/adminModel')
+const { Admin } = require('../models/adminModel')
 const Archive = require('../models/archiveModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 
 const bcrypt = require('bcrypt')
 const validator = require('validator')
@@ -31,7 +31,7 @@ const loginAdmin = async (req, res) => {
         const token = createToken(admin._id)
 
         // activity log
-        await ActivityLog.create({ adminEmail: email, activity: "Logged in." })
+        await ActivityLog.create({ adminEmail: email, action: [Actions.LOGGED_IN, Actions.ADMIN], activity: "Logged in." })
 
         res.status(200).json({ email, token })
     } catch (error) {
@@ -41,7 +41,7 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, access, name, sex, age, contact, adminEmail } = await req.body
+    const { email, password, role, name, sex, age, contact, adminEmail } = await req.body
 
     try {
         const match = await Admin.findOne({ email })
@@ -60,10 +60,10 @@ const addNewAdmin = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const admin = await Admin.create({ email, password: hash, access, personalData: { name, sex, age, contact } })
+        const admin = await Admin.create({ email, password: hash, role, personalData: { name, sex, age, contact } })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Added a new admin. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
 
         res.status(200).json({ admin })
     } catch (error) {
@@ -84,7 +84,7 @@ const deleteAdmin = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Deleted an admin. (${admin.email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.DELETED], activity: `Deleted an admin with the email of "${admin.email}"` })
 
         res.status(200).json({ admin })
     } catch (error) {
@@ -105,7 +105,7 @@ const restoreAdmin = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Restored an admin. (${admin.email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.RESTORED], activity: `Restored an admin with the email of "${admin.email}"` })
 
         res.status(200).json({ admin })
     } catch (error) {
@@ -115,16 +115,16 @@ const restoreAdmin = async (req, res) => {
 
 // UPDATE ADMIN PROFILE
 const updateAdmin = async (req, res) => {
-    const { _id, access, name, sex, age, contact, adminEmail } = await req.body
+    const { _id, role, name, sex, age, contact, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldAdmin = await Admin.findOne({ _id })
 
-        const admin = await Admin.findOneAndUpdate({ _id }, { access, personalData: { name, sex, age, contact } }, { new: true })
+        const admin = await Admin.findOneAndUpdate({ _id }, { role, personalData: { name, sex, age, contact } }, { new: true })
 
         // activity log
-        oldAdmin.access != access && editedParts.push("access")
+        oldAdmin.role != role && editedParts.push("role")
         oldAdmin.personalData.name != name && editedParts.push("name")
         oldAdmin.personalData.sex != sex && editedParts.push("sex")
         oldAdmin.personalData.age != age && editedParts.push("age")
@@ -133,20 +133,22 @@ const updateAdmin = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
-                activity: `Changed profile. ${editedParts.map(part => {
+                action: [Actions.ADMIN, Actions.UPDATED],
+                activity: `Changed information of admin with the email of ${admin.email}. ${oldAdmin.email}. ${editedParts.map(part => {
                     switch (part) {
-                        case "access":
-                            return `(access: from ${oldAdmin.access.map(a => a)} to ${access.map(a => a)})`
+                        case "role":
+                            return ` changed role from "${oldAdmin.role.map(a => a)}" to "${role.map(a => a)}"`
                         case "name":
-                            return `(name: from ${oldAdmin.personalData.name} to ${name})`
+                            return ` changed name from "${oldAdmin.personalData.name}" to "${name}"`
                         case "sex":
-                            return `(sex: from ${oldAdmin.personalData.sex} to ${sex})`
+                            return ` chnaged sex from "${oldAdmin.personalData.sex}" to "${sex}"`
                         case "age":
-                            return `(age: from ${oldAdmin.personalData.age} to ${age})`
+                            return ` changed age from "${oldAdmin.personalData.age}" to "${age}"`
                         case "contact":
-                            return `(contact: from ${oldAdmin.personalData.contact} to ${contact})`
+                            return ` changed contact from "${oldAdmin.personalData.contact}" to "${contact}"`
                     }
-                })}`
+                })
+                    } `
             })
         }
 
@@ -159,6 +161,7 @@ const updateAdmin = async (req, res) => {
 // CHANGE PASSWORD
 const updatePassword = async (req, res) => {
     const { password, adminEmail } = await req.body
+    const email = adminEmail
 
     try {
         const salt = await bcrypt.genSalt(10)
@@ -167,7 +170,7 @@ const updatePassword = async (req, res) => {
         const admin = await Admin.findOneAndUpdate({ email }, { email, password: hash }, { new: true })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Changed password.` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.UPDATED], activity: `Changed password.` })
 
         res.status(200).json({ admin })
     } catch (error) {

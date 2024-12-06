@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin: 5px 5px 30px 5px;
+    margin-bottom: 30px;
 }
 
 .config-header button {
@@ -60,7 +60,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    margin: 5px;
 }
 
 .room-cont .room-type-header {
@@ -293,7 +292,6 @@
 .infos {
     display: flex;
     flex-direction: column;
-    margin: 5px;
 }
 
 .infos h1 {
@@ -312,7 +310,6 @@
     justify-content: space-between;
     gap: 5px;
     background-color: var(--primary);
-    margin: 5px;
     padding: 25px 5px 5px 5px;
 }
 
@@ -351,7 +348,6 @@
     justify-content: space-between;
     gap: 5px;
     background-color: var(--primary);
-    margin: 5px;
     padding: 25px 5px 5px 5px;
 }
 
@@ -386,11 +382,11 @@
 
 .card-and-table-togg-cont {
     display: flex;
-    margin: 5px;
     border: 1px solid var(--primary);
     width: fit-content;
     border-radius: 20px;
     overflow: hidden;
+    margin-block: 10px;
 }
 
 .card-and-table-togg-cont button {
@@ -405,6 +401,7 @@
     overflow-x: auto;
     padding: 10px 5px;
     width: 100%;
+    animation: fadeIn 0.5s;
 }
 
 .room-table-cont img {
@@ -465,7 +462,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 5px;
 }
 
 .amenity-card {
@@ -479,6 +475,7 @@
     color: var(--primary);
     max-width: min-content;
     overflow: hidden;
+    animation: fadeIn 0.5s;
 }
 
 .amenity-card h1 {
@@ -519,6 +516,7 @@
 .amenity-table-cont {
     overflow-x: auto;
     padding: 5px;
+    animation: fadeIn 0.5s;
 }
 
 .amenity-table-cont img {
@@ -586,9 +584,9 @@
     flex-direction: column;
     border: 3px solid var(--primary);
     border-radius: 4px;
-    margin: 5px;
     color: var(--primary);
     width: fit-content;
+    margin-bottom: 10px;
 }
 
 .gallery-add {
@@ -653,7 +651,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 0 5px 100px 5px;
 }
 
 .gallery-cont .photo {
@@ -662,6 +659,7 @@
     background-color: #fff;
     border-radius: 4px;
     overflow: hidden;
+    animation: fadeIn 0.5s;
 }
 
 .gallery-cont .photo img {
@@ -729,6 +727,7 @@
         padding: 10px;
         transition: all 0.1s;
         cursor: pointer;
+        animation: fadeIn 0.5s;
     }
 
     .room-cont .room-type-content .room:hover {
@@ -989,6 +988,10 @@
     .amenity-table-cont table td span {
         padding: 4px;
         font-size: 0.8rem;
+    }
+
+    .gallery-add-cont {
+        border: 5px solid var(--primary);
     }
 
     .gallery-add {

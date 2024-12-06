@@ -1,3 +1,4 @@
+import '../styles/utilities.css'
 import { Outlet, useLocation } from "react-router-dom"
 
 export default function Utilities() {

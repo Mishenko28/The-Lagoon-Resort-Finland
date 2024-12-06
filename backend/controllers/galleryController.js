@@ -1,6 +1,6 @@
 const Picture = require('../models/photoModel')
 const Archive = require('../models/archiveModel')
-const ActivityLog = require('../models/activityLogModel')
+const { ActivityLog, Actions } = require('../models/activityLogModel')
 
 // GET ALL PICTURES
 const getAllPictures = async (_, res) => {
@@ -25,7 +25,7 @@ const addPicture = async (req, res) => {
         const picture = await Picture.create({ img, caption, hide })
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Added a new picture. (${caption})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.GALLERY, Actions.CREATED], activity: `Added a new picture with a caption of "${caption}"` })
 
         res.status(200).json({ picture })
     } catch (error) {
@@ -51,14 +51,15 @@ const updatePicture = async (req, res) => {
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
-                activity: `Changed information. ${editedParts.map(part => {
+                action: [Actions.GALLERY, Actions.UPDATED],
+                activity: `Changed properties of image with a caption of ${caption}. ${editedParts.map(part => {
                     switch (part) {
                         case "img":
-                            return `(image)`
+                            return ` changed the image`
                         case "caption":
-                            return `(caption: from ${oldPicture.caption} to ${caption})`
+                            return ` changed caption from "${oldPicture.caption}" to "${caption}"`
                         case "hide":
-                            return `(${caption ? "hidden" : "shown"})`
+                            return ` changed visibility to "${hide ? "hidden" : "visible"}"`
                     }
                 })}`
             })
@@ -83,7 +84,7 @@ const deletePicture = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Deleted a picture. (${picture.caption})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.GALLERY, Actions.DELETED], activity: `Deleted a picture with a caption of "${picture.caption}"` })
 
         res.status(200).json({ picture })
     } catch (error) {
@@ -104,7 +105,7 @@ const restorePicture = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, activity: `Restored a picture. (${picture.caption})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.GALLERY, Actions.RESTORED], activity: `Restored a picture with a caption of "${picture.caption}"` })
 
         res.status(200).json({ picture })
     } catch (error) {
