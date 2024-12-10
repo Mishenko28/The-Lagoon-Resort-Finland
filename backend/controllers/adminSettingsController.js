@@ -47,11 +47,11 @@ const updateSettings = async (req, res) => {
                 activity: `Changed settings. ${editedParts.map(part => {
                     switch (part) {
                         case "downPayment":
-                            return `(down payment: from ${oldSettings.downPayment} to ${downPayment})`
+                            return ` changed down payment from ${oldSettings.downPayment} to ${downPayment}`
                         case "roomTypes":
-                            return `(room types: from ${oldSettings.roomTypes} to ${roomTypes})`
+                            return ` changed room types from ${oldSettings.roomTypes} to ${roomTypes}`
                         case "roomStart":
-                            return `(room start: from ${oldSettings.roomStart} to ${roomStart})`
+                            return ` changed room start from ${oldSettings.roomStart} to ${roomStart}`
                     }
                 })}`
             })

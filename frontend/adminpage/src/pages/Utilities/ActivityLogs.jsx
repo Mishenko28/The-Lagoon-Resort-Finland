@@ -9,9 +9,12 @@ export default function ActivityLogs() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [logsLoading, setLogsLoading] = useState(true)
+
     const [logs, setLogs] = useState([])
     const [admins, setAdmins] = useState([])
     const [Actions, setActions] = useState([])
+    const [maxPage, setMaxPage] = useState(0)
+
 
     const [page, setPage] = useState(1)
     const [filter, setFilter] = useState({
@@ -28,12 +31,13 @@ export default function ActivityLogs() {
         setLogsLoading(true)
         const fetchLogs = async () => {
             await axios.get('log/all', {
-                params: { ...filter }
+                params: { ...filter, page }
             })
                 .then(res => {
                     setLogs(res.data.logs)
                     setAdmins(res.data.admins)
                     setActions(res.data.actions)
+                    setMaxPage(Math.ceil(res.data.logCount / 20))
                     setIsLoading(false)
                     setLogsLoading(false)
                 })
@@ -44,7 +48,7 @@ export default function ActivityLogs() {
         }
 
         fetchLogs()
-    }, [filter])
+    }, [filter, page])
 
     return (
         <>
@@ -67,6 +71,31 @@ export default function ActivityLogs() {
                                 <h2 key={action} style={filter.action === action ? selectedStyle : null} onClick={() => setFilter(prev => ({ ...prev, action: action }))}>{action}</h2>
                             ))}
                         </div>
+                    </div>
+                    <div className="page-bttns">
+                        {![1, 2, 3].includes(page) &&
+                            <>
+                                <button onClick={() => setPage(1)}>1</button>
+                                {page - 3 !== 1 && <h1>..</h1>}
+                            </>
+                        }
+                        {![1, 2].includes(page) && <button onClick={() => setPage(prev => prev - 2)}>{page - 2}</button>}
+                        {page !== 1 && <button onClick={() => setPage(prev => prev - 1)}>{page - 1}</button>}
+                        <button className="active">{page}</button>
+                        {page < maxPage && <button onClick={() => setPage(prev => prev + 1)}>{page + 1}</button>}
+                        {page < maxPage - 1 && <button onClick={() => setPage(prev => prev + 2)}>{page + 2}</button>}
+                        {![1, page + 1, page + 2, maxPage].includes(Math.ceil((maxPage + page) / 2)) &&
+                            <>
+                                {page + 3 !== Math.ceil((maxPage + page) / 2) && <h1>..</h1>}
+                                <button onClick={() => setPage(Math.ceil((maxPage + page) / 2))}>{Math.ceil((maxPage + page) / 2)}</button>
+                            </>
+                        }
+                        {maxPage !== 0 && ![maxPage, maxPage - 1, maxPage - 2].includes(page) &&
+                            <>
+                                {maxPage - 3 !== page && <h1>..</h1>}
+                                <button onClick={() => setPage(maxPage)}>{maxPage}</button>
+                            </>
+                        }
                     </div>
                     <div className="logs-table-cont">
                         <table>

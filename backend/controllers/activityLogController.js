@@ -19,9 +19,11 @@ const getAllActivityLogs = async (req, res) => {
             }
         }))
 
+        const logCount = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).countDocuments()
+
         const admins = await Admin.find({}).select('email')
 
-        res.status(200).json({ logs, admins, actions })
+        res.status(200).json({ logs, logCount, admins, actions })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

@@ -125,7 +125,7 @@ const setConfirmed = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${email}` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -179,7 +179,7 @@ const setCompleted = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed of ${email}` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -197,7 +197,7 @@ const setCancelled = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${email}` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -215,7 +215,7 @@ const setNoshow = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow. (${email})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow of ${email}` })
 
         res.status(200).json({ book })
     } catch (error) {
@@ -233,6 +233,8 @@ const editBook = async (req, res) => {
 
         const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room, total, deposit, balance, payed }, { new: true })
 
+        const { email } = await User.findOne({ _id: book.userId })
+
         // activity log
         oldBook.from != from && editedParts.push("from")
         oldBook.to != to && editedParts.push("to")
@@ -246,22 +248,22 @@ const editBook = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.BOOKING, Actions.UPDATED],
-                activity: `Changed information. ${editedParts.map(part => {
+                activity: `Changed the book information of ${email}. ${editedParts.map(part => {
                     switch (part) {
                         case "from":
-                            return `(start: from ${oldBook.from} to ${from})`
+                            return ` changed start date from ${oldBook.from} to ${from}`
                         case "to":
-                            return `(end: from ${oldBook.to} to ${to})`
+                            return ` changed end date from ${oldBook.to} to ${to}`
                         case "room":
-                            return `(room)`
+                            return ` changed room`
                         case "total":
-                            return `(total: from ${oldBook.total} to ${total})`
+                            return ` changed total from ${oldBook.total} to ${total}`
                         case "deposit":
-                            return `(deposit: from ${oldBook.deposit} to ${deposit})`
+                            return ` changed deposit from ${oldBook.deposit} to ${deposit}`
                         case "balance":
-                            return `(balance: from ${oldBook.balance} to ${balance})`
+                            return ` changed remaining balance from ${oldBook.balance} to ${balance}`
                         case "payed":
-                            return `(payed: from ${oldBook.payed} to ${payed})`
+                            return ` changed payed balance from ${oldBook.payed} to ${payed}`
                     }
                 })}`
             })

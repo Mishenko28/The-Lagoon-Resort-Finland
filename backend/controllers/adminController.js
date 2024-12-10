@@ -134,21 +134,20 @@ const updateAdmin = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.ADMIN, Actions.UPDATED],
-                activity: `Changed information of admin with the email of ${admin.email}. ${oldAdmin.email}. ${editedParts.map(part => {
+                activity: `Changed information of admin ${admin.email}. ${editedParts.map(part => {
                     switch (part) {
                         case "role":
                             return ` changed role from "${oldAdmin.role.map(a => a)}" to "${role.map(a => a)}"`
                         case "name":
                             return ` changed name from "${oldAdmin.personalData.name}" to "${name}"`
                         case "sex":
-                            return ` chnaged sex from "${oldAdmin.personalData.sex}" to "${sex}"`
+                            return ` changed sex from "${oldAdmin.personalData.sex}" to "${sex}"`
                         case "age":
                             return ` changed age from "${oldAdmin.personalData.age}" to "${age}"`
                         case "contact":
                             return ` changed contact from "${oldAdmin.personalData.contact}" to "${contact}"`
                     }
-                })
-                    } `
+                })} `
             })
         }
 

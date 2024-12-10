@@ -25,7 +25,7 @@ const addAmenity = async (req, res) => {
         const amenity = await Amenity.create({ name, img, rate, caption, active })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.CREATED], activity: `Added a new amenity. (${name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.CREATED], activity: `Added a new amenity with a name of ${name}` })
 
         res.status(200).json({ amenity })
     } catch (error) {
@@ -54,18 +54,18 @@ const updateAmenity = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.AMENITY, Actions.UPDATED],
-                activity: `Changed information. ${editedParts.map(part => {
+                activity: `Changed amenity information of ${oldAmenity.name}. ${editedParts.map(part => {
                     switch (part) {
                         case "name":
-                            return `(name: from ${oldAmenity.name} to ${name})`
+                            return ` changed name from ${oldAmenity.name} to ${name}`
                         case "img":
-                            return `(image)`
+                            return ` changed image`
                         case "rate":
-                            return `(rate: from ${oldAmenity.rate} to ${rate})`
+                            return ` changed rate from ${oldAmenity.rate} to ${rate}`
                         case "caption":
-                            return `(caption: from ${oldAmenity.caption} to ${caption})`
+                            return ` changed caption from ${oldAmenity.caption} to ${caption}`
                         case "active":
-                            return `(${active ? "activated" : "deactivated"})`
+                            return ` changed active status to ${active ? "active" : "inactive"}`
                     }
                 })}`
             })
@@ -90,7 +90,7 @@ const deleteAmenity = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.DELETED], activity: `Deleted an amenity. (${amenity.name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.DELETED], activity: `Deleted an amenity with a name of ${amenity.name}` })
 
         res.status(200).json({ amenity })
     } catch (error) {
@@ -111,7 +111,7 @@ const restoreAmenity = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.RESTORED], activity: `Restored an amenity. (${amenity.name})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.RESTORED], activity: `Restored an amenity with a name of ${amenity.name}` })
 
         res.status(200).json({ amenity })
     } catch (error) {

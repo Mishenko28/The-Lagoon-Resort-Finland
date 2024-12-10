@@ -25,7 +25,7 @@ const addRoom = async (req, res) => {
         const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a new room. (room number: ${roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a new room with a room number of ${roomNo} in ${roomType} room type` })
 
         res.status(200).json({ room })
     } catch (error) {
@@ -35,18 +35,17 @@ const addRoom = async (req, res) => {
 
 // UPDATE ROOM
 const updateRoom = async (req, res) => {
-    const { _id, roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
+    const { _id, roomNo, img, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldRoom = await Room.findOne({ _id })
 
-        const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })
+        const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })
 
         // activity log
         oldRoom.roomNo != roomNo && editedParts.push("roomNo")
         oldRoom.img != img && editedParts.push("img")
-        oldRoom.roomType != roomType && editedParts.push("roomType")
         oldRoom.rate != rate && editedParts.push("rate")
         oldRoom.addFeePerPerson != addFeePerPerson && editedParts.push("addFeePerPerson")
         oldRoom.maxPerson != maxPerson && editedParts.push("maxPerson")
@@ -57,24 +56,22 @@ const updateRoom = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.ROOM, Actions.UPDATED],
-                activity: `Changed properties. ${editedParts.map(part => {
+                activity: `Changed properties of room ${oldRoom.roomNo} in ${oldRoom.roomType}. ${editedParts.map(part => {
                     switch (part) {
                         case "roomNo":
-                            return `(room number: from ${oldRoom.roomNo} to ${roomNo})`
+                            return ` changed room number from ${oldRoom.roomNo} to ${roomNo}`
                         case "img":
-                            return `(image)`
-                        case "roomType":
-                            return `(room type: from ${oldRoom.roomType} to ${roomType})`
+                            return ` changed image`
                         case "rate":
-                            return `(rate: from ${oldRoom.rate} to ${rate})`
+                            return ` changed rate from ${oldRoom.rate} to ${rate}`
                         case "addFeePerPerson":
-                            return `(additional fee per person: from ${oldRoom.addFeePerPerson} to ${addFeePerPerson})`
+                            return ` changed additional fee per person from ${oldRoom.addFeePerPerson} to ${addFeePerPerson}`
                         case "maxPerson":
-                            return `(max person: from ${oldRoom.maxPerson} to ${maxPerson})`
+                            return ` changed maximum person from ${oldRoom.maxPerson} to ${maxPerson}`
                         case "caption":
-                            return `(caption: from ${oldRoom.caption} to ${caption})`
+                            return ` changed caption from ${oldRoom.caption} to ${caption}`
                         case "active":
-                            return `(${caption ? "activated" : "deactivated"})`
+                            return ` changed active status to ${active ? "active" : "inactive"}`
                     }
                 })}`
             })
@@ -99,7 +96,7 @@ const deleteRoom = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a room. (room number: ${room.roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a room with a room number of ${room.roomNo} in ${room.roomType} room type` })
 
         res.status(200).json({ room })
     } catch (error) {
@@ -120,7 +117,7 @@ const restoreRoom = async (req, res) => {
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.RESTORED], activity: `Restored a room. (${room.roomNo})` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.RESTORED], activity: `Restored a room with a room number of ${room.roomNo} in ${room.roomType} roomtype` })
 
         res.status(200).json({ room })
     } catch (error) {

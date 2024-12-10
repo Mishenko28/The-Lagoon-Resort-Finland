@@ -16,7 +16,7 @@ module.exports.ActivityLog = mongoose.model('ActivityLog', new mongoose.Schema({
 }, { timestamps: true }), 'activityLogs')
 
 module.exports.Actions = Actions = {
-    LOGGED_IN: 'loggedIn',
+    LOGGED_IN: 'logged in',
     CREATED: 'created',
     UPDATED: 'updated',
     DELETED: 'deleted',
