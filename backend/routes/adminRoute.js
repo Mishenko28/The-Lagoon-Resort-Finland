@@ -13,10 +13,10 @@ const {
 } = require('../controllers/adminController')
 
 router.post('/login', loginAdmin)
+router.post('/add', addNewAdmin)
 
 router.use(auth)
 
-router.post('/add', addNewAdmin)
 router.delete('/delete', deleteAdmin)
 router.post('/restore', restoreAdmin)
 router.patch('/update', updateAdmin)
