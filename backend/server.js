@@ -36,6 +36,12 @@ app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.json())
 
+app.use((req, res, next) => {
+    setTimeout(() => {
+        next()
+    }, 500)
+})
+
 
 // ROUTES
 app.use('/user', userRoute)
@@ -61,10 +67,12 @@ io.on('connection', (socket) => {
 })
 
 
+
+
 // CONNECTION
 mongoose.connect(process.env.DB_CONNECTIONSTING)
     .then(() => {
-        server.listen(process.env.PORT, () => {
+        server.listen(process.env.PORT, '0.0.0.0', () => {
             console.log("Database is ready")
         })
     })

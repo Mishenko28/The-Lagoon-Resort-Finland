@@ -63,7 +63,7 @@ const updateAmenity = async (req, res) => {
                         case "rate":
                             return ` changed rate from ${oldAmenity.rate} to ${rate}`
                         case "caption":
-                            return ` changed caption from ${oldAmenity.caption} to ${caption}`
+                            return ` changed caption from "${oldAmenity.caption}" to "${caption}"`
                         case "active":
                             return ` changed active status to ${active ? "active" : "inactive"}`
                     }

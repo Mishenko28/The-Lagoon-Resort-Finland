@@ -125,6 +125,31 @@ export default function ActivityLogs() {
 
                         </table>
                     </div>
+                    <div className="page-bttns">
+                        {![1, 2, 3].includes(page) &&
+                            <>
+                                <button onClick={() => setPage(1)}>1</button>
+                                {page - 3 !== 1 && <h1>..</h1>}
+                            </>
+                        }
+                        {![1, 2].includes(page) && <button onClick={() => setPage(prev => prev - 2)}>{page - 2}</button>}
+                        {page !== 1 && <button onClick={() => setPage(prev => prev - 1)}>{page - 1}</button>}
+                        <button className="active">{page}</button>
+                        {page < maxPage && <button onClick={() => setPage(prev => prev + 1)}>{page + 1}</button>}
+                        {page < maxPage - 1 && <button onClick={() => setPage(prev => prev + 2)}>{page + 2}</button>}
+                        {![1, page + 1, page + 2, maxPage].includes(Math.ceil((maxPage + page) / 2)) &&
+                            <>
+                                {page + 3 !== Math.ceil((maxPage + page) / 2) && <h1>..</h1>}
+                                <button onClick={() => setPage(Math.ceil((maxPage + page) / 2))}>{Math.ceil((maxPage + page) / 2)}</button>
+                            </>
+                        }
+                        {maxPage !== 0 && ![maxPage, maxPage - 1, maxPage - 2].includes(page) &&
+                            <>
+                                {maxPage - 3 !== page && <h1>..</h1>}
+                                <button onClick={() => setPage(maxPage)}>{maxPage}</button>
+                            </>
+                        }
+                    </div>
                 </>
             }
         </>

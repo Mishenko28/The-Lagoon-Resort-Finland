@@ -112,7 +112,6 @@ export default function Amenities() {
                                     <h1>{amenity.name}</h1>
                                     <img src={amenity.img} />
                                     <h2>₱{amenity.rate}</h2>
-                                    <hr />
                                     <h5>{amenity.caption}</h5>
                                     {!amenity.active && <span>not active</span>}
                                 </div>

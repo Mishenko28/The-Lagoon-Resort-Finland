@@ -18,10 +18,15 @@
     --blue-light: #2196F326;
 
     --gold: #FFD700;
-    --light-gray: #AAAAAA;
 
-    --red: #FF0000;
+    --light-gray: #d7d7d7;
+    --gray: #666666;
+
+    --red: #ab0000;
     --red-light: #ff000026;
+
+    --light-orange: #ff660040;
+    --dark-orange: #a03702;
 
 }
 
@@ -267,6 +272,7 @@ hr {
 
 .success-cont p {
     font-size: 0.8rem;
+    text-align: center;
 }
 
 .success-cont i {

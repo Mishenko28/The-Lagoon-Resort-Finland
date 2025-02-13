@@ -117,7 +117,7 @@ export default function Gallery() {
                         <h1>ADD NEW:</h1>
                         <div className='gallery-add'>
                             <textarea onChange={(e) => setNewPhoto(prev => ({ ...prev, caption: e.target.value }))} value={newPhoto.caption} rows={6} placeholder='caption here'></textarea>
-                            <img style={newPhoto.img ? null : { height: 0 }} src={newPhoto.img} />
+                            {newPhoto.img && <img style={newPhoto.img ? null : { height: 0 }} src={newPhoto.img} />}
                         </div>
                         <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />
                         <div className='hide-wrapper'>
@@ -125,8 +125,8 @@ export default function Gallery() {
                             <input checked={newPhoto.hide} type="checkbox" onChange={() => setNewPhoto(prev => ({ ...prev, hide: !prev.hide }))} />
                         </div>
                         <div className='bttns'>
-                            <button onClick={submitNewPhoto}>add</button>
-                            <button onClick={handleClear}>clear</button>
+                            <button onClick={submitNewPhoto}>Add</button>
+                            <button onClick={handleClear}>Clear</button>
                         </div>
                     </div>
                     <div className="config-header">
@@ -144,7 +144,6 @@ export default function Gallery() {
                         {photos.map(photo => (
                             <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo'>
                                 <img src={photo.img} />
-                                <hr />
                                 <p>{photo.caption}</p>
                                 {photo.hide && <h2 className='hide'>hidden</h2>}
                             </div>

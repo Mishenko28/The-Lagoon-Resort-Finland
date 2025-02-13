@@ -63,18 +63,18 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
             {confirmDeleteTogg ?
                 <div className='room-type-delete'>
                     <h1>Are you sure you want to delete this room type?</h1>
-                    <h2>Warning: Deleting this room type will also remove all associated rooms.</h2>
+                    <h2><i className="fa-solid fa-triangle-exclamation" />Warning: Deleting this room type will also remove all associated rooms.</h2>
                     <div className='bttns'>
-                        <button disabled={isLoading} onClick={handleDelete}>Yes</button>
-                        <button onClick={() => setConfirmDeleteTogg(false)}>No</button>
+                        <button disabled={isLoading} onClick={handleDelete}><i className="fa-solid fa-trash-can" />Delete</button>
+                        <button onClick={() => setConfirmDeleteTogg(false)}>Cancel</button>
                     </div>
                 </div>
                 :
                 <div className='room-type-content'>
                     {roomSettTogg &&
                         <div className='room-settings'>
-                            <button onClick={() => setAddRoomTogg(true)}>Add Room</button>
-                            <button onClick={() => setConfirmDeleteTogg(true)}>Delete</button>
+                            <button onClick={() => setAddRoomTogg(true)}><i className="fa-solid fa-plus" />Add</button>
+                            <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
                         </div>
                     }
                     {isCard && rooms.map(room => (
@@ -122,7 +122,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                     }
                     {rooms.length === 0 &&
                         <div className='no-room'>
-                            <button onClick={() => setAddRoomTogg(true)}>Add Room</button>
+                            <button onClick={() => setAddRoomTogg(true)}>Add Room Now</button>
                         </div>
                     }
                 </div>

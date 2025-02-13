@@ -56,7 +56,7 @@ const updateRoom = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.ROOM, Actions.UPDATED],
-                activity: `Changed properties of room ${oldRoom.roomNo} in ${oldRoom.roomType}. ${editedParts.map(part => {
+                activity: `Changed properties of room ${oldRoom.roomNo} in ${oldRoom.roomType} roomtype. ${editedParts.map(part => {
                     switch (part) {
                         case "roomNo":
                             return ` changed room number from ${oldRoom.roomNo} to ${roomNo}`
@@ -69,7 +69,7 @@ const updateRoom = async (req, res) => {
                         case "maxPerson":
                             return ` changed maximum person from ${oldRoom.maxPerson} to ${maxPerson}`
                         case "caption":
-                            return ` changed caption from ${oldRoom.caption} to ${caption}`
+                            return ` changed caption from "${oldRoom.caption}" to "${caption}"`
                         case "active":
                             return ` changed active status to ${active ? "active" : "inactive"}`
                     }

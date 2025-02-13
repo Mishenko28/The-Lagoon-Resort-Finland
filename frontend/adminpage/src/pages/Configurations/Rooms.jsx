@@ -111,7 +111,7 @@ export default function Rooms() {
         e.preventDefault()
         setNewRoomTypeIsLoading(true)
 
-        await axios.patch('/admin-settings/update', { ...adminSettings, roomTypes: [...adminSettings.roomTypes, newRoomType] })
+        await axios.patch('/admin-settings/update', { roomTypes: [...adminSettings.roomTypes, newRoomType] })
             .then((res) => {
                 setAdminSettings(res.data.adminSetting)
                 dispatch({ type: 'SUCCESS', payload: true })
@@ -130,7 +130,13 @@ export default function Rooms() {
         e.preventDefault()
         setChangeDownPaymentIsLoading(true)
 
-        await axios.patch('/admin-settings/update', { ...adminSettings, downPayment: newDownPayment })
+        if (adminSettings.downPayment === newDownPayment) {
+            dispatch({ type: 'FAILED', payload: "No changes" })
+            setChangeDownPaymentIsLoading(false)
+            return
+        }
+
+        await axios.patch('/admin-settings/update', { downPayment: newDownPayment })
             .then((res) => {
                 setAdminSettings(res.data.adminSetting)
                 dispatch({ type: 'SUCCESS', payload: true })

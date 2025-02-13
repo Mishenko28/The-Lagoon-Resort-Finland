@@ -12,5 +12,25 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
     roomStart: {
         type: Number,
         default: 8
+    },
+    emails: {
+        type: Array,
+        default: []
+    },
+    phoneNumbers: {
+        type: Array,
+        default: []
+    },
+    socials: {
+        type: Array,
+        default: []
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+    aboutUs: {
+        type: String,
+        default: ''
     }
 }, { timestamps: true }), 'adminSettings')

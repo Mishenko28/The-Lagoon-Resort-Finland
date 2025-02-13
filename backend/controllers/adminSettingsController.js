@@ -18,26 +18,36 @@ const getSettings = async (_, res) => {
 }
 
 const updateSettings = async (req, res) => {
-    const { downPayment, roomTypes, roomStart, adminEmail } = await req.body
+    const { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails, adminEmail } = await req.body
     let editedParts = []
+    let deletedRoomType = []
+    let addedRoomType = []
 
     try {
         const oldSettings = await AdminSetting.findOne({})
 
-        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart }, { new: true })
+        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
-        oldSettings.downPayment != downPayment && editedParts.push("downPayment")
-        oldSettings.roomStart != roomStart && editedParts.push("roomStart")
-        if (oldSettings.roomTypes != roomTypes) {
+        socials !== undefined && oldSettings.socials != socials && editedParts.push("socials")
+        emails !== undefined && oldSettings.emails != emails && editedParts.push("emails")
+        phoneNumbers !== undefined && oldSettings.phoneNumbers != phoneNumbers && editedParts.push("phoneNumbers")
+        downPayment !== undefined && oldSettings.downPayment != downPayment && editedParts.push("downPayment")
+        roomStart !== undefined && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
+        if (roomTypes !== undefined && JSON.stringify(oldSettings.roomTypes) !== JSON.stringify(roomTypes)) {
             editedParts.push("roomTypes")
 
             if (oldSettings.roomTypes.length > roomTypes.length) {
-                let deletedRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
+                deletedRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
 
                 await Room.deleteMany({ roomType: deletedRoomType[0] })
             }
+
+            if (oldSettings.roomTypes.length < roomTypes.length) {
+                addedRoomType = roomTypes.filter(roomType => !oldSettings.roomTypes.includes(roomType))
+            }
         }
+
 
 
         if (editedParts.length > 0) {
@@ -47,11 +57,95 @@ const updateSettings = async (req, res) => {
                 activity: `Changed settings. ${editedParts.map(part => {
                     switch (part) {
                         case "downPayment":
-                            return ` changed down payment from ${oldSettings.downPayment} to ${downPayment}`
+                            return ` changed down payment from ${oldSettings.downPayment * 100}% to ${downPayment * 100}%`
                         case "roomTypes":
-                            return ` changed room types from ${oldSettings.roomTypes} to ${roomTypes}`
+                            if (deletedRoomType.length > 0) {
+                                return ` deleted a room type ${deletedRoomType[0]}`
+                            } else {
+                                return ` added a room type ${addedRoomType[0]}`
+                            }
                         case "roomStart":
                             return ` changed room start from ${oldSettings.roomStart} to ${roomStart}`
+                        case "emails":
+                            if (oldSettings.emails.length === emails.length) {
+                                return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0]} to ${emails.filter(email => !oldSettings.emails.includes(email))[0]}`
+                            } else if (oldSettings.emails.length > emails.length) {
+                                return ` deleted an email ${oldSettings.emails.filter(email => !emails.includes(email))[0]}`
+                            } else {
+                                return ` added an email ${emails[emails.length - 1]}`
+                            }
+                        case "phoneNumbers":
+                            if (oldSettings.phoneNumbers.length === phoneNumbers.length) {
+                                let oldPhoneNumber
+                                let newPhoneNumber
+
+                                oldSettings.phoneNumbers.forEach(element => {
+                                    phoneNumbers.forEach(element2 => {
+                                        if (element.sim !== element2.sim || element.number !== element2.number) {
+                                            oldPhoneNumber = element
+                                            newPhoneNumber = element2
+                                        }
+                                    })
+                                })
+                                return ` changed phone number from ${oldPhoneNumber.sim} ${oldPhoneNumber.number} to ${newPhoneNumber.sim} ${newPhoneNumber.number}`
+                            } else if (oldSettings.phoneNumbers.length > phoneNumbers.length) {
+                                let phoneNumber
+
+                                oldSettings.phoneNumbers.forEach(element => {
+                                    let isExist = false
+
+                                    phoneNumbers.forEach(element2 => {
+                                        if (element.sim === element2.sim && element.number === element2.number) {
+                                            isExist = true
+                                        }
+                                    })
+
+                                    if (!isExist) {
+                                        phoneNumber = element
+                                    }
+                                })
+
+                                return ` deleted a phone number ${phoneNumber.sim} ${phoneNumber.number}`
+                            } else {
+                                const phoneNumber = phoneNumbers[phoneNumbers.length - 1]
+                                return ` added a phone number ${phoneNumber.sim} ${phoneNumber.number}`
+                            }
+                        case "socials":
+                            if (oldSettings.socials.length === socials.length) {
+                                let oldSocial
+                                let newSocial
+
+                                oldSettings.socials.forEach(element => {
+                                    socials.forEach(element2 => {
+                                        if (element.app !== element2.app || element.link !== element2.link) {
+                                            oldSocial = element
+                                            newSocial = element2
+                                        }
+                                    })
+                                })
+                                return ` changed social media from ${oldSocial.app} ${oldSocial.link} to ${newSocial.app} ${newSocial.link}`
+                            } else if (oldSettings.socials.length > socials.length) {
+                                let social
+
+                                oldSettings.socials.forEach(element => {
+                                    let isExist = false
+
+                                    socials.forEach(element2 => {
+                                        if (element.app === element2.app && element.link === element2.link) {
+                                            isExist = true
+                                        }
+                                    })
+
+                                    if (!isExist) {
+                                        social = element
+                                    }
+                                })
+
+                                return ` deleted a social media ${social.app} ${social.link}`
+                            } else {
+                                const social = socials[socials.length - 1]
+                                return ` added a social media ${social.app} ${social.link}`
+                            }
                     }
                 })}`
             })
