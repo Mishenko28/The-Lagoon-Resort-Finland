@@ -178,6 +178,9 @@ export default function Gallery() {
                                     {photo.hide && <h2 className='hide'>hidden</h2>}
                                 </div>
                             ))}
+                            {photos.length === 0 &&
+                                <h3>No Photos</h3>
+                            }
                         </div>
                     </div>
                     <div className='room-gallery'>

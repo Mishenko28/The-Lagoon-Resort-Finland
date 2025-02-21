@@ -29,26 +29,34 @@ export default function ActivityLogs() {
 
     useEffect(() => {
         setLogsLoading(true)
-        const fetchLogs = async () => {
-            await axios.get('log/all', {
-                params: { ...filter, page }
-            })
-                .then(res => {
-                    setLogs(res.data.logs)
-                    setAdmins(res.data.admins)
-                    setActions(res.data.actions)
-                    setMaxPage(Math.ceil(res.data.logCount / 20))
-                    setIsLoading(false)
-                    setLogsLoading(false)
-                })
-                .catch(err => {
-                    dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
-                })
-        }
 
         fetchLogs()
-    }, [filter, page])
+    }, [page])
+
+    useEffect(() => {
+        setLogsLoading(true)
+        setPage(1)
+
+        fetchLogs()
+    }, [filter])
+
+    const fetchLogs = async () => {
+        await axios.get('log/all', {
+            params: { ...filter, page: 1 }
+        })
+            .then(res => {
+                setLogs(res.data.logs)
+                setAdmins(res.data.admins)
+                setActions(res.data.actions)
+                setMaxPage(Math.ceil(res.data.logCount / 20))
+                setIsLoading(false)
+                setLogsLoading(false)
+            })
+            .catch(err => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err)
+            })
+    }
 
     return (
         <>
