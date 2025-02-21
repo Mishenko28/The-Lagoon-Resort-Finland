@@ -4,6 +4,9 @@ import useConvertBase64 from '../../hooks/useConvertBase64'
 import axios from 'axios'
 import useAdmin from '../../hooks/useAdmin'
 import EditPhoto from '../../components/EditPhoto'
+import AddRoomSubImage from '../../components/AddRoomSubImage'
+import EditRoomSubImage from '../../components/EditRoomSubImage'
+import EditRoomMainImage from '../../components/EditRoomMainImage'
 
 export default function Gallery() {
     const { dispatch } = useAdmin()
@@ -11,6 +14,8 @@ export default function Gallery() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [photos, setPhotos] = useState([])
+    const [rooms, setRooms] = useState([])
+    const [roomTypes, setRoomTypes] = useState([])
 
     const [newPhoto, setNewPhoto] = useState({
         caption: '',
@@ -25,6 +30,9 @@ export default function Gallery() {
     const sortSelectionRef = useRef()
 
     const [editPhoto, setEditPhoto] = useState(null)
+    const [isAddingSubImg, setIsAddingSubImg] = useState(null)
+    const [editingSubImg, setEditingSubImg] = useState(null)
+    const [isEditingMainImg, setIsEditingMainImg] = useState(null)
 
     useEffect(() => {
         const handleClick = e => {
@@ -49,6 +57,24 @@ export default function Gallery() {
             await axios.get('gallery/all')
                 .then((res) => {
                     setPhotos(res.data.pictures.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
+                })
+                .catch((err) => {
+                    dispatch({ type: 'FAILED', payload: err.response.data.error })
+                    console.log(err.response.data.error)
+                })
+
+            await axios.get('/room/all')
+                .then((res) => {
+                    setRooms(res.data.rooms.sort((a, b) => a.roomType.localeCompare(b.roomType)))
+                })
+                .catch((err) => {
+                    dispatch({ type: 'FAILED', payload: err.response.data.error })
+                    console.log(err.response.data.error)
+                })
+
+            await axios.get('/admin-settings/all')
+                .then((res) => {
+                    setRoomTypes(res.data.adminSetting.roomTypes)
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -114,7 +140,7 @@ export default function Gallery() {
                 <>
                     <div className='gallery-add-cont'>
                         {newPhotoLoading && <div className='loader-line'></div>}
-                        <h1>ADD NEW:</h1>
+                        <h1>ADD NEW PHOTO:</h1>
                         <div className='gallery-add'>
                             <textarea onChange={(e) => setNewPhoto(prev => ({ ...prev, caption: e.target.value }))} value={newPhoto.caption} rows={6} placeholder='caption here'></textarea>
                             {newPhoto.img && <img style={newPhoto.img ? null : { height: 0 }} src={newPhoto.img} />}
@@ -131,7 +157,7 @@ export default function Gallery() {
                     </div>
                     <div className="config-header">
                         <div className='sort-wrapper'>
-                            <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort</button>
+                            <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort Photos</button>
                             {sortTogg &&
                                 <div ref={sortSelectionRef} className='selections'>
                                     <h1 onClick={() => setSort('newest')}>{sort === 'newest' && <i className="fa-solid fa-caret-right" />}Newest</h1>
@@ -141,14 +167,50 @@ export default function Gallery() {
                         </div>
                     </div>
                     <div className='gallery-cont'>
-                        {photos.map(photo => (
-                            <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo'>
-                                <img src={photo.img} />
-                                <p>{photo.caption}</p>
-                                {photo.hide && <h2 className='hide'>hidden</h2>}
-                            </div>
-                        ))}
+                        <div className='gallery-header'>
+                            <h1>Photos</h1>
+                        </div>
+                        <div className='pics'>
+                            {photos.map(photo => (
+                                <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo'>
+                                    <img src={photo.img} />
+                                    <p>{photo.caption}</p>
+                                    {photo.hide && <h2 className='hide'>hidden</h2>}
+                                </div>
+                            ))}
+                        </div>
                     </div>
+                    <div className='room-gallery'>
+                        <div className='gallery-header'>
+                            <h1>Room Gallery</h1>
+                        </div>
+                        <div className='pics'>
+                            {roomTypes.map((roomType, i) => (
+                                <div key={i} className='room-typess'>
+                                    <h1>{roomType}</h1>
+                                    {rooms.filter(room => room.roomType === roomType).map(room => (
+                                        <div className='room' key={room._id}>
+                                            <h2>Room {room.roomNo}</h2>
+                                            <div className='room-pics'>
+                                                <p>main</p>
+                                                <img onClick={() => setIsEditingMainImg({ roomType, _id: room._id, roomNo: room.roomNo, img: room.img })} src={room.img} />
+                                                {room.subImg.map((img, i) => (
+                                                    <img onClick={() => setEditingSubImg({ roomType, roomNo: room.roomNo, _id: room._id, img, index: i })} key={i} src={img} />
+                                                ))}
+                                                <i onClick={() => setIsAddingSubImg({ roomType, roomNo: room.roomNo, _id: room._id })} className="fa-solid fa-plus" />
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {rooms.filter(room => room.roomType === roomType).length === 0 &&
+                                        <h3>No Rooms</h3>
+                                    }
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {isEditingMainImg && <EditRoomMainImage isEditingMainImg={isEditingMainImg} setIsEditingMainImg={setIsEditingMainImg} setRooms={setRooms} />}
+                    {editingSubImg && <EditRoomSubImage editingSubImg={editingSubImg} setEditingSubImg={setEditingSubImg} setRooms={setRooms} />}
+                    {isAddingSubImg && <AddRoomSubImage isAddingSubImg={isAddingSubImg} setIsAddingSubImg={setIsAddingSubImg} setRooms={setRooms} />}
                     {editPhoto && <EditPhoto editPhoto={editPhoto} setEditPhoto={setEditPhoto} setPhotos={setPhotos} />}
                 </>
             }

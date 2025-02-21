@@ -10,8 +10,12 @@ export default function Success() {
         }, 1500)
     }, [state.success])
 
+    const skip = () => {
+        dispatch({ type: 'SUCCESS', payload: false })
+    }
+
     return (
-        <div className="full-cont">
+        <div onClick={skip} className="full-cont">
             <div className="success-cont animate__animated animate__bounceIn">
                 <i className="fa-regular fa-circle-check" />
                 <h1>Success!</h1>

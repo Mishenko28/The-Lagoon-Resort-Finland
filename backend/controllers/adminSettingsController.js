@@ -22,6 +22,8 @@ const updateSettings = async (req, res) => {
     let editedParts = []
     let deletedRoomType = []
     let addedRoomType = []
+    let updatedRoomType = []
+    let oldRoomType = []
 
     try {
         const oldSettings = await AdminSetting.findOne({})
@@ -29,12 +31,12 @@ const updateSettings = async (req, res) => {
         const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
-        socials !== undefined && oldSettings.socials != socials && editedParts.push("socials")
-        emails !== undefined && oldSettings.emails != emails && editedParts.push("emails")
-        phoneNumbers !== undefined && oldSettings.phoneNumbers != phoneNumbers && editedParts.push("phoneNumbers")
-        downPayment !== undefined && oldSettings.downPayment != downPayment && editedParts.push("downPayment")
-        roomStart !== undefined && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
-        if (roomTypes !== undefined && JSON.stringify(oldSettings.roomTypes) !== JSON.stringify(roomTypes)) {
+        socials && oldSettings.socials != socials && editedParts.push("socials")
+        emails && oldSettings.emails != emails && editedParts.push("emails")
+        phoneNumbers && oldSettings.phoneNumbers != phoneNumbers && editedParts.push("phoneNumbers")
+        downPayment && oldSettings.downPayment != downPayment && editedParts.push("downPayment")
+        roomStart && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
+        if (roomTypes && JSON.stringify(oldSettings.roomTypes) !== JSON.stringify(roomTypes)) {
             editedParts.push("roomTypes")
 
             if (oldSettings.roomTypes.length > roomTypes.length) {
@@ -45,6 +47,12 @@ const updateSettings = async (req, res) => {
 
             if (oldSettings.roomTypes.length < roomTypes.length) {
                 addedRoomType = roomTypes.filter(roomType => !oldSettings.roomTypes.includes(roomType))
+            }
+
+            if (oldSettings.roomTypes.length === roomTypes.length) {
+                oldRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
+                updatedRoomType = roomTypes.filter(roomType => !oldSettings.roomTypes.includes(roomType))
+                await Room.updateMany({ roomType: oldRoomType[0] }, { roomType: updatedRoomType[0] })
             }
         }
 
@@ -61,8 +69,10 @@ const updateSettings = async (req, res) => {
                         case "roomTypes":
                             if (deletedRoomType.length > 0) {
                                 return ` deleted a room type ${deletedRoomType[0]}`
-                            } else {
+                            } else if (addedRoomType.length > 0) {
                                 return ` added a room type ${addedRoomType[0]}`
+                            } else {
+                                return ` changed room type from ${oldRoomType[0]} to ${updatedRoomType[0]}`
                             }
                         case "roomStart":
                             return ` changed room start from ${oldSettings.roomStart} to ${roomStart}`

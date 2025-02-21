@@ -201,17 +201,19 @@ export default function Rooms() {
                         <button onClick={() => setIsCard(true)} style={isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Card</button>
                         <button onClick={() => setIsCard(false)} style={!isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Table</button>
                     </div>
-                    {adminSettings.roomTypes?.map((roomType, i) => (
-                        <RoomTypes
-                            key={i}
-                            roomType={roomType}
-                            rooms={rooms.filter(room => room.roomType === roomType)}
-                            setRooms={setRooms}
-                            adminSettings={adminSettings}
-                            setAdminSettings={setAdminSettings}
-                            isCard={isCard}
-                        />
-                    ))}
+                    <div className='room-types'>
+                        {adminSettings.roomTypes?.map((roomType, i) => (
+                            <RoomTypes
+                                key={i}
+                                roomType={roomType}
+                                rooms={rooms.filter(room => room.roomType === roomType)}
+                                setRooms={setRooms}
+                                adminSettings={adminSettings}
+                                setAdminSettings={setAdminSettings}
+                                isCard={isCard}
+                            />
+                        ))}
+                    </div>
                 </>
             }
         </>

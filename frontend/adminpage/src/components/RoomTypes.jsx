@@ -16,6 +16,14 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
     const [addRoomTogg, setAddRoomTogg] = useState(false)
     const [editRoom, setEditRoom] = useState(null)
 
+    const [isRenaming, setIsRenaming] = useState(false)
+    const [newName, setNewName] = useState('')
+    const newNameRef = useRef(null)
+
+    useEffect(() => {
+        newNameRef.current && newNameRef.current.focus()
+    }, [newNameRef.current])
+
     useEffect(() => {
         const handleClick = e => {
             if (settingsRef.current && !settingsRef.current.contains(e.target)) {
@@ -36,7 +44,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
         const newRoomTypes = adminSettings.roomTypes.filter(type => type !== roomType)
 
         await axios.patch('/admin-settings/update', {
-            ...adminSettings,
             roomTypes: newRoomTypes
         })
             .then((res) => {
@@ -53,11 +60,47 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
         setConfirmDeleteTogg(false)
     }
 
+    const updateRoomType = async () => {
+        setIsLoading(true)
+
+        const newRoomTypes = adminSettings.roomTypes.map(type => type === roomType ? newName : type)
+
+        await axios.patch('/admin-settings/update', {
+            roomTypes: newRoomTypes
+        })
+            .then((res) => {
+                setAdminSettings(res.data.adminSetting)
+                setRooms(prev => prev.map(room => room.roomType === roomType ? { ...room, roomType: newName } : room))
+                setNewName('')
+                dispatch({ type: 'SUCCESS', payload: true })
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+
+        setIsLoading(false)
+        setIsRenaming(false)
+    }
+
+    const cancelRename = () => {
+        setNewName('')
+        setIsRenaming(false)
+    }
+
     return (
         <div className='room-cont'>
             {isLoading && <div className='loader-line'></div>}
             <div className='room-type-header'>
-                <h1>{roomType.toUpperCase()}</h1>
+                {isRenaming ?
+                    <div className='rename-room-type'>
+                        <input onKeyDown={(e) => e.key === "Enter" && updateRoomType()} placeholder={roomType} ref={newNameRef} type='text' value={newName} onChange={e => setNewName(e.target.value.toUpperCase())} />
+                        <i onClick={cancelRename} className="fa-solid fa-xmark" />
+                        <i onClick={updateRoomType} className="fa-solid fa-floppy-disk" />
+                    </div>
+                    :
+                    <h1>{roomType}</h1>
+                }
                 <i ref={settingsRef} onClick={() => setRoomSettTogg(!roomSettTogg)} className="fa-solid fa-ellipsis" />
             </div>
             {confirmDeleteTogg ?
@@ -74,6 +117,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                     {roomSettTogg &&
                         <div className='room-settings'>
                             <button onClick={() => setAddRoomTogg(true)}><i className="fa-solid fa-plus" />Add</button>
+                            <button onClick={() => setIsRenaming(true)}><i className="fa-solid fa-pen-to-square" />Rename</button>
                             <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
                         </div>
                     }

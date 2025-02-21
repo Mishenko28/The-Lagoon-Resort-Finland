@@ -33,6 +33,58 @@ const addRoom = async (req, res) => {
     }
 }
 
+// ADD SUB IMAGE
+const addSubImage = async (req, res) => {
+    const { _id, img, adminEmail } = await req.body
+
+    try {
+        const room = await Room.findOneAndUpdate({ _id }, { $push: { subImg: img } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a sub image to room ${room.roomNo} in ${room.roomType} roomtype` })
+
+        res.status(200).json({ room })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// EDIT SUB IMAGE
+const editSubImage = async (req, res) => {
+    const { _id, img, index, adminEmail } = await req.body
+
+    try {
+        const room = await Room.findOneAndUpdate({ _id }, { $set: { [`subImg.${index}`]: img } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.UPDATED], activity: `Edited a sub image of room ${room.roomNo} in ${room.roomType} roomtype` })
+
+        res.status(200).json({ room })
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// DELETE SUB IMAGE
+const deleteSubImage = async (req, res) => {
+    const { _id, index, adminEmail } = await req.body
+
+    try {
+        await Room.findOneAndUpdate({ _id }, { $unset: { [`subImg.${index}`]: 1 } }, { new: true })
+
+        const room = await Room.findOneAndUpdate({ _id }, { $pull: { subImg: null } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a sub image of room ${room.roomNo} in ${room.roomType} roomtype` })
+
+        res.status(200).json({ room })
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 // UPDATE ROOM
 const updateRoom = async (req, res) => {
     const { _id, roomNo, img, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
@@ -44,24 +96,24 @@ const updateRoom = async (req, res) => {
         const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })
 
         // activity log
-        oldRoom.roomNo != roomNo && editedParts.push("roomNo")
-        oldRoom.img != img && editedParts.push("img")
-        oldRoom.rate != rate && editedParts.push("rate")
-        oldRoom.addFeePerPerson != addFeePerPerson && editedParts.push("addFeePerPerson")
-        oldRoom.maxPerson != maxPerson && editedParts.push("maxPerson")
-        oldRoom.caption != caption && editedParts.push("caption")
-        oldRoom.active != active && editedParts.push("active")
+        roomNo && oldRoom.roomNo != roomNo && editedParts.push("roomNo")
+        img && oldRoom.img != img && editedParts.push("img")
+        rate && oldRoom.rate != rate && editedParts.push("rate")
+        addFeePerPerson && oldRoom.addFeePerPerson != addFeePerPerson && editedParts.push("addFeePerPerson")
+        maxPerson && oldRoom.maxPerson != maxPerson && editedParts.push("maxPerson")
+        caption && oldRoom.caption != caption && editedParts.push("caption")
+        active && oldRoom.active != active && editedParts.push("active")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.ROOM, Actions.UPDATED],
-                activity: `Changed properties of room ${oldRoom.roomNo} in ${oldRoom.roomType} roomtype. ${editedParts.map(part => {
+                activity: `Changed properties of room ${oldRoom.roomNo} in ${oldRoom.roomType} roomtype.${editedParts.map(part => {
                     switch (part) {
                         case "roomNo":
                             return ` changed room number from ${oldRoom.roomNo} to ${roomNo}`
                         case "img":
-                            return ` changed image`
+                            return ` changed main image`
                         case "rate":
                             return ` changed rate from ${oldRoom.rate} to ${rate}`
                         case "addFeePerPerson":
@@ -73,7 +125,8 @@ const updateRoom = async (req, res) => {
                         case "active":
                             return ` changed active status to ${active ? "active" : "inactive"}`
                     }
-                })}`
+                })
+                    }`
             })
         }
 
@@ -130,5 +183,8 @@ module.exports = {
     addRoom,
     updateRoom,
     deleteRoom,
-    restoreRoom
+    restoreRoom,
+    addSubImage,
+    editSubImage,
+    deleteSubImage
 }
