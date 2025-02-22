@@ -14,6 +14,10 @@ module.exports.Admin = mongoose.model('Admin', new mongoose.Schema({
         type: Array,
         required: true
     },
+    img: {
+        type: String,
+        required: true
+    },
     personalData: {
         name: {
             type: String,
@@ -34,22 +38,17 @@ module.exports.Admin = mongoose.model('Admin', new mongoose.Schema({
     }
 }, { timestamps: true }), 'admins')
 
-module.exports.Roles = Roles = {
-    DASHBOARD: {
-        BOOKING: 'booking',
-        REPORTS: 'reports'
+module.exports.Roles = Roles = [
+    {
+        page: 'Dashboard',
+        section: ['booking', 'reports']
     },
-    CONFIGURATION: {
-        ROOM: 'room',
-        AMENITY: 'amenity',
-        GALLERY: 'gallery',
-        ABOUT_US: 'aboutUs'
+    {
+        page: 'Configuration',
+        section: ['room', 'amenity', 'gallery', 'aboutUs']
     },
-    UTILITIES: {
-        ARCHIVE: 'archive',
-        ACTIVITY_LOGS: 'activityLogs',
-        DATABASE: 'database',
-        USERS: 'users',
-        ADMINS: 'admins'
+    {
+        page: 'Utilities',
+        section: ['archive', 'activityLogs', 'database', 'users', 'admins']
     }
-}
+]

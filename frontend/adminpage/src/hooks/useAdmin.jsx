@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useEffect, useState } from "react"
 import axios from 'axios'
+import Loader2 from "../components/Loader2"
 
 const AdminContext = createContext()
 
@@ -34,34 +35,48 @@ export function AdminContextProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const admin = localStorage.getItem('lagoonAdmin')
-        admin && dispatch({ type: "LOGIN", payload: JSON.parse(admin) })
+        let admin = JSON.parse(localStorage.getItem('lagoonAdmin'))
         axios.defaults.baseURL = import.meta.env.VITE_API_URL
-
         axios.defaults.headers.common['Content-Type'] = 'application/json'
-        if (admin) {
-            const { token } = JSON.parse(admin)
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        const fetchRole = async () => {
+            axios.get('admin/role', { params: { email: admin.email } })
+                .then(res => {
+                    admin.role = res.data.role
+                    admin && dispatch({ type: "LOGIN", payload: admin })
+                })
+                .catch(err => {
+                    dispatch({ type: 'FAILED', payload: err.response.data.error })
+                    console.log(err)
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
         }
-        setIsLoading(false)
+
+        if (admin) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${admin.token}`
+            fetchRole()
+        } else {
+            setIsLoading(false)
+            return
+        }
     }, [])
 
     useEffect(() => {
         if (state.admin) {
-            const { token } = state.admin
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            axios.defaults.headers.common['Authorization'] = `Bearer ${state.admin.token}`
         }
     }, [state.admin])
 
     useEffect(() => {
         if (state.failed === "jwt expired") {
             dispatch({ type: "LOGOUT" })
-            dispatch({ type: "FAILED", payload: null })
         }
     }, [state.failed])
 
     if (isLoading) {
-        return
+        return <Loader2 />
     }
 
     return (

@@ -14,15 +14,13 @@ export default function Navigations() {
     const settingsBtnRef = useRef(null)
 
     useEffect(() => {
-        setOpenNav(path)
-
+        setOpenNav(path.toLowerCase())
 
         const handleClickOutside = (e) => {
             if (settingsRef.current && !settingsRef.current.contains(e.target) && !settingsBtnRef.current.contains(e.target)) {
                 setOpenSettings(false)
             }
         }
-
 
         document.addEventListener('mousedown', handleClickOutside)
 
@@ -49,40 +47,48 @@ export default function Navigations() {
         <div className='main-cont'>
             <div className="header-cont">
                 <h1>The Lagoon Resort Finland Inc.</h1>
-                <div className='profile-cont'>
-                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile-pic" />
-                    <h3>{state.admin.email}</h3>
+                <div className='right-cont'>
+                    <div className='profile-cont'>
+                        <img src={state.admin.profile} />
+                        <h3>{state.admin.email}</h3>
+                    </div>
+                    <i ref={settingsBtnRef} onClick={() => setOpenSettings(!openSettings)} className="fa-solid fa-ellipsis-vertical" />
                 </div>
-                <i ref={settingsBtnRef} onClick={() => setOpenSettings(!openSettings)} className="fa-solid fa-ellipsis-vertical" />
             </div >
             <div className='nav-and-con'>
                 <div className="navigation-cont">
-                    <div className='parent-cont'>
-                        <NavLink onClick={() => handleOpenNav('dashboard')} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
-                        <div className={`child-cont ${openNav === 'dashboard' ? 'open' : ''}`}>
-                            <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>
-                            <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>
+                    {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
+                        <div className='parent-cont'>
+                            < NavLink onClick={() => handleOpenNav('dashboard')} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
+                            <div className={`child-cont ${openNav === 'dashboard' ? 'open' : ''}`}>
+                                {state.admin.role.includes('booking') && <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>}
+                                {state.admin.role.includes('reports') && <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>}
+                            </div>
                         </div>
-                    </div>
-                    <div className='parent-cont'>
-                        <NavLink onClick={() => handleOpenNav('configuration')} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
-                        <div className={`child-cont ${openNav === 'configuration' ? 'open' : ''}`}>
-                            <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>
-                            <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>
-                            <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>
-                            <NavLink to='/configuration/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>
+                    }
+                    {['room', 'amenity', 'gallery', 'aboutUs'].some(section => state.admin.role.includes(section)) &&
+                        <div className='parent-cont'>
+                            <NavLink onClick={() => handleOpenNav('configuration')} to='/configuration'>Configuration<i className="fa-solid fa-wrench" /></NavLink>
+                            <div className={`child-cont ${openNav === 'configuration' ? 'open' : ''}`}>
+                                {state.admin.role.includes('room') && <NavLink to='/configuration/room'>Rooms<i className="fa-solid fa-building" /></NavLink>}
+                                {state.admin.role.includes('amenity') && <NavLink to='/configuration/amenity'>Amenities<i className="fa-solid fa-umbrella-beach" /></NavLink>}
+                                {state.admin.role.includes('gallery') && <NavLink to='/configuration/gallery'>Gallery<i className="fa-solid fa-camera-retro" /></NavLink>}
+                                {state.admin.role.includes('aboutUs') && <NavLink to='/configuration/about-us'>About Us<i className="fa-solid fa-location-dot" /></NavLink>}
+                            </div>
                         </div>
-                    </div>
-                    <div className='parent-cont'>
-                        <NavLink onClick={() => handleOpenNav('utilities')} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
-                        <div className={`child-cont ${openNav === 'utilities' ? 'open' : ''}`}>
-                            <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>
-                            <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>
-                            <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>
-                            <NavLink to='/utilities/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>
-                            <NavLink to='/utilities/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>
+                    }
+                    {['archive', 'activityLogs', 'database', 'users', 'admins'].some(section => state.admin.role.includes(section)) &&
+                        <div className='parent-cont'>
+                            <NavLink onClick={() => handleOpenNav('utilities')} to='/utilities'>Utilities<i className="fa-solid fa-server" /></NavLink>
+                            <div className={`child-cont ${openNav === 'utilities' ? 'open' : ''}`}>
+                                {state.admin.role.includes('archive') && <NavLink to='/utilities/archive'>Archive<i className="fa-solid fa-recycle" /></NavLink>}
+                                {state.admin.role.includes('activityLogs') && <NavLink to='/utilities/activity-logs'>Activity Logs<i className="fa-solid fa-folder-closed" /></NavLink>}
+                                {state.admin.role.includes('database') && <NavLink to='/utilities/database'>Database<i className="fa-solid fa-database" /></NavLink>}
+                                {state.admin.role.includes('users') && <NavLink to='/utilities/users'>Users<i className="fa-solid fa-user-gear" /></NavLink>}
+                                {state.admin.role.includes('admins') && <NavLink to='/utilities/admins'>Admins<i className="fa-solid fa-user-tie" /></NavLink>}
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div className='parent-cont'>
                         <NavLink onClick={() => handleOpenNav('help')} to='/help'>Help<i className="fa-regular fa-circle-question" /></NavLink>
                         <div className={`child-cont ${openNav === 'help' ? 'open' : ''}`}>
@@ -97,13 +103,13 @@ export default function Navigations() {
                             <button>Button2</button>
                             <button>Button3</button>
                             <button>Button4</button>
-                            <button onClick={handleLogout}>Logout<i className="fa-solid fa-right-from-bracket" /></button>
+                            <button className='logout' onClick={handleLogout}>Logout<i className="fa-solid fa-right-from-bracket" /></button>
                         </div>
                     }
                     <Outlet />
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }

@@ -21,6 +21,7 @@ import ActivityLogs from './pages/Utilities/ActivityLogs'
 // PDF
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import Admins from './pages/Utilities/Admins'
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
 // PDF
 
@@ -33,23 +34,29 @@ function App() {
                 {state.admin ?
                     <Route path="/" element={<Navigations />}>
                         <Route index element={<h1>Index</h1>} />
-                        <Route path='dashboard' element={<Dashboard />}>
-                            <Route path='booking' element={<h1>Booking</h1>} />
-                            <Route path='report' element={<h1>Report</h1>} />
-                        </Route>
-                        <Route path='configuration' element={<Configuration />}>
-                            <Route path='room' element={<Rooms />} />
-                            <Route path='amenity' element={<Amenities />} />
-                            <Route path='gallery' element={<Gallery />} />
-                            <Route path='about-us' element={<AboutUs />} />
-                        </Route>
-                        <Route path='utilities' element={<Utilities />}>
-                            <Route path='archive' element={<h1>WHAHAHA</h1>} />
-                            <Route path='activity-logs' element={<ActivityLogs />} />
-                            <Route path='database' element={<h1>WHAHAHA</h1>} />
-                            <Route path='users' element={<h1>WHAHAHA</h1>} />
-                            <Route path='admins' element={<h1>WHAHAHA</h1>} />
-                        </Route>
+                        {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
+                            <Route path='dashboard' element={<Dashboard />}>
+                                {state.admin.role.includes('booking') && <Route path='booking' element={<h1>Booking</h1>} />}
+                                {state.admin.role.includes('reports') && <Route path='report' element={<h1>Report</h1>} />}
+                            </Route>
+                        }
+                        {['room', 'amenity', 'gallery', 'aboutUs'].some(section => state.admin.role.includes(section)) &&
+                            <Route path='configuration' element={<Configuration />}>
+                                {state.admin.role.includes('room') && <Route path='room' element={<Rooms />} />}
+                                {state.admin.role.includes('amenity') && <Route path='amenity' element={<Amenities />} />}
+                                {state.admin.role.includes('gallery') && <Route path='gallery' element={<Gallery />} />}
+                                {state.admin.role.includes('aboutUs') && <Route path='about-us' element={<AboutUs />} />}
+                            </Route>
+                        }
+                        {['archive', 'activityLogs', 'database', 'users', 'admins'].some(section => state.admin.role.includes(section)) &&
+                            <Route path='utilities' element={<Utilities />}>
+                                {state.admin.role.includes('archive') && <Route path='archive' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('activityLogs') && <Route path='activity-logs' element={<ActivityLogs />} />}
+                                {state.admin.role.includes('database') && <Route path='database' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('users') && <Route path='users' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('admins') && <Route path='admins' element={<Admins />} />}
+                            </Route>
+                        }
                         <Route path='help' element={<Help />}>
                             <Route path='user-manual' element={<h1>User Manual</h1>} />
                         </Route>

@@ -9,18 +9,22 @@ const {
     restoreAdmin,
     updateAdmin,
     getAllAdmin,
-    updatePassword
+    updatePassword,
+    getAllRoles,
+    getRole
 } = require('../controllers/adminController')
 
 router.post('/login', loginAdmin)
-router.post('/add', addNewAdmin)
 
 router.use(auth)
 
+router.post('/add', addNewAdmin)
 router.delete('/delete', deleteAdmin)
 router.post('/restore', restoreAdmin)
 router.patch('/update', updateAdmin)
 router.get('/all', getAllAdmin)
+router.get('/roles', getAllRoles)
 router.post('/password', updatePassword)
+router.get('/role', getRole)
 
 module.exports = router

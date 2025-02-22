@@ -1,4 +1,4 @@
-const { Admin } = require('../models/adminModel')
+const { Admin, Roles } = require('../models/adminModel')
 const Archive = require('../models/archiveModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 
@@ -33,7 +33,7 @@ const loginAdmin = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail: email, action: [Actions.LOGGED_IN, Actions.ADMIN], activity: "Logged in." })
 
-        res.status(200).json({ email, token })
+        res.status(200).json({ email, token, profile: admin.img, role: admin.role })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -41,7 +41,7 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, role, name, sex, age, contact, adminEmail } = await req.body
+    const { email, password, img, role, name, sex, age, contact, adminEmail } = await req.body
 
     try {
         const match = await Admin.findOne({ email })
@@ -60,7 +60,7 @@ const addNewAdmin = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const admin = await Admin.create({ email, password: hash, role, personalData: { name, sex, age, contact } })
+        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
@@ -188,6 +188,28 @@ const getAllAdmin = async (_, res) => {
     }
 }
 
+// GET ALL ROLES
+const getAllRoles = async (_, res) => {
+    try {
+        res.status(200).json({ Roles })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// GET ROLE BY EMAIL
+const getRole = async (req, res) => {
+    const { email } = await req.query
+
+    try {
+        const role = await Admin.findOne({ email }).select('role')
+
+        res.status(200).json({ role: role.role })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 module.exports = {
     loginAdmin,
     addNewAdmin,
@@ -195,5 +217,7 @@ module.exports = {
     restoreAdmin,
     updateAdmin,
     getAllAdmin,
-    updatePassword
+    updatePassword,
+    getAllRoles,
+    getRole
 }

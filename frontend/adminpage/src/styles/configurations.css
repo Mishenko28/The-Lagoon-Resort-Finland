@@ -1,12 +1,12 @@
-.config-header {
+.button-header {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
     margin-bottom: 30px;
 }
 
-.config-header button {
-    padding: 10px;
+.button-header button {
+    padding: 10px 15px;
     border: none;
     background-color: var(--primary);
     color: #fff;
@@ -14,11 +14,11 @@
     font-size: 0.7em;
 }
 
-.config-header .sort-wrapper {
+.button-header .sort-wrapper {
     position: relative;
 }
 
-.config-header .sort-wrapper .selections {
+.button-header .sort-wrapper .selections {
     position: absolute;
     top: 34px;
     left: 0;
@@ -33,7 +33,7 @@
     z-index: 1;
 }
 
-.config-header .sort-wrapper .selections h1 {
+.button-header .sort-wrapper .selections h1 {
     position: relative;
     font-size: 0.6rem;
     font-weight: 300;
@@ -44,18 +44,18 @@
     font-weight: 500;
 }
 
-.config-header .sort-wrapper .selections h1 i {
+.button-header .sort-wrapper .selections h1 i {
     position: absolute;
     left: -10px;
     top: 6px;
     color: var(--primary);
 }
 
-.config-header .sort-wrapper .selections hr {
+.button-header .sort-wrapper .selections hr {
     width: 100%;
 }
 
-.config-header button i {
+.button-header button i {
     margin-right: 8px;
 }
 
@@ -496,7 +496,7 @@
 
 .room-table-cont table td {
     position: relative;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-gray);
 }
 
 .room-table-cont table td span {
@@ -613,7 +613,7 @@
 
 .amenity-table-cont td {
     position: relative;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-gray);
 }
 
 .amenity-table-cont table td span {
@@ -1201,11 +1201,16 @@
 
 /* PC */
 @media (min-width: 1025px) {
-    .config-header button {
+    .button-header button {
         cursor: pointer;
+        padding: 15px 20px;
     }
 
-    .config-header button:hover {
+    .button-header .sort-wrapper .selections {
+        top: 45px;
+    }
+
+    .button-header button:hover {
         background-color: var(--primary-dark);
     }
 
@@ -1409,11 +1414,11 @@
         font-size: 0.8rem;
     }
 
-    .config-header .sort-wrapper .selections h1 {
+    .button-header .sort-wrapper .selections h1 {
         cursor: pointer;
     }
 
-    .config-header .sort-wrapper .selections h1:hover {
+    .button-header .sort-wrapper .selections h1:hover {
         background-color: var(--primary-dark);
     }
 

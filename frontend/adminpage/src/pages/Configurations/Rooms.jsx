@@ -156,9 +156,9 @@ export default function Rooms() {
                 <Loader2 />
                 :
                 <>
-                    <div className="config-header">
-                        <button onClick={() => setNewRoomTypeTogg(true)}>Create Room Type</button>
-                        <button onClick={() => setNewDownPayment(adminSettings.downPayment)}>Change Down Payment</button>
+                    <div className="button-header">
+                        <button onClick={() => setNewRoomTypeTogg(true)}><i className="fa-solid fa-folder-plus" />Create Room Type</button>
+                        <button onClick={() => setNewDownPayment(adminSettings.downPayment)}><i className="fa-solid fa-square-pen" />Change Down Payment</button>
                         <div className='sort-wrapper'>
                             <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort Rooms</button>
                             {sortTogg &&

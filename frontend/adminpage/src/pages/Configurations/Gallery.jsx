@@ -155,7 +155,7 @@ export default function Gallery() {
                             <button onClick={handleClear}>Clear</button>
                         </div>
                     </div>
-                    <div className="config-header">
+                    <div className="button-header">
                         <div className='sort-wrapper'>
                             <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort Photos</button>
                             {sortTogg &&

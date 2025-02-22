@@ -21,9 +21,15 @@
     background-color: var(--primary);
 }
 
+.header-cont .right-cont {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .header-cont h1 {
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
 }
 
 .header-cont .profile-cont {
@@ -33,11 +39,15 @@
     padding: 5px;
     border: 1px solid #fff;
     border-radius: 5px;
+    max-width: 200px;
 }
 
 .header-cont h3 {
     color: #fff;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .header-cont i {
@@ -46,13 +56,9 @@
     padding: 5px 10px;
 }
 
-.header-cont i:hover {
-    cursor: pointer;
-}
-
 .header-cont img {
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
@@ -114,34 +120,35 @@
 }
 
 .settings-cont {
-    position: absolute;
-    top: 0;
-    right: 0;
+    position: fixed;
+    top: 87px;
+    right: 4px;
     display: flex;
     flex-direction: column;
     gap: 5px;
-    background-color: var(--secondary);
-    padding: 5px;
+    background-color: #fff;
+    padding: 10px;
     z-index: 1;
+    border-radius: 4px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
 }
 
 .settings-cont button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
-    width: 120px;
+    padding: 8px 10px;
+    width: 150px;
     border: none;
     background-color: #fff;
     border-radius: 2px;
+    font-weight: 500;
+    color: var(--gray);
 }
 
-.settings-cont button:hover {
-    cursor: pointer;
-}
-
-.settings-cont button:last-child {
+.settings-cont button.logout {
     background-color: var(--red);
+    color: #fff;
 }
 
 .content-cont {
@@ -157,12 +164,31 @@
         padding-inline: 15px;
     }
 
+    .header-cont .right-cont {
+        gap: 20px;
+    }
+
     .header-cont h1 {
         font-size: 1.8rem;
     }
 
+    .header-cont .profile-cont {
+        padding: 10px 15px;
+        max-width: 300px;
+    }
+
+    .header-cont .profile-cont:hover {
+        cursor: pointer;
+        background-color: var(--primary-dark);
+    }
+
     .header-cont i {
-        padding: 5px 15px;
+        padding: 15px;
+    }
+
+    .header-cont i:hover {
+        cursor: pointer;
+        background-color: var(--primary-dark);
     }
 
     .navigation-cont {
@@ -173,6 +199,16 @@
     .navigation-cont a {
         font-size: 1rem;
         padding: 12px;
+    }
+
+    .navigation-cont a:hover {
+        transition: all 0.1s ease-in-out;
+        background-color: var(--primary-dark);
+    }
+
+    .navigation-cont a.active:hover {
+        transition: all 0.1s ease-in-out;
+        background-color: var(--gold-dark);
     }
 
     .navigation-cont .child-cont {
@@ -198,6 +234,15 @@
     .settings-cont button {
         padding: 10px 15px;
         width: 180px;
+    }
+
+    .settings-cont button:hover {
+        cursor: pointer;
+        background-color: var(--light-gray);
+    }
+
+    .settings-cont button.logout:hover {
+        background-color: var(--red-dark);
     }
 
     .content-cont {
