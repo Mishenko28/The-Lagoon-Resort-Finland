@@ -71,7 +71,7 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
 
         setIsLoading(true)
 
-        axios.post('admin/add', { ...newAdmin })
+        axios.post('admin/add', newAdmin)
             .then(res => {
                 dispatch({ type: 'SUCCESS', payload: true })
                 setAdmins(prev => ([...prev, res.data.admin]))
@@ -161,7 +161,6 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
                     </>
                 }
             </form>
-
         </div>
     )
 }

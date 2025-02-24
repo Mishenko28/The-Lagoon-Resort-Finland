@@ -147,6 +147,13 @@
     color: #fff;
 }
 
+.admin-main table img {
+    width: 100px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .admin-form {
     position: relative;
     display: flex;
@@ -154,7 +161,6 @@
     gap: 10px;
     background-color: #fff;
     padding: 10px;
-
 }
 
 .admin-form h2 {
@@ -250,6 +256,7 @@
 }
 
 .admin-form .bttns {
+    position: relative;
     display: flex;
     gap: 10px;
 }
@@ -264,12 +271,106 @@
     font-weight: 500;
 }
 
-.admin-form .bttns button:last-of-type {
+.admin-form .bttns button:nth-child(2) {
     background-color: #fff;
     color: var(--gray);
     border: 1px solid var(--light-gray);
 }
 
+.admin-form .bttns button:nth-child(3) {
+    position: absolute;
+    right: 0;
+    background-color: var(--red);
+}
+
+.confirm-delete-admin {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+}
+
+.confirm-delete-admin label,
+.confirm-delete-admin input[type='password'] {
+    border: 2px solid var(--light-gray);
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: var(--gray);
+    text-overflow: ellipsis;
+    max-width: 250px;
+    overflow: hidden;
+}
+
+.confirm-delete-admin h2 {
+    color: var(--primary);
+}
+
+.confirm-delete-admin h3 {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--gray);
+}
+
+.confirm-delete-admin .info {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--light-orange);
+    gap: 15px;
+    padding: 15px 5px;
+    border-radius: 5px;
+    margin-block: 15px;
+    font-weight: 500;
+    border-left: 3px solid var(--dark-orange);
+}
+
+.confirm-delete-admin .info p {
+    color: var(--dark-orange);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.confirm-delete-admin .info img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.confirm-delete-admin .bttns2 {
+    display: flex;
+    gap: 10px;
+}
+
+.confirm-delete-admin .bttns2 button {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    background-color: var(--red);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.confirm-delete-admin .bttns2 button:nth-child(2) {
+    background-color: #fff;
+    color: var(--gray);
+    border: 1px solid var(--light-gray);
+}
+
+.confirm-delete-admin .fa-xmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5rem;
+    color: var(--gray);
+}
 
 /* PC */
 @media (min-width: 1025px) {
@@ -335,6 +436,11 @@
         font-size: 2.3rem;
     }
 
+    .admin-main tbody tr:hover {
+        cursor: pointer;
+        background-color: #eee;
+    }
+
     .admin-form {
         padding: 20px;
     }
@@ -360,6 +466,11 @@
         color: var(--red);
     }
 
+    .confirm-delete-admin .fa-xmark:hover {
+        cursor: pointer;
+        color: var(--red);
+    }
+
     .admin-form .input-group .roles input[type="checkbox"]:hover {
         cursor: pointer;
     }
@@ -369,6 +480,14 @@
     }
 
     .admin-form .bttns button:hover {
+        cursor: pointer;
+    }
+
+    .confirm-delete-admin .bttns2 button {
+        padding: 10px 20px;
+    }
+
+    .confirm-delete-admin .bttns2 button:hover {
         cursor: pointer;
     }
 }

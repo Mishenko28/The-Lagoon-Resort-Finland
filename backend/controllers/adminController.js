@@ -19,6 +19,14 @@ const loginAdmin = async (req, res) => {
         const admin = await Admin.findOne({ email })
 
         if (!admin) {
+            const deletedAdmin = await Archive.findOne({ type: "admin", "data.email": email })
+
+            if (deletedAdmin) {
+                throw Error("This admin account has been deleted")
+            }
+        }
+
+        if (!admin) {
             throw Error("Admin not Found")
         }
 
@@ -73,20 +81,27 @@ const addNewAdmin = async (req, res) => {
 
 // DELETE ADMIN
 const deleteAdmin = async (req, res) => {
-    const { _id, adminEmail } = await req.body
+    const { _id, password, adminEmail } = await req.body
 
     try {
-        const admin = await Admin.findOneAndDelete({ _id })
+        const admin = await Admin.findOne({ email: adminEmail })
+        const match = await bcrypt.compare(password, admin.password)
+
+        if (!match) {
+            throw Error("Incorrect password")
+        }
+
+        const deletedAdmin = await Admin.findOneAndDelete({ _id })
 
         // archive
         if (admin) {
-            await Archive.create({ adminEmail, type: "admin", data: admin })
+            await Archive.create({ adminEmail, type: "admin", data: deletedAdmin })
         }
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.DELETED], activity: `Deleted an admin with the email of "${admin.email}"` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.DELETED], activity: `Deleted an admin with the email of "${deletedAdmin.email}"` })
 
-        res.status(200).json({ admin })
+        res.status(200).json({ admin: deletedAdmin })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -115,29 +130,35 @@ const restoreAdmin = async (req, res) => {
 
 // UPDATE ADMIN PROFILE
 const updateAdmin = async (req, res) => {
-    const { _id, role, name, sex, age, contact, adminEmail } = await req.body
+    const { _id, email, role, img, name, sex, age, contact, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldAdmin = await Admin.findOne({ _id })
 
-        const admin = await Admin.findOneAndUpdate({ _id }, { role, personalData: { name, sex, age, contact } }, { new: true })
+        const admin = await Admin.findOneAndUpdate({ _id }, { email, img, role, personalData: { name, sex, age, contact } }, { new: true })
 
         // activity log
-        oldAdmin.role != role && editedParts.push("role")
-        oldAdmin.personalData.name != name && editedParts.push("name")
-        oldAdmin.personalData.sex != sex && editedParts.push("sex")
-        oldAdmin.personalData.age != age && editedParts.push("age")
-        oldAdmin.personalData.contact != contact && editedParts.push("contact")
+        JSON.stringify(oldAdmin.role) !== JSON.stringify(role) && editedParts.push("role")
+        oldAdmin.img !== img && editedParts.push("image")
+        oldAdmin.email !== email && editedParts.push("email")
+        oldAdmin.personalData.name !== name && editedParts.push("name")
+        oldAdmin.personalData.sex !== sex && editedParts.push("sex")
+        oldAdmin.personalData.age !== age && editedParts.push("age")
+        oldAdmin.personalData.contact !== contact && editedParts.push("contact")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.ADMIN, Actions.UPDATED],
-                activity: `Changed information of admin ${admin.email}. ${editedParts.map(part => {
+                activity: `Changed information of admin ${oldAdmin.email}. ${editedParts.map(part => {
                     switch (part) {
                         case "role":
                             return ` changed role from "${oldAdmin.role.map(a => a)}" to "${role.map(a => a)}"`
+                        case "image":
+                            return ` changed Profile Picture`
+                        case "email":
+                            return ` changed email from "${oldAdmin.email}" to "${email}"`
                         case "name":
                             return ` changed name from "${oldAdmin.personalData.name}" to "${name}"`
                         case "sex":

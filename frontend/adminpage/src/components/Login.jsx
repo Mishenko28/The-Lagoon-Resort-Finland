@@ -24,13 +24,14 @@ function Login() {
         })
             .then((res) => {
                 dispatch({ type: 'LOGIN', payload: res.data })
+                setPassword('')
             })
             .catch((err) => {
                 setError(err.response.data.error)
             })
-
-        setIsLoading(false)
-        setPassword('')
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     return (

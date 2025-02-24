@@ -1635,10 +1635,6 @@
         width: 280px;
     }
 
-    .add-room-sub-img .bttns {
-        gap: 20px;
-    }
-
     .add-room-sub-img .bttns button {
         padding: 10px 20px;
     }
@@ -1664,10 +1660,6 @@
         width: 200px;
     }
 
-    .add-room-sub-img .delete-bttns {
-        gap: 20px;
-    }
-
     .add-room-sub-img .delete-bttns button {
         padding: 10px 20px;
     }
@@ -1687,10 +1679,6 @@
     .about-us-header h1 {
         font-size: 1rem;
         font-weight: 500;
-    }
-
-    .about-us-header .bttns {
-        gap: 15px;
     }
 
     .about-us-header .bttns i {
@@ -1768,10 +1756,6 @@
     .about-us-phone-num-cont .confirmation-cont {
         gap: 15px;
         width: 300px;
-    }
-
-    .confirmation-cont .bttns {
-        gap: 20px;
     }
 
     .confirmation-cont .bttns button {

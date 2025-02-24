@@ -13,7 +13,7 @@ const getAllActivityLogs = async (req, res) => {
 
             return {
                 _id: log._id,
-                name: personalData.name,
+                name: personalData.name || 'Deleted or Changed Admin',
                 activity: log.activity,
                 createdAt: log.createdAt
             }
