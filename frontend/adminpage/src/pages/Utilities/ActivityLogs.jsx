@@ -42,7 +42,7 @@ export default function ActivityLogs() {
 
     const fetchLogs = async () => {
         await axios.get('log/all', {
-            params: { ...filter, page: 1 }
+            params: { ...filter, page }
         })
             .then(res => {
                 setLogs(res.data.logs)

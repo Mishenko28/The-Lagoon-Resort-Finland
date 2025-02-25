@@ -73,8 +73,9 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
 
         axios.patch('admin/update', newAdmin)
             .then(res => {
-                if (res.data.admin.email === state.admin.email) {
-                    location.reload()
+                const admin = res.data.admin
+                if (editAdmin.email === state.admin.email) {
+                    dispatch({ type: 'LOGIN', payload: { token: state.admin.token, email: admin.email, profile: admin.img, role: admin.role } })
                 }
                 setAdmins(prev => prev.map(admin => admin._id === res.data.admin._id ? res.data.admin : admin))
                 dispatch({ type: 'SUCCESS', payload: true })
@@ -160,7 +161,6 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                                 <div className="input-group">
                                     <label>Sex</label>
                                     <select value={newAdmin.sex} onChange={(e) => setNewAdmin(prev => ({ ...prev, sex: e.target.value }))}>
-                                        <option value=''>--select--</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>

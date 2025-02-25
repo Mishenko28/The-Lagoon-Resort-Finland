@@ -11,7 +11,8 @@ const {
     getAllAdmin,
     updatePassword,
     getAllRoles,
-    getRole
+    getRole,
+    getSingleAdmin
 } = require('../controllers/adminController')
 
 router.post('/login', loginAdmin)
@@ -26,5 +27,6 @@ router.get('/all', getAllAdmin)
 router.get('/roles', getAllRoles)
 router.post('/password', updatePassword)
 router.get('/role', getRole)
+router.get('/profile', getSingleAdmin)
 
 module.exports = router

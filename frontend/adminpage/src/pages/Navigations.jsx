@@ -1,5 +1,5 @@
 import '../styles/navigations.css'
-import { NavLink, Outlet, useLocation } from "react-router-dom"
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 import { useState, useRef, useEffect } from 'react'
 import useAdmin from '../hooks/useAdmin'
 
@@ -48,10 +48,10 @@ export default function Navigations() {
             <div className="header-cont">
                 <h1>The Lagoon Resort Finland Inc.</h1>
                 <div className='right-cont'>
-                    <div className='profile-cont'>
+                    <Link to='/profile' className='profile-cont'>
                         <img src={state.admin.profile} />
                         <h3>{state.admin.email}</h3>
-                    </div>
+                    </Link>
                     <i ref={settingsBtnRef} onClick={() => setOpenSettings(!openSettings)} className="fa-solid fa-ellipsis-vertical" />
                 </div>
             </div >

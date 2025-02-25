@@ -198,6 +198,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--light-gray);
+    padding: 4px;
 }
 
 .admin-form .input-group select,

@@ -22,6 +22,7 @@ import ActivityLogs from './pages/Utilities/ActivityLogs'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 import Admins from './pages/Utilities/Admins'
+import Profile from './pages/Profile'
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
 // PDF
 
@@ -60,6 +61,7 @@ function App() {
                         <Route path='help' element={<Help />}>
                             <Route path='user-manual' element={<h1>User Manual</h1>} />
                         </Route>
+                        <Route path="profile" element={<Profile />} />
                         <Route path="*" element={<Navigate to='/' />} />
                     </Route>
                     :

@@ -231,6 +231,20 @@ const getRole = async (req, res) => {
     }
 }
 
+// GET SINGLE ADMIN
+const getSingleAdmin = async (req, res) => {
+    const { email } = await req.query
+
+    try {
+        const admin = await Admin.findOne({ email })
+
+        res.status(200).json({ admin })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+
 module.exports = {
     loginAdmin,
     addNewAdmin,
@@ -240,5 +254,6 @@ module.exports = {
     getAllAdmin,
     updatePassword,
     getAllRoles,
-    getRole
+    getRole,
+    getSingleAdmin
 }

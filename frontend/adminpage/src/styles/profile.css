@@ -1,0 +1,248 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.profile .cont {
+    display: flex;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.profile .header {
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile .header img {
+    width: 120px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid var(--secondary);
+    padding: 6px;
+}
+
+.profile .header h1 {
+    margin-top: 5px;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.profile .header h2 {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gray);
+}
+
+.profile .header button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border: none;
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 0.7rem;
+    margin-top: 10px;
+    border-radius: 15px;
+}
+
+.profile .personal {
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile .personal h1 {
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+.profile .personal .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile .personal .info h2 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+.profile .personal .info h2 span:first-of-type {
+    color: var(--gray);
+    font-weight: 400;
+}
+
+.profile .role {
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile .role h1 {
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+.profile .role .info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.profile .role .info h2 {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    font-weight: 400;
+    background-color: var(--gold);
+    padding: 1px 3px;
+}
+
+.profile .edit-mode {
+    position: relative;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile .edit-mode .fa-xmark {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 1.5rem;
+    color: var(--gray);
+}
+
+.profile .edit-mode img {
+    width: 120px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid var(--secondary);
+    padding: 6px;
+}
+
+.profile .edit-mode h1 {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.profile .edit-mode h2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile .edit-mode h2 span {
+    color: var(--gray);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.profile .edit-mode h2 select,
+.profile .edit-mode h2 input {
+    color: var(--primary);
+    font-size: 1rem;
+    padding: 5px;
+    border-radius: 4px;
+    border: 2px solid var(--light-gray);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile .edit-mode .bttns {
+    display: flex;
+    gap: 10px;
+}
+
+.profile .edit-mode .bttns button {
+    padding: 10px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.profile .edit-mode .bttns button:nth-child(2) {
+    background-color: #fff;
+    color: var(--gray);
+    border: 1px solid var(--light-gray);
+}
+
+
+
+
+@media (min-width: 1025px) {
+    .profile {
+        flex-wrap: wrap;
+        height: 100%;
+        width: fit-content;
+    }
+
+    .profile .cont {
+        padding: 20px;
+        width: 320px;
+    }
+
+    .profile .header {
+        align-items: start;
+    }
+
+    .profile .header button {
+        align-self: flex-end;
+    }
+
+    .profile .header button:hover {
+        cursor: pointer;
+        background-color: var(--primary-dark);
+    }
+
+    .profile .role,
+    .profile .personal {
+        gap: 10px;
+        flex-grow: 1;
+    }
+
+    .profile .role h1,
+    .profile .personal h1 {
+        font-size: 0.9rem;
+    }
+
+    .profile .personal .info {
+        gap: 10px;
+    }
+
+    .profile .personal .info h2 {
+        font-size: 1rem;
+    }
+
+    .profile .role .info {
+        gap: 10px;
+    }
+
+    .profile .role .info h2 {
+        font-size: 1rem;
+        padding: 3px 17px;
+    }
+
+    .profile .role {
+        height: 100%;
+    }
+
+    .profile .edit-mode .bttns button:hover {
+        cursor: pointer;
+    }
+
+    .profile .edit-mode .fa-xmark:hover {
+        cursor: pointer;
+        color: var(--red);
+    }
+}
