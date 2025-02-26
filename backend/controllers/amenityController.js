@@ -39,6 +39,9 @@ const updateAmenity = async (req, res) => {
     let editedParts = []
 
     try {
+        const existingAmenity = await Amenity.findOne({ _id: { $ne: _id }, name })
+        if (existingAmenity) throw Error("Amenity already exists.")
+
         const oldAmenity = await Amenity.findOne({ _id })
 
         const amenity = await Amenity.findOneAndUpdate({ _id }, { name, img, rate, caption, active }, { new: true })

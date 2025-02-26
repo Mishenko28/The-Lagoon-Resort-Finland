@@ -19,7 +19,6 @@ const addRoom = async (req, res) => {
 
     try {
         const existingRoomNo = await Room.findOne({ roomType, roomNo })
-
         if (existingRoomNo) throw new Error("Room number already exists.")
 
         const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
@@ -91,6 +90,9 @@ const updateRoom = async (req, res) => {
     let editedParts = []
 
     try {
+        const existingRoomNo = await Room.findOne({ _id: { $ne: _id }, roomNo })
+        if (existingRoomNo) throw new Error("Room number already exists.")
+
         const oldRoom = await Room.findOne({ _id })
 
         const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })

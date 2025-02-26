@@ -201,7 +201,7 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                             <div className="bttns">
                                 <button type="submit" disabled={isLoading}>Save</button>
                                 <button onClick={() => setEditAdmin(null)}>Cancel</button>
-                                <button onClick={() => setDeleteTogg(true)}>Delete</button>
+                                <button disabled={isLoading} onClick={() => setDeleteTogg(true)}>Delete</button>
                             </div>
                         </>
                     }

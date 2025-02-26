@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../middlewares/auth')
+const loginLimiter = require('../middlewares/loginLimiter')
 
 const {
     loginAdmin,
@@ -15,7 +16,7 @@ const {
     getSingleAdmin
 } = require('../controllers/adminController')
 
-router.post('/login', loginAdmin)
+router.post('/login', loginLimiter, loginAdmin)
 
 router.use(auth)
 

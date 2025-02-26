@@ -15,30 +15,41 @@ const createToken = (id) => {
 
 
 // LOGIN
+let attempts = {}
+
 const loginAdmin = async (req, res) => {
     const { email, password } = await req.body
+    const ip = await req.ip
+
+    if (!attempts[ip]) attempts[ip] = 8
+    else attempts[ip]--
 
     try {
+
         const admin = await Admin.findOne({ email })
 
         if (!admin) {
             const deletedAdmin = await Archive.findOne({ type: "admin", "data.email": email })
 
             if (deletedAdmin) {
+                if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
                 throw Error("This admin account has been deleted")
             }
         }
 
         if (!admin) {
+            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
             throw Error("Admin not Found")
         }
 
         const match = await bcrypt.compare(password, admin.password)
 
         if (!match) {
+            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
             throw Error("Incorrect password")
         }
 
+        delete attempts[ip]
         const token = createToken(admin._id)
 
         // activity log
@@ -57,15 +68,9 @@ const addNewAdmin = async (req, res) => {
     try {
         const match = await Admin.findOne({ email })
 
-        if (match) {
-            throw Error("Admin already exist")
-        }
-        if (!validator.isEmail(email)) {
-            throw Error("email is not valid")
-        }
-        if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) {
-            throw Error("password must atleast 8 characters")
-        }
+        if (match) throw Error("Admin already exist")
+        if (!validator.isEmail(email)) throw Error("email is not valid")
+        if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) throw Error("password must atleast 8 characters")
 
 
         const salt = await bcrypt.genSalt(10)
@@ -90,9 +95,7 @@ const deleteAdmin = async (req, res) => {
         const admin = await Admin.findOne({ email: adminEmail })
         const match = await bcrypt.compare(password, admin.password)
 
-        if (!match) {
-            throw Error("Incorrect password")
-        }
+        if (!match) throw Error("Incorrect password")
 
         const deletedAdmin = await Admin.findOneAndDelete({ _id })
 
@@ -137,6 +140,9 @@ const updateAdmin = async (req, res) => {
     let editedParts = []
 
     try {
+        const exist = await Admin.findOne({ _id: { $ne: _id }, email })
+        if (exist) throw Error("Admin already exist")
+
         const oldAdmin = await Admin.findOne({ _id })
 
         const admin = await Admin.findOneAndUpdate({ _id }, { email, img, role, personalData: { name, sex, age, contact } }, { new: true })

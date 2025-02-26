@@ -28,9 +28,7 @@ const updateSettings = async (req, res) => {
     try {
         const oldSettings = await AdminSetting.findOne({})
 
-        if (roomTypes && oldSettings.roomTypes.includes(roomTypes)) {
-            throw new Error("Room type already exists")
-        }
+        if (roomTypes && new Set(roomTypes).size !== roomTypes.length) throw new Error("Room type already exists")
 
         const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails }, { new: true })
 
