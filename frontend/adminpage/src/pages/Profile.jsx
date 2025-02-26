@@ -98,7 +98,7 @@ export default function Profile() {
                             <input type="file" accept=".png, .jpeg, .jpg" onChange={(e) => convertToBase64(e.target.files[0])} />
                             <h2>
                                 <span>Email: </span>
-                                <input type="text" value={editProfile.email} onChange={(e) => setEditProfile(prev => ({ ...prev, email: e.target.value }))} />
+                                <p>{editProfile.email}</p>
                             </h2>
                             <h2>
                                 <span>Name: </span>

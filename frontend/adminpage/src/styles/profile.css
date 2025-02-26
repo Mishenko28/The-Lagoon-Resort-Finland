@@ -145,6 +145,7 @@
     font-weight: 400;
 }
 
+.profile .edit-mode h2 p,
 .profile .edit-mode h2 select,
 .profile .edit-mode h2 input {
     color: var(--primary);
@@ -154,6 +155,7 @@
     border: 2px solid var(--light-gray);
     width: 100%;
     box-sizing: border-box;
+    font-weight: 400;
 }
 
 .profile .edit-mode .bttns {

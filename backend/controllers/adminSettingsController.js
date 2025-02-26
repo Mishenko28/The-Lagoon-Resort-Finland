@@ -28,6 +28,10 @@ const updateSettings = async (req, res) => {
     try {
         const oldSettings = await AdminSetting.findOne({})
 
+        if (roomTypes && oldSettings.roomTypes.includes(roomTypes)) {
+            throw new Error("Room type already exists")
+        }
+
         const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
@@ -55,8 +59,6 @@ const updateSettings = async (req, res) => {
                 await Room.updateMany({ roomType: oldRoomType[0] }, { roomType: updatedRoomType[0] })
             }
         }
-
-
 
         if (editedParts.length > 0) {
             await ActivityLog.create({

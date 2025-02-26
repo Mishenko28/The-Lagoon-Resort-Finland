@@ -2,6 +2,7 @@ const { Admin, Roles } = require('../models/adminModel')
 const Archive = require('../models/archiveModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 
+
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
@@ -9,6 +10,8 @@ const jwt = require('jsonwebtoken')
 const createToken = (id) => {
     return jwt.sign({ id }, "LagoonThesis", { expiresIn: '1d' })
 }
+
+
 
 
 // LOGIN
@@ -255,5 +258,5 @@ module.exports = {
     updatePassword,
     getAllRoles,
     getRole,
-    getSingleAdmin
+    getSingleAdmin,
 }

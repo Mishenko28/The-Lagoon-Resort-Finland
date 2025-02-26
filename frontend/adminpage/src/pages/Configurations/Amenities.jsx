@@ -82,7 +82,7 @@ export default function Amenities() {
                 :
                 <>
                     <div className="button-header">
-                        <button onClick={() => setAddAmenityTogg(true)}><i class="fa-solid fa-plus" />Add</button>
+                        <button onClick={() => setAddAmenityTogg(true)}><i className="fa-solid fa-plus" />Add</button>
                         <div className='sort-wrapper'>
                             <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort</button>
                             {sortTogg &&
