@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useAdmin from '../hooks/useAdmin'
 import Loader2 from '../components/Loader2'
-import '../styles/admin-invite.css'
 import useConvertBase64 from '../hooks/useConvertBase64'
 import { useNavigate } from 'react-router-dom'
 
