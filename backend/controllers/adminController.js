@@ -278,7 +278,7 @@ const createInviteLink = async (req, res) => {
         if (exist) throw Error("There are currently an active invite link for this email")
 
         const token = createToken(email)
-        const link = req.headers.origin + '/admin-invite?token=' + token
+        const link = process.env.WEBSITE_URL + '/admin-invite?token=' + token
         const invite = await InviteLink.create({ email, role, link })
 
         sendMail({
