@@ -1,14 +1,5 @@
 const OTP = require('../models/otpModel')
-const nodemailer = require('nodemailer')
-
-
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: "johnthomasalog@gmail.com",
-        pass: "fyem mpzq rgxb uati",
-    },
-})
+const sendMail = require('../Utility/nodeMailer')
 
 
 // CREATE OTP
@@ -17,14 +8,11 @@ const createOTP = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
 
     try {
-        const mailOptions = {
-            from: "johnthomasalog@gmail.com",
+        sendMail({
             to: email,
             subject: "Hello from The Lagoon Resort Finland Inc.!",
-            text: "Your OTP is " + otp,
-        }
-
-        transporter.sendMail(mailOptions, (error) => {
+            html: `<h1>Your OTP is ${otp}<h1>`
+        }, (error) => {
             if (error) {
                 throw Error(error)
             }

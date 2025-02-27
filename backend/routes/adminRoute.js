@@ -13,10 +13,16 @@ const {
     updatePassword,
     getAllRoles,
     getRole,
-    getSingleAdmin
+    getSingleAdmin,
+    createInviteLink,
+    getAllInviteLink,
+    verifyInviteLink,
+    deleteInviteLink,
+    resendInviteLink
 } = require('../controllers/adminController')
 
 router.post('/login', loginLimiter, loginAdmin)
+router.post('/verify', verifyInviteLink)
 
 router.use(auth)
 
@@ -29,5 +35,10 @@ router.get('/roles', getAllRoles)
 router.post('/password', updatePassword)
 router.get('/role', getRole)
 router.get('/profile', getSingleAdmin)
+
+router.get('/invite', getAllInviteLink)
+router.post('/reinvite', resendInviteLink)
+router.post('/invite', createInviteLink)
+router.delete('/invite', deleteInviteLink)
 
 module.exports = router

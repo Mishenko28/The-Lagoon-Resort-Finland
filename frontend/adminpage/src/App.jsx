@@ -23,6 +23,7 @@ import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 import Admins from './pages/Utilities/Admins'
 import Profile from './pages/Profile'
+import AdminInvite from './pages/AdminInvite'
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
 // PDF
 
@@ -70,6 +71,7 @@ function App() {
                         <Route path="*" element={<Navigate to='/login' />} />
                     </>
                 }
+                <Route path='admin-invite' element={<AdminInvite />} />
                 <Route path='hello-world' element={<h1>Hello World!</h1>} />
             </Routes>
             {state.success && <Success />}

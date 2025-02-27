@@ -1,6 +1,8 @@
 const { Admin, Roles } = require('../models/adminModel')
 const Archive = require('../models/archiveModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
+const InviteLink = require('../models/inviteLinkModel')
+const sendMail = require('../Utility/nodeMailer')
 
 
 const bcrypt = require('bcrypt')
@@ -8,7 +10,7 @@ const validator = require('validator')
 const jwt = require('jsonwebtoken')
 
 const createToken = (id) => {
-    return jwt.sign({ id }, "LagoonThesis", { expiresIn: '1d' })
+    return jwt.sign({ id }, process.env.PASSWORD, { expiresIn: '1d' })
 }
 
 
@@ -25,27 +27,26 @@ const loginAdmin = async (req, res) => {
     else attempts[ip]--
 
     try {
-
         const admin = await Admin.findOne({ email })
 
         if (!admin) {
             const deletedAdmin = await Archive.findOne({ type: "admin", "data.email": email })
 
             if (deletedAdmin) {
-                if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
+                if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip] - 1} attempts left`)
                 throw Error("This admin account has been deleted")
             }
         }
 
         if (!admin) {
-            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
+            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip] - 1} attempts left`)
             throw Error("Admin not Found")
         }
 
         const match = await bcrypt.compare(password, admin.password)
 
         if (!match) {
-            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
+            if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip] - 1} attempts left`)
             throw Error("Incorrect password")
         }
 
@@ -63,8 +64,8 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, img, role, name, sex, age, contact, adminEmail } = await req.body
-
+    const { email, password, img, role, name, sex, age, contact, adminEmail: adminE } = await req.body
+    const adminEmail = adminE || email
     try {
         const match = await Admin.findOne({ email })
 
@@ -77,6 +78,7 @@ const addNewAdmin = async (req, res) => {
         const hash = await bcrypt.hash(password, salt)
 
         const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
+        await InviteLink.findOneAndDelete({ email })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
@@ -253,6 +255,112 @@ const getSingleAdmin = async (req, res) => {
     }
 }
 
+// GET ALL INVITE LINK
+const getAllInviteLink = async (_, res) => {
+    try {
+        const invites = await InviteLink.find({})
+
+        res.status(200).json({ invites })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// CREATE INVITE LINK
+const createInviteLink = async (req, res) => {
+    const { email, role } = await req.body
+
+    try {
+        const adminExist = await Admin.findOne({ email })
+        if (adminExist) throw Error("This email is already an Admin")
+
+        const exist = await InviteLink.findOne({ email })
+        if (exist) throw Error("There are currently an active invite link for this email")
+
+        const token = createToken(email)
+        const link = req.headers.origin + '/admin-invite?token=' + token
+        const invite = await InviteLink.create({ email, role, link })
+
+        sendMail({
+            to: email,
+            subject: "Hello from The Lagoon Resort Finland Inc.!",
+            html: `<h2>You have been invited to be an admin of The Lagoon Resort Finland Inc.<h2>
+                    <h3>Click the link to accept the invitation.<h3>
+                    <a href="${link}">Click here</a>`
+        }, (error) => {
+            if (error) {
+                throw Error(error)
+            }
+        })
+
+        res.status(200).json({ invite })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// RESEND INVITE LINK
+const resendInviteLink = async (req, res) => {
+    const { newEmail, oldEmail } = await req.body
+
+    try {
+        const adminExist = await Admin.findOne({ email: oldEmail })
+        if (adminExist) throw Error("This email is already an Admin")
+
+        const oldInvite = await InviteLink.findOne({ email: oldEmail })
+        if (!oldInvite) throw Error("No invite link found")
+
+        await InviteLink.findOneAndDelete({ email: oldEmail })
+        const invite = await InviteLink.create({ email: newEmail, role: oldInvite.role, link: oldInvite.link })
+
+        sendMail({
+            to: newEmail,
+            subject: "Hello from The Lagoon Resort Finland Inc.!",
+            html: `<h2>You have been invited to be an admin of The Lagoon Resort Finland Inc.<h2>
+                    <h3>Click the link to accept the invitation.<h3>
+                    <a href="${invite.link}">Click here</a>`
+        }, (error) => {
+            if (error) {
+                throw Error(error)
+            }
+        })
+
+        res.status(200).json({ invite, _id: oldInvite._id })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// VERIFY INVITE LINK
+const verifyInviteLink = async (req, res) => {
+    const { token } = await req.body
+
+    try {
+        const decoded = jwt.verify(token, process.env.PASSWORD)
+        const invite = await InviteLink.findOne({ email: decoded.id })
+
+        if (!invite) throw Error("Invalid Link")
+
+        res.status(200).json({ invite })
+    } catch (error) {
+        res.status(400).json({ error: "Invalid Link" })
+    }
+}
+
+// DELETE INVITE LINK
+const deleteInviteLink = async (req, res) => {
+    const { _id } = await req.body
+
+    try {
+        const invite = await InviteLink.findOneAndDelete({ _id })
+
+        res.status(200).json({ invite })
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 
 module.exports = {
     loginAdmin,
@@ -265,4 +373,9 @@ module.exports = {
     getAllRoles,
     getRole,
     getSingleAdmin,
+    createInviteLink,
+    getAllInviteLink,
+    verifyInviteLink,
+    deleteInviteLink,
+    resendInviteLink
 }
