@@ -18,11 +18,13 @@ const {
     getAllInviteLink,
     verifyInviteLink,
     deleteInviteLink,
-    resendInviteLink
+    resendInviteLink,
+    addNewAdminLink
 } = require('../controllers/adminController')
 
 router.post('/login', loginLimiter, loginAdmin)
 router.post('/verify', verifyInviteLink)
+router.post('/addLink', addNewAdminLink)
 
 router.use(auth)
 

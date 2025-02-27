@@ -64,8 +64,8 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, img, role, name, sex, age, contact, adminEmail: adminE } = await req.body
-    const adminEmail = adminE || email
+    const { email, password, img, role, name, sex, age, contact, adminEmail } = await req.body
+
     try {
         const match = await Admin.findOne({ email })
 
@@ -78,7 +78,6 @@ const addNewAdmin = async (req, res) => {
         const hash = await bcrypt.hash(password, salt)
 
         const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
-        await InviteLink.findOneAndDelete({ email })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
@@ -361,6 +360,31 @@ const deleteInviteLink = async (req, res) => {
     }
 }
 
+// ADD ADMIN USING LINK
+const addNewAdminLink = async (req, res) => {
+    const { email, password, img, role, name, sex, age, contact, token } = await req.body
+
+    try {
+        const decoded = jwt.verify(token, process.env.PASSWORD)
+        if (decoded.id !== email) throw Error("Invalid Link")
+
+        if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) throw Error("password must atleast 8 characters")
+        await InviteLink.findOneAndDelete({ email })
+
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(password, salt)
+
+        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
+
+        // activity log
+        await ActivityLog.create({ adminEmail: email, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
+
+        res.status(200).json({ admin })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 
 module.exports = {
     loginAdmin,
@@ -377,5 +401,6 @@ module.exports = {
     getAllInviteLink,
     verifyInviteLink,
     deleteInviteLink,
-    resendInviteLink
+    resendInviteLink,
+    addNewAdminLink
 }

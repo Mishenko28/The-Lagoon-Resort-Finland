@@ -76,7 +76,7 @@ export default function AdminInvite() {
 
         setIsLoading(true)
 
-        axios.post('admin/add', newAdmin)
+        axios.post('admin/addLink', { ...newAdmin, token })
             .then(res => {
                 dispatch({ type: 'SUCCESS', payload: true })
                 navigate('/login')
