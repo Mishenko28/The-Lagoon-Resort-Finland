@@ -306,11 +306,12 @@ const resendInviteLink = async (req, res) => {
         const adminExist = await Admin.findOne({ email: oldEmail })
         if (adminExist) throw Error("This email is already an Admin")
 
-        const oldInvite = await InviteLink.findOne({ email: oldEmail })
+        const oldInvite = await InviteLink.findOneAndDelete({ email: oldEmail })
         if (!oldInvite) throw Error("No invite link found")
 
-        await InviteLink.findOneAndDelete({ email: oldEmail })
-        const invite = await InviteLink.create({ email: newEmail, role: oldInvite.role, link: oldInvite.link })
+        const token = createToken(newEmail)
+        const link = process.env.WEBSITE_URL + '/admin-invite?token=' + token
+        const invite = await InviteLink.create({ email: newEmail, role: oldInvite.role, link })
 
         sendMail({
             to: newEmail,
