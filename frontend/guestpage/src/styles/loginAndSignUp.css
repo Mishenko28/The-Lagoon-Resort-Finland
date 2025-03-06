@@ -1,0 +1,75 @@
+.sign-up,
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-and-sign-up-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.login-and-sign-up-form h1 {
+    font-size: var(--medium);
+    color: var(--dark);
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.login-and-sign-up-form p {
+    color: var(--light);
+    background-color: var(--red);
+    padding: 5px;
+    font-size: var(--small);
+    font-weight: 400;
+}
+
+.login-and-sign-up-form .input-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.login-and-sign-up-form label {
+    font-size: var(--x-small);
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.login-and-sign-up-form button,
+.login-and-sign-up-form input {
+    width: 250px;
+}
+
+.login-and-sign-up-form input {
+    padding: 8px;
+    border: 1px solid var(--light-7);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.login-and-sign-up-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary);
+    color: var(--light);
+    font-size: var(--x-small);
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.login-and-sign-up-form h2 {
+    font-size: var(--x-small);
+    align-self: center;
+    font-weight: 400;
+    color: var(--dark);
+}

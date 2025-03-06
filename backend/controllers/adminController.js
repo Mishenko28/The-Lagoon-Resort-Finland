@@ -33,7 +33,7 @@ const loginAdmin = async (req, res) => {
             const deletedAdmin = await Archive.findOne({ type: "admin", "data.email": email })
 
             if (deletedAdmin) {
-                if (attempts[ip] <= 3) throw Error(`Warning you have only ${attempts[ip] - 1} attempts left`)
+                if (attempts[ip] < 3) throw Error(`Warning you have only ${attempts[ip]} attempts left`)
                 throw Error("This admin account has been deleted")
             }
         }

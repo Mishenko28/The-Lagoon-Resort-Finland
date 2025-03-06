@@ -7,9 +7,9 @@ const {
     updateSettings
 } = require('../controllers/adminSettingsController')
 
-router.use(auth)
-
 router.get('/all', getSettings)
+
+router.use(auth)
 router.patch('/update', updateSettings)
 
 module.exports = router

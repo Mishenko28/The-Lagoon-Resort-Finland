@@ -7,6 +7,7 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
 
     const [email, setEmail] = useState(inviteOptionTogg.email)
     const [isLoading, setIsLoading] = useState(false)
+    const [deleteTogg, setDeleteTogg] = useState(false)
 
     const [copyHTMLText, setcopyHTMLText] = useState('Copy Link')
 
@@ -62,18 +63,31 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
                 {isLoading && <div className="loader-line"></div>}
                 <i onClick={() => setInviteOptionTogg(null)} className="fa-solid fa-xmark" />
                 <h1>Invite Options</h1>
-                <h2>Email</h2>
-                <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" />
-                <h2>Link</h2>
-                <div className="link-wrapper">
-                    <h3>{inviteOptionTogg.link}</h3>
-                    <button type="button" onClick={handleCopy} className="copy">{copyHTMLText}</button>
-                </div>
-                <div className="bttns">
-                    <button disabled={isLoading} type="submit">Resend</button>
-                    <button onClick={() => setInviteOptionTogg(null)}>Cancel</button>
-                    <button onClick={handleDelete} disabled={isLoading}>Delete Link</button>
-                </div>
+                {deleteTogg ?
+                    <>
+                        <h4>Are you sure you want to delete this link?</h4>
+                        <div className="bttns">
+                            <button onClick={handleDelete} className="del"><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button onClick={() => setDeleteTogg(false)}>Cancel</button>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <h2>Email</h2>
+                        <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" />
+                        <h2>Link</h2>
+                        <div className="link-wrapper">
+                            <h3>{inviteOptionTogg.link}</h3>
+                            <button type="button" onClick={handleCopy} className="copy">{copyHTMLText}</button>
+                        </div>
+                        <div className="bttns">
+                            <button disabled={isLoading} type="submit">Resend</button>
+                            <button onClick={() => setInviteOptionTogg(null)}>Cancel</button>
+                            <button onClick={() => setDeleteTogg(true)} disabled={isLoading}>Delete Link</button>
+                        </div>
+                    </>
+                }
+
             </form>
         </div>
     )

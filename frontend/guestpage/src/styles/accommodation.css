@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
+
+.accommodation {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 15px;
+}
+
+.accommodation .room-type {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.accommodation .slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
+
+.accommodation .room-type h1 {
+    font-family: 'Cinzel';
+    font-size: var(--medium);
+    text-align: center;
+    background-color: #66d2cf86;
+    padding: 5px;
+    border-top: 4px solid var(--secondary);
+    color: var(--light);
+    text-shadow: 0 2px 2px var(--dark);
+}
+
+.accommodation .room {
+    position: relative;
+    flex: 1 0 100%;
+    background-color: var(--light);
+    border-bottom: 4px solid var(--light-7);
+    scroll-snap-align: start;
+}
+
+.accommodation .room:nth-child(odd) {
+    background-color: var(--light-9);
+    border-bottom: 4px solid var(--gray);
+}
+
+.accommodation .room .room-info {
+    padding-inline: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.accommodation .room img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    padding: 5px;
+}
+
+.accommodation .room h2 {
+    font-family: 'Cinzel Decorative';
+    font-size: var(--medium);
+    color: var(--gold);
+    text-shadow: 1px 1px 0 var(--dark-gold);
+}
+
+.accommodation .room h3 {
+    font-size: var(--x-small);
+    font-weight: 400;
+    color: var(--dark);
+}
+
+.accommodation .room h3:first-of-type {
+    font-size: var(--x-small);
+    font-weight: 500;
+    color: var(--dark-secondary);
+}
+
+.accommodation .room h4 {
+    font-family: 'Cinzel', 'Times New Roman', Times, serif;
+    font-size: var(--x-large);
+    font-weight: 500;
+}
+
+.accommodation .room-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accommodation .room-footer button {
+    margin: 10px;
+    background-color: var(--primary);
+    border: none;
+    color: var(--light);
+    padding: 5px 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--light-8);
+}
+
+.accommodation .room-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    top: 15px;
+    right: 15px;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 2px 3px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.accommodation .room-nav {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+}
+
+.accommodation .room-nav button {
+    border: none;
+    background-color: var(--light-7);
+    width: 35px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+}
+
+.accommodation .room-nav button.active {
+    background-color: var(--light);
+}
+
+@media (min-width: 1025px) {}

@@ -415,6 +415,12 @@
     margin-top: 10px;
 }
 
+.invite-options h4 {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--gray);
+}
+
 .invite-options input {
     padding: 5px;
     border: 1px solid var(--gray);
@@ -462,6 +468,12 @@
 .invite-options .bttns button:nth-child(3) {
     position: absolute;
     right: 0;
+    background-color: var(--red);
+}
+
+.invite-options .bttns button.del {
+    display: flex;
+    gap: 5px;
     background-color: var(--red);
 }
 
