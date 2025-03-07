@@ -234,6 +234,7 @@ header .mobile-dropdown {
 	height: 0;
 	overflow: hidden;
 	transition: height 0.3s ease-in-out;
+	z-index: 98;
 }
 
 header .mobile-dropdown a {
@@ -280,6 +281,7 @@ header .prof-pic {
 	width: 200px;
 	color: var(--dark);
 	padding: 10px;
+	z-index: 99;
 }
 
 .user-options h1 {

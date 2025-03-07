@@ -1,5 +1,6 @@
 const OTP = require('../models/otpModel')
 const sendMail = require('../Utility/nodeMailer')
+const User = require('../models/userModel')
 
 
 // CREATE OTP
@@ -8,6 +9,9 @@ const createOTP = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
 
     try {
+        const exist = await User.findOne({ email })
+        if (exist) throw Error("This email is already registered")
+
         sendMail({
             to: email,
             subject: "Hello from The Lagoon Resort Finland Inc.!",

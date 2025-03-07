@@ -21,6 +21,7 @@ const SignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         setIsLoading(true)
+        setError('')
 
         if (!otpCreated && !verified) createOTP()
         if (otpCreated && !verified) verifyOTP()
@@ -45,7 +46,7 @@ const SignUp = () => {
                     setVerified(true)
                 }
             })
-            .catch(err => setError(err.response.data.message))
+            .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
 
@@ -60,7 +61,7 @@ const SignUp = () => {
             .then(res => {
                 dispatch({ type: 'LOGIN', payload: res.data })
             })
-            .catch(err => setError(err.response.data.message))
+            .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
 
