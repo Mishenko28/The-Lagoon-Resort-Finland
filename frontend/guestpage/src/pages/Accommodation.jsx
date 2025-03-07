@@ -69,7 +69,7 @@ const Accommodation = () => {
             roomTypes.forEach(roomType => {
                 const slider = sliderRefs.current[roomType]
                 if (slider) {
-                    slider.removeEventListener('scroll', () => handleScroll(roomType))
+                    slider.removeEventListener('scroll', () => debouncedHandleScroll(roomType))
                 }
             })
         }
