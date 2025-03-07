@@ -29,11 +29,10 @@
     padding: 5px;
     border-top: 4px solid var(--secondary);
     color: var(--light);
-    text-shadow: 0 2px 2px var(--dark);
+    text-shadow: 0 2px 1px var(--dark);
 }
 
 .accommodation .room {
-    position: relative;
     flex: 1 0 100%;
     background-color: var(--light);
     border-bottom: 4px solid var(--light-7);
@@ -82,6 +81,7 @@
     font-family: 'Cinzel', 'Times New Roman', Times, serif;
     font-size: var(--x-large);
     font-weight: 500;
+    color: var(--dark);
 }
 
 .accommodation .room-footer {
@@ -94,18 +94,22 @@
     background-color: var(--primary);
     border: none;
     color: var(--light);
-    padding: 5px 10px;
+    padding-inline: 10px;
     cursor: pointer;
     box-shadow: 3px 3px 0 var(--light-8);
 }
 
+.accommodation .img-wrapper {
+    position: relative;
+}
+
 .accommodation .room-icon {
     position: absolute;
+    top: 15px;
+    right: 15px;
     display: flex;
     align-items: center;
     gap: 5px;
-    top: 15px;
-    right: 15px;
     background-color: rgba(255, 255, 255, 0.6);
     padding: 2px 3px;
     border-radius: 2px;
@@ -120,14 +124,179 @@
 
 .accommodation .room-nav button {
     border: none;
-    background-color: var(--light-7);
+    background-color: var(--light-8);
     width: 35px;
     aspect-ratio: 1/1;
     cursor: pointer;
+    transition: background-color 0.3s;
+    color: var(--dark);
 }
 
 .accommodation .room-nav button.active {
     background-color: var(--light);
 }
 
-@media (min-width: 1025px) {}
+.accommodation .sub-img {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 5px;
+    background-color: #000;
+    padding: 5px;
+}
+
+.accommodation .sub-img .sub-img-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accommodation .sub-img .sub-img-header h1 {
+    color: var(--light);
+    font-size: var(--medium);
+    font-weight: 200;
+}
+
+.accommodation .sub-img .fa-xmark {
+    color: var(--red);
+    cursor: pointer;
+    font-size: var(--medium);
+}
+
+.accommodation .sub-img img {
+    object-fit: cover;
+}
+
+.accommodation .sub-img img.big {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: 1px solid var(--gray);
+}
+
+.accommodation .sub-img button,
+.accommodation .sub-img img.small {
+    width: 60px;
+    aspect-ratio: 1/1;
+    border: none;
+    background-color: var(--gray);
+    color: #000;
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: var(--medium);
+    border: 1px solid var(--gray);
+}
+
+.accommodation .sub-img img.small.active {
+    transform: scale(0.8);
+    transition: ease-in-out 0.15s;
+}
+
+.accommodation .sub-img .sub-navs {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.accommodation .sub-img .sub-navs .sub-imgs-wrapper {
+    display: flex;
+    gap: 3px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+@media (min-width: 1025px) {
+    .accommodation {
+        gap: 100px;
+        padding: 30px;
+    }
+
+    .accommodation .room-type {
+        gap: 10px;
+    }
+
+    .accommodation .room-type h1 {
+        font-size: var(--large);
+        padding: 10px;
+    }
+
+    .accommodation .room {
+        display: flex;
+        position: relative;
+    }
+
+    .accommodation .room .room-info {
+        align-self: center;
+        flex: 1;
+        gap: 0;
+    }
+
+    .accommodation .room img {
+        width: 500px;
+        padding: 10px;
+    }
+
+    .accommodation .room h2 {
+        font-size: var(--x-large);
+    }
+
+    .accommodation .room h3 {
+        font-size: var(--small);
+        max-width: 250px;
+    }
+
+    .accommodation .room h3:first-of-type {
+        font-size: var(--small);
+        margin-bottom: 20px;
+    }
+
+    .accommodation .room h4 {
+        font-weight: 900;
+    }
+
+    .accommodation .room-footer {
+        margin-top: 30px;
+    }
+
+    .accommodation .room-footer button {
+        margin: 5px;
+        padding-inline: 20px;
+    }
+
+    .accommodation .room-nav {
+        gap: 10px;
+    }
+
+    .accommodation .room-nav button {
+        width: 50px;
+        font-size: var(--small);
+    }
+
+    .accommodation .sub-img {
+        width: 50%;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .accommodation .sub-img .fa-xmark {
+        font-size: var(--large);
+    }
+
+    .accommodation .sub-img img.big {
+        border: 2px solid var(--gray);
+    }
+
+    .accommodation .sub-img button,
+    .accommodation .sub-img img.small {
+        width: 80px;
+        aspect-ratio: 4/3;
+        border: 2px solid var(--gray);
+    }
+
+    .accommodation .sub-img .sub-navs {
+        gap: 10px;
+    }
+
+    .accommodation .sub-img .sub-navs .sub-imgs-wrapper {
+        gap: 5px;
+    }
+}

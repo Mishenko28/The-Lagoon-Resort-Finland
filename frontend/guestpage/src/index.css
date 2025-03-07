@@ -72,6 +72,19 @@ img {
 	width: 100%;
 }
 
+.full-cont {
+	width: 100svw;
+	height: 100svh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
+}
+
 /* BarMenu */
 #checkbox {
 	display: none;
