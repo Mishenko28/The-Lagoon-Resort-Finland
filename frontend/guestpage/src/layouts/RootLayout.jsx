@@ -41,7 +41,7 @@ const RootLayout = () => {
                     {userOptions && <UserOptions profileDropdownRef={profileDropdownRef} />}
                     <Outlet />
                 </div>
-                <img className="background" src="/bg.jpg" />
+                <img className="background" src="/bg.jpeg" />
             </div>
             <Footer />
         </>

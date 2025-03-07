@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/accommodation.css"
 import SubImg from "../components/SubImg"
+import { debounce } from 'lodash'
 
 const Accommodation = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -55,10 +56,12 @@ const Accommodation = () => {
             setActiveButtons(prev => [...prev, { roomType, roomNo: closestRoom.roomNo }])
         }
 
+        const debouncedHandleScroll = debounce(handleScroll, 100)
+
         roomTypes.forEach(roomType => {
             const slider = sliderRefs.current[roomType]
             if (slider) {
-                slider.addEventListener('scroll', () => handleScroll(roomType))
+                slider.addEventListener('scroll', () => debouncedHandleScroll(roomType))
             }
         })
 
