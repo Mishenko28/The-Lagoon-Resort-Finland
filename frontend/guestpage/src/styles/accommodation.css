@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative:wght@400;700;900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .accommodation {
     display: flex;
@@ -11,7 +10,11 @@
 .accommodation .room-type {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+}
+
+.accommodation .room-header {
+    background-color: #66d2cf86;
+    border-top: 4px solid var(--secondary);
 }
 
 .accommodation .slider {
@@ -22,14 +25,15 @@
 }
 
 .accommodation .room-type h1 {
-    font-family: 'Cinzel';
+    padding: 0 5px;
+    font-family: 'Poppins';
     font-size: var(--medium);
-    text-align: center;
-    background-color: #66d2cf86;
-    padding: 5px;
-    border-top: 4px solid var(--secondary);
     color: var(--light);
-    text-shadow: 0 2px 1px var(--dark);
+    font-weight: 900;
+}
+
+.accommodation .room-type h1::first-letter {
+    font-size: var(--large);
 }
 
 .accommodation .room {
@@ -118,8 +122,8 @@
 
 .accommodation .room-nav {
     display: flex;
-    gap: 5px;
     overflow-x: auto;
+    gap: 1px;
 }
 
 .accommodation .room-nav button {
@@ -134,6 +138,10 @@
 
 .accommodation .room-nav button.active {
     background-color: var(--light);
+}
+
+.accommodation .room-nav button.active:nth-child(odd) {
+    background-color: var(--light-9);
 }
 
 .accommodation .sub-img {
@@ -210,13 +218,13 @@
         padding: 30px;
     }
 
-    .accommodation .room-type {
-        gap: 10px;
-    }
-
     .accommodation .room-type h1 {
         font-size: var(--large);
-        padding: 10px;
+        padding: 0 10px;
+    }
+
+    .accommodation .room-type h1::first-letter {
+        font-size: var(--x-large);
     }
 
     .accommodation .room {
@@ -231,7 +239,7 @@
     }
 
     .accommodation .room img {
-        width: 500px;
+        width: 600px;
         padding: 10px;
     }
 
@@ -263,7 +271,7 @@
     }
 
     .accommodation .room-nav {
-        gap: 10px;
+        gap: 2px;
     }
 
     .accommodation .room-nav button {

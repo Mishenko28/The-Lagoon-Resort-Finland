@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/accommodation.css"
 import SubImg from "../components/SubImg"
-import { debounce } from 'lodash'
 
 const Accommodation = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -56,12 +55,10 @@ const Accommodation = () => {
             setActiveButtons(prev => [...prev, { roomType, roomNo: closestRoom.roomNo }])
         }
 
-        const debouncedHandleScroll = debounce(handleScroll, 100)
-
         roomTypes.forEach(roomType => {
             const slider = sliderRefs.current[roomType]
             if (slider) {
-                slider.addEventListener('scroll', () => debouncedHandleScroll(roomType))
+                slider.addEventListener('scroll', () => handleScroll(roomType))
             }
         })
 
@@ -69,7 +66,7 @@ const Accommodation = () => {
             roomTypes.forEach(roomType => {
                 const slider = sliderRefs.current[roomType]
                 if (slider) {
-                    slider.removeEventListener('scroll', () => debouncedHandleScroll(roomType))
+                    slider.removeEventListener('scroll', () => handleScroll(roomType))
                 }
             })
         }
@@ -110,11 +107,13 @@ const Accommodation = () => {
             {subImgToShow && <SubImg subImgToShow={subImgToShow} setSubImgToShow={setSubImgToShow} />}
             {roomTypes.map(roomType => (
                 <div className="room-type" key={roomType}>
-                    <h1>{roomType} ROOMS</h1>
-                    <div className="room-nav">
-                        {rooms.filter(room => room.roomType === roomType).map(room => (
-                            <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
-                        ))}
+                    <div className="room-header">
+                        <h1>{roomType} ROOMS</h1>
+                        <div className="room-nav">
+                            {rooms.filter(room => room.roomType === roomType).map(room => (
+                                <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
+                            ))}
+                        </div>
                     </div>
                     <div ref={(el) => (sliderRefs.current[roomType] = el)} className="slider">
                         {rooms.filter(room => room.roomType === roomType).map(room => (
