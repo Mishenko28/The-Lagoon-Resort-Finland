@@ -8,7 +8,7 @@ import Loader from '../components/Loader'
 
 
 const Login = () => {
-    const { state, dispatch } = useAdmin()
+    const { dispatch } = useAdmin()
 
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -24,7 +24,7 @@ const Login = () => {
             .then(res => {
                 dispatch({ type: 'LOGIN', payload: res.data })
             })
-            .catch(err => setError(err.response.data.message))
+            .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
 

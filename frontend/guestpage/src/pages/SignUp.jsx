@@ -34,7 +34,7 @@ const SignUp = () => {
                     setOtpCreated(true)
                 }
             })
-            .catch(err => setError(err.response.data.message))
+            .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
 

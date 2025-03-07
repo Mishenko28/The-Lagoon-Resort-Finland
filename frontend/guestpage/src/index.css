@@ -274,12 +274,20 @@ header .prof-pic {
 .user-options {
 	position: fixed;
 	right: 5px;
-	padding: 3px;
-	background-color: var(--light-9);
+	background-color: var(--light);
 	display: flex;
 	flex-direction: column;
-	border-radius: 15px;
-	gap: 3px;
+	width: 200px;
+	color: var(--dark);
+	padding: 10px;
+}
+
+.user-options h1 {
+	font-size: var(--x-small);
+	font-weight: 400;
+	padding: 8px 5px;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .user-options button {
@@ -287,18 +295,14 @@ header .prof-pic {
 	gap: 10px;
 	align-items: center;
 	padding: 12px;
-	background-color: var(--light);
 	border: none;
-	border-radius: 12px;
-	width: 150px;
-	color: var(--dark);
 	font-size: var(--x-small);
 	cursor: pointer;
+	background-color: unset;
 }
 
-.user-options button:last-of-type {
-	background-color: var(--red);
-	color: var(--light);
+.user-options button:hover {
+	background-color: var(--light-9);
 }
 
 /* ERROR PAGE */
@@ -431,8 +435,13 @@ header .prof-pic {
 	}
 
 	/* USER OPTIONS */
+
+	.user-options {
+		width: 300px;
+	}
+
 	.user-options button {
-		width: 200px;
+		font-weight: 500;
 	}
 
 	/* ERROR PAGE */
