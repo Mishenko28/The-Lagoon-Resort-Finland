@@ -13,7 +13,7 @@ const SignUp = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
 
-    const [email, setEmail] = useState('johnthomasalog@gmail.com')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [otp, setOtp] = useState('')

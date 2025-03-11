@@ -6,7 +6,7 @@ import useAdmin from "../hooks/useAdmin"
 
 
 
-const Navbar = ({ setUserOptions, profileRef }) => {
+const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
     const { state } = useAdmin()
 
     const [showDropdown, setShowDropdown] = useState(false)
@@ -43,20 +43,19 @@ const Navbar = ({ setUserOptions, profileRef }) => {
             </div>
             <div className="login-profile">
                 {state.user ?
-                    <img ref={profileRef} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="src/assets/profile.webp" />
+                    <img ref={profileRef1} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="/profile.webp" />
                     :
                     <ul>
                         <Link to='sign-up'><li>Sign Up</li></Link>
                         <Link to='login'><li>Login</li></Link>
                     </ul>
                 }
-
             </div>
             <div className="mobile-nav">
                 <BarMenu barRef={barRef} showDropdown={showDropdown} setShowDropdown={setShowDropdown} />
                 <div className="mobile-login-profile">
                     {state.user ?
-                        <img ref={profileRef} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="src/assets/profile.webp" />
+                        <img ref={profileRef2} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="/profile.webp" />
                         :
                         <ul>
                             <Link to='sign-up'><li>Sign Up</li></Link>

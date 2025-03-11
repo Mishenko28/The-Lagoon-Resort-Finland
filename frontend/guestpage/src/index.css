@@ -43,13 +43,14 @@ img {
 	--dark: hsl(0, 0%, 30%);
 	--gray: hsl(0, 0%, 50%);
 
-	--light-7: hsl(0, 0%, 70%);
-	--light-8: hsl(0, 0%, 80%);
-	--light-9: hsl(0, 0%, 90%);
+	--light-7: hsl(0, 0%, 85%);
+	--light-8: hsl(0, 0%, 90%);
+	--light-9: hsl(0, 0%, 95%);
 	--light: hsl(0, 0%, 100%);
 }
 
 .app {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	height: 100svh;
@@ -60,16 +61,6 @@ img {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-}
-
-.app .background {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: -1;
-	object-fit: cover;
-	height: 100vh;
-	width: 100%;
 }
 
 .full-cont {
@@ -84,6 +75,7 @@ img {
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 100;
 }
+
 
 /* BarMenu */
 #checkbox {
@@ -180,11 +172,15 @@ img {
 
 /* NAVBAR */
 header {
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	padding: 15px;
 	gap: 15px;
+	z-index: 101;
 }
 
 header .navigations,
@@ -257,6 +253,7 @@ header .prof-pic {
 	object-fit: cover;
 	border-radius: 50%;
 	cursor: pointer;
+	border: 2px solid var(--light);
 }
 
 /* FOOTER */
@@ -282,6 +279,7 @@ header .prof-pic {
 	color: var(--dark);
 	padding: 10px;
 	z-index: 99;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .user-options h1 {
@@ -371,6 +369,10 @@ header .prof-pic {
 
 	header .mobile-nav {
 		display: none;
+	}
+
+	header .prof-pic {
+		border: 3px solid var(--light);
 	}
 
 	header ul {

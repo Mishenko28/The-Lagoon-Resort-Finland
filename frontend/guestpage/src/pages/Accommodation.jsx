@@ -105,18 +105,27 @@ const Accommodation = () => {
     return (
         <div className="accommodation">
             {subImgToShow && <SubImg subImgToShow={subImgToShow} setSubImgToShow={setSubImgToShow} />}
+            <div className="accomm-header">
+                <img src="accommodationBG.jpg" />
+                <div>
+                    <h1>ROOMS &</h1>
+                    <h1>ACCOMMODATION</h1>
+                </div>
+                <p>Experience the beauty of nature in our cozy rooms</p>
+            </div>
             {roomTypes.map(roomType => (
+                rooms.some(room => room.roomType === roomType) &&
                 <div className="room-type" key={roomType}>
                     <div className="room-header">
                         <h1>{roomType} ROOMS</h1>
                         <div className="room-nav">
-                            {rooms.filter(room => room.roomType === roomType).map(room => (
+                            {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
                                 <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
                             ))}
                         </div>
                     </div>
                     <div ref={(el) => (sliderRefs.current[roomType] = el)} className="slider">
-                        {rooms.filter(room => room.roomType === roomType).map(room => (
+                        {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
                             <div id={room.roomNo} key={room._id} className="room">
                                 <div className="img-wrapper">
                                     <img src={room.img} />
