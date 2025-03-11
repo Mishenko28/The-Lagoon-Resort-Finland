@@ -142,7 +142,7 @@ export default function Gallery() {
                         {newPhotoLoading && <div className='loader-line'></div>}
                         <h1>ADD NEW PHOTO:</h1>
                         <div className='gallery-add'>
-                            <textarea onChange={(e) => setNewPhoto(prev => ({ ...prev, caption: e.target.value }))} value={newPhoto.caption} rows={6} placeholder='caption here'></textarea>
+                            <textarea onChange={(e) => e.target.value.length <= 40 && setNewPhoto(prev => ({ ...prev, caption: e.target.value }))} value={newPhoto.caption} rows={6} placeholder='caption here'></textarea>
                             {newPhoto.img && <img style={newPhoto.img ? null : { height: 0 }} src={newPhoto.img} />}
                         </div>
                         <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />

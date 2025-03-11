@@ -105,7 +105,7 @@ const Accommodation = () => {
     return (
         <div className="accommodation">
             {subImgToShow && <SubImg subImgToShow={subImgToShow} setSubImgToShow={setSubImgToShow} />}
-            <div className="accomm-header">
+            <div className="header-page">
                 <img src="accommodationBG.jpg" />
                 <div>
                     <h1>ROOMS &</h1>
