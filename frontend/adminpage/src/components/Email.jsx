@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useRef, useEffect } from "react"
 import useAdmin from '../hooks/useAdmin'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Email({ emails, setEmails }) {
     const { dispatch } = useAdmin()
@@ -88,25 +89,59 @@ export default function Email({ emails, setEmails }) {
                     {emailEdit && <i className="fa-solid fa-square-xmark" onClick={() => setEmailEdit(null)} />}
                 </div>
             </div>
-            {!emailEdit && emails?.map((email, i) => (
-                <div className="phone-num-cont" key={i}>
-                    <h4>{email}</h4>
-                </div>
-            ))}
-            {emailEdit?.map((email, i) => (
-                <div className="phone-num-cont" key={i}>
-                    <input type="email" value={email} onChange={e => setEmailEdit(prev => prev.map((email, index) => index === i ? e.target.value : email))} />
-                    {(!emailLoad && email !== emails[i]) && <i className="fa-solid fa-rotate-left" onClick={() => setEmailEdit(prev => prev.map((data, index) => index === i ? emails[i] : data))} />}
-                    {!emailLoad && <i className="fa-solid fa-trash-can" onClick={() => setEmailToDelete(email)} />}
-                </div>
-            ))}
-            {newEmailTogg &&
-                <form className="phone-num-cont" onSubmit={(e) => addEmail(e)}>
-                    <input ref={emailRef} type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="email" />
-                    {(newEmail && !emailLoad) && <button type="submit"><i className="fa-solid fa-floppy-disk" /></button>}
-                    {!emailLoad && <i className="fa-solid fa-square-xmark" onClick={() => setNewEmailTogg(false)} />}
-                </form>
+            {!emailEdit &&
+                <AnimatePresence mode='sync'>
+                    {emails?.map((email, i) => (
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0.5, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.3 }}
+                            className="phone-num-cont"
+                            key={i}
+                        >
+                            <h4>{email}</h4>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             }
+            {emailEdit &&
+                <AnimatePresence mode='sync'>
+                    {emailEdit.map((email, i) => (
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0.5, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.3 }}
+                            className="phone-num-cont"
+                            key={email}
+                        >
+                            <input type="email" value={email} onChange={e => setEmailEdit(prev => prev.map((email, index) => index === i ? e.target.value : email))} />
+                            {(!emailLoad && email !== emails[i]) && <i className="fa-solid fa-rotate-left" onClick={() => setEmailEdit(prev => prev.map((data, index) => index === i ? emails[i] : data))} />}
+                            {!emailLoad && <i className="fa-solid fa-trash-can" onClick={() => setEmailToDelete(email)} />}
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            }
+            <AnimatePresence>
+                {newEmailTogg &&
+                    <motion.form
+                        layout
+                        initial={{ opacity: 0.5, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        className="phone-num-cont"
+                        onSubmit={(e) => addEmail(e)}
+                    >
+                        <input ref={emailRef} type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="email" />
+                        {(newEmail && !emailLoad) && <button type="submit"><i className="fa-solid fa-floppy-disk" /></button>}
+                        {!emailLoad && <i className="fa-solid fa-square-xmark" onClick={() => setNewEmailTogg(false)} />}
+                    </motion.form>
+                }
+            </AnimatePresence>
             {emailToDelete &&
                 <div className='full-cont'>
                     <div className='confirmation-cont'>

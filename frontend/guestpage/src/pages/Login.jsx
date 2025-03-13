@@ -31,6 +31,7 @@ const Login = () => {
 
     return (
         <div className="login">
+            <img src="/loginSignUpBG.avif" />
             <form onSubmit={submit} className='login-and-sign-up-form'>
                 <h1>LOGIN</h1>
                 {isLoading ?

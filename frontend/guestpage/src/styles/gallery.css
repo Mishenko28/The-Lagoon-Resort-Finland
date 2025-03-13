@@ -1,6 +1,8 @@
 .gallery {
     display: flex;
     flex-direction: column;
+    gap: 50px;
+    margin-bottom: 50px;
 }
 
 .gallery .pics-wrapper {
@@ -11,13 +13,12 @@
     gap: 20px;
     padding: 20px;
     background-color: var(--light);
-    z-index: -1;
 }
 
 .gallery .pics-wrapper .pic {
     position: relative;
     min-width: 150px;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
     overflow: hidden;
     box-shadow: 4px 4px 0 2px var(--light-7);
 }
@@ -27,7 +28,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
 }
 
 .gallery .pics-wrapper .pic p {
@@ -44,6 +44,11 @@
 }
 
 @media (min-width: 1025px) {
+    .gallery {
+        gap: 100px;
+        margin-bottom: 100px;
+    }
+
     .gallery .pics-wrapper {
         gap: 30px;
     }
@@ -51,6 +56,11 @@
     .gallery .pics-wrapper .pic {
         min-width: 400px;
         box-shadow: 6px 6px 0 3px var(--light-7);
+        transition: all 0.3s;
+    }
+
+    .gallery .pics-wrapper .pic:hover {
+        transform: scale(1.05);
     }
 
     .gallery .pics-wrapper .pic p {

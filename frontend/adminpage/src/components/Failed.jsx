@@ -21,7 +21,7 @@ export default function Failed() {
 
     return (
         <div className="full-cont">
-            <div className="failed-cont animate__animated animate__headShake">
+            <div className="failed-cont">
                 <i className="fa-regular fa-circle-xmark" />
                 <h1>Failed!</h1>
                 <p>{state.failed}</p>

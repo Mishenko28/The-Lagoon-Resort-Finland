@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import axios from "axios"
 import AddAmenity from "../../components/AddAmenity"
 import EditAmenity from "../../components/EditAmenity"
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Amenities() {
     const { dispatch } = useAdmin()
@@ -42,8 +43,6 @@ export default function Amenities() {
         const sortedAmenities = [...amenities].sort((a, b) => {
             if (sort.type === "name") {
                 return sort.order === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
-            } else if (sort.type === "rate") {
-                return sort.order === "asc" ? a.rate - b.rate : b.rate - a.rate
             } else if (sort.type === "active") {
                 return sort.order === "asc" ? b.active - a.active : a.active - b.active
             } else if (sort.type === "created") {
@@ -88,7 +87,6 @@ export default function Amenities() {
                             {sortTogg &&
                                 <div ref={sortSelectionRef} className='selections'>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "name" }))}>{sort.type == "name" && <i className="fa-solid fa-caret-right" />}Name</h1>
-                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "rate" }))}>{sort.type == "rate" && <i className="fa-solid fa-caret-right" />}Rate</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "active" }))}>{sort.type == "active" && <i className="fa-solid fa-caret-right" />}Active</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "created" }))}>{sort.type == "created" && <i className="fa-solid fa-caret-right" />}Created</h1>
                                     <hr />
@@ -99,7 +97,7 @@ export default function Amenities() {
                         </div>
                     </div>
                     <div className='infos'>
-                        <h1>Total: <b>0</b></h1>
+                        <h1>Total: <b>{amenities.length}</b></h1>
                     </div>
                     <div className='card-and-table-togg-cont'>
                         <button onClick={() => setIsCard(true)} style={isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Card</button>
@@ -107,15 +105,24 @@ export default function Amenities() {
                     </div>
                     {isCard ?
                         <div className="amenity-card-wrapper">
-                            {amenities.map(amenity => (
-                                <div key={amenity._id} onClick={() => setEditAmenity(amenity)} className='amenity-card'>
-                                    <h1>{amenity.name}</h1>
-                                    <img src={amenity.img} />
-                                    <h2>₱{amenity.rate}</h2>
-                                    <h5>{amenity.caption}</h5>
-                                    {!amenity.active && <span>not active</span>}
-                                </div>
-                            ))}
+                            <AnimatePresence mode="sync">
+                                {amenities.map(amenity => (
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0.5, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.3 }}
+                                        key={amenity._id} onClick={() => setEditAmenity(amenity)}
+                                        className='amenity-card'
+                                    >
+                                        <h1>{amenity.name}</h1>
+                                        <img src={amenity.img} />
+                                        <h5>{amenity.caption}</h5>
+                                        {!amenity.active && <span>not active</span>}
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
                         </div>
                         :
                         <div className="amenity-table-cont">
@@ -124,22 +131,30 @@ export default function Amenities() {
                                     <tr>
                                         <th>Name</th>
                                         <th>Image</th>
-                                        <th>Rate</th>
                                         <th>Caption</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {amenities.map(amenity => (
-                                        <tr key={amenity._id} onClick={() => setEditAmenity(amenity)}>
-                                            <td>
-                                                {amenity.name}
-                                                {!amenity.active && <span>not active</span>}
-                                            </td>
-                                            <td><img src={amenity.img} /></td>
-                                            <td>₱{amenity.rate}</td>
-                                            <td>{amenity.caption}</td>
-                                        </tr>
-                                    ))}
+                                    <AnimatePresence mode='sync'>
+                                        {amenities.map(amenity => (
+                                            <motion.tr
+                                                layout
+                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                transition={{ duration: 0.3 }}
+                                                key={amenity._id}
+                                                onClick={() => setEditAmenity(amenity)}
+                                            >
+                                                <td>
+                                                    {amenity.name}
+                                                    {!amenity.active && <span>not active</span>}
+                                                </td>
+                                                <td><img src={amenity.img} /></td>
+                                                <td>{amenity.caption}</td>
+                                            </motion.tr>
+                                        ))}
+                                    </AnimatePresence>
                                 </tbody>
                             </table>
                         </div>

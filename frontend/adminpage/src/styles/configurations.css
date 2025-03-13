@@ -462,7 +462,6 @@
     overflow-x: auto;
     padding: 10px 5px;
     width: 100%;
-    animation: fadeIn 0.5s;
 }
 
 .room-table-cont img {
@@ -537,7 +536,6 @@
     color: var(--primary);
     max-width: min-content;
     overflow: hidden;
-    animation: fadeIn 0.5s;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
 }
 
@@ -551,11 +549,6 @@
     width: 100px;
     aspect-ratio: 4/3;
     object-fit: cover;
-}
-
-.amenity-card h2 {
-    font-size: 1rem;
-    font-weight: 500;
 }
 
 .amenity-card h5 {
@@ -582,7 +575,6 @@
 .amenity-table-cont {
     overflow-x: auto;
     padding: 5px;
-    animation: fadeIn 0.5s;
 }
 
 .amenity-table-cont img {
@@ -759,7 +751,6 @@
     background-color: #fff;
     border-radius: 4px;
     overflow: hidden;
-    animation: fadeIn 0.5s;
     border: 1px solid var(--light-gray);
     width: min-content;
 }
@@ -1236,7 +1227,6 @@
         padding: 10px;
         transition: all 0.1s;
         cursor: pointer;
-        animation: fadeIn 0.5s;
     }
 
     .room-cont .room-type-content .room:hover {
@@ -1538,7 +1528,6 @@
         position: relative;
         border-radius: 4px;
         overflow: hidden;
-        animation: fadeIn 0.5s;
         border: 1px solid var(--light-gray);
         width: min-content;
     }

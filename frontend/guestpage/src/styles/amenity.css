@@ -1,0 +1,69 @@
+.amenity {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.amenity .amenities-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 20px;
+}
+
+.amenity .amenities-wrapper .ame {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--dark);
+}
+
+.amenity .amenities-wrapper .ame img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.amenity .amenities-wrapper .ame h1 {
+    font-size: var(--medium);
+    font-weight: 600;
+    font-family: 'Cinzel';
+}
+
+.amenity .amenities-wrapper .ame p {
+    font-size: var(--x-small);
+    font-weight: 400;
+}
+
+@media (min-width: 1025px) {
+    .amenity .amenities-wrapper {
+        gap: 100px;
+        padding: 100px;
+    }
+
+    .amenity .amenities-wrapper .ame {
+        flex-direction: row;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .amenity .amenities-wrapper .ame:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .amenity .amenities-wrapper .ame img {
+        width: 65%;
+        aspect-ratio: 6/4;
+        object-fit: cover;
+    }
+
+    .amenity .amenities-wrapper .ame h1 {
+        font-size: var(--large);
+    }
+
+    .amenity .amenities-wrapper .ame p {
+        font-size: var(--small);
+        margin-top: 20px;
+        max-width: 250px;
+    }
+}

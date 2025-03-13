@@ -3,6 +3,7 @@ import axios from 'axios'
 import useAdmin from '../hooks/useAdmin'
 import AddRoom from './AddRoom'
 import EditRoom from './EditRoom'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, setAdminSettings, isCard }) {
     const { dispatch } = useAdmin()
@@ -121,18 +122,28 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                             <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
                         </div>
                     }
-                    {isCard && rooms.map(room => (
-                        <div key={room._id} onClick={() => setEditRoom(room)} className='room'>
-                            <h1>{room.roomNo}</h1>
-                            <img src={room.img} />
-                            <h2>₱{room.rate}</h2>
-                            <h3>Add Person: ₱{room.addFeePerPerson}</h3>
-                            <h4>Max Person: {room.maxPerson}</h4>
-                            <hr />
-                            <h5>{room.caption}</h5>
-                            {!room.active && <span>not active</span>}
-                        </div>
-                    ))}
+                    <AnimatePresence mode='sync'>
+                        {isCard && rooms.map(room => (
+                            <motion.div
+                                layout
+                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3 }}
+                                key={room._id} onClick={() => setEditRoom(room)}
+                                className='room'
+                            >
+                                <h1>{room.roomNo}</h1>
+                                <img src={room.img} />
+                                <h2>₱{room.rate}</h2>
+                                <h3>Add Person: ₱{room.addFeePerPerson}</h3>
+                                <h4>Max Person: {room.maxPerson}</h4>
+                                <hr />
+                                <h5>{room.caption}</h5>
+                                {!room.active && <span>not active</span>}
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                     {!isCard && rooms.length > 0 &&
                         <div className='room-table-cont'>
                             <table>
@@ -147,19 +158,29 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {rooms.map(room => (
-                                        <tr key={room._id} onClick={() => setEditRoom(room)}>
-                                            <td>
-                                                {room.roomNo}
-                                                {!room.active && <span>not active</span>}
-                                            </td>
-                                            <td><img src={room.img} /></td>
-                                            <td>₱{room.rate}</td>
-                                            <td>₱{room.addFeePerPerson}</td>
-                                            <td>{room.maxPerson}</td>
-                                            <td>{room.caption}</td>
-                                        </tr>
-                                    ))}
+                                    <AnimatePresence mode='sync'>
+                                        {rooms.map(room => (
+                                            <motion.tr
+                                                layout
+                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                transition={{ duration: 0.3 }}
+                                                key={room._id}
+                                                onClick={() => setEditRoom(room)}
+                                            >
+                                                <td>
+                                                    {room.roomNo}
+                                                    {!room.active && <span>not active</span>}
+                                                </td>
+                                                <td><img src={room.img} /></td>
+                                                <td>₱{room.rate}</td>
+                                                <td>₱{room.addFeePerPerson}</td>
+                                                <td>{room.maxPerson}</td>
+                                                <td>{room.caption}</td>
+                                            </motion.tr>
+                                        ))}
+                                    </AnimatePresence>
                                 </tbody>
                             </table>
                         </div>

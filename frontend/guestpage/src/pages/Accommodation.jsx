@@ -100,7 +100,6 @@ const Accommodation = () => {
         }
     }
 
-    if (isLoading) return <Loader />
 
     return (
         <div className="accommodation">
@@ -113,43 +112,51 @@ const Accommodation = () => {
                 </div>
                 <p>Experience the beauty of nature in our cozy rooms</p>
             </div>
-            {roomTypes.map(roomType => (
-                rooms.some(room => room.roomType === roomType) &&
-                <div className="room-type" key={roomType}>
-                    <div className="room-header">
-                        <h1>{roomType} ROOMS</h1>
-                        <div className="room-nav">
-                            {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
-                                <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
-                            ))}
-                        </div>
-                    </div>
-                    <div ref={(el) => (sliderRefs.current[roomType] = el)} className="slider">
-                        {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
-                            <div id={room.roomNo} key={room._id} className="room">
-                                <div className="img-wrapper">
-                                    <img src={room.img} />
-                                    {room.subImg.length > 0 &&
-                                        <div onClick={() => setSubImgToShow({ roomNo: room.roomNo, images: room.subImg })} className="room-icon">
-                                            <i className="fa-solid fa-image" />
-                                            <p>{room.subImg.length}</p>
-                                        </div>
-                                    }
-                                </div>
-                                <div className="room-info">
-                                    <h2>ROOM {room.roomNo}</h2>
-                                    <h3>• maximum of {room.maxPerson} persons</h3>
-                                    <h3>{room.caption}</h3>
-                                    <div className="room-footer">
-                                        <h4>₱{room.rate}</h4>
-                                        <button>BOOK NOW</button>
+            {isLoading ?
+                <Loader />
+                :
+                <>
+                    {
+                        roomTypes.map(roomType => (
+                            rooms.some(room => room.roomType === roomType) &&
+                            <div className="room-type" key={roomType}>
+                                <div className="room-header">
+                                    <h1>{roomType} ROOMS</h1>
+                                    <div className="room-nav">
+                                        {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
+                                            <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
+                                        ))}
                                     </div>
                                 </div>
+                                <div ref={(el) => (sliderRefs.current[roomType] = el)} className="slider">
+                                    {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
+                                        <div id={room.roomNo} key={room._id} className="room">
+                                            <div className="img-wrapper">
+                                                <img src={room.img} />
+                                                {room.subImg.length > 0 &&
+                                                    <div onClick={() => setSubImgToShow({ roomNo: room.roomNo, images: room.subImg })} className="room-icon">
+                                                        <i className="fa-solid fa-image" />
+                                                        <p>{room.subImg.length}</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div className="room-info">
+                                                <h2>ROOM {room.roomNo}</h2>
+                                                <h3>• maximum of {room.maxPerson} persons</h3>
+                                                <h3>{room.caption}</h3>
+                                                <div className="room-footer">
+                                                    <h4>₱{room.rate}</h4>
+                                                    <button>BOOK NOW</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            ))}
+                        ))
+                    }
+                </>
+            }
         </div>
     )
 }

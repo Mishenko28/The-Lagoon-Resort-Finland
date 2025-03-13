@@ -1,7 +1,6 @@
 /* Activity Logs */
 .logs-table-cont {
     overflow-x: auto;
-    animation: fadeIn 0.5s;
 }
 
 .logs-table-cont table {

@@ -11,7 +11,6 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
     const [newAmenity, setNewAmenity] = useState({
         name: "",
         img: base64,
-        rate: "",
         caption: "",
         active: false
     })
@@ -23,7 +22,7 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (newAmenity.name.trim() === "" || newAmenity.img === "" || newAmenity.rate === "" || newAmenity.caption.trim() === "") {
+        if (newAmenity.name.trim() === "" || newAmenity.img === "" || newAmenity.caption.trim() === "") {
             dispatch({ type: 'FAILED', payload: 'Please fill out all fields' })
             return
         }
@@ -58,10 +57,6 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
                     <div className="room-add-input">
                         <label>Name:</label>
                         <input onChange={(e) => setNewAmenity(prev => ({ ...prev, name: e.target.value }))} value={newAmenity.name} type="text" />
-                    </div>
-                    <div className="room-add-input">
-                        <label>Rate:</label>
-                        <input onChange={(e) => setNewAmenity(prev => ({ ...prev, rate: e.target.value }))} value={newAmenity.rate} type="number" />
                     </div>
                     <textarea onChange={(e) => setNewAmenity(prev => ({ ...prev, caption: e.target.value }))} value={newAmenity.caption} rows={4} placeholder="caption" />
                     <div className="room-add-input">

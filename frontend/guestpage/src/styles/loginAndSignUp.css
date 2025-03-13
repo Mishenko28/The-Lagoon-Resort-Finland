@@ -1,9 +1,19 @@
 .sign-up,
 .login {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+.sign-up img,
+.login img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
 
 .login-and-sign-up-form {

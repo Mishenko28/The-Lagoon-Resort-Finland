@@ -13,7 +13,6 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
         _id: editAmenity._id,
         img: base64,
         name: editAmenity.name,
-        rate: editAmenity.rate,
         caption: editAmenity.caption,
         active: editAmenity.active,
     })
@@ -27,7 +26,7 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (updateAmenity.img === "" || updateAmenity.rate === "" || updateAmenity.caption.trim() === "" || updateAmenity.name.trim() === "") {
+        if (updateAmenity.img === "" || updateAmenity.caption.trim() === "" || updateAmenity.name.trim() === "") {
             dispatch({ type: 'FAILED', payload: 'Please fill out all fields' })
             return
         }
@@ -91,10 +90,6 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
                             <div className="room-add-input">
                                 <label>Name:</label>
                                 <input onChange={(e) => setUpdateAmenity(prev => ({ ...prev, name: e.target.value }))} value={updateAmenity.name} type="text" />
-                            </div>
-                            <div className="room-add-input">
-                                <label>Rate:</label>
-                                <input onChange={(e) => setUpdateAmenity(prev => ({ ...prev, rate: e.target.value }))} value={updateAmenity.rate} type="number" />
                             </div>
                             <textarea onChange={(e) => setUpdateAmenity(prev => ({ ...prev, caption: e.target.value }))} value={updateAmenity.caption} rows={4} placeholder="caption" />
                             <div className="room-add-input">

@@ -9,10 +9,6 @@ module.exports = mongoose.model('Amenity', new mongoose.Schema({
         type: String,
         required: true
     },
-    rate: {
-        type: Number,
-        required: true
-    },
     caption: {
         type: String,
         required: true

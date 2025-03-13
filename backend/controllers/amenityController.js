@@ -15,14 +15,14 @@ const getAllAmenities = async (_, res) => {
 
 // ADD AMENITY
 const addAmenity = async (req, res) => {
-    const { name, img, rate, caption, active, adminEmail } = await req.body
+    const { name, img, caption, active, adminEmail } = await req.body
 
     try {
         const existingAmenity = await Amenity.findOne({ name })
 
         if (existingAmenity) throw Error("Amenity already exists.")
 
-        const amenity = await Amenity.create({ name, img, rate, caption, active })
+        const amenity = await Amenity.create({ name, img, caption, active })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.CREATED], activity: `Added a new amenity with a name of ${name}` })
@@ -35,7 +35,7 @@ const addAmenity = async (req, res) => {
 
 // UPDATE AMENITY
 const updateAmenity = async (req, res) => {
-    const { _id, name, img, rate, caption, active, adminEmail } = await req.body
+    const { _id, name, img, caption, active, adminEmail } = await req.body
     let editedParts = []
 
     try {
@@ -44,12 +44,11 @@ const updateAmenity = async (req, res) => {
 
         const oldAmenity = await Amenity.findOne({ _id })
 
-        const amenity = await Amenity.findOneAndUpdate({ _id }, { name, img, rate, caption, active }, { new: true })
+        const amenity = await Amenity.findOneAndUpdate({ _id }, { name, img, caption, active }, { new: true })
 
         // activity log
         oldAmenity.name != name && editedParts.push("name")
         oldAmenity.img != img && editedParts.push("img")
-        oldAmenity.rate != rate && editedParts.push("rate")
         oldAmenity.caption != caption && editedParts.push("caption")
         oldAmenity.active != active && editedParts.push("active")
 
@@ -63,8 +62,6 @@ const updateAmenity = async (req, res) => {
                             return ` changed name from ${oldAmenity.name} to ${name}`
                         case "img":
                             return ` changed image`
-                        case "rate":
-                            return ` changed rate from ${oldAmenity.rate} to ${rate}`
                         case "caption":
                             return ` changed caption from "${oldAmenity.caption}" to "${caption}"`
                         case "active":

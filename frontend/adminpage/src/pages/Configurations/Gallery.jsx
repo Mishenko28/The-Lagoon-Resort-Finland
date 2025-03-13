@@ -7,6 +7,7 @@ import EditPhoto from '../../components/EditPhoto'
 import AddRoomSubImage from '../../components/AddRoomSubImage'
 import EditRoomSubImage from '../../components/EditRoomSubImage'
 import EditRoomMainImage from '../../components/EditRoomMainImage'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Gallery() {
     const { dispatch } = useAdmin()
@@ -171,16 +172,26 @@ export default function Gallery() {
                             <h1>Photos</h1>
                         </div>
                         <div className='pics'>
-                            {photos.map(photo => (
-                                <div key={photo._id} onClick={() => setEditPhoto(photo)} className='photo'>
-                                    <img src={photo.img} />
-                                    <p>{photo.caption}</p>
-                                    {photo.hide && <h2 className='hide'>hidden</h2>}
-                                </div>
-                            ))}
-                            {photos.length === 0 &&
-                                <h3>No Photos</h3>
-                            }
+                            <AnimatePresence mode='sync'>
+                                {photos.map(photo => (
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0.5, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.3 }}
+                                        key={photo._id} onClick={() => setEditPhoto(photo)}
+                                        className='photo'
+                                    >
+                                        <img src={photo.img} />
+                                        <p>{photo.caption}</p>
+                                        {photo.hide && <h2 className='hide'>hidden</h2>}
+                                    </motion.div>
+                                ))}
+                                {photos.length === 0 &&
+                                    <h3>No Photos</h3>
+                                }
+                            </AnimatePresence>
                         </div>
                     </div>
                     <div className='room-gallery'>

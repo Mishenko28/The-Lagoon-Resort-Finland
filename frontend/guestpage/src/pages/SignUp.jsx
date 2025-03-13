@@ -68,6 +68,7 @@ const SignUp = () => {
 
     return (
         <div className="sign-up">
+            <img src="/loginSignUpBG.avif" />
             <form onSubmit={handleSubmit} className='login-and-sign-up-form'>
                 <h1>SIGN UP</h1>
                 {error && <p>{error}</p>}
