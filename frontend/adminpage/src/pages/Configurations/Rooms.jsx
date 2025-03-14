@@ -3,11 +3,15 @@ import axios from 'axios'
 import useAdmin from '../../hooks/useAdmin'
 import RoomTypes from '../../components/RoomTypes'
 import Loader2 from '../../components/Loader2'
+import useConvertBase64 from '../../hooks/useConvertBase64'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Rooms() {
     const { dispatch } = useAdmin()
+    const [base64, convertToBase64] = useConvertBase64("")
 
     const [adminSettings, setAdminSettings] = useState({})
+    const [roomTypes, setRoomTypes] = useState([])
     const [rooms, setRooms] = useState([])
 
     const [isLoading, setIsLoading] = useState(true)
@@ -27,8 +31,19 @@ export default function Rooms() {
     const newDownPaymentRef = useRef()
 
     const [newRoomTypeTogg, setNewRoomTypeTogg] = useState(false)
-    const [newRoomType, setNewRoomType] = useState('')
+    const [newRoomType, setNewRoomType] = useState({
+        name: '',
+        img: base64,
+        rate: '',
+        caption: '',
+        addFeePerPerson: '',
+        maxPerson: ''
+    })
     const newRoomTypeRef = useRef()
+
+    useEffect(() => {
+        setNewRoomType(prev => ({ ...prev, img: base64 }))
+    }, [base64])
 
     useEffect(() => {
         const fetchAdminSettings = async () => {
@@ -52,10 +67,21 @@ export default function Rooms() {
                     console.log(err.response.data.error)
                 })
         }
+        const fetchRoomTypes = async () => {
+            await axios.get('/room-type/all')
+                .then((res) => {
+                    setRoomTypes(res.data.roomTypes)
+                })
+                .catch((err) => {
+                    dispatch({ type: 'FAILED', payload: err.response.data.error })
+                    console.log(err.response.data.error)
+                })
+        }
 
         const fetchAll = async () => {
             await fetchAdminSettings()
             await fetchRooms()
+            await fetchRoomTypes()
             setIsLoading(false)
         }
 
@@ -80,10 +106,6 @@ export default function Rooms() {
         const sortedRooms = [...rooms].sort((a, b) => {
             if (sort.type === "roomNo") {
                 return sort.order === "asc" ? a.roomNo - b.roomNo : b.roomNo - a.roomNo
-            } else if (sort.type === "rate") {
-                return sort.order === "asc" ? a.rate - b.rate : b.rate - a.rate
-            } else if (sort.type === "max") {
-                return sort.order === "asc" ? a.maxPerson - b.maxPerson : b.maxPerson - a.maxPerson
             } else if (sort.type === "active") {
                 return sort.order === "asc" ? b.active - a.active : a.active - b.active
             } else if (sort.type === "created") {
@@ -109,21 +131,29 @@ export default function Rooms() {
 
     const createNewRoomType = async (e) => {
         e.preventDefault()
+
+        if (!newRoomType.name || !newRoomType.rate || !newRoomType.addFeePerPerson || !newRoomType.maxPerson || !newRoomType.caption || !newRoomType.img) {
+            dispatch({ type: 'FAILED', payload: "Please fill out all fields" })
+            return
+        }
+
         setNewRoomTypeIsLoading(true)
 
-        await axios.patch('/admin-settings/update', { roomTypes: [...adminSettings.roomTypes, newRoomType] })
+        await axios.post('/room-type/add', { ...newRoomType })
             .then((res) => {
-                setAdminSettings(res.data.adminSetting)
+                setRoomTypes(prev => [res.data.roomType, ...prev])
                 dispatch({ type: 'SUCCESS', payload: true })
-                setNewRoomType('')
+                setNewRoomType({})
+                setNewRoomTypeTogg(false)
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
             })
+            .finally(() => {
+                setNewRoomTypeIsLoading(false)
+            })
 
-        setNewRoomTypeIsLoading(false)
-        setNewRoomTypeTogg(false)
     }
 
     const updateDownPayment = async (e) => {
@@ -150,6 +180,11 @@ export default function Rooms() {
         setNewDownPayment(null)
     }
 
+    const cancelNewRoomType = () => {
+        setNewRoomTypeTogg(false)
+        setNewRoomType({})
+    }
+
     return (
         <>
             {isLoading ?
@@ -164,8 +199,6 @@ export default function Rooms() {
                             {sortTogg &&
                                 <div ref={sortSelectionRef} className='selections'>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "roomNo" }))}>{sort.type == "roomNo" && <i className="fa-solid fa-caret-right" />}Room Number</h1>
-                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "rate" }))}>{sort.type == "rate" && <i className="fa-solid fa-caret-right" />}Rate</h1>
-                                    <h1 onClick={() => setSort(prev => ({ ...prev, type: "max" }))}>{sort.type == "max" && <i className="fa-solid fa-caret-right" />}Max Person</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "active" }))}>{sort.type == "active" && <i className="fa-solid fa-caret-right" />}Active</h1>
                                     <h1 onClick={() => setSort(prev => ({ ...prev, type: "created" }))}>{sort.type == "created" && <i className="fa-solid fa-caret-right" />}Created</h1>
                                     <hr />
@@ -179,41 +212,69 @@ export default function Rooms() {
                         <h1>Rooms: <b>{rooms.length}</b></h1>
                         <h1>Down Payment: <b>{adminSettings.downPayment * 100}%</b></h1>
                     </div>
-                    {newRoomTypeTogg &&
-                        <form onSubmit={createNewRoomType} className='add-room-type'>
-                            {newRoomTypeIsLoading && <div className='loader-line'></div>}
-                            <h1>New Room Type:</h1>
-                            <input type='text' ref={newRoomTypeRef} value={newRoomType} onChange={e => setNewRoomType(e.target.value.toUpperCase())} placeholder='type here' />
-                            <button disabled={!newRoomType || newRoomTypeIsLoading} type='submit'>Add</button>
-                            <i onClick={() => setNewRoomTypeTogg(false)} className="fa-solid fa-xmark" />
-                        </form>
-                    }
-                    {(newDownPayment || newDownPayment == "") &&
-                        <form onSubmit={updateDownPayment} className='change-down-payment'>
-                            {changeDownPaymentIsLoading && <div className='loader-line'></div>}
-                            <h1>Change Down Payment: Percentage (1-100)</h1>
-                            <input ref={newDownPaymentRef} onChange={(e) => setNewDownPayment(Math.min(e.target.value / 100, 1))} value={newDownPayment * 100 === 0 ? "" : newDownPayment * 100} type='number' placeholder='type here' />
-                            <button disabled={!newDownPayment || changeDownPaymentIsLoading} type='submit'>Save</button>
-                            <i onClick={() => setNewDownPayment(null)} className="fa-solid fa-xmark" />
-                        </form>
-                    }
-                    <div className='card-and-table-togg-cont'>
-                        <button onClick={() => setIsCard(true)} style={isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Card</button>
-                        <button onClick={() => setIsCard(false)} style={!isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Table</button>
-                    </div>
-                    <div className='room-types'>
-                        {adminSettings.roomTypes?.map((roomType, i) => (
-                            <RoomTypes
-                                key={i}
-                                roomType={roomType}
-                                rooms={rooms.filter(room => room.roomType === roomType)}
-                                setRooms={setRooms}
-                                adminSettings={adminSettings}
-                                setAdminSettings={setAdminSettings}
-                                isCard={isCard}
-                            />
-                        ))}
-                    </div>
+                    <AnimatePresence >
+                        {newRoomTypeTogg &&
+                            <motion.form
+                                layout
+                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3 }}
+                                onSubmit={createNewRoomType}
+                                className='add-room-type'
+                                key="add-room-type"
+                            >
+                                {newRoomTypeIsLoading && <div className='loader-line'></div>}
+                                <h1>New Room Type:</h1>
+                                <input type='text' ref={newRoomTypeRef} value={newRoomType.name} onChange={e => setNewRoomType(prev => ({ ...prev, name: e.target.value.toUpperCase() }))} placeholder='name' />
+                                <input type='number' value={newRoomType.rate} onChange={e => setNewRoomType(prev => ({ ...prev, rate: e.target.value }))} placeholder='rate' />
+                                <input type='number' value={newRoomType.addFeePerPerson} onChange={e => setNewRoomType(prev => ({ ...prev, addFeePerPerson: e.target.value }))} placeholder='additional fee for extra person/s' />
+                                <input type='number' value={newRoomType.maxPerson} onChange={e => setNewRoomType(prev => ({ ...prev, maxPerson: e.target.value }))} placeholder='maximum person/s' />
+                                <textarea value={newRoomType.caption} onChange={e => setNewRoomType(prev => ({ ...prev, caption: e.target.value }))} rows={4} placeholder='caption'></textarea>
+                                <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
+                                {newRoomType.img && <img src={newRoomType.img} />}
+                                <button disabled={newRoomTypeIsLoading} type='submit'>Add</button>
+                                <i onClick={cancelNewRoomType} className="fa-solid fa-xmark" />
+                            </motion.form>
+                        }
+                        {(newDownPayment || newDownPayment == "") &&
+                            <motion.form
+                                layout
+                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3 }}
+                                onSubmit={updateDownPayment}
+                                className='change-down-payment'
+                                key="change-down-payment"
+                            >
+                                {changeDownPaymentIsLoading && <div className='loader-line'></div>}
+                                <h1>Change Down Payment: Percentage (1-100)</h1>
+                                <input ref={newDownPaymentRef} onChange={(e) => setNewDownPayment(Math.min(e.target.value / 100, 1))} value={newDownPayment * 100 === 0 ? "" : newDownPayment * 100} type='number' placeholder='type here' />
+                                <button disabled={!newDownPayment || changeDownPaymentIsLoading} type='submit'>Save</button>
+                                <i onClick={() => setNewDownPayment(null)} className="fa-solid fa-xmark" />
+                            </motion.form>
+                        }
+                        <motion.div layout className='card-and-table-togg-cont' key="card-and-table-togg-cont">
+                            <button onClick={() => setIsCard(true)} style={isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Card</button>
+                            <button onClick={() => setIsCard(false)} style={!isCard ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>Table</button>
+                        </motion.div>
+                        <motion.div layout className='room-types' key="room-types">
+                            <AnimatePresence mode='sync'>
+                                {roomTypes.map((roomType, i) => (
+                                    <RoomTypes
+                                        key={roomType.name}
+                                        roomType={roomType}
+                                        rooms={rooms.filter(room => room.roomType === roomType.name)}
+                                        setRooms={setRooms}
+                                        adminSettings={adminSettings}
+                                        setRoomTypes={setRoomTypes}
+                                        isCard={isCard}
+                                    />
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+                    </AnimatePresence>
                 </>
             }
         </>

@@ -15,13 +15,13 @@ const getAllRooms = async (_, res) => {
 
 // ADD ROOM
 const addRoom = async (req, res) => {
-    const { roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
+    const { roomNo, img, roomType, caption, active, adminEmail } = await req.body
 
     try {
         const existingRoomNo = await Room.findOne({ roomType, roomNo })
         if (existingRoomNo) throw new Error("Room number already exists.")
 
-        const room = await Room.create({ roomNo, img, roomType, rate, addFeePerPerson, maxPerson, caption, active })
+        const room = await Room.create({ roomNo, img, roomType, caption, active })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a new room with a room number of ${roomNo} in ${roomType} room type` })
@@ -86,23 +86,20 @@ const deleteSubImage = async (req, res) => {
 
 // UPDATE ROOM
 const updateRoom = async (req, res) => {
-    const { _id, roomNo, img, rate, addFeePerPerson, maxPerson, caption, active, adminEmail } = await req.body
+    const { _id, roomNo, img, caption, active, roomType, adminEmail } = await req.body
     let editedParts = []
 
     try {
-        const existingRoomNo = await Room.findOne({ _id: { $ne: _id }, roomNo })
+        const existingRoomNo = await Room.findOne({ _id: { $ne: _id }, roomNo, roomType })
         if (existingRoomNo) throw new Error("Room number already exists.")
 
         const oldRoom = await Room.findOne({ _id })
 
-        const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, rate, addFeePerPerson, maxPerson, caption, active }, { new: true })
+        const room = await Room.findOneAndUpdate({ _id }, { roomNo, img, caption, active }, { new: true })
 
         // activity log
         roomNo && oldRoom.roomNo != roomNo && editedParts.push("roomNo")
         img && oldRoom.img != img && editedParts.push("img")
-        rate && oldRoom.rate != rate && editedParts.push("rate")
-        addFeePerPerson && oldRoom.addFeePerPerson != addFeePerPerson && editedParts.push("addFeePerPerson")
-        maxPerson && oldRoom.maxPerson != maxPerson && editedParts.push("maxPerson")
         caption && oldRoom.caption != caption && editedParts.push("caption")
         active && oldRoom.active != active && editedParts.push("active")
 
@@ -116,19 +113,12 @@ const updateRoom = async (req, res) => {
                             return ` changed room number from ${oldRoom.roomNo} to ${roomNo}`
                         case "img":
                             return ` changed main image`
-                        case "rate":
-                            return ` changed rate from ${oldRoom.rate} to ${rate}`
-                        case "addFeePerPerson":
-                            return ` changed additional fee per person from ${oldRoom.addFeePerPerson} to ${addFeePerPerson}`
-                        case "maxPerson":
-                            return ` changed maximum person from ${oldRoom.maxPerson} to ${maxPerson}`
                         case "caption":
                             return ` changed caption from "${oldRoom.caption}" to "${caption}"`
                         case "active":
                             return ` changed active status to ${active ? "active" : "inactive"}`
                     }
-                })
-                    }`
+                })}`
             })
         }
 

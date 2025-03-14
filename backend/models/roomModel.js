@@ -7,7 +7,7 @@ module.exports = mongoose.model('Room', new mongoose.Schema({
     },
     img: {
         type: String,
-        required: true,
+        default: '',
     },
     subImg: {
         type: [String],
@@ -17,21 +17,9 @@ module.exports = mongoose.model('Room', new mongoose.Schema({
         type: String,
         required: true
     },
-    rate: {
-        type: Number,
-        required: true
-    },
-    addFeePerPerson: {
-        type: Number,
-        required: true
-    },
-    maxPerson: {
-        type: Number,
-        required: true
-    },
     caption: {
         type: String,
-        required: true
+        default: '',
     },
     active: {
         type: Boolean,

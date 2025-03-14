@@ -15,6 +15,7 @@ const adminSettingsRoute = require('./routes/adminSettingsRoute')
 const archiveRoute = require('./routes/archiveRoute')
 const activityLogRoute = require('./routes/activityLogRoute')
 const otpRoute = require('./routes/otpRoute')
+const roomTypeRoute = require('./routes/roomTypeRoute')
 
 
 const app = express()
@@ -40,7 +41,7 @@ app.use(express.json())
 // app.use((req, res, next) => {
 //     setTimeout(() => {
 //         next()
-//     }, 1500)
+//     }, 2000)
 // })
 
 
@@ -55,6 +56,7 @@ app.use('/admin-settings', adminSettingsRoute)
 app.use('/archive', archiveRoute)
 app.use('/log', activityLogRoute)
 app.use('/otp', otpRoute)
+app.use('/room-type', roomTypeRoute)
 
 // WEB SOCKET
 io.on('connection', (socket) => {

@@ -18,19 +18,14 @@ const getSettings = async (_, res) => {
 }
 
 const updateSettings = async (req, res) => {
-    const { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails, adminEmail } = await req.body
+    const { downPayment, roomStart, phoneNumbers, socials, emails, adminEmail } = await req.body
     let editedParts = []
     let deletedRoomType = []
-    let addedRoomType = []
-    let updatedRoomType = []
-    let oldRoomType = []
 
     try {
         const oldSettings = await AdminSetting.findOne({})
 
-        if (roomTypes && new Set(roomTypes).size !== roomTypes.length) throw new Error("Room type already exists")
-
-        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomTypes, roomStart, phoneNumbers, socials, emails }, { new: true })
+        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomStart, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
         socials && oldSettings.socials != socials && editedParts.push("socials")
@@ -38,25 +33,6 @@ const updateSettings = async (req, res) => {
         phoneNumbers && oldSettings.phoneNumbers != phoneNumbers && editedParts.push("phoneNumbers")
         downPayment && oldSettings.downPayment != downPayment && editedParts.push("downPayment")
         roomStart && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
-        if (roomTypes && JSON.stringify(oldSettings.roomTypes) !== JSON.stringify(roomTypes)) {
-            editedParts.push("roomTypes")
-
-            if (oldSettings.roomTypes.length > roomTypes.length) {
-                deletedRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
-
-                await Room.deleteMany({ roomType: deletedRoomType[0] })
-            }
-
-            if (oldSettings.roomTypes.length < roomTypes.length) {
-                addedRoomType = roomTypes.filter(roomType => !oldSettings.roomTypes.includes(roomType))
-            }
-
-            if (oldSettings.roomTypes.length === roomTypes.length) {
-                oldRoomType = oldSettings.roomTypes.filter(roomType => !roomTypes.includes(roomType))
-                updatedRoomType = roomTypes.filter(roomType => !oldSettings.roomTypes.includes(roomType))
-                await Room.updateMany({ roomType: oldRoomType[0] }, { roomType: updatedRoomType[0] })
-            }
-        }
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -66,14 +42,6 @@ const updateSettings = async (req, res) => {
                     switch (part) {
                         case "downPayment":
                             return ` changed down payment from ${oldSettings.downPayment * 100}% to ${downPayment * 100}%`
-                        case "roomTypes":
-                            if (deletedRoomType.length > 0) {
-                                return ` deleted a room type ${deletedRoomType[0]}`
-                            } else if (addedRoomType.length > 0) {
-                                return ` added a room type ${addedRoomType[0]}`
-                            } else {
-                                return ` changed room type from ${oldRoomType[0]} to ${updatedRoomType[0]}`
-                            }
                         case "roomStart":
                             return ` changed room start from ${oldSettings.roomStart} to ${roomStart}`
                         case "emails":

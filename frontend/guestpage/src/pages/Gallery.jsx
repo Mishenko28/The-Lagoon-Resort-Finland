@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Loader from "../components/Loader"
 import axios from "axios"
 import "../styles/gallery.css"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 
 

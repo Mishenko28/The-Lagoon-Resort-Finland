@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import "../styles/amenity.css"
 import axios from "axios"
 import Loader from "../components/Loader"
+import { motion } from "framer-motion"
 
 
 
@@ -34,13 +35,20 @@ const Amenity = () => {
                 :
                 <div className="amenities-wrapper">
                     {amenities.filter(amenity => amenity.active).map(amenity => (
-                        <div className="ame" key={amenity._id}>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            viewport={{ once: 1, amount: 0.4 }}
+                            className="ame"
+                            key={amenity._id}
+                        >
                             <img src={amenity.img} />
                             <div>
                                 <h1>{amenity.name}</h1>
                                 <p>{amenity.caption}</p>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             }

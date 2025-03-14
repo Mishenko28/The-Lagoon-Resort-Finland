@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import useAdmin from "../hooks/useAdmin"
+import { motion } from 'framer-motion'
 
 export default function Success() {
     const { state, dispatch } = useAdmin()
@@ -16,11 +17,16 @@ export default function Success() {
 
     return (
         <div onClick={skip} className="full-cont">
-            <div className="success-cont">
+            <motion.div
+                initial={{ scale: 0.5 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.1 }}
+                className="success-cont"
+            >
                 <i className="fa-regular fa-circle-check" />
                 <h1>Success!</h1>
                 <p>Your request has been successfully processed.</p>
-            </div>
+            </motion.div>
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import useAdmin from "../hooks/useAdmin"
+import { motion } from 'framer-motion'
 
 export default function Failed() {
     const { state, dispatch } = useAdmin()
@@ -21,13 +22,18 @@ export default function Failed() {
 
     return (
         <div className="full-cont">
-            <div className="failed-cont">
+            <motion.div
+                initial={{ scale: 0.5 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.1 }}
+                className="failed-cont"
+            >
                 <i className="fa-regular fa-circle-xmark" />
                 <h1>Failed!</h1>
                 <p>{state.failed}</p>
                 <h6>{timer}s</h6>
                 <i onClick={() => dispatch({ type: 'FAILED', payload: null })} className="fa-solid fa-xmark" />
-            </div>
+            </motion.div>
         </div>
     )
 }

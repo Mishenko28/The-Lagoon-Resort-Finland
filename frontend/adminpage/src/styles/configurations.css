@@ -84,24 +84,71 @@
     border-radius: 4px;
 }
 
+.room-cont .room-type-header .room-type-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.room-cont .room-type-header .room-type-details form {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.room-cont .room-type-header .room-type-details form p {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
 .room-cont .room-type-header .rename-room-type {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
+.room-cont .room-type-header .room-type-settings {
+    display: flex;
+    gap: 10px;
+    align-self: flex-end;
+}
+
 .room-cont .room-type-header h1 {
+    font-size: 0.9rem;
+}
+
+.room-cont .room-type-header h2 {
+    font-size: 0.8rem;
+    font-weight: 900;
+}
+
+.room-cont .room-type-header h2 span {
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.room-cont .room-type-header .room-type-details .bttns {
+    display: flex;
+    gap: 5px;
+}
+
+.room-cont .room-type-header .room-type-details .bttns button {
+    padding: 10px;
+    border: none;
+    background-color: unset;
+    border: 1px solid var(--light-gray);
+    border-radius: 2px;
     font-size: 0.8rem;
 }
 
 .room-cont .room-type-header input {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     padding-inline: 5px;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .room-cont .room-type-header i {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 .room-cont .room-type-content {
@@ -117,6 +164,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 5px;
     width: 100px;
     padding: 5px;
     border-radius: 4px;
@@ -130,20 +178,9 @@
     font-size: 1rem;
 }
 
-.room-cont .room-type-content .room h2 {
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.room-cont .room-type-content .room h3,
-.room-cont .room-type-content .room h4 {
-    font-size: 0.5rem;
-    font-weight: 500;
-}
-
 .room-cont .room-type-content .room h5 {
     font-size: 0.5rem;
-    height: 30px;
+    height: 50px;
     overflow-y: auto;
     overflow-wrap: break-word;
     white-space: pre-wrap;
@@ -167,6 +204,7 @@
     width: 100px;
     aspect-ratio: 4/3;
     object-fit: cover;
+    border: 1px solid var(--light-gray);
 }
 
 .room-cont .room-type-content .room-settings {
@@ -263,6 +301,57 @@
     background-color: #fff;
     border: 1px solid var(--light-gray);
     color: var(--primary);
+}
+
+.room-cont .room-type-image {
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.room-cont .room-type-image h1 {
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.room-cont .room-type-image img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.room-cont .room-type-image i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: var(--red);
+    font-size: 1.5rem;
+}
+
+.room-cont .room-type-image textarea,
+.room-cont .room-type-image p {
+    font-size: 0.8rem;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.room-cont .room-type-image .bttns {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.room-cont .room-type-image .bttns button {
+    padding: 10px;
+    border: none;
+    background-color: unset;
+    border: 1px solid var(--light-gray);
+    border-radius: 2px;
+    font-size: 0.8rem;
 }
 
 .room-add {
@@ -403,17 +492,18 @@
 .add-room-type {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     gap: 5px;
     background-color: var(--primary);
     padding: 25px 5px 5px 5px;
 }
 
+.add-room-type textarea,
 .add-room-type input {
-    padding: 5px;
+    padding: 8px;
     border: none;
     font-size: 0.8rem;
-    flex: 1;
 }
 
 .add-room-type i {
@@ -430,8 +520,15 @@
     color: #fff;
 }
 
+.add-room-type img {
+    width: 150px;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
 .add-room-type button {
-    padding: 5px 10px;
+    align-self: flex-start;
+    padding: 10px 20px;
     border: none;
     background-color: var(--green);
     color: #fff;
@@ -1210,10 +1307,27 @@
     }
 
     .room-cont .room-type-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .room-cont .room-type-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .room-cont .room-type-header h2 span {
         font-size: 1rem;
     }
 
+    .room-cont .room-type-header .room-type-details .bttns button {
+        cursor: pointer;
+    }
+
+    .room-cont .room-type-header input {
+        font-size: 1.6rem;
+    }
+
     .room-cont .room-type-header i {
+        font-size: 1.8rem;
         cursor: pointer;
     }
 
@@ -1235,15 +1349,6 @@
 
     .room-cont .room-type-content .room h1 {
         font-size: 2rem;
-    }
-
-    .room-cont .room-type-content .room h2 {
-        font-size: 1.6rem;
-    }
-
-    .room-cont .room-type-content .room h3,
-    .room-cont .room-type-content .room h4 {
-        font-size: 1rem;
     }
 
     .room-cont .room-type-content .room h5 {
@@ -1289,6 +1394,14 @@
     .room-cont .room-type-delete .bttns button {
         width: 100px;
         padding-block: 15px;
+        cursor: pointer;
+    }
+
+    .room-cont .room-type-image i {
+        cursor: pointer;
+    }
+
+    .room-cont .room-type-image .bttns button {
         cursor: pointer;
     }
 
@@ -1354,11 +1467,6 @@
         padding: 50px 10px 10px 10px;
     }
 
-    .add-room-type input {
-        padding: 10px;
-        font-size: 1rem;
-    }
-
     .add-room-type i {
         font-size: 1.5rem;
         cursor: pointer;
@@ -1370,7 +1478,7 @@
     }
 
     .add-room-type button {
-        padding: 10px 20px;
+        padding: 15px 25px;
         cursor: pointer;
     }
 

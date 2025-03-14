@@ -26,6 +26,7 @@ module.exports.Actions = Actions = {
     AMENITY: 'amenity',
     GALLERY: 'gallery',
     BOOKING: 'booking',
+    ROOMTYPE: 'roomtype',
 
     ADMIN: 'admin',
     USER: 'user'

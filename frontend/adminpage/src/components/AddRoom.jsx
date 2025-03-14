@@ -12,12 +12,9 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
     const [newRoom, setNewRoom] = useState({
         img: base64,
         roomNo: "",
-        rate: "",
-        addFeePerPerson: "",
-        maxPerson: "",
         caption: "",
         active: false,
-        roomType: roomType
+        roomType: roomType.name
     })
 
     useEffect(() => {
@@ -27,8 +24,8 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (newRoom.img === "" || newRoom.roomNo === "" || newRoom.rate === "" || newRoom.addFeePerPerson === "" || newRoom.maxPerson === "" || newRoom.caption.trim() === "") {
-            dispatch({ type: 'FAILED', payload: 'Please fill in all fields' })
+        if (newRoom.roomNo === "") {
+            dispatch({ type: 'FAILED', payload: 'Please fill room number' })
             return
         }
 
@@ -52,7 +49,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
         <div className="full-cont">
             <div className="room-add">
                 {isLoading && <div className='loader-line'></div>}
-                <h3>ADD {roomType} ROOM</h3>
+                <h3>ADD {roomType.name} ROOM</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="room-add-input">
                         <label>Image:</label>
@@ -62,18 +59,6 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
                     <div className="room-add-input">
                         <label>Room Number:</label>
                         <input onChange={(e) => setNewRoom(prev => ({ ...prev, roomNo: e.target.value }))} value={newRoom.roomNo} type="number" />
-                    </div>
-                    <div className="room-add-input">
-                        <label>Rate:</label>
-                        <input onChange={(e) => setNewRoom(prev => ({ ...prev, rate: e.target.value }))} value={newRoom.rate} type="number" />
-                    </div>
-                    <div className="room-add-input">
-                        <label>Additional Fee per Person:</label>
-                        <input onChange={(e) => setNewRoom(prev => ({ ...prev, addFeePerPerson: e.target.value }))} value={newRoom.addFeePerPerson} type="number" />
-                    </div>
-                    <div className="room-add-input">
-                        <label>Max Person:</label>
-                        <input onChange={(e) => setNewRoom(prev => ({ ...prev, maxPerson: e.target.value }))} value={newRoom.maxPerson} type="number" />
                     </div>
                     <textarea onChange={(e) => setNewRoom(prev => ({ ...prev, caption: e.target.value }))} value={newRoom.caption} rows={4} placeholder="caption" />
                     <div className="room-add-input">

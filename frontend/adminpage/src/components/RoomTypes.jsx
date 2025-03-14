@@ -4,8 +4,9 @@ import useAdmin from '../hooks/useAdmin'
 import AddRoom from './AddRoom'
 import EditRoom from './EditRoom'
 import { motion, AnimatePresence } from 'framer-motion'
+import RoomTypeImage from './RoomTypeImage'
 
-export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, setAdminSettings, isCard }) {
+export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isCard }) {
     const { dispatch } = useAdmin()
 
     const [roomSettTogg, setRoomSettTogg] = useState(false)
@@ -20,6 +21,11 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
     const [isRenaming, setIsRenaming] = useState(false)
     const [newName, setNewName] = useState('')
     const newNameRef = useRef(null)
+
+    const [showImage, setShowImage] = useState(false)
+
+    const [isEditing, setIsEditing] = useState(false)
+    const [newDetails, setNewDetails] = useState({})
 
     useEffect(() => {
         newNameRef.current && newNameRef.current.focus()
@@ -42,14 +48,10 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
     const handleDelete = async () => {
         setIsLoading(true)
 
-        const newRoomTypes = adminSettings.roomTypes.filter(type => type !== roomType)
-
-        await axios.patch('/admin-settings/update', {
-            roomTypes: newRoomTypes
-        })
+        await axios.delete('/room-type/delete', { data: { _id: roomType._id } })
             .then((res) => {
-                setAdminSettings(res.data.adminSetting)
-                setRooms(prev => prev.filter(room => room.roomType !== roomType))
+                setRoomTypes(prev => prev.filter(roomType => roomType._id !== res.data.roomType._id))
+                setRooms(prev => prev.filter(room => room.roomType !== roomType.name))
                 dispatch({ type: 'SUCCESS', payload: true })
             })
             .catch((err) => {
@@ -62,26 +64,66 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
     }
 
     const updateRoomType = async () => {
+        if (newName === '') {
+            dispatch({ type: 'FAILED', payload: 'This can not be empty' })
+            return
+        }
+
         setIsLoading(true)
 
-        const newRoomTypes = adminSettings.roomTypes.map(type => type === roomType ? newName : type)
-
-        await axios.patch('/admin-settings/update', {
-            roomTypes: newRoomTypes
+        await axios.patch('/room-type/update', {
+            _id: roomType._id,
+            name: newName
         })
             .then((res) => {
-                setAdminSettings(res.data.adminSetting)
-                setRooms(prev => prev.map(room => room.roomType === roomType ? { ...room, roomType: newName } : room))
+                setRoomTypes(prev => prev.map(roomType => roomType._id === res.data.roomType._id ? { ...roomType, name: newName } : roomType))
+                setRooms(prev => prev.map(room => room.roomType === roomType.name ? { ...room, roomType: newName } : room))
                 setNewName('')
                 dispatch({ type: 'SUCCESS', payload: true })
+                setIsRenaming(false)
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
             })
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }
 
-        setIsLoading(false)
-        setIsRenaming(false)
+    const updateDetails = async (e) => {
+        e.preventDefault()
+
+        if (newDetails.rate === roomType.rate && newDetails.maxPerson === roomType.maxPerson && newDetails.addFeePerPerson === roomType.addFeePerPerson) {
+            setIsEditing(false)
+            return
+        }
+
+        if (newDetails.rate === '' || newDetails.maxPerson === '' || newDetails.addFeePerPerson === '') {
+            dispatch({ type: 'FAILED', payload: 'Please fill out all fields' })
+            return
+        }
+
+        setIsLoading(true)
+
+        await axios.patch('/room-type/update', {
+            _id: roomType._id,
+            rate: newDetails.rate,
+            maxPerson: newDetails.maxPerson,
+            addFeePerPerson: newDetails.addFeePerPerson
+        })
+            .then((res) => {
+                setRoomTypes(prev => prev.map(roomType => roomType._id === res.data.roomType._id ? { ...roomType, rate: res.data.roomType.rate, maxPerson: res.data.roomType.maxPerson, addFeePerPerson: res.data.roomType.addFeePerPerson } : roomType))
+                dispatch({ type: 'SUCCESS', payload: true })
+                setIsEditing(false)
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     const cancelRename = () => {
@@ -89,20 +131,63 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
         setIsRenaming(false)
     }
 
+    const handleRename = () => {
+        setIsRenaming(true)
+        setNewName(roomType.name)
+    }
+
+    const handleEdit = () => {
+        setIsEditing(true)
+        setNewDetails(roomType)
+    }
+
     return (
-        <div className='room-cont'>
+        <motion.div
+            layout
+            initial={{ opacity: 0.5, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className='room-cont'
+        >
             {isLoading && <div className='loader-line'></div>}
             <div className='room-type-header'>
-                {isRenaming ?
-                    <div className='rename-room-type'>
-                        <input onKeyDown={(e) => e.key === "Enter" && updateRoomType()} placeholder={roomType} ref={newNameRef} type='text' value={newName} onChange={e => setNewName(e.target.value.toUpperCase())} />
-                        <i onClick={cancelRename} className="fa-solid fa-xmark" />
-                        <i onClick={updateRoomType} className="fa-solid fa-floppy-disk" />
-                    </div>
-                    :
-                    <h1>{roomType}</h1>
-                }
-                <i ref={settingsRef} onClick={() => setRoomSettTogg(!roomSettTogg)} className="fa-solid fa-ellipsis" />
+                <div className='room-type-details'>
+                    {isRenaming ?
+                        <div className='rename-room-type'>
+                            <input onKeyDown={(e) => e.key === "Enter" && updateRoomType()} ref={newNameRef} type='text' value={newName} onChange={e => setNewName(e.target.value.toUpperCase())} />
+                            <i onClick={cancelRename} className="fa-solid fa-xmark" />
+                            {newName !== roomType.name && <i disabled={isLoading} onClick={updateRoomType} className="fa-solid fa-floppy-disk" />}
+                        </div>
+                        :
+                        <h1>{roomType.name} ROOMS</h1>
+                    }
+                    <hr />
+                    {isEditing ?
+                        <form onSubmit={updateDetails}>
+                            <p>Rate:</p>
+                            <input type='number' onChange={(e) => setNewDetails(prev => ({ ...prev, rate: e.target.value }))} value={newDetails.rate} />
+                            <p>Max Person:</p>
+                            <input type='number' onChange={(e) => setNewDetails(prev => ({ ...prev, maxPerson: e.target.value }))} value={newDetails.maxPerson} />
+                            <p>Additional Fee:</p>
+                            <input type='number' onChange={(e) => setNewDetails(prev => ({ ...prev, addFeePerPerson: e.target.value }))} value={newDetails.addFeePerPerson} />
+                            <div className='bttns'>
+                                <button type='button' onClick={() => setIsEditing(false)}>Cancel</button>
+                                {<button disabled={isLoading} type='submit'>Save</button>}
+                            </div>
+                        </form>
+                        :
+                        <>
+                            <h2><span>rate: ₱</span>{roomType.rate}</h2>
+                            <h2><span>max person: </span>{roomType.maxPerson}</h2>
+                            <h2><span>additional person: ₱</span>{roomType.addFeePerPerson}</h2>
+                        </>
+                    }
+                </div>
+                <div className='room-type-settings'>
+                    <i onClick={() => setShowImage(true)} className="fa-solid fa-image" />
+                    <i ref={settingsRef} onClick={() => setRoomSettTogg(!roomSettTogg)} className="fa-solid fa-gear" />
+                </div>
             </div>
             {confirmDeleteTogg ?
                 <div className='room-type-delete'>
@@ -118,32 +203,31 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                     {roomSettTogg &&
                         <div className='room-settings'>
                             <button onClick={() => setAddRoomTogg(true)}><i className="fa-solid fa-plus" />Add</button>
-                            <button onClick={() => setIsRenaming(true)}><i className="fa-solid fa-pen-to-square" />Rename</button>
+                            <button onClick={handleRename}><i className="fa-solid fa-pen-to-square" />Rename</button>
                             <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button onClick={handleEdit}><i className="fa-solid fa-pen" />Edit</button>
                         </div>
                     }
-                    <AnimatePresence mode='sync'>
-                        {isCard && rooms.map(room => (
-                            <motion.div
-                                layout
-                                initial={{ opacity: 0.5, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ duration: 0.3 }}
-                                key={room._id} onClick={() => setEditRoom(room)}
-                                className='room'
-                            >
-                                <h1>{room.roomNo}</h1>
-                                <img src={room.img} />
-                                <h2>₱{room.rate}</h2>
-                                <h3>Add Person: ₱{room.addFeePerPerson}</h3>
-                                <h4>Max Person: {room.maxPerson}</h4>
-                                <hr />
-                                <h5>{room.caption}</h5>
-                                {!room.active && <span>not active</span>}
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                    {isCard &&
+                        <AnimatePresence mode='sync'>
+                            {rooms.map(room => (
+                                <motion.div
+                                    layout
+                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ duration: 0.3 }}
+                                    key={room._id} onClick={() => setEditRoom(room)}
+                                    className='room'
+                                >
+                                    <h1>{room.roomNo}</h1>
+                                    <img src={room.img} />
+                                    <h5>{room.caption}{!room.caption && "no caption"}</h5>
+                                    {!room.active && <span>not active</span>}
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    }
                     {!isCard && rooms.length > 0 &&
                         <div className='room-table-cont'>
                             <table>
@@ -151,9 +235,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                                     <tr>
                                         <th>Room No</th>
                                         <th>Image</th>
-                                        <th>Rate</th>
-                                        <th>Add Person</th>
-                                        <th>Max Person</th>
                                         <th>Caption</th>
                                     </tr>
                                 </thead>
@@ -174,9 +255,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                                                     {!room.active && <span>not active</span>}
                                                 </td>
                                                 <td><img src={room.img} /></td>
-                                                <td>₱{room.rate}</td>
-                                                <td>₱{room.addFeePerPerson}</td>
-                                                <td>{room.maxPerson}</td>
                                                 <td>{room.caption}</td>
                                             </motion.tr>
                                         ))}
@@ -192,8 +270,11 @@ export default function RoomTypes({ roomType, rooms, setRooms, adminSettings, se
                     }
                 </div>
             }
+            {showImage &&
+                <RoomTypeImage setRoomTypes={setRoomTypes} setShowImage={setShowImage} roomType={roomType} />
+            }
             {addRoomTogg && <AddRoom roomType={roomType} setAddRoomTogg={setAddRoomTogg} setRooms={setRooms} />}
             {editRoom && <EditRoom roomType={roomType} editRoom={editRoom} setEditRoom={setEditRoom} setRooms={setRooms} />}
-        </div >
+        </motion.div >
     )
 }

@@ -5,10 +5,6 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
         type: Number,
         default: 0.5
     },
-    roomTypes: {
-        type: Array,
-        default: []
-    },
     roomStart: {
         type: Number,
         default: 8

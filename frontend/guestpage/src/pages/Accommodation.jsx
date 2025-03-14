@@ -20,12 +20,12 @@ const Accommodation = () => {
         if (!rooms || !roomTypes) return
 
         roomTypes.map(roomType => {
-            rooms.filter(room => room.roomType === roomType).map((room, i) => {
+            rooms.filter(room => room.roomType === roomType.name).map((room, i) => {
                 if (i !== 0) return
                 if (activeButtons.some(button => button.roomNo === room.roomNo)) return
 
                 setActiveButtons(prev => [...prev, {
-                    roomType,
+                    roomType: roomType.name,
                     roomNo: room.roomNo
                 }])
             })
@@ -56,17 +56,17 @@ const Accommodation = () => {
         }
 
         roomTypes.forEach(roomType => {
-            const slider = sliderRefs.current[roomType]
+            const slider = sliderRefs.current[roomType.name]
             if (slider) {
-                slider.addEventListener('scroll', () => handleScroll(roomType))
+                slider.addEventListener('scroll', () => handleScroll(roomType.name))
             }
         })
 
         return () => {
             roomTypes.forEach(roomType => {
-                const slider = sliderRefs.current[roomType]
+                const slider = sliderRefs.current[roomType.name]
                 if (slider) {
-                    slider.removeEventListener('scroll', () => handleScroll(roomType))
+                    slider.removeEventListener('scroll', () => handleScroll(roomType.name))
                 }
             })
         }
@@ -81,9 +81,9 @@ const Accommodation = () => {
     }
 
     const fetchRoomTypes = async () => {
-        axios.get('admin-settings/all')
+        axios.get('room-type/all')
             .then(res => {
-                setRoomTypes(res.data.adminSetting.roomTypes)
+                setRoomTypes(res.data.roomTypes)
             })
             .finally(() => fetchRooms())
     }
@@ -99,7 +99,6 @@ const Accommodation = () => {
             }
         }
     }
-
 
     return (
         <div className="accommodation">
@@ -117,19 +116,19 @@ const Accommodation = () => {
                 :
                 <>
                     {
-                        roomTypes.map(roomType => (
-                            rooms.some(room => room.roomType === roomType) &&
-                            <div className="room-type" key={roomType}>
+                        roomTypes?.map(roomType => (
+                            rooms.some(room => room.roomType === roomType.name) &&
+                            <div className="room-type" key={roomType._id}>
                                 <div className="room-header">
-                                    <h1>{roomType} ROOMS</h1>
+                                    <h1>{roomType.name} ROOMS</h1>
                                     <div className="room-nav">
-                                        {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
-                                            <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType)} key={room._id}>{room.roomNo}</button>
+                                        {rooms.filter(room => room.roomType === roomType.name && room.active).map(room => (
+                                            <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType.name)} key={room._id}>{room.roomNo}</button>
                                         ))}
                                     </div>
                                 </div>
-                                <div ref={(el) => (sliderRefs.current[roomType] = el)} className="slider">
-                                    {rooms.filter(room => room.roomType === roomType && room.active).map(room => (
+                                <div ref={(el) => (sliderRefs.current[roomType.name] = el)} className="slider">
+                                    {rooms.filter(room => room.roomType === roomType.name && room.active).map(room => (
                                         <div id={room.roomNo} key={room._id} className="room">
                                             <div className="img-wrapper">
                                                 <img src={room.img} />
