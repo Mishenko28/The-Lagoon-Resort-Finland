@@ -1,76 +1,18 @@
 import axios from "axios"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import Loader from "../components/Loader"
 import "../styles/accommodation.css"
-import SubImg from "../components/SubImg"
+import { motion } from "framer-motion"
 
 const Accommodation = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const [rooms, setRooms] = useState(null)
-    const [roomTypes, setRoomTypes] = useState(null)
-    const sliderRefs = useRef({})
-    const [activeButtons, setActiveButtons] = useState([])
-    const [subImgToShow, setSubImgToShow] = useState(null)
+    const [rooms, setRooms] = useState([])
+    const [roomTypes, setRoomTypes] = useState([])
+
 
     useEffect(() => {
         fetchRoomTypes()
     }, [])
-
-    useEffect(() => {
-        if (!rooms || !roomTypes) return
-
-        roomTypes.map(roomType => {
-            rooms.filter(room => room.roomType === roomType.name).map((room, i) => {
-                if (i !== 0) return
-                if (activeButtons.some(button => button.roomNo === room.roomNo)) return
-
-                setActiveButtons(prev => [...prev, {
-                    roomType: roomType.name,
-                    roomNo: room.roomNo
-                }])
-            })
-        })
-
-    }, [roomTypes, rooms])
-
-    useEffect(() => {
-        if (!rooms || !roomTypes) return
-
-        const handleScroll = (roomType) => {
-            const slider = sliderRefs.current[roomType]
-            const roomsInSlider = rooms.filter(room => room.roomType === roomType)
-            let closestRoom = roomsInSlider[0]
-
-            roomsInSlider.forEach(room => {
-                const roomElement = document.getElementById(room.roomNo)
-                const offsetLeft = roomElement.offsetLeft
-                const distance = Math.abs(slider.scrollLeft - offsetLeft)
-
-                if (distance < Math.abs(slider.scrollLeft - document.getElementById(closestRoom.roomNo).offsetLeft)) {
-                    closestRoom = room
-                }
-            })
-
-            setActiveButtons(prev => prev.filter(button => button.roomType !== roomType))
-            setActiveButtons(prev => [...prev, { roomType, roomNo: closestRoom.roomNo }])
-        }
-
-        roomTypes.forEach(roomType => {
-            const slider = sliderRefs.current[roomType.name]
-            if (slider) {
-                slider.addEventListener('scroll', () => handleScroll(roomType.name))
-            }
-        })
-
-        return () => {
-            roomTypes.forEach(roomType => {
-                const slider = sliderRefs.current[roomType.name]
-                if (slider) {
-                    slider.removeEventListener('scroll', () => handleScroll(roomType.name))
-                }
-            })
-        }
-    }, [roomTypes, rooms])
 
     const fetchRooms = async () => {
         axios.get('room/all')
@@ -88,21 +30,8 @@ const Accommodation = () => {
             .finally(() => fetchRooms())
     }
 
-    const scrollToRoom = (roomNo, roomType) => {
-        if (sliderRefs.current[roomType]) {
-            const slider = sliderRefs.current[roomType]
-            const targetRoom = document.getElementById(roomNo)
-
-            if (targetRoom) {
-                const offsetLeft = targetRoom.offsetLeft
-                slider.scrollTo({ left: offsetLeft, behavior: "smooth" })
-            }
-        }
-    }
-
     return (
         <div className="accommodation">
-            {subImgToShow && <SubImg subImgToShow={subImgToShow} setSubImgToShow={setSubImgToShow} />}
             <div className="header-page">
                 <img src="accommodationBG.jpg" />
                 <div>
@@ -114,47 +43,27 @@ const Accommodation = () => {
             {isLoading ?
                 <Loader />
                 :
-                <>
-                    {
-                        roomTypes?.map(roomType => (
-                            rooms.some(room => room.roomType === roomType.name) &&
-                            <div className="room-type" key={roomType._id}>
-                                <div className="room-header">
-                                    <h1>{roomType.name} ROOMS</h1>
-                                    <div className="room-nav">
-                                        {rooms.filter(room => room.roomType === roomType.name && room.active).map(room => (
-                                            <button className={activeButtons.some(button => button.roomNo === room.roomNo) ? 'active' : null} onClick={() => scrollToRoom(room.roomNo, roomType.name)} key={room._id}>{room.roomNo}</button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div ref={(el) => (sliderRefs.current[roomType.name] = el)} className="slider">
-                                    {rooms.filter(room => room.roomType === roomType.name && room.active).map(room => (
-                                        <div id={room.roomNo} key={room._id} className="room">
-                                            <div className="img-wrapper">
-                                                <img src={room.img} />
-                                                {room.subImg.length > 0 &&
-                                                    <div onClick={() => setSubImgToShow({ roomNo: room.roomNo, images: room.subImg })} className="room-icon">
-                                                        <i className="fa-solid fa-image" />
-                                                        <p>{room.subImg.length}</p>
-                                                    </div>
-                                                }
-                                            </div>
-                                            <div className="room-info">
-                                                <h2>ROOM {room.roomNo}</h2>
-                                                <h3>• maximum of {room.maxPerson} persons</h3>
-                                                <h3>{room.caption}</h3>
-                                                <div className="room-footer">
-                                                    <h4>₱{room.rate}</h4>
-                                                    <button>BOOK NOW</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                <div className="roomTypes">
+                    {roomTypes.map(roomType => rooms.some(room => room.roomType === roomType.name && room.active) && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            viewport={{ once: 1, amount: 0.6 }}
+                            className="roomType"
+                        >
+                            <div className="part1">
+                                <img src={roomType.img} />
+                                <h1>₱{roomType.rate} / Night</h1>
                             </div>
-                        ))
-                    }
-                </>
+                            <div className="part2">
+                                <h2>{roomType.name} ROOM</h2>
+                                <p>{roomType.caption}</p>
+                                <button>BOOK NOW</button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
             }
         </div>
     )

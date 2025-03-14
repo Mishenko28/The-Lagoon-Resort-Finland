@@ -3,304 +3,116 @@
     flex-direction: column;
 }
 
-.accommodation .room-type {
+.accommodation .roomTypes {
     display: flex;
     flex-direction: column;
-    background-color: var(--light);
-    padding: 20px;
+    gap: 50px;
+    padding: 50px 20px;
 }
 
-.accommodation .room-type:nth-child(odd) {
-    background-color: var(--light-9);
-}
-
-.accommodation .slider {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-}
-
-.accommodation .room-type h1 {
-    padding: 0 5px;
-    font-family: 'Poppins';
-    font-size: var(--medium);
-    color: var(--dark);
-    font-weight: 900;
-}
-
-.accommodation .room-type h1::first-letter {
-    font-size: var(--large);
-}
-
-.accommodation .room {
-    flex: 1 0 100%;
-    background-color: var(--light-9);
-    border-bottom: 4px solid var(--light-7);
-    scroll-snap-align: start;
-}
-
-.accommodation .room:nth-child(odd) {
-    background-color: var(--light-8);
-    border-bottom: 4px solid var(--gray);
-}
-
-.accommodation .room .room-info {
-    padding-inline: 10px;
+.accommodation .roomTypes .roomType {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
-.accommodation .room img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    padding: 5px;
-}
-
-.accommodation .room h2 {
-    font-family: 'Cinzel Decorative';
-    font-size: var(--medium);
-    color: var(--gold);
-    text-shadow: 1px 1px 0 var(--dark-gold);
-}
-
-.accommodation .room h3 {
-    font-size: var(--x-small);
-    font-weight: 400;
-    color: var(--dark);
-}
-
-.accommodation .room h3:first-of-type {
-    font-size: var(--x-small);
-    font-weight: 500;
-    color: var(--dark-secondary);
-}
-
-.accommodation .room h4 {
-    font-family: 'Cinzel', 'Times New Roman', Times, serif;
-    font-size: var(--x-large);
-    font-weight: 500;
-    color: var(--dark);
-}
-
-.accommodation .room-footer {
-    display: flex;
-    justify-content: space-between;
-}
-
-.accommodation .room-footer button {
-    margin: 10px;
-    background-color: var(--primary);
-    border: none;
-    color: var(--light);
-    padding-inline: 10px;
-    cursor: pointer;
-    box-shadow: 3px 3px 0 var(--light-8);
-}
-
-.accommodation .img-wrapper {
+.accommodation .roomTypes .roomType .part1 {
     position: relative;
 }
 
-.accommodation .room-icon {
+.accommodation .roomTypes .roomType .part1 img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    object-position: center;
+}
+
+.accommodation .roomTypes .roomType .part1 h1 {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--light);
+    padding: 15px;
+    font-size: var(--small);
+    font-weight: 400;
+    width: 100%;
+}
+
+.accommodation .roomTypes .roomType .part2 {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 5px;
-    background-color: rgba(255, 255, 255, 0.6);
-    padding: 2px 3px;
-    border-radius: 2px;
-    cursor: pointer;
+    padding: 20px;
 }
 
-.accommodation .room-nav {
-    display: flex;
-    overflow-x: auto;
-    gap: 1px;
+.accommodation .roomTypes .roomType .part2 h2 {
+    font-size: var(--large);
+    color: var(--dark);
+    font-family: 'Cinzel';
 }
 
-.accommodation .room-nav button {
-    border: none;
-    background-color: var(--light-7);
-    width: 35px;
-    aspect-ratio: 1/1;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.accommodation .roomTypes .roomType .part2 p {
+    font-size: var(--x-small);
     color: var(--dark);
 }
 
-.accommodation .room-nav button.active {
-    background-color: var(--light-9);
-}
-
-.accommodation .room-nav button.active:nth-child(odd) {
-    background-color: var(--light-8);
-}
-
-.accommodation .sub-img {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    gap: 5px;
-    background-color: #000;
-    padding: 5px;
-}
-
-.accommodation .sub-img .sub-img-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.accommodation .sub-img .sub-img-header h1 {
+.accommodation .roomTypes .roomType .part2 button {
+    padding: 20px;
+    background-color: var(--primary);
     color: var(--light);
-    font-size: var(--medium);
-    font-weight: 200;
-}
-
-.accommodation .sub-img .fa-xmark {
-    color: var(--red);
-    cursor: pointer;
-    font-size: var(--medium);
-}
-
-.accommodation .sub-img img {
-    object-fit: cover;
-}
-
-.accommodation .sub-img img.big {
-    width: 100%;
-    aspect-ratio: 16/9;
-    border: 1px solid var(--gray);
-}
-
-.accommodation .sub-img button,
-.accommodation .sub-img img.small {
-    width: 60px;
-    aspect-ratio: 1/1;
+    font-size: var(--x-small);
+    font-weight: 600;
     border: none;
-    background-color: var(--gray);
-    color: #000;
-    cursor: pointer;
-    border-radius: 2px;
-    font-size: var(--medium);
-    border: 1px solid var(--gray);
-}
-
-.accommodation .sub-img img.small.active {
-    transform: scale(0.8);
-    transition: ease-in-out 0.15s;
-}
-
-.accommodation .sub-img .sub-navs {
-    display: flex;
-    justify-content: space-between;
-    gap: 5px;
-}
-
-.accommodation .sub-img .sub-navs .sub-imgs-wrapper {
-    display: flex;
-    gap: 3px;
-    flex: 1;
-    overflow-y: auto;
+    width: fit-content;
+    margin-top: 20px;
+    box-shadow: 3px 3px 0 1px rgba(0, 0, 0, 0.2);
 }
 
 @media (min-width: 1025px) {
-    .accommodation .room-type {
-        padding: 50px 100px;
+    .accommodation .roomTypes {
+        gap: 100px;
+        padding: 100px 150px;
     }
 
-    .accommodation .room-type h1 {
-        font-size: var(--large);
-        padding: 0 10px;
+    .accommodation .roomTypes .roomType {
+        flex-direction: row;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     }
 
-    .accommodation .room-type h1::first-letter {
-        font-size: var(--x-large);
+    .accommodation .roomTypes .roomType:nth-child(even) {
+        flex-direction: row-reverse;
     }
 
-    .accommodation .room {
-        display: flex;
-        position: relative;
+    .accommodation .roomTypes .roomType .part1 {
+        width: 60%;
     }
 
-    .accommodation .room .room-info {
-        align-self: center;
-        flex: 1;
-        gap: 0;
+    .accommodation .roomTypes .roomType .part1 h1 {
+        padding: 25px;
+        font-size: var(--medium);
     }
 
-    .accommodation .room img {
-        width: 600px;
-        padding: 10px;
+    .accommodation .roomTypes .roomType .part2 {
+        gap: 5px;
+        padding: 60px 30px;
     }
 
-    .accommodation .room h2 {
-        font-size: var(--x-large);
-    }
-
-    .accommodation .room h3 {
+    .accommodation .roomTypes .roomType .part2 p {
         font-size: var(--small);
         max-width: 250px;
+        line-height: 2;
     }
 
-    .accommodation .room h3:first-of-type {
-        font-size: var(--small);
-        margin-bottom: 20px;
+    .accommodation .roomTypes .roomType:nth-child(even) .part2 p {
+        text-align: right;
     }
 
-    .accommodation .room h4 {
-        font-weight: 900;
+    .accommodation .roomTypes .roomType .part2 button {
+        padding: 25px;
+        cursor: pointer;
     }
 
-    .accommodation .room-footer {
-        margin-top: 30px;
-    }
-
-    .accommodation .room-footer button {
-        margin: 5px;
-        padding-inline: 20px;
-    }
-
-    .accommodation .room-nav {
-        gap: 2px;
-    }
-
-    .accommodation .room-nav button {
-        width: 50px;
-        font-size: var(--small);
-    }
-
-    .accommodation .sub-img {
-        width: 50%;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .accommodation .sub-img .fa-xmark {
-        font-size: var(--large);
-    }
-
-    .accommodation .sub-img img.big {
-        border: 2px solid var(--gray);
-    }
-
-    .accommodation .sub-img button,
-    .accommodation .sub-img img.small {
-        width: 80px;
-        aspect-ratio: 4/3;
-        border: 2px solid var(--gray);
-    }
-
-    .accommodation .sub-img .sub-navs {
-        gap: 10px;
-    }
-
-    .accommodation .sub-img .sub-navs .sub-imgs-wrapper {
-        gap: 5px;
+    .accommodation .roomTypes .roomType:nth-child(even) .part2 button {
+        align-self: flex-end;
     }
 }

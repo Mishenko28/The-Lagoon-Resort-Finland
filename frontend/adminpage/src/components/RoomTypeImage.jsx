@@ -60,12 +60,12 @@ const RoomTypeImage = ({ setRoomTypes, roomType, setShowImage }) => {
                 <i onClick={() => setShowImage(false)} className="fa-solid fa-xmark" />
                 <h1>{roomType.name} ROOMS</h1>
                 <img src={image} />
+                {isEditing && <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />}
                 {!isEditing ?
                     <p>{caption}</p>
                     :
                     <textarea onChange={(e) => setCaption(e.target.value)} rows={4}>{caption}</textarea>
                 }
-                {isEditing && <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />}
                 <div className="bttns">
                     {isEditing ?
                         <button onClick={handleCancel}>Cancel</button>
