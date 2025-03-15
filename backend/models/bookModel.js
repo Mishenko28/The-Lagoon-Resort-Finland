@@ -8,6 +8,10 @@ const roomSchema = new mongoose.Schema({
     roomNo: {
         type: Number,
         required: true
+    },
+    addedPerson: {
+        type: Number,
+        default: 0
     }
 })
 
