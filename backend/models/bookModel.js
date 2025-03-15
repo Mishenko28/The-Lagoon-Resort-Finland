@@ -1,5 +1,16 @@
 const mongoose = require('mongoose')
 
+const roomSchema = new mongoose.Schema({
+    roomType: {
+        type: String,
+        required: true
+    },
+    roomNo: {
+        type: Number,
+        required: true
+    }
+})
+
 module.exports = mongoose.model('Book', new mongoose.Schema({
     userId: {
         type: String,
@@ -22,7 +33,7 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
         default: "none"
     },
     room: {
-        type: Array,
+        type: [roomSchema],
         required: true
     },
     total: {

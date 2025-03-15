@@ -917,37 +917,17 @@
 .room-gallery .pics .room-typess {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     border: 1px solid var(--light-gray);
-    padding-block: 5px;
+    padding: 5px;
 }
 
 .room-gallery .pics .room-typess h1 {
-    padding: 5px;
     color: var(--gray);
 }
 
-.room-gallery .pics .room-typess h3 {
-    font-size: 0.6rem;
-    color: var(--primary);
-    font-weight: 500;
-    padding-block: 10px;
-    text-align: center;
-}
 
-.room-gallery .pics .room-typess .room {
-    display: flex;
-    align-items: center;
-}
-
-.room-gallery .pics .room-typess .room h2 {
-    padding: 10px;
-    font-size: 0.5rem;
-    font-weight: 400;
-    white-space: nowrap;
-}
-
-.room-gallery .pics .room-typess .room .room-pics {
+.room-gallery .pics .room-typess .room-pics {
     position: relative;
     display: flex;
     gap: 3px;
@@ -956,8 +936,8 @@
 }
 
 
-.room-gallery .pics .room-typess .room .room-pics i,
-.room-gallery .pics .room-typess .room .room-pics img {
+.room-gallery .pics .room-typess .room-pics i,
+.room-gallery .pics .room-typess .room-pics img {
     object-fit: cover;
     font-weight: 400;
     min-width: 150px;
@@ -972,7 +952,7 @@
     color: var(--gray);
 }
 
-.room-gallery .pics .room-typess .room .room-pics img:first-of-type {
+.room-gallery .pics .room-typess .room-pics img:first-of-type {
     margin-right: 15px;
 }
 
@@ -1677,36 +1657,29 @@
         padding: 15px;
     }
 
+    .room-gallery .pics .room-typess {
+        padding: 15px;
+    }
+
     .room-gallery .pics .room-typess h1 {
-        padding: 10px;
         font-size: 1rem;
     }
 
-    .room-gallery .pics .room-typess h3 {
-        font-size: 1rem;
-        padding-block: 20px;
-    }
-
-    .room-gallery .pics .room-typess .room h2 {
-        padding: 20px;
-        font-size: 0.7rem;
-    }
-
-    .room-gallery .pics .room-typess .room .room-pics {
+    .room-gallery .pics .room-typess .room-pics {
         gap: 20px;
         padding: 5px 15px 5px 0;
     }
 
 
-    .room-gallery .pics .room-typess .room .room-pics i,
-    .room-gallery .pics .room-typess .room .room-pics img {
+    .room-gallery .pics .room-typess .room-pics i,
+    .room-gallery .pics .room-typess .room-pics img {
         min-width: 280px;
         max-width: 280px;
         aspect-ratio: 4/3;
     }
 
-    .room-gallery .pics .room-typess .room .room-pics i:hover,
-    .room-gallery .pics .room-typess .room .room-pics img:hover {
+    .room-gallery .pics .room-typess .room-pics i:hover,
+    .room-gallery .pics .room-typess .room-pics img:hover {
         transform: scale(1.02);
         transition: all 0.1s;
         cursor: pointer;

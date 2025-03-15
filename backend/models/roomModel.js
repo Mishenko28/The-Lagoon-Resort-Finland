@@ -9,10 +9,6 @@ module.exports = mongoose.model('Room', new mongoose.Schema({
         type: String,
         default: '',
     },
-    subImg: {
-        type: [String],
-        default: []
-    },
     roomType: {
         type: String,
         required: true

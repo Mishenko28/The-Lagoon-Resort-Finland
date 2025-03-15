@@ -3,7 +3,7 @@ import useConvertBase64 from "../hooks/useConvertBase64"
 import useAdmin from "../hooks/useAdmin"
 import { useState } from "react"
 
-export default function AddRoomSubImage({ isAddingSubImg, setIsAddingSubImg, setRooms }) {
+export default function AddRoomSubImage({ isAddingSubImg, setIsAddingSubImg, setRoomTypes }) {
     const [base64, convertToBase64] = useConvertBase64("")
     const { dispatch } = useAdmin()
 
@@ -19,10 +19,10 @@ export default function AddRoomSubImage({ isAddingSubImg, setIsAddingSubImg, set
 
         setIsLoading(true)
 
-        await axios.post('room/addSubImage', { _id: isAddingSubImg._id, img: base64 })
+        await axios.post('room-type/addSubImage', { _id: isAddingSubImg._id, img: base64 })
             .then((res) => {
                 setIsAddingSubImg(null)
-                setRooms(prev => prev.map(room => room._id === isAddingSubImg._id ? res.data.room : room))
+                setRoomTypes(prev => prev.map(roomType => roomType._id === isAddingSubImg._id ? res.data.roomType : roomType))
                 dispatch({ type: 'SUCCESS', payload: true })
             })
             .catch((err) => {
@@ -38,7 +38,7 @@ export default function AddRoomSubImage({ isAddingSubImg, setIsAddingSubImg, set
         <div className="full-cont">
             <form onSubmit={handleSave} className="add-room-sub-img">
                 {isLoading && <div className="loader-line"></div>}
-                <h1>{isAddingSubImg.roomType} Room {isAddingSubImg.roomNo}</h1>
+                <h1>{isAddingSubImg.name} ROOMS SUB IMAGE</h1>
                 <img src={base64} />
                 <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />
                 <div className="bttns">

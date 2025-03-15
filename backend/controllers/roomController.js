@@ -32,58 +32,6 @@ const addRoom = async (req, res) => {
     }
 }
 
-// ADD SUB IMAGE
-const addSubImage = async (req, res) => {
-    const { _id, img, adminEmail } = await req.body
-
-    try {
-        const room = await Room.findOneAndUpdate({ _id }, { $push: { subImg: img } }, { new: true })
-
-        // Activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.CREATED], activity: `Added a sub image to room ${room.roomNo} in ${room.roomType} roomtype` })
-
-        res.status(200).json({ room })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// EDIT SUB IMAGE
-const editSubImage = async (req, res) => {
-    const { _id, img, index, adminEmail } = await req.body
-
-    try {
-        const room = await Room.findOneAndUpdate({ _id }, { $set: { [`subImg.${index}`]: img } }, { new: true })
-
-        // Activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.UPDATED], activity: `Edited a sub image of room ${room.roomNo} in ${room.roomType} roomtype` })
-
-        res.status(200).json({ room })
-    }
-    catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// DELETE SUB IMAGE
-const deleteSubImage = async (req, res) => {
-    const { _id, index, adminEmail } = await req.body
-
-    try {
-        await Room.findOneAndUpdate({ _id }, { $unset: { [`subImg.${index}`]: 1 } }, { new: true })
-
-        const room = await Room.findOneAndUpdate({ _id }, { $pull: { subImg: null } }, { new: true })
-
-        // Activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a sub image of room ${room.roomNo} in ${room.roomType} roomtype` })
-
-        res.status(200).json({ room })
-    }
-    catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
 // UPDATE ROOM
 const updateRoom = async (req, res) => {
     const { _id, roomNo, img, caption, active, roomType, adminEmail } = await req.body
@@ -175,8 +123,5 @@ module.exports = {
     addRoom,
     updateRoom,
     deleteRoom,
-    restoreRoom,
-    addSubImage,
-    editSubImage,
-    deleteSubImage
+    restoreRoom
 }

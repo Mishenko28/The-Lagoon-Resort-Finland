@@ -3,11 +3,13 @@ import { useEffect, useState } from "react"
 import Loader from "../components/Loader"
 import "../styles/accommodation.css"
 import { motion } from "framer-motion"
+import SubImg from "../components/SubImg"
 
 const Accommodation = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [rooms, setRooms] = useState([])
     const [roomTypes, setRoomTypes] = useState([])
+    const [subImgToShow, setSubImgToShow] = useState(null)
 
 
     useEffect(() => {
@@ -49,12 +51,16 @@ const Accommodation = () => {
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ duration: 1 }}
-                            viewport={{ once: 1, amount: 0.6 }}
+                            viewport={{ once: 1, amount: 0.5 }}
                             className="roomType"
                         >
                             <div className="part1">
                                 <img src={roomType.img} />
                                 <h1>₱{roomType.rate} / Night</h1>
+                                <div onClick={() => setSubImgToShow(roomType)} className="subImg-icon">
+                                    <i className="fa-solid fa-image" />
+                                    <p>{roomType.subImg.length}</p>
+                                </div>
                             </div>
                             <div className="part2">
                                 <h2>{roomType.name} ROOM</h2>
@@ -63,6 +69,7 @@ const Accommodation = () => {
                             </div>
                         </motion.div>
                     ))}
+                    {subImgToShow && <SubImg subImgToShow={subImgToShow} setSubImgToShow={setSubImgToShow} />}
                 </div>
             }
         </div>

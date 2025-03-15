@@ -5,9 +5,11 @@ import AddRoom from './AddRoom'
 import EditRoom from './EditRoom'
 import { motion, AnimatePresence } from 'framer-motion'
 import RoomTypeImage from './RoomTypeImage'
+import { useNavigate } from 'react-router-dom'
 
 export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isCard }) {
     const { dispatch } = useAdmin()
+    const navigate = useNavigate()
 
     const [roomSettTogg, setRoomSettTogg] = useState(false)
     const settingsRef = useRef(null)
@@ -206,6 +208,8 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                             <button onClick={handleRename}><i className="fa-solid fa-pen-to-square" />Rename</button>
                             <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
                             <button onClick={handleEdit}><i className="fa-solid fa-pen" />Edit</button>
+                            <hr />
+                            <button onClick={() => navigate('/configuration/gallery#room-types')}><i className="fa-solid fa-image" />Images</button>
                         </div>
                     }
                     {isCard &&

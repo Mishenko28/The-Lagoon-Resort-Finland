@@ -3,7 +3,7 @@ import useConvertBase64 from "../hooks/useConvertBase64"
 import useAdmin from "../hooks/useAdmin"
 import { useState } from "react"
 
-export default function EditRoomMainImage({ isEditingMainImg, setIsEditingMainImg, setRooms }) {
+export default function EditRoomMainImage({ isEditingMainImg, setIsEditingMainImg, setRoomTypes }) {
     const [base64, convertToBase64] = useConvertBase64(isEditingMainImg.img)
     const { dispatch } = useAdmin()
 
@@ -19,9 +19,9 @@ export default function EditRoomMainImage({ isEditingMainImg, setIsEditingMainIm
 
         setIsLoading(true)
 
-        await axios.patch('room/update', { _id: isEditingMainImg._id, img: base64 })
+        await axios.patch('room-type/update', { _id: isEditingMainImg._id, img: base64 })
             .then((res) => {
-                setRooms((prev) => prev.map((room) => room._id === isEditingMainImg._id ? res.data.room : room))
+                setRoomTypes((prev) => prev.map((roomType) => roomType._id === isEditingMainImg._id ? res.data.roomType : roomType))
                 dispatch({ type: 'SUCCESS', payload: true })
                 setIsEditingMainImg(null)
             })
@@ -37,7 +37,7 @@ export default function EditRoomMainImage({ isEditingMainImg, setIsEditingMainIm
         <div className="full-cont">
             <form onSubmit={handleSave} className="add-room-sub-img">
                 {isLoading && <div className="loader-line"></div>}
-                <h1>{isEditingMainImg.roomType} Room {isEditingMainImg.roomNo}</h1>
+                <h1>{isEditingMainImg.name} ROOMS MAIN IMAGE</h1>
                 <img src={base64} />
                 <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />
                 <div className="bttns">

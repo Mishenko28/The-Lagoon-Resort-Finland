@@ -131,10 +131,65 @@ const restoreRoomType = async (req, res) => {
     }
 }
 
+// ADD SUB IMAGE
+const addSubImage = async (req, res) => {
+    const { _id, img, adminEmail } = await req.body
+
+    try {
+        const roomType = await RoomType.findOneAndUpdate({ _id }, { $push: { subImg: { url: img } } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOMTYPE, Actions.CREATED], activity: `Added a sub image to ${roomType.name} roomtype` })
+
+        res.status(200).json({ roomType })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// EDIT SUB IMAGE
+const editSubImage = async (req, res) => {
+    const { _id, img, index, adminEmail } = await req.body
+
+    try {
+        const roomType = await RoomType.findOneAndUpdate({ _id }, { $set: { [`subImg.${index}.url`]: img } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOMTYPE, Actions.UPDATED], activity: `Edited a sub image in ${roomType.name} roomtype` })
+
+        res.status(200).json({ roomType })
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// DELETE SUB IMAGE
+const deleteSubImage = async (req, res) => {
+    const { _id, index, adminEmail } = await req.body
+
+    try {
+        await RoomType.findOneAndUpdate({ _id }, { $unset: { [`subImg.${index}`]: 1 } })
+
+        const roomType = await RoomType.findOneAndUpdate({ _id }, { $pull: { subImg: null } }, { new: true })
+
+        // Activity log
+        await ActivityLog.create({ adminEmail, action: [Actions.ROOMTYPE, Actions.DELETED], activity: `Deleted a sub image in ${roomType.name} roomtype` })
+
+        res.status(200).json({ roomType })
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 module.exports = {
     getRoomTypes,
     addRoomTypes,
     updateRoomTypes,
     deleteRoomType,
-    restoreRoomType
+    restoreRoomType,
+    addSubImage,
+    editSubImage,
+    deleteSubImage
 }

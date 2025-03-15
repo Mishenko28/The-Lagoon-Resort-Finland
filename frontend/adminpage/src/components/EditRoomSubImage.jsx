@@ -3,8 +3,8 @@ import useConvertBase64 from "../hooks/useConvertBase64"
 import useAdmin from "../hooks/useAdmin"
 import { useState } from "react"
 
-export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setRooms }) {
-    const [base64, convertToBase64] = useConvertBase64(editingSubImg.img)
+export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setRoomTypes }) {
+    const [base64, convertToBase64] = useConvertBase64(editingSubImg.subImg[editingSubImg.index].url)
     const { dispatch } = useAdmin()
 
     const [isLoading, setIsLoading] = useState(false)
@@ -20,9 +20,9 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
 
         setIsLoading(true)
 
-        await axios.post('room/editSubImage', { _id: editingSubImg._id, img: base64, index: editingSubImg.index })
+        await axios.post('room-type/editSubImage', { _id: editingSubImg._id, img: base64, index: editingSubImg.index })
             .then((res) => {
-                setRooms(prev => prev.map(room => room._id === editingSubImg._id ? res.data.room : room))
+                setRoomTypes(prev => prev.map(roomType => roomType._id === editingSubImg._id ? res.data.roomType : roomType))
                 dispatch({ type: 'SUCCESS', payload: true })
                 setEditingSubImg(null)
             })
@@ -38,9 +38,9 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
     const handleDelete = async () => {
         setIsLoading(true)
 
-        await axios.delete('room/deleteSubImage', { data: { _id: editingSubImg._id, index: editingSubImg.index } })
+        await axios.delete('room-type/deleteSubImage', { data: { _id: editingSubImg._id, index: editingSubImg.index } })
             .then((res) => {
-                setRooms(prev => prev.map(room => room._id === editingSubImg._id ? res.data.room : room))
+                setRoomTypes(prev => prev.map(roomType => roomType._id === editingSubImg._id ? res.data.roomType : roomType))
                 dispatch({ type: 'SUCCESS', payload: true })
                 setEditingSubImg(null)
             })
@@ -63,7 +63,7 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
         <div className="full-cont">
             <form className="add-room-sub-img">
                 {isLoading && <div className="loader-line"></div>}
-                <h1>{editingSubImg.roomType} Room {editingSubImg.roomNo}</h1>
+                <h1>{editingSubImg.name} ROOMS SUB IMAGE</h1>
                 {deleteTogg ?
                     <>
                         <h2>Are you sure?</h2>

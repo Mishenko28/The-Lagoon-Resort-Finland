@@ -8,10 +8,12 @@ import AddRoomSubImage from '../../components/AddRoomSubImage'
 import EditRoomSubImage from '../../components/EditRoomSubImage'
 import EditRoomMainImage from '../../components/EditRoomMainImage'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 
 export default function Gallery() {
     const { dispatch } = useAdmin()
     const [base64, convertToBase64] = useConvertBase64("")
+    const location = useLocation()
 
     const [isLoading, setIsLoading] = useState(true)
     const [photos, setPhotos] = useState([])
@@ -34,6 +36,15 @@ export default function Gallery() {
     const [isAddingSubImg, setIsAddingSubImg] = useState(null)
     const [editingSubImg, setEditingSubImg] = useState(null)
     const [isEditingMainImg, setIsEditingMainImg] = useState(null)
+
+    useEffect(() => {
+        if (location.hash) {
+            const element = document.getElementById(location.hash.substring(1));
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [isLoading])
 
     useEffect(() => {
         const handleClick = e => {
@@ -64,18 +75,9 @@ export default function Gallery() {
                     console.log(err.response.data.error)
                 })
 
-            await axios.get('/room/all')
+            await axios.get('/room-type/all')
                 .then((res) => {
-                    setRooms(res.data.rooms.sort((a, b) => a.roomType.localeCompare(b.roomType)))
-                })
-                .catch((err) => {
-                    dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
-                })
-
-            await axios.get('/admin-settings/all')
-                .then((res) => {
-                    setRoomTypes(res.data.adminSetting.roomTypes)
+                    setRoomTypes(res.data.roomTypes)
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -169,7 +171,7 @@ export default function Gallery() {
                     </div>
                     <div className='gallery-cont'>
                         <div className='gallery-header'>
-                            <h1>Photos</h1>
+                            <h1>Gallery</h1>
                         </div>
                         <div className='pics'>
                             <AnimatePresence mode='sync'>
@@ -194,37 +196,40 @@ export default function Gallery() {
                             </AnimatePresence>
                         </div>
                     </div>
-                    <div className='room-gallery'>
+                    <div className='room-gallery' id='room-types'>
                         <div className='gallery-header'>
-                            <h1>Room Gallery</h1>
+                            <h1>ROOM TYPES IMAGES</h1>
                         </div>
                         <div className='pics'>
                             {roomTypes.map((roomType, i) => (
                                 <div key={i} className='room-typess'>
-                                    <h1>{roomType}</h1>
-                                    {rooms.filter(room => room.roomType === roomType).map(room => (
-                                        <div className='room' key={room._id}>
-                                            <h2>Room {room.roomNo}</h2>
-                                            <div className='room-pics'>
-                                                <p>main</p>
-                                                <img onClick={() => setIsEditingMainImg({ roomType, _id: room._id, roomNo: room.roomNo, img: room.img })} src={room.img} />
-                                                {room.subImg.map((img, i) => (
-                                                    <img onClick={() => setEditingSubImg({ roomType, roomNo: room.roomNo, _id: room._id, img, index: i })} key={i} src={img} />
-                                                ))}
-                                                <i onClick={() => setIsAddingSubImg({ roomType, roomNo: room.roomNo, _id: room._id })} className="fa-solid fa-plus" />
-                                            </div>
-                                        </div>
-                                    ))}
-                                    {rooms.filter(room => room.roomType === roomType).length === 0 &&
-                                        <h3>No Rooms</h3>
-                                    }
+                                    <h1>{roomType.name} ROOMS</h1>
+                                    <div className='room-pics'>
+                                        <p>main</p>
+                                        <img onClick={() => setIsEditingMainImg(roomType)} src={roomType.img} />
+                                        <AnimatePresence mode='sync'>
+                                            {roomType.subImg.map((img, i) => (
+                                                <motion.img
+                                                    layout
+                                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    onClick={() => setEditingSubImg({ ...roomType, index: i })}
+                                                    key={img._id}
+                                                    src={img.url}
+                                                />
+                                            ))}
+                                            <i key="add" onClick={() => setIsAddingSubImg(roomType)} className="fa-solid fa-plus" />
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
-                    {isEditingMainImg && <EditRoomMainImage isEditingMainImg={isEditingMainImg} setIsEditingMainImg={setIsEditingMainImg} setRooms={setRooms} />}
-                    {editingSubImg && <EditRoomSubImage editingSubImg={editingSubImg} setEditingSubImg={setEditingSubImg} setRooms={setRooms} />}
-                    {isAddingSubImg && <AddRoomSubImage isAddingSubImg={isAddingSubImg} setIsAddingSubImg={setIsAddingSubImg} setRooms={setRooms} />}
+                    {isEditingMainImg && <EditRoomMainImage isEditingMainImg={isEditingMainImg} setIsEditingMainImg={setIsEditingMainImg} setRoomTypes={setRoomTypes} />}
+                    {editingSubImg && <EditRoomSubImage editingSubImg={editingSubImg} setEditingSubImg={setEditingSubImg} setRoomTypes={setRoomTypes} />}
+                    {isAddingSubImg && <AddRoomSubImage isAddingSubImg={isAddingSubImg} setIsAddingSubImg={setIsAddingSubImg} setRoomTypes={setRoomTypes} />}
                     {editPhoto && <EditPhoto editPhoto={editPhoto} setEditPhoto={setEditPhoto} setPhotos={setPhotos} />}
                 </>
             }
