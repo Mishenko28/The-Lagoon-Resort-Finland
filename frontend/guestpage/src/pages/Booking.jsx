@@ -3,6 +3,7 @@ import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
 import { isPast, isAfter, formatDistance, format } from 'date-fns'
+import { motion, AnimatePresence } from "framer-motion"
 
 const convertToISO = (date) => {
     return date.toISOString().split('T')[0]
@@ -21,6 +22,8 @@ const Booking = () => {
     const [roomTypes, setRoomTypes] = useState(null)
     const [selectedRoomTypes, setSelectedRoomTypes] = useState([])
 
+    const [downPayment, setDownPayment] = useState(null)
+
     const [page, setPage] = useState("date")
 
     useEffect(() => {
@@ -28,6 +31,15 @@ const Booking = () => {
             axios.get('room-type/all')
                 .then(res => {
                     setRoomTypes(res.data.roomTypes)
+                })
+                .finally(() => fetchAdminSettings())
+
+        }
+
+        const fetchAdminSettings = async () => {
+            axios.get('admin-settings/all')
+                .then(res => {
+                    setDownPayment(res.data.adminSetting.downPayment)
                 })
                 .finally(() => setIsLoading(false))
         }
@@ -52,6 +64,7 @@ const Booking = () => {
 
     }, [checkIn, checkOut])
 
+    console.log(downPayment)
     return (
         <div className="booking">
             <div className="header-page">
@@ -83,57 +96,96 @@ const Booking = () => {
                         </div>
                     }
                     {page === "room" &&
-                        <div className="room-picker">
-                            <div className="date">
-                                <p><b>{format(checkIn, 'LLLL d, yyyy')}</b> to <b>{format(checkOut, 'LLLL d, yyyy')}</b></p>
-                                <p>({formatDistance(checkIn, checkOut)})</p>
-                            </div>
-                            {selectedRoomTypes.length > 0 &&
-                                <div className="selected-room-type-wrapper">
-                                    {selectedRoomTypes?.map((roomType, i) => (
-                                        <div key={i}>
-                                            <div className="selected-room-type">
-                                                <div className="top">
-                                                    <h3>{roomType.name}</h3>
-                                                    <div className="right">
-                                                        <p>₱{roomType.rate} + {roomType.addedPerson * roomType.addFeePerPerson}</p>
-                                                        <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
+                        <div className="room-picker" >
+                            <AnimatePresence mode="popLayout">
+                                <motion.div
+                                    layout
+                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="date"
+                                    key="date"
+                                >
+                                    <p><b>{format(checkIn, 'LLLL d, yyyy')}</b> to <b>{format(checkOut, 'LLLL d, yyyy')}</b></p>
+                                    <p>({formatDistance(checkIn, checkOut)})</p>
+                                </motion.div>
+                                {selectedRoomTypes.length > 0 &&
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0.5, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="selected-room-type-wrapper"
+                                        key="selected-room-type"
+                                    >
+                                        <AnimatePresence mode="popLayout">
+                                            {selectedRoomTypes?.map((roomType, i) => (
+                                                <motion.div
+                                                    layout
+                                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    key={roomType.animationId}
+                                                >
+                                                    <div className="selected-room-type">
+                                                        <div className="top">
+                                                            <h3>{roomType.name}</h3>
+                                                            <div className="right">
+                                                                <p>₱{roomType.rate} + {roomType.addedPerson * roomType.addFeePerPerson}</p>
+                                                                <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="bottom">
+                                                            <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson++ } : roomType))} className="left">
+                                                                <i className="fa-solid fa-user-plus" />
+                                                                <p>₱{roomType.addFeePerPerson}</p>
+                                                            </div>
+                                                            <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson--, 0) } : roomType))} className="fa-solid fa-user-minus" />
+                                                            <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                            {roomType.addedPerson > 0 &&
+                                                                <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                            }
+                                                            <p>({roomType.maxPerson + roomType.addedPerson})</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="bottom">
-                                                    <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson++ } : roomType))} className="left">
-                                                        <i className="fa-solid fa-user-plus" />
-                                                        <p>₱{roomType.addFeePerPerson}</p>
-                                                    </div>
-                                                    <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson--, 0) } : roomType))} className="fa-solid fa-user-minus" />
-                                                    <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                    {roomType.addedPerson > 0 &&
-                                                        <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                    }
-                                                    <p>({roomType.maxPerson + roomType.addedPerson})</p>
-                                                </div>
-                                            </div>
-                                            <hr />
+                                                    <hr />
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
+                                        <div className="total">
+                                            <h3>Down Payment: ({downPayment * 100}%)</h3>
+                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment}</p>
                                         </div>
-                                    ))}
-                                    <div className="total">
-                                        <h3>Total:</h3>
-                                        <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0)}</p>
-                                    </div>
-                                    <button>Continue</button>
-                                </div>
-                            }
-                            {roomTypes.map(roomType => (
-                                <div className="room-type" key={roomType._id}>
-                                    <img src={roomType.img} />
-                                    <div className="room-type-info">
-                                        <h3>{roomType.name}</h3>
-                                        <p>₱{roomType.rate}</p>
-                                        <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} (<i className="fa-solid fa-person-circle-plus" />₱{roomType.addFeePerPerson})</p>
-                                    </div>
-                                    <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0 }])} />
-                                </div>
-                            ))}
+                                        <div className="total">
+                                            <h3>Total:</h3>
+                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0)}</p>
+                                        </div>
+                                        <button>Continue</button>
+                                    </motion.div>
+                                }
+                                {roomTypes.map(roomType => (
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0.5, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="room-type"
+                                        key={roomType._id}
+                                    >
+                                        <img src={roomType.img} />
+                                        <div className="room-type-info">
+                                            <h3>{roomType.name}</h3>
+                                            <p>₱{roomType.rate}</p>
+                                            <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} (<i className="fa-solid fa-person-circle-plus" />₱{roomType.addFeePerPerson})</p>
+                                        </div>
+                                        <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) }])} />
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
                         </div>
                     }
                 </div>
