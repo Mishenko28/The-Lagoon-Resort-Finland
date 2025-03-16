@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
-import { isPast, isAfter, formatDistance, format } from 'date-fns'
+import { isPast, isAfter, formatDistance, format, isEqual } from 'date-fns'
 import { motion, AnimatePresence } from "framer-motion"
 
 const convertToISO = (date) => {
@@ -16,15 +16,23 @@ dateTomorrow.setDate(dateTomorrow.getDate() + 1)
 const Booking = () => {
     const [isLoading, setIsLoading] = useState(true)
 
-    const [checkIn, setCheckIn] = useState(dateToday)
-    const [checkOut, setCheckOut] = useState(dateTomorrow)
+    const [checkIn, setCheckIn] = useState(new Date())
+    const [checkOut, setCheckOut] = useState(new Date())
 
     const [roomTypes, setRoomTypes] = useState(null)
     const [selectedRoomTypes, setSelectedRoomTypes] = useState([])
 
     const [downPayment, setDownPayment] = useState(null)
+    const [roomStart, setRoomStart] = useState(null)
 
     const [page, setPage] = useState("date")
+
+    useEffect(() => {
+        if (roomStart) {
+            setCheckIn(new Date(dateToday.setHours(roomStart, 0, 0, 0)))
+            setCheckOut(new Date(dateTomorrow.setHours(roomStart, 0, 0, 0)))
+        }
+    }, [roomStart])
 
     useEffect(() => {
         const fetchRoomTypes = async () => {
@@ -40,6 +48,7 @@ const Booking = () => {
             axios.get('admin-settings/all')
                 .then(res => {
                     setDownPayment(res.data.adminSetting.downPayment)
+                    setRoomStart(res.data.adminSetting.roomStart)
                 })
                 .finally(() => setIsLoading(false))
         }
@@ -57,14 +66,13 @@ const Booking = () => {
             setCheckIn(dateToday)
         }
 
-        if (isAfter(checkIn, checkOut)) {
+        if (isAfter(checkIn, checkOut) || isEqual(checkIn, checkOut)) {
             const date = new Date(checkIn)
             setCheckOut(new Date(date.setDate(date.getDate() + 1)))
         }
 
     }, [checkIn, checkOut])
 
-    console.log(downPayment)
     return (
         <div className="booking">
             <div className="header-page">
@@ -82,11 +90,11 @@ const Booking = () => {
                         <div className="date-picker">
                             <div className="date-wrapper">
                                 <label>Check In:</label>
-                                <input type="date" value={convertToISO(checkIn)} onChange={e => setCheckIn(new Date(e.target.value))} />
+                                <input type="date" value={convertToISO(checkIn)} onChange={e => setCheckIn(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
                             </div>
                             <div className="date-wrapper">
                                 <label>Check Out:</label>
-                                <input type="date" value={convertToISO(checkOut)} onChange={e => setCheckOut(new Date(e.target.value))} />
+                                <input type="date" value={convertToISO(checkOut)} onChange={e => setCheckOut(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
                             </div>
                             <div className="date-wrapper">
                                 <label>Total Period:</label>
@@ -106,6 +114,7 @@ const Booking = () => {
                                     transition={{ duration: 0.3 }}
                                     className="date"
                                     key="date"
+                                    onClick={() => setPage("date")}
                                 >
                                     <p><b>{format(checkIn, 'LLLL d, yyyy')}</b> to <b>{format(checkOut, 'LLLL d, yyyy')}</b></p>
                                     <p>({formatDistance(checkIn, checkOut)})</p>
@@ -134,7 +143,7 @@ const Booking = () => {
                                                         <div className="top">
                                                             <h3>{roomType.name}</h3>
                                                             <div className="right">
-                                                                <p>₱{roomType.rate} + {roomType.addedPerson * roomType.addFeePerPerson}</p>
+                                                                <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
                                                                 <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
                                                             </div>
                                                         </div>
@@ -157,11 +166,11 @@ const Booking = () => {
                                         </AnimatePresence>
                                         <div className="total">
                                             <h3>Down Payment: ({downPayment * 100}%)</h3>
-                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment}</p>
+                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
                                         </div>
                                         <div className="total">
                                             <h3>Total:</h3>
-                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0)}</p>
+                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
                                         </div>
                                         <button>Continue</button>
                                     </motion.div>

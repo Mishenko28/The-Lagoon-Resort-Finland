@@ -48,7 +48,6 @@
 
 .booking .reservation-form .date-picker p {
     font-size: var(--medium);
-    color: var(--secondary);
 }
 
 .booking .reservation-form .date-picker button,
