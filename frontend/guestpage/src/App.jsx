@@ -10,6 +10,7 @@ import Gallery from "./pages/Gallery"
 import ForUsersOnlyRoute from "./components/ForUsersOnlyRoute"
 import Login from "./pages/Login"
 import SignUp from "./pages/SignUp"
+import Profile from "./pages/Profile"
 import Error from "./components/Error"
 
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
             <Route path="about-us" element={<AboutUs />} />
             <Route path="login" element={<ForUsersOnlyRoute component={<Login />} />} />
             <Route path="sign-up" element={<ForUsersOnlyRoute component={<SignUp />} />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
         </Route>
     )

@@ -16,6 +16,9 @@ const reducer = (state, action) => {
         case "LOGOUT":
             localStorage.removeItem('lagoonUser')
             return { ...state, user: null }
+        case "UPDATE_IMG":
+            localStorage.setItem('lagoonUser', JSON.stringify({ ...state.user, img: action.payload }))
+            return { ...state, user: { ...state.user, img: action.payload } }
         default:
             return state
     }

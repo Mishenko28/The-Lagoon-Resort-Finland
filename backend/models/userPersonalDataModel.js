@@ -18,11 +18,11 @@ module.exports = mongoose.model('UserPersonalData', new mongoose.Schema({
         type: String,
         default: true
     },
-    address: {
+    contact: {
         type: String,
         required: true
     },
-    contact: {
+    img: {
         type: String,
         required: true
     }

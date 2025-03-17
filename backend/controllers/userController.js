@@ -16,6 +16,12 @@ const loginUser = async (req, res) => {
 
     try {
         const user = await User.findOne({ email })
+        let img = null
+
+        if (user.personalData) {
+            const personalData = await UserPersonalData.findOne({ email })
+            img = personalData.img
+        }
 
         if (!user) {
             throw Error("Email is not registered")
@@ -29,7 +35,7 @@ const loginUser = async (req, res) => {
 
         const token = createToken(user._id)
 
-        res.status(200).json({ email, token })
+        res.status(200).json({ email, token, img })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -107,7 +113,7 @@ const searchUser = async (req, res) => {
 
 // ADD USER PERSONAL DATA
 const addUserData = async (req, res) => {
-    const { email, name, age, sex, address, contact } = await req.body
+    const { email, name, age, sex, contact, img } = await req.body
 
     try {
         const exist = await UserPersonalData.findOne({ email })
@@ -117,9 +123,9 @@ const addUserData = async (req, res) => {
         }
 
         await User.findOneAndUpdate({ email }, { personalData: true })
-        const personalData = await UserPersonalData.create({ email, name, age, sex, address, contact })
+        const personalData = await UserPersonalData.create({ email, name, age, sex, contact, img })
 
-        res.status(200).json(personalData)
+        res.status(200).json({ personalData })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -130,9 +136,9 @@ const getUserData = async (req, res) => {
     const email = await req.query.email
 
     try {
-        const personalData = await UserPersonalData.findOne({ email })
+        const personalData = await UserPersonalData.findOne({ email }) || null
 
-        res.status(200).json(personalData)
+        res.status(200).json({ personalData })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -140,12 +146,12 @@ const getUserData = async (req, res) => {
 
 // UPDATE USER PERSONAL DATA
 const updateUserData = async (req, res) => {
-    const { email, name, age, sex, address, contact } = await req.body
+    const { email, name, age, sex, contact, img } = await req.body
 
     try {
-        const personalData = await UserPersonalData.findOneAndUpdate({ email }, { name, age, sex, address, contact }, { new: true })
+        const personalData = await UserPersonalData.findOneAndUpdate({ email }, { name, age, sex, contact, img }, { new: true })
 
-        res.status(200).json(personalData)
+        res.status(200).json({ personalData })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

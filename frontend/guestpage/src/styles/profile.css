@@ -1,0 +1,127 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 150px;
+    padding: 10px;
+    color: var(--dark);
+    max-width: 400px;
+}
+
+.profile hr {
+    border: 1px solid var(--primary);
+    transform: scaleY(0.5);
+}
+
+.profile .main {
+    display: flex;
+    gap: 10px;
+    border: 1px solid var(--primary);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.profile img {
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    border: 1px solid var(--primary);
+}
+
+.profile button {
+    color: var(--light);
+    padding: 10px 15px;
+    width: fit-content;
+    border: none;
+    border-radius: 5px;
+    font-size: var(--small);
+}
+
+.profile .main button {
+    align-self: flex-end;
+    background-color: var(--primary);
+}
+
+.profile .main .name-email {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+    text-wrap: wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.profile .main .name-email h1 {
+    font-size: var(--medium);
+    line-height: 0.8;
+}
+
+.profile .main .name-email h2 {
+    font-size: var(--small);
+}
+
+.profile .edit,
+.profile .sub {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--primary);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.profile .edit .info-wrapper,
+.profile .sub .info-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile .edit .info-wrapper input,
+.profile .edit .info-wrapper select {
+    width: 180px;
+    padding: 5px;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    font-size: var(--small);
+    background-color: var(--light);
+}
+
+.profile .edit .bttns {
+    display: flex;
+    align-self: flex-end;
+    gap: 10px;
+}
+
+.profile .edit button.cancel {
+    background-color: var(--light);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.profile .edit button.save {
+    background-color: var(--primary);
+}
+
+.profile .edit h6 {
+    font-size: var(--small);
+    color: var(--red);
+    font-weight: 400;
+}
+
+@media (min-width: 1025px) {
+    .profile {
+        max-width: 400px;
+        margin-top: 120px;
+    }
+
+    .profile button {
+        cursor: pointer;
+    }
+}

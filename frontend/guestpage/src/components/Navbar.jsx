@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import BarMenu from "./BarMenu"
 import { useEffect, useRef, useState } from "react"
 import useAdmin from "../hooks/useAdmin"
@@ -8,6 +8,7 @@ import useAdmin from "../hooks/useAdmin"
 
 const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
     const { state } = useAdmin()
+    const path = useLocation().pathname.split("/")[1]
 
     const [showDropdown, setShowDropdown] = useState(false)
     const barRef = useRef(null)
@@ -28,7 +29,7 @@ const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
     }, [])
 
     return (
-        <header>
+        <header style={path === "profile" ? { backgroundColor: "var(--primary)" } : null}>
             <div className="navigations">
                 <ul>
                     <NavLink to='accommodations' ><li>ACCOMMODATION</li></NavLink>
@@ -43,7 +44,7 @@ const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
             </div>
             <div className="login-profile">
                 {state.user ?
-                    <img ref={profileRef1} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="/profile.webp" />
+                    <img ref={profileRef1} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src={state.user.img || "/profile.webp"} />
                     :
                     <ul>
                         <Link to='sign-up'><li>Sign Up</li></Link>
@@ -55,7 +56,7 @@ const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
                 <BarMenu barRef={barRef} showDropdown={showDropdown} setShowDropdown={setShowDropdown} />
                 <div className="mobile-login-profile">
                     {state.user ?
-                        <img ref={profileRef2} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src="/profile.webp" />
+                        <img ref={profileRef2} onClick={() => setUserOptions(prev => !prev)} className="prof-pic" src={state.user.img || "/profile.webp"} />
                         :
                         <ul>
                             <Link to='sign-up'><li>Sign Up</li></Link>

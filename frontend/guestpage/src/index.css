@@ -19,6 +19,10 @@ img {
 	display: block;
 }
 
+textarea {
+	resize: none;
+}
+
 :root {
 	--primary: #3898ff;
 	--secondary: #66D2CE;

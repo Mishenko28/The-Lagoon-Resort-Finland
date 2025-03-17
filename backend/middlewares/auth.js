@@ -12,8 +12,11 @@ const auth = async (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.PASSWORD)
 
-        const { email } = await Admin.findOne({ _id: decoded.id })
-        req.body.adminEmail = email
+        const admin = await Admin.findOne({ _id: decoded.id })
+
+        if (admin) {
+            req.body.adminEmail = admin.email
+        }
 
         next()
     } catch (error) {

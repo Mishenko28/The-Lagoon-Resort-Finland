@@ -53,6 +53,7 @@ const Accommodation = () => {
                             transition={{ duration: 1 }}
                             viewport={{ once: 1, amount: 0.5 }}
                             className="roomType"
+                            key={roomType._id}
                         >
                             <div className="part1">
                                 <img src={roomType.img} />

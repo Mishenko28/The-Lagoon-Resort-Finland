@@ -7,11 +7,11 @@ const roomSchema = new mongoose.Schema({
     },
     roomNo: {
         type: Number,
-        required: true
+        default: 0
     },
     addedPerson: {
         type: Number,
-        default: 0
+        required: true
     }
 })
 

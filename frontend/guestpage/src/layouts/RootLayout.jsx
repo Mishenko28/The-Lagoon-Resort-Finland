@@ -42,7 +42,7 @@ const RootLayout = () => {
             <div className="app">
                 <Navbar profileRef1={profileRef1} profileRef2={profileRef2} setUserOptions={setUserOptions} />
                 <div className="content">
-                    {userOptions && <UserOptions profileDropdownRef={profileDropdownRef} />}
+                    {userOptions && <UserOptions setUserOptions={setUserOptions} profileDropdownRef={profileDropdownRef} />}
                     <Outlet />
                 </div>
             </div>

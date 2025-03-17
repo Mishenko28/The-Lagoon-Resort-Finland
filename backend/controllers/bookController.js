@@ -101,8 +101,12 @@ const getCompleted = async (_, res) => {
 
 // ADD NEW PENDING BOOK
 const addBook = async (req, res) => {
-    const { email, from, to, note, room, total, deposit } = await req.body
+    const { email, from, to, note, selectedRoomTypes, total, deposit } = await req.body
     const { downPayment } = await AdminSetting.findOne({})
+
+    let room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, addedPerson: roomType.addedPerson }))
+
+
 
     try {
         const user = await User.findOne({ email })
