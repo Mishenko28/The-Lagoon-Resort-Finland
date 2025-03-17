@@ -17,6 +17,8 @@ dateTomorrow.setDate(dateTomorrow.getDate() + 1)
 
 const Booking = () => {
     const { state } = useAdmin()
+    const select = new URLSearchParams(window.location.search).get("select")
+
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomsloading, setIsRoomsloading] = useState(false)
 
@@ -34,6 +36,10 @@ const Booking = () => {
     const [userHasDetails, setUserHasDetails] = useState(true)
 
     const [page, setPage] = useState("date")
+
+    useEffect(() => {
+        page === "room" && setSelectedRoomTypes(prev => [...prev, roomTypes.map(roomType => roomType.name === select ? { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) } : null).filter(roomType => roomType)[0]])
+    }, [page])
 
     useEffect(() => {
         if (roomStart) {

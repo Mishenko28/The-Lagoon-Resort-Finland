@@ -4,8 +4,10 @@ import Loader from "../components/Loader"
 import "../styles/accommodation.css"
 import { motion } from "framer-motion"
 import SubImg from "../components/SubImg"
+import { useNavigate } from "react-router-dom"
 
 const Accommodation = () => {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [rooms, setRooms] = useState([])
     const [roomTypes, setRoomTypes] = useState([])
@@ -66,7 +68,7 @@ const Accommodation = () => {
                             <div className="part2">
                                 <h2>{roomType.name} ROOM</h2>
                                 <p>{roomType.caption}</p>
-                                <button>BOOK NOW</button>
+                                <button onClick={() => navigate(`/booking?select=${roomType.name}`)}>BOOK NOW</button>
                             </div>
                         </motion.div>
                     ))}
