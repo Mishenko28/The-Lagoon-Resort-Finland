@@ -211,11 +211,11 @@ const Booking = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="bottom">
-                                                                    <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson++ } : roomType))} className="left">
+                                                                    <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson + 1 } : roomType))} className="left">
                                                                         <i className="fa-solid fa-user-plus" />
                                                                         <p>₱{roomType.addFeePerPerson}</p>
                                                                     </div>
-                                                                    <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson--, 0) } : roomType))} className="fa-solid fa-user-minus" />
+                                                                    <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson - 1, 0) } : roomType))} className="fa-solid fa-user-minus" />
                                                                     <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
                                                                     {roomType.addedPerson > 0 &&
                                                                         <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
