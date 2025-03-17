@@ -39,33 +39,33 @@
     gap: 5px;
 }
 
-.booking .reservation-form .date-picker label,
-.booking .reservation-form .date-picker p {
+.booking .reservation-form .date-picker .date-wrapper:last-of-type {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.booking .reservation-form .date-picker label {
     font-size: var(--small);
     color: var(--dark);
-    font-family: 'Roboto';
 }
 
 .booking .reservation-form .date-picker p {
     font-size: var(--medium);
+    color: var(--dark);
+    font-weight: 700;
 }
 
-.booking .reservation-form .date-picker button,
 .booking .reservation-form .date-picker input {
     width: 100%;
     padding: 10px;
-    border: 2px solid var(--gray);
+    border: 3px solid var(--dark);
     border-radius: 5px;
     background-color: var(--light);
     color: var(--dark);
     font-family: 'Roboto';
     font-size: var(--small);
-}
-
-.booking .reservation-form .date-picker button {
-    border: 2px solid var(--primary);
-    background-color: var(--primary);
-    color: var(--light);
 }
 
 .booking .reservation-form .room-picker {
@@ -75,24 +75,34 @@
     width: 100%;
 }
 
+.booking .reservation-form .room-picker h2 {
+    font-size: var(--small);
+    color: var(--dark);
+    font-family: 'Roboto';
+    text-align: center;
+}
+
 .booking .reservation-form .room-picker .date {
+    position: relative;
     display: flex;
     flex-direction: column;
+    gap: 5px;
     gap: 5px;
     background-color: var(--light-9);
     border: 1px solid var(--light-7);
     padding: 10px;
     border-radius: 5px;
-    font-size: var(--x-small);
     text-align: center;
 }
 
 .booking .reservation-form .room-picker .date p {
     display: flex;
     justify-content: space-evenly;
+    color: var(--dark);
 }
 
 .booking .reservation-form .room-picker .room-type {
+    position: relative;
     display: flex;
     justify-content: space-between;
     background-color: var(--light-9);
@@ -130,14 +140,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--light-7);
-    color: var(--gray);
+    background-color: var(--dark);
+    color: var(--light);
     width: 50px;
+}
+
+.booking .reservation-form .room-picker .room-type h4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    color: var(--red);
+    font-size: var(--small);
+    font-family: 'poppins';
 }
 
 .booking .reservation-form .room-picker .selected-room-type-wrapper {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     background-color: var(--light-9);
     border: 1px solid var(--light-7);
     border-radius: 5px;
@@ -223,8 +250,8 @@
     padding: 2px 5px;
 }
 
-.booking .reservation-form .room-picker button {
-    padding: 10px;
+.booking .reservation-form button {
+    padding: 12px;
     border: none;
     border-radius: 5px;
     background-color: var(--dark);

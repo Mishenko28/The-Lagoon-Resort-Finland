@@ -48,8 +48,8 @@ const updateRoom = async (req, res) => {
         // activity log
         roomNo && oldRoom.roomNo != roomNo && editedParts.push("roomNo")
         img && oldRoom.img != img && editedParts.push("img")
-        caption && oldRoom.caption != caption && editedParts.push("caption")
-        active && oldRoom.active != active && editedParts.push("active")
+        caption || caption === "" && oldRoom.caption != caption && editedParts.push("caption")
+        active !== null && oldRoom.active != active && editedParts.push("active")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({

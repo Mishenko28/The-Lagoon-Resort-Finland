@@ -14,6 +14,25 @@ const getRoomTypes = async (_, res) => {
     }
 }
 
+// GET AVAILABLE ROOMS
+const getAvailableRooms = async (req, res) => {
+    const { from, to } = req.body
+
+    try {
+        if (!from || !to) throw Error("Please provide a date range.")
+        let roomTypes = await RoomType.find({}).lean()
+
+        roomTypes = roomTypes.map(roomType => ({
+            ...roomType,
+            numberOfAvailableRooms: 2
+        }))
+
+        res.status(200).json({ roomTypes })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 // ADD ROOMTYPE
 const addRoomTypes = async (req, res) => {
     const { name, img, rate, caption, addFeePerPerson, maxPerson, adminEmail } = await req.body
@@ -191,5 +210,6 @@ module.exports = {
     restoreRoomType,
     addSubImage,
     editSubImage,
-    deleteSubImage
+    deleteSubImage,
+    getAvailableRooms
 }

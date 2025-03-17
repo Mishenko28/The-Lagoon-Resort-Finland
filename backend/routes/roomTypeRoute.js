@@ -10,10 +10,12 @@ const {
     restoreRoomType,
     addSubImage,
     editSubImage,
-    deleteSubImage
+    deleteSubImage,
+    getAvailableRooms
 } = require('../controllers/roomTypeController')
 
 router.get('/all', getRoomTypes)
+router.post('/searchRooms', getAvailableRooms)
 
 router.use(auth)
 
