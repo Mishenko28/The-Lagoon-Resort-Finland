@@ -9,6 +9,7 @@ import Loader from '../components/Loader'
 
 const Login = () => {
     const { dispatch } = useAdmin()
+    const book = new URLSearchParams(window.location.search).get('book')
 
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)

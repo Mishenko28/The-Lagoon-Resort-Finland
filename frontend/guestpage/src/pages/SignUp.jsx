@@ -8,6 +8,8 @@ import useAdmin from '../hooks/useAdmin'
 
 const SignUp = () => {
     const { dispatch } = useAdmin()
+    const book = new URLSearchParams(window.location.search).get('book')
+
     const [verified, setVerified] = useState(false)
     const [otpCreated, setOtpCreated] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -114,7 +116,7 @@ const SignUp = () => {
                             </>
                         }
                         <button disabled={isLoading} >{otpCreated ? 'VERIFY' : 'SIGN UP'}</button>
-                        <h2>Already a user? <Link to='/login'>LOGIN</Link></h2>
+                        <h2>Already a user? <Link to={'/login' + (book && "?book=true")}>LOGIN</Link></h2>
                     </>
                 }
             </form>
