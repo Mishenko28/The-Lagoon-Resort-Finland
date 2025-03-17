@@ -29,7 +29,7 @@ const Navbar = ({ setUserOptions, profileRef1, profileRef2 }) => {
     }, [])
 
     return (
-        <header style={path === "profile" || path === "" ? { backgroundColor: "var(--primary)" } : null}>
+        <header style={["", "profile", "my-bookings"].includes(path) ? { backgroundColor: "var(--primary)" } : null}>
             <div className="navigations">
                 <ul>
                     <NavLink to='accommodations' ><li>ACCOMMODATION</li></NavLink>

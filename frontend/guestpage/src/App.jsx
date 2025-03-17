@@ -7,11 +7,12 @@ import Amenity from "./pages/Amenity"
 import AboutUs from "./pages/AboutUs"
 import Booking from "./pages/Booking"
 import Gallery from "./pages/Gallery"
-import ForUsersOnlyRoute from "./components/ForUsersOnlyRoute"
+import NotRegisteredUserRoute from "./components/NotRegisteredUserRoute"
 import Login from "./pages/Login"
 import SignUp from "./pages/SignUp"
 import Profile from "./pages/Profile"
 import Error from "./components/Error"
+import MyBookings from "./pages/MyBookings"
 
 
 
@@ -25,9 +26,10 @@ const router = createBrowserRouter(
             <Route path="gallery" element={<Gallery />} />
             <Route path="booking" element={<Booking />} />
             <Route path="about-us" element={<AboutUs />} />
-            <Route path="login" element={<ForUsersOnlyRoute component={<Login />} />} />
-            <Route path="sign-up" element={<ForUsersOnlyRoute component={<SignUp />} />} />
+            <Route path="login" element={<NotRegisteredUserRoute component={<Login />} />} />
+            <Route path="sign-up" element={<NotRegisteredUserRoute component={<SignUp />} />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="my-bookings" element={<MyBookings />} />
             <Route path="*" element={<Navigate to="/" />} />
         </Route>
     )

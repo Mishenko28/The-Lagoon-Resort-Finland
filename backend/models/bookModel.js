@@ -1,3 +1,4 @@
+const { max } = require('moment-timezone')
 const mongoose = require('mongoose')
 
 const roomSchema = new mongoose.Schema({
@@ -9,7 +10,19 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    maxPerson: {
+        type: Number,
+        required: true
+    },
     addedPerson: {
+        type: Number,
+        required: true
+    },
+    rate: {
+        type: Number,
+        required: true
+    },
+    addedPersonRate: {
         type: Number,
         required: true
     }

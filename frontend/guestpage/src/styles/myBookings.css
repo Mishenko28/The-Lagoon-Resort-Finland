@@ -1,0 +1,128 @@
+.my-booking {
+    margin-top: 160px;
+}
+
+.my-booking hr {
+    border: 1px solid var(--primary);
+    transform: scaleY(0.5);
+}
+
+.my-booking .book button {
+    background-color: var(--light);
+    padding: 15px 20px;
+    width: fit-content;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: var(--small);
+}
+
+.my-booking .navs-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.my-booking .navs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.my-booking .navs i {
+    font-size: var(--medium);
+    color: var(--gray);
+}
+
+.my-booking .navs p {
+    font-size: var(--x-small);
+    color: var(--dark);
+}
+
+.my-booking .book-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    color: var(--dark);
+}
+
+.my-booking .book {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+}
+
+.my-booking .book .date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.my-booking .book .date h2,
+.my-booking .book .date h1 {
+    font-size: var(--small);
+}
+
+.my-booking .book .date h1 {
+    font-weight: 900;
+}
+
+.my-booking .book .rooms {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    line-height: 1.2;
+}
+
+.my-booking .book .rooms .room,
+.my-booking .book .rooms .added-person,
+.my-booking .book .rooms .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-booking .book .rooms .room h1 {
+    font-size: var(--medium);
+    font-family: "Poppins";
+}
+
+.my-booking .book .rooms .total h2,
+.my-booking .book .rooms .added-person h2,
+.my-booking .book .rooms .room h2 {
+    font-size: var(--small);
+    font-weight: 400;
+}
+
+.my-booking .book .note h1,
+.my-booking .book .rooms .total h1,
+.my-booking .book .rooms .added-person h1 {
+    font-size: var(--small);
+    font-weight: 500;
+}
+
+.my-booking .book .total-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.my-booking .book .note {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-booking .book .note h2 {
+    font-size: var(--small);
+    font-weight: 300;
+    background-color: var(--light-8);
+    padding: 2px 4px;
+}
+
+.my-booking .book button.cancel {
+    color: var(--red);
+    border: 1px solid var(--red);
+}

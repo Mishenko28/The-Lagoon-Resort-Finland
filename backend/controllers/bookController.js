@@ -24,7 +24,7 @@ const getPending = async (_, res) => {
         await setExpiredBooks()
         const books = await getBook("pending")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -104,8 +104,7 @@ const addBook = async (req, res) => {
     const { email, from, to, note, selectedRoomTypes, total, deposit } = await req.body
     const { downPayment } = await AdminSetting.findOne({})
 
-    let room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, addedPerson: roomType.addedPerson }))
-
+    let room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, maxPerson: roomType.maxPerson, addedPerson: roomType.addedPerson, rate: roomType.rate, addedPersonRate: roomType.addFeePerPerson }))
 
 
     try {
@@ -144,8 +143,8 @@ const setExpiredBooks = async () => {
     const { roomStart } = await AdminSetting.findOne({})
 
     await Promise.all(books.map(async book => {
-        book.from.setHours(roomStart)
-        book.to.setHours(roomStart)
+        book.from.setHours(roomStart, 0, 0, 0)
+        book.to.setHours(roomStart, 0, 0, 0)
 
         const isExpired = dateNow.isSameOrAfter(book.from)
 

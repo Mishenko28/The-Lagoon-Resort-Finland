@@ -5,7 +5,7 @@ import axios from "axios"
 import { isPast, isAfter, formatDistance, format, isEqual } from 'date-fns'
 import { motion, AnimatePresence } from "framer-motion"
 import useAdmin from "../hooks/useAdmin"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const convertToISO = (date) => {
     return date.toISOString().split('T')[0]
@@ -17,7 +17,9 @@ dateTomorrow.setDate(dateTomorrow.getDate() + 1)
 
 const Booking = () => {
     const { state } = useAdmin()
-    const select = new URLSearchParams(window.location.search).get("select")
+    const navigate = useNavigate()
+    const url = new URL(window.location)
+    const select = url.searchParams.get("select")
 
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomsloading, setIsRoomsloading] = useState(false)
@@ -38,7 +40,11 @@ const Booking = () => {
     const [page, setPage] = useState("date")
 
     useEffect(() => {
-        page === "room" && setSelectedRoomTypes(prev => [...prev, roomTypes.map(roomType => roomType.name === select ? { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) } : null).filter(roomType => roomType)[0]])
+        if (page === "room" && select) {
+            setSelectedRoomTypes(prev => [...prev, roomTypes.map(roomType => roomType.name === select ? { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) } : null).filter(roomType => roomType)[0]])
+            url.searchParams.delete("select")
+            window.history.pushState({}, "", url)
+        }
     }, [page])
 
     useEffect(() => {
@@ -140,224 +146,227 @@ const Booking = () => {
             {isLoading ?
                 <Loader />
                 :
-                <div style={!state.user || !userHasDetails ? { display: "none" } : null} className="reservation-form">
-                    <h1>RESERVATION FORM</h1>
-                    <hr />
-                    {isRoomsloading ?
-                        <Loader />
-                        :
-                        <>
-                            {page === "date" &&
-                                <AnimatePresence>
+                <>
+                    <p className="note"><i className="fa-solid fa-circle-info" />To ensure a secure booking system for All guest, The Lagoon Finland Resort Inc. request for a minimum of {downPayment * 100}% down payment to help us gurantee the availability of your room/s. Our team will contact you within 24 hours to process your request. We appreciate your understanding and We are happy to assist you!</p>
+                    <div style={!state.user || !userHasDetails ? { display: "none" } : null} className="reservation-form">
+                        <h1>RESERVATION FORM</h1>
+                        <hr />
+                        {isRoomsloading ?
+                            <Loader />
+                            :
+                            <>
+                                {page === "date" &&
+                                    <AnimatePresence>
+                                        <motion.div
+                                            layout
+                                            initial={{ opacity: 0.5, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="date-picker"
+                                        >
+                                            <div className="date-wrapper">
+                                                <label>Check In:</label>
+                                                <input type="date" value={convertToISO(checkIn)} onChange={e => setCheckIn(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
+                                            </div>
+                                            <div className="date-wrapper">
+                                                <label>Check Out:</label>
+                                                <input type="date" value={convertToISO(checkOut)} onChange={e => setCheckOut(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
+                                            </div>
+                                            <div className="date-wrapper">
+                                                <label>Total Period:</label>
+                                                <p>{formatDistance(checkIn, checkOut)}</p>
+                                            </div>
+                                            <button onClick={handleFetchAvailableRooms}>Select Room/s</button>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                }
+                                {page === "room" &&
+                                    <div className="room-picker" >
+                                        <AnimatePresence mode="popLayout">
+                                            <motion.div
+                                                layout
+                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="date"
+                                                key="date"
+                                            >
+                                                <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
+                                                <p>({formatDistance(checkIn, checkOut)})</p>
+                                                <button onClick={() => setPage("date")}>Change Date</button>
+                                            </motion.div>
+                                            {selectedRoomTypes.length > 0 &&
+                                                <motion.div
+                                                    layout
+                                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="selected-room-type-wrapper"
+                                                    key="selected-room-type"
+                                                >
+                                                    <AnimatePresence mode="popLayout">
+                                                        {selectedRoomTypes?.map((roomType, i) => (
+                                                            <motion.div
+                                                                layout
+                                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                                animate={{ opacity: 1, scale: 1 }}
+                                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                                transition={{ duration: 0.3 }}
+                                                                key={roomType.animationId}
+                                                            >
+                                                                <div className="selected-room-type">
+                                                                    <div className="top">
+                                                                        <h3>{roomType.name}</h3>
+                                                                        <div className="right">
+                                                                            <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
+                                                                            <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="bottom">
+                                                                        <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson + 1 } : roomType))} className="left">
+                                                                            <i className="fa-solid fa-user-plus" />
+                                                                            <p>₱{roomType.addFeePerPerson}</p>
+                                                                        </div>
+                                                                        <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson - 1, 0) } : roomType))} className="fa-solid fa-user-minus" />
+                                                                        <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                                        {roomType.addedPerson > 0 &&
+                                                                            <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                                        }
+                                                                        <p>({roomType.maxPerson + roomType.addedPerson})</p>
+                                                                    </div>
+                                                                </div>
+                                                                <hr />
+                                                            </motion.div>
+                                                        ))}
+                                                    </AnimatePresence>
+                                                    <div>
+                                                        <div className="total">
+                                                            <h3>Down Payment: ({downPayment * 100}%)</h3>
+                                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                        </div>
+                                                        <div className="total">
+                                                            <h3>Total:</h3>
+                                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                        </div>
+                                                    </div>
+                                                    <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="requests or concerns? (optional)"></textarea>
+                                                    <button onClick={() => setPage("confirm")}>Continue</button>
+                                                </motion.div>
+                                            }
+                                            <motion.h2 layout>Available Rooms:</motion.h2>
+                                            {roomTypes.map(roomType => (
+                                                <motion.div
+                                                    layout
+                                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="room-type"
+                                                    key={roomType._id}
+                                                >
+                                                    <img src={roomType.img} />
+                                                    <div className="room-type-info">
+                                                        <h3>{roomType.name}</h3>
+                                                        <p>₱{roomType.rate}</p>
+                                                        <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} (<i className="fa-solid fa-person-circle-plus" />₱{roomType.addFeePerPerson})</p>
+                                                    </div>
+                                                    <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) }])} />
+                                                    {selectedRoomTypes.reduce((acc, curr) => curr.name === roomType.name ? acc + 1 : acc, 0) === roomType.numberOfAvailableRooms &&
+                                                        <h4>Out of rooms</h4>
+                                                    }
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
+                                    </div>
+                                }
+                                {page === "confirm" &&
+                                    <div className="room-picker">
+                                        <AnimatePresence mode="popLayout">
+                                            <motion.div
+                                                layout
+                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="date"
+                                                key="date"
+                                                onClick={() => setPage("date")}
+                                            >
+                                                <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
+                                                <p>({formatDistance(checkIn, checkOut)})</p>
+                                            </motion.div>
+                                            {selectedRoomTypes.length > 0 &&
+                                                <motion.div
+                                                    layout
+                                                    initial={{ opacity: 0.5, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="selected-room-type-wrapper"
+                                                    key="selected-room-type"
+                                                >
+                                                    <AnimatePresence mode="popLayout">
+                                                        {selectedRoomTypes?.map((roomType, i) => (
+                                                            <motion.div
+                                                                layout
+                                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                                animate={{ opacity: 1, scale: 1 }}
+                                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                                transition={{ duration: 0.3 }}
+                                                                key={roomType.animationId}
+                                                            >
+                                                                <div className="selected-room-type">
+                                                                    <div className="top">
+                                                                        <h3>{roomType.name}</h3>
+                                                                        <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
+                                                                    </div>
+                                                                    <div className="bottom">
+                                                                        <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                                        {roomType.addedPerson > 0 &&
+                                                                            <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
+                                                                        }
+                                                                        <p>({roomType.maxPerson + roomType.addedPerson})</p>
+                                                                    </div>
+                                                                </div>
+                                                                <hr />
+                                                            </motion.div>
+                                                        ))}
+                                                    </AnimatePresence>
+                                                    <div>
+                                                        <div className="total">
+                                                            <h3>Down Payment: ({downPayment * 100}%)</h3>
+                                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                        </div>
+                                                        <div className="total">
+                                                            <h3>Total:</h3>
+                                                            <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={() => setPage("room")}>Edit</button>
+                                                </motion.div>
+                                            }
+                                        </AnimatePresence>
+                                        <button onClick={handleConfirmReservation}>Submit</button>
+                                    </div>
+                                }
+                                {page === "success" &&
                                     <motion.div
-                                        layout
                                         initial={{ opacity: 0.5, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.8 }}
                                         transition={{ duration: 0.3 }}
-                                        className="date-picker"
+                                        className="success"
                                     >
-                                        <div className="date-wrapper">
-                                            <label>Check In:</label>
-                                            <input type="date" value={convertToISO(checkIn)} onChange={e => setCheckIn(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
-                                        </div>
-                                        <div className="date-wrapper">
-                                            <label>Check Out:</label>
-                                            <input type="date" value={convertToISO(checkOut)} onChange={e => setCheckOut(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
-                                        </div>
-                                        <div className="date-wrapper">
-                                            <label>Total Period:</label>
-                                            <p>{formatDistance(checkIn, checkOut)}</p>
-                                        </div>
-                                        <button onClick={handleFetchAvailableRooms}>Select Room/s</button>
+                                        <h1>Success</h1>
+                                        <p>Your reservation has been successfully made.</p>
+                                        <Link to="/profile"></Link>
+                                        <button onClick={() => setPage("date")}>Book Again?</button>
+                                        <button onClick={() => navigate("/my-bookings")}>View Reservation</button>
                                     </motion.div>
-                                </AnimatePresence>
-                            }
-                            {page === "room" &&
-                                <div className="room-picker" >
-                                    <AnimatePresence mode="popLayout">
-                                        <motion.div
-                                            layout
-                                            initial={{ opacity: 0.5, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="date"
-                                            key="date"
-                                        >
-                                            <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
-                                            <p>({formatDistance(checkIn, checkOut)})</p>
-                                            <button onClick={() => setPage("date")}>Change Date</button>
-                                        </motion.div>
-                                        {selectedRoomTypes.length > 0 &&
-                                            <motion.div
-                                                layout
-                                                initial={{ opacity: 0.5, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.8 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="selected-room-type-wrapper"
-                                                key="selected-room-type"
-                                            >
-                                                <AnimatePresence mode="popLayout">
-                                                    {selectedRoomTypes?.map((roomType, i) => (
-                                                        <motion.div
-                                                            layout
-                                                            initial={{ opacity: 0.5, scale: 0.9 }}
-                                                            animate={{ opacity: 1, scale: 1 }}
-                                                            exit={{ opacity: 0, scale: 0.8 }}
-                                                            transition={{ duration: 0.3 }}
-                                                            key={roomType.animationId}
-                                                        >
-                                                            <div className="selected-room-type">
-                                                                <div className="top">
-                                                                    <h3>{roomType.name}</h3>
-                                                                    <div className="right">
-                                                                        <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
-                                                                        <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="bottom">
-                                                                    <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson + 1 } : roomType))} className="left">
-                                                                        <i className="fa-solid fa-user-plus" />
-                                                                        <p>₱{roomType.addFeePerPerson}</p>
-                                                                    </div>
-                                                                    <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson - 1, 0) } : roomType))} className="fa-solid fa-user-minus" />
-                                                                    <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                                    {roomType.addedPerson > 0 &&
-                                                                        <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                                    }
-                                                                    <p>({roomType.maxPerson + roomType.addedPerson})</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
-                                                <div>
-                                                    <div className="total">
-                                                        <h3>Down Payment: ({downPayment * 100}%)</h3>
-                                                        <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
-                                                    </div>
-                                                    <div className="total">
-                                                        <h3>Total:</h3>
-                                                        <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
-                                                    </div>
-                                                </div>
-                                                <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="requests or concerns? (optional)"></textarea>
-                                                <button onClick={() => setPage("confirm")}>Continue</button>
-                                            </motion.div>
-                                        }
-                                        <motion.h2 layout>Available Rooms:</motion.h2>
-                                        {roomTypes.map(roomType => (
-                                            <motion.div
-                                                layout
-                                                initial={{ opacity: 0.5, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="room-type"
-                                                key={roomType._id}
-                                            >
-                                                <img src={roomType.img} />
-                                                <div className="room-type-info">
-                                                    <h3>{roomType.name}</h3>
-                                                    <p>₱{roomType.rate}</p>
-                                                    <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} (<i className="fa-solid fa-person-circle-plus" />₱{roomType.addFeePerPerson})</p>
-                                                </div>
-                                                <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) }])} />
-                                                {selectedRoomTypes.reduce((acc, curr) => curr.name === roomType.name ? acc + 1 : acc, 0) === roomType.numberOfAvailableRooms &&
-                                                    <h4>Out of rooms</h4>
-                                                }
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
-                                </div>
-                            }
-                            {page === "confirm" &&
-                                <div className="room-picker">
-                                    <AnimatePresence mode="popLayout">
-                                        <motion.div
-                                            layout
-                                            initial={{ opacity: 0.5, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="date"
-                                            key="date"
-                                            onClick={() => setPage("date")}
-                                        >
-                                            <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
-                                            <p>({formatDistance(checkIn, checkOut)})</p>
-                                        </motion.div>
-                                        {selectedRoomTypes.length > 0 &&
-                                            <motion.div
-                                                layout
-                                                initial={{ opacity: 0.5, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.8 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="selected-room-type-wrapper"
-                                                key="selected-room-type"
-                                            >
-                                                <AnimatePresence mode="popLayout">
-                                                    {selectedRoomTypes?.map((roomType, i) => (
-                                                        <motion.div
-                                                            layout
-                                                            initial={{ opacity: 0.5, scale: 0.9 }}
-                                                            animate={{ opacity: 1, scale: 1 }}
-                                                            exit={{ opacity: 0, scale: 0.8 }}
-                                                            transition={{ duration: 0.3 }}
-                                                            key={roomType.animationId}
-                                                        >
-                                                            <div className="selected-room-type">
-                                                                <div className="top">
-                                                                    <h3>{roomType.name}</h3>
-                                                                    <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
-                                                                </div>
-                                                                <div className="bottom">
-                                                                    <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                                    {roomType.addedPerson > 0 &&
-                                                                        <p>+ {Array.from({ length: roomType.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
-                                                                    }
-                                                                    <p>({roomType.maxPerson + roomType.addedPerson})</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
-                                                <div>
-                                                    <div className="total">
-                                                        <h3>Down Payment: ({downPayment * 100}%)</h3>
-                                                        <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
-                                                    </div>
-                                                    <div className="total">
-                                                        <h3>Total:</h3>
-                                                        <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
-                                                    </div>
-                                                </div>
-                                                <button onClick={() => setPage("room")}>Edit</button>
-                                            </motion.div>
-                                        }
-                                    </AnimatePresence>
-                                    <button onClick={handleConfirmReservation}>Submit</button>
-                                </div>
-                            }
-                            {page === "success" &&
-                                <motion.div
-                                    initial={{ opacity: 0.5, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="success"
-                                >
-                                    <h1>Success</h1>
-                                    <p>Your reservation has been successfully made.</p>
-                                    <Link to="/profile"></Link>
-                                    <button onClick={() => setPage("date")}>Book Again?</button>
-                                    <button>View Reservation</button>
-                                </motion.div>
-                            }
-                        </>
-                    }
-                </div>
+                                }
+                            </>
+                        }
+                    </div>
+                </>
             }
         </div>
     )
