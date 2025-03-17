@@ -48,7 +48,7 @@ const Login = () => {
                             <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
                         </div>
                         <button disabled={isLoading}>LOGIN</button>
-                        <h2>Need an account? <Link to='/sign-up'>SIGNUP</Link></h2>
+                        <h2>Need an account? <Link to={'/sign-up' + (book && "?book=true")}>SIGNUP</Link></h2>
                     </>
                 }
 

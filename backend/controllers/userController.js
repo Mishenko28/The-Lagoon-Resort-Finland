@@ -16,6 +16,15 @@ const loginUser = async (req, res) => {
 
     try {
         const user = await User.findOne({ email })
+
+        if (!user) {
+            throw Error("Email is not registered")
+        }
+
+        if (!match) {
+            throw Error("Incorrect password")
+        }
+
         let img = null
 
         if (user.personalData) {
@@ -23,15 +32,7 @@ const loginUser = async (req, res) => {
             img = personalData.img
         }
 
-        if (!user) {
-            throw Error("Email is not registered")
-        }
-
         const match = await bcrypt.compare(password, user.password)
-
-        if (!match) {
-            throw Error("Incorrect password")
-        }
 
         const token = createToken(user._id)
 
