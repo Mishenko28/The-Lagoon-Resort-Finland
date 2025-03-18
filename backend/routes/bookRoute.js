@@ -16,7 +16,8 @@ const {
     setCancelled,
     setNoshow,
     editBook,
-    getUserBooks
+    getUserBooks,
+    getTotalBooks
 } = require('../controllers/bookController')
 
 router.use(auth)
@@ -27,6 +28,7 @@ router.post('/add-completed', setCompleted)
 router.post('/add-cancelled', setCancelled)
 router.post('/add-noshow', setNoshow)
 
+router.get('/total-book', getTotalBooks)
 router.get('/pending', getPending)
 router.get('/expired', getExpired)
 router.get('/confirmed', getConfirmed)

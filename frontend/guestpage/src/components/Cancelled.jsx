@@ -1,61 +1,30 @@
-import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, formatDistance } from "date-fns"
+import { useEffect, useState } from "react"
 import Loader from "./Loader"
-import { Link } from "react-router-dom"
+import { format, formatDistance } from "date-fns"
 import useAdmin from "../hooks/useAdmin"
+import { Link } from "react-router-dom"
 
 
 
 
-const Pending = () => {
+const Cancelled = () => {
     const { state } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
     const [books, setBooks] = useState([])
-
-    const [isCancelling, setIsCancelling] = useState(null)
-    const [reason, setReason] = useState("")
-    const [otherReason, setOtherReason] = useState("")
 
     useEffect(() => {
         fetchPending()
     }, [])
 
     const fetchPending = async () => {
-        axios.get("book/user", { params: { status: "pending", email: state.user.email } })
+        axios.get("book/user", { params: { status: "cancelled", email: state.user.email } })
             .then(res => setBooks(res.data))
             .finally(() => setIsLoading(false))
     }
 
-    const handleToggCancel = (book) => {
-        setIsCancelling(book)
-        setReason("")
-    }
-
-    const handleReason = (value) => {
-        setReason(value)
-        setOtherReason("")
-    }
-
-    const handleOtherReason = (e) => {
-        setReason(e.target.value)
-        setOtherReason(e.target.value)
-    }
-
-    const handleSubmitCancel = async (e) => {
-        e.preventDefault()
-
-        if (!reason) return
-
-        setIsLoading(true)
-
-        axios.post('book/add-cancelled', { _id: isCancelling._id, reasonToCancel: reason })
-            .then(res => setBooks(prev => prev.filter(book => book._id !== res.data._id)))
-            .finally(() => setIsLoading(false))
-    }
-
     return (
-        <div className="pending book-wrapper">
+        <div className="cancelled book-wrapper">
             {isLoading ?
                 <Loader />
                 :
@@ -115,47 +84,22 @@ const Pending = () => {
                                     <hr />
                                 </>
                             }
-                            {!isCancelling ?
-                                <button onClick={() => handleToggCancel(book)} className="cancel">Cancel this reservation</button>
-                                :
-                                <form onSubmit={handleSubmitCancel} className="cancel-wrapper">
-                                    <div className="reasons">
-                                        <h1>reason to cancel:</h1>
-                                        <div className="reason">
-                                            <input checked={reason === "Change of Plans"} onChange={() => handleReason("Change of Plans")} type="radio" name="reason" />
-                                            <h2>Change of Plans</h2>
-                                        </div>
-                                        <div className="reason">
-                                            <input checked={reason === "Financial Reasons"} onChange={() => handleReason("Financial Reasons")} type="radio" name="reason" />
-                                            <h2>Financial Reasons</h2>
-                                        </div>
-                                        <div className="reason">
-                                            <input checked={reason === "Personal Reasons"} onChange={() => handleReason("Personal Reasons")} type="radio" name="reason" />
-                                            <h2>Personal Reasons</h2>
-                                        </div>
-                                        <div className="other">
-                                            <h2>Others reason:</h2>
-                                            <textarea value={otherReason} onChange={handleOtherReason} rows={3}></textarea>
-                                        </div>
-                                    </div>
-                                    <div className="bttns">
-                                        <button onClick={() => handleToggCancel(null)} className="back">Back</button>
-                                        <button type="submit" className="submit">Submit</button>
-                                    </div>
-                                </form>
-                            }
+                            <div className="cancel-reason">
+                                <h1>reason:</h1>
+                                <h2>{book.reasonToCancel}</h2>
+                            </div>
                         </div>
                     ))}
                     {books.length === 0 &&
                         <div className="book">
-                            <h3>No pending bookings</h3>
+                            <h3>No cancelled bookings</h3>
                             <Link to="/booking" className="book-now">Book Now</Link>
                         </div>
                     }
                 </>
             }
-        </div >
+        </div>
     )
 }
 
-export default Pending
+export default Cancelled

@@ -9,7 +9,7 @@ const getAllActivityLogs = async (req, res) => {
         let logs = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).sort({ createdAt: -1 }).skip((page - 1) * 20).limit(20)
 
         logs = await Promise.all(logs.map(async log => {
-            const { personalData } = await Admin.findOne({ email: log.adminEmail }) || { personalData: { name: 'Deleted Admin' } }
+            const { personalData } = await Admin.findOne({ email: log.adminEmail }) || { personalData: { name: log.adminEmail } }
 
             return {
                 _id: log._id,

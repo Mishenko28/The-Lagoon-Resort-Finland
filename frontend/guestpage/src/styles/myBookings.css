@@ -3,10 +3,18 @@
 }
 
 .my-booking hr {
-    border: 1px solid var(--primary);
     transform: scaleY(0.5);
 }
 
+.my-booking .pending hr {
+    border: 1px solid var(--primary);
+}
+
+.my-booking .cancelled hr {
+    border: 1px solid var(--red);
+}
+
+.my-booking .book a,
 .my-booking .book button {
     background-color: var(--light);
     padding: 15px 20px;
@@ -16,12 +24,18 @@
     font-size: var(--small);
 }
 
+.my-booking .book h3 {
+    font-size: var(--medium);
+    font-weight: 500;
+}
+
 .my-booking .navs-wrapper {
     display: flex;
     justify-content: space-evenly;
 }
 
 .my-booking .navs {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,6 +52,21 @@
     color: var(--dark);
 }
 
+.my-booking .navs h1 {
+    position: absolute;
+    right: 5px;
+    top: -5px;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--x-small);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: var(--light);
+    border-radius: 50%;
+}
+
 .my-booking .book-wrapper {
     display: flex;
     flex-direction: column;
@@ -51,8 +80,15 @@
     flex-direction: column;
     gap: 5px;
     padding: 10px;
-    border: 1px solid var(--primary);
     border-radius: 10px;
+}
+
+.my-booking .pending .book {
+    border: 1px solid var(--primary);
+}
+
+.my-booking .cancelled .book {
+    border: 1px solid var(--red);
 }
 
 .my-booking .book .date {
@@ -90,6 +126,7 @@
     font-family: "Poppins";
 }
 
+.my-booking .book .reasons h2,
 .my-booking .book .rooms .total h2,
 .my-booking .book .rooms .added-person h2,
 .my-booking .book .rooms .room h2 {
@@ -97,6 +134,7 @@
     font-weight: 400;
 }
 
+.my-booking .book .cancel-reason h1,
 .my-booking .book .note h1,
 .my-booking .book .rooms .total h1,
 .my-booking .book .rooms .added-person h1 {
@@ -110,9 +148,17 @@
     gap: 5px;
 }
 
+.my-booking .book .cancel-reason,
 .my-booking .book .note {
     display: flex;
     flex-direction: column;
+}
+
+.my-booking .book .cancel-reason h2 {
+    font-size: var(--small);
+    font-weight: 300;
+    color: var(--red);
+    padding: 2px 4px;
 }
 
 .my-booking .book .note h2 {
@@ -125,4 +171,55 @@
 .my-booking .book button.cancel {
     color: var(--red);
     border: 1px solid var(--red);
+}
+
+.my-booking .book button.back {
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.my-booking .book button.submit {
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--light);
+}
+
+.my-booking .book a.book-now {
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.my-booking .book .cancel-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-booking .book .reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.my-booking .book .reason {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.my-booking .book .reasons h1 {
+    font-size: var(--small);
+    font-weight: 500;
+    color: var(--red);
+}
+
+.my-booking .book .reasons textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+}
+
+.my-booking .book .bttns {
+    display: flex;
+    gap: 10px;
 }

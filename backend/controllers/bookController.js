@@ -13,6 +13,26 @@ const User = require('../models/userModel')
 // noshow
 // completed
 
+
+// GET TOTAL BOOKS PER USER
+const getTotalBooks = async (req, res) => {
+    const { email } = req.query
+
+    try {
+        const { _id: userId } = await User.findOne({ email })
+
+        const pending = await Book.countDocuments({ status: "pending", userId })
+        const confirm = await Book.countDocuments({ status: "confirmed", userId })
+        const ongoing = await Book.countDocuments({ status: "ongoing", userId })
+        const complete = await Book.countDocuments({ status: "completed", userId })
+        const cancel = await Book.countDocuments({ status: "cancelled", userId })
+
+        res.status(200).json({ pending, confirm, ongoing, complete, cancel })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 const getBook = async (status) => {
     const book = await Book.find({ status })
     return book
@@ -36,7 +56,7 @@ const getExpired = async (_, res) => {
         await setExpiredBooks()
         const books = await getBook("expired")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -48,7 +68,7 @@ const getConfirmed = async (_, res) => {
         await setOngoingBooks()
         const books = await getBook("confirmed")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -60,7 +80,7 @@ const getOngoing = async (_, res) => {
         await setOngoingBooks()
         const books = await getBook("ongoing")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -71,7 +91,7 @@ const getCancelled = async (_, res) => {
     try {
         const books = await getBook("cancelled")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -82,7 +102,7 @@ const getNoshow = async (_, res) => {
     try {
         const books = await getBook("noshow")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -93,7 +113,7 @@ const getCompleted = async (_, res) => {
     try {
         const books = await getBook("completed")
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -200,9 +220,9 @@ const setCancelled = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${email}` })
+        await ActivityLog.create({ adminEmail: adminEmail || email + "(guest)", action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${email}` })
 
-        res.status(200).json({ book })
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -280,14 +300,14 @@ const editBook = async (req, res) => {
 
 // GET ALL USER BOOKING
 const getUserBooks = async (req, res) => {
-    const email = req.query.email
+    const { status, email } = req.query
 
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await Book.find({ userId: _id })
+        const books = await Book.find({ status, userId: _id })
 
-        res.status(200).json({ books })
+        res.status(200).json(books)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -308,5 +328,6 @@ module.exports = {
     setCancelled,
     setNoshow,
     editBook,
-    getUserBooks
+    getUserBooks,
+    getTotalBooks
 }

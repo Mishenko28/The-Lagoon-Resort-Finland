@@ -116,7 +116,7 @@ const SignUp = () => {
                             </>
                         }
                         <button disabled={isLoading} >{otpCreated ? 'VERIFY' : 'SIGN UP'}</button>
-                        <h2>Already a user? <Link to={'/login' + (book && "?book=true")}>LOGIN</Link></h2>
+                        <h2>Already a user? <Link to={'/login' + (book ? "?book=true" : "")}>LOGIN</Link></h2>
                     </>
                 }
             </form>

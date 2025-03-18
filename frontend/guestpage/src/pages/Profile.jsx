@@ -84,7 +84,7 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (!formData.name || !formData.age || !formData.sex || !formData.contact || !formData.img) {
+        if (!formData.name || !formData.age || !formData.sex || !formData.contact) {
             setError("Please fill all fields")
             return
         }
@@ -163,7 +163,7 @@ const Profile = () => {
                             </div>
                             <hr />
                             <div className="info-wrapper">
-                                <p>Name:</p>
+                                <p>Full Name:</p>
                                 <input value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} type="text" />
                             </div>
                             <div className="info-wrapper">

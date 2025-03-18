@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
@@ -20,6 +20,7 @@ const Booking = () => {
     const navigate = useNavigate()
     const url = new URL(window.location)
     const select = url.searchParams.get("select")
+    const formRef = useRef(null)
 
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomsloading, setIsRoomsloading] = useState(false)
@@ -38,6 +39,13 @@ const Booking = () => {
     const [userHasDetails, setUserHasDetails] = useState(true)
 
     const [page, setPage] = useState("date")
+
+    useEffect(() => {
+        if (formRef.current && select) {
+            formRef.current.scrollIntoView({ behavior: "smooth" })
+        }
+    }, [isLoading])
+
 
     useEffect(() => {
         if (page === "room" && select) {
@@ -147,8 +155,10 @@ const Booking = () => {
                 <Loader />
                 :
                 <>
-                    <p className="note"><i className="fa-solid fa-circle-info" />To ensure a secure booking system for All guest, The Lagoon Finland Resort Inc. request for a minimum of {downPayment * 100}% down payment to help us gurantee the availability of your room/s. Our team will contact you within 24 hours to process your request. We appreciate your understanding and We are happy to assist you!</p>
-                    <div style={!state.user || !userHasDetails ? { display: "none" } : null} className="reservation-form">
+                    {!(!state.user || !userHasDetails) &&
+                        <p className="note"><i className="fa-solid fa-circle-info" />To ensure a secure booking system for All guest, The Lagoon Finland Resort Inc. request for a minimum of {downPayment * 100}% down payment to help us gurantee the availability of your room/s. Our team will contact you within 24 hours to process your request. We appreciate your understanding and We are happy to assist you!</p>
+                    }
+                    <div ref={formRef} style={!state.user || !userHasDetails ? { display: "none" } : null} className="reservation-form">
                         <h1>RESERVATION FORM</h1>
                         <hr />
                         {isRoomsloading ?
