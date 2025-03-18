@@ -67,7 +67,7 @@ const MyBookings = () => {
                             {total?.cancel > 0 && <h1>{total?.cancel}</h1>}
                         </div>
                     </div>
-                    {page === "pending" && <Pending />}
+                    {page === "pending" && <Pending totalBooks={totalBooks} />}
                     {page === "cancel" && <Cancelled />}
                 </>
             }

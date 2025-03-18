@@ -8,7 +8,7 @@ import useAdmin from "../hooks/useAdmin"
 
 
 
-const Pending = () => {
+const Pending = ({ totalBooks }) => {
     const { state } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
     const [books, setBooks] = useState([])
@@ -50,7 +50,10 @@ const Pending = () => {
         setIsLoading(true)
 
         axios.post('book/add-cancelled', { _id: isCancelling._id, reasonToCancel: reason })
-            .then(res => setBooks(prev => prev.filter(book => book._id !== res.data._id)))
+            .then(res => {
+                setBooks(prev => prev.filter(book => book._id !== res.data._id))
+                totalBooks()
+            })
             .finally(() => setIsLoading(false))
     }
 
