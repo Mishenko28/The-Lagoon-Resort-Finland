@@ -6,6 +6,9 @@
     transform: scaleY(0.5);
 }
 
+.my-booking .completed hr,
+.my-booking .ongoing hr,
+.my-booking .confirmed hr,
 .my-booking .pending hr {
     border: 1px solid var(--primary);
 }
@@ -83,6 +86,9 @@
     border-radius: 10px;
 }
 
+.my-booking .completed .book,
+.my-booking .ongoing .book,
+.my-booking .confirmed .book,
 .my-booking .pending .book {
     border: 1px solid var(--primary);
 }
@@ -222,4 +228,30 @@
 .my-booking .book .bttns {
     display: flex;
     gap: 10px;
+}
+
+@media (min-width: 1025px) {
+    .my-booking {
+        margin-top: 130px;
+    }
+
+    .my-booking .navs-wrapper {
+        justify-content: flex-start;
+        padding-inline: 20px;
+        gap: 20px;
+    }
+
+    .my-booking .navs {
+        cursor: pointer;
+    }
+
+    .my-booking .book-wrapper {
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .my-booking .book {
+        min-width: 400px;
+    }
 }

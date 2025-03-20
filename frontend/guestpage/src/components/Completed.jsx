@@ -8,24 +8,23 @@ import { motion } from "framer-motion"
 
 
 
-
-const Cancelled = () => {
+const Completed = () => {
     const { state } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
     const [books, setBooks] = useState([])
 
     useEffect(() => {
-        fetchPending()
+        fetchConfirmed()
     }, [])
 
-    const fetchPending = async () => {
-        axios.get("book/user", { params: { status: "cancelled", email: state.user.email } })
+    const fetchConfirmed = async () => {
+        axios.get("book/user", { params: { status: "completed", email: state.user.email } })
             .then(res => setBooks(res.data))
             .finally(() => setIsLoading(false))
     }
 
     return (
-        <div className="cancelled book-wrapper">
+        <div className="completed book-wrapper">
             {isLoading ?
                 <Loader />
                 :
@@ -33,6 +32,7 @@ const Cancelled = () => {
                     {books.map(book => (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.3 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: 1, amount: 0.3 }}
@@ -76,16 +76,7 @@ const Cancelled = () => {
                                             <h2>₱{book.total}</h2>
                                         </div>
                                     }
-                                    <div className="total">
-                                        <h1>Down payment:</h1>
-                                        <h2>₱{book.deposit}</h2>
-                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                            <div className="cancel-reason">
-                                <h1>reason:</h1>
-                                <h2>{book.reasonToCancel}</h2>
                             </div>
                         </motion.div>
                     ))}
@@ -96,7 +87,7 @@ const Cancelled = () => {
                             transition={{ duration: 0.3 }}
                             className="book"
                         >
-                            <h3>No cancelled bookings</h3>
+                            <h3>No completed bookings</h3>
                             <Link to="/booking" className="book-now">Book Now</Link>
                         </motion.div>
                     }
@@ -106,4 +97,4 @@ const Cancelled = () => {
     )
 }
 
-export default Cancelled
+export default Completed

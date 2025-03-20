@@ -17,7 +17,6 @@ export default function Gallery() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [photos, setPhotos] = useState([])
-    const [rooms, setRooms] = useState([])
     const [roomTypes, setRoomTypes] = useState([])
 
     const [newPhoto, setNewPhoto] = useState({
@@ -182,7 +181,8 @@ export default function Gallery() {
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.8 }}
                                         transition={{ duration: 0.3 }}
-                                        key={photo._id} onClick={() => setEditPhoto(photo)}
+                                        key={photo._id}
+                                        onClick={() => setEditPhoto(photo)}
                                         className='photo'
                                     >
                                         <img src={photo.img} />

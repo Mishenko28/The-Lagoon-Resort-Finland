@@ -8,24 +8,23 @@ import { motion } from "framer-motion"
 
 
 
-
-const Cancelled = () => {
+const Confirmed = () => {
     const { state } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
     const [books, setBooks] = useState([])
 
     useEffect(() => {
-        fetchPending()
+        fetchConfirmed()
     }, [])
 
-    const fetchPending = async () => {
-        axios.get("book/user", { params: { status: "cancelled", email: state.user.email } })
+    const fetchConfirmed = async () => {
+        axios.get("book/user", { params: { status: "confirmed", email: state.user.email } })
             .then(res => setBooks(res.data))
             .finally(() => setIsLoading(false))
     }
 
     return (
-        <div className="cancelled book-wrapper">
+        <div className="confirmed book-wrapper">
             {isLoading ?
                 <Loader />
                 :
@@ -33,11 +32,11 @@ const Cancelled = () => {
                     {books.map(book => (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.3 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: 1, amount: 0.3 }}
-                            className="book"
-                            key={book._id}
+                            className="book" key={book._id}
                         >
                             <div className="date">
                                 <h1>{format(book.from, 'LLLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}</h1>
@@ -80,13 +79,26 @@ const Cancelled = () => {
                                         <h1>Down payment:</h1>
                                         <h2>₱{book.deposit}</h2>
                                     </div>
+                                    <hr />
+                                    <div className="total">
+                                        <h1>Payment received:</h1>
+                                        <h2>₱{book.payed}</h2>
+                                    </div>
+                                    <div className="total">
+                                        <h1>Left to pay:</h1>
+                                        <h2>₱{book.balance}</h2>
+                                    </div>
                                 </div>
                             </div>
-                            <hr />
-                            <div className="cancel-reason">
-                                <h1>reason:</h1>
-                                <h2>{book.reasonToCancel}</h2>
-                            </div>
+                            {book.note &&
+                                <>
+                                    <div className="note">
+                                        <hr />
+                                        <h1>Note:</h1>
+                                        <h2>{book.note}</h2>
+                                    </div>
+                                </>
+                            }
                         </motion.div>
                     ))}
                     {books.length === 0 &&
@@ -96,7 +108,7 @@ const Cancelled = () => {
                             transition={{ duration: 0.3 }}
                             className="book"
                         >
-                            <h3>No cancelled bookings</h3>
+                            <h3>No confirmed bookings</h3>
                             <Link to="/booking" className="book-now">Book Now</Link>
                         </motion.div>
                     }
@@ -106,4 +118,4 @@ const Cancelled = () => {
     )
 }
 
-export default Cancelled
+export default Confirmed

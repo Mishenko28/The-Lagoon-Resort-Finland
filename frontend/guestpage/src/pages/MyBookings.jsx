@@ -6,6 +6,9 @@ import Loader from "../components/Loader"
 import axios from "axios"
 import useAdmin from "../hooks/useAdmin"
 import { useNavigate } from "react-router-dom"
+import Confirmed from "../components/Confirmed"
+import Ongoing from "../components/Ongoing"
+import Completed from "../components/Completed"
 
 
 
@@ -67,7 +70,10 @@ const MyBookings = () => {
                             {total?.cancel > 0 && <h1>{total?.cancel}</h1>}
                         </div>
                     </div>
-                    {page === "pending" && <Pending totalBooks={totalBooks} />}
+                    {page === "pending" && <Pending setTotal={setTotal} />}
+                    {page === "confirm" && <Confirmed />}
+                    {page === "ongoing" && <Ongoing />}
+                    {page === "complete" && <Completed />}
                     {page === "cancel" && <Cancelled />}
                 </>
             }

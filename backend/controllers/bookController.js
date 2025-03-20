@@ -1,4 +1,3 @@
-const moment = require('moment-timezone')
 const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
@@ -41,7 +40,6 @@ const getBook = async (status) => {
 // GET ALL PENDING
 const getPending = async (_, res) => {
     try {
-        await setExpiredBooks()
         const books = await getBook("pending")
 
         res.status(200).json(books)
@@ -53,7 +51,6 @@ const getPending = async (_, res) => {
 // GET ALL EXPIRED
 const getExpired = async (_, res) => {
     try {
-        await setExpiredBooks()
         const books = await getBook("expired")
 
         res.status(200).json(books)
@@ -65,7 +62,6 @@ const getExpired = async (_, res) => {
 // GET ALL CONFIRMED
 const getConfirmed = async (_, res) => {
     try {
-        await setOngoingBooks()
         const books = await getBook("confirmed")
 
         res.status(200).json(books)
@@ -77,7 +73,6 @@ const getConfirmed = async (_, res) => {
 // GET ALL ONGOING
 const getOngoing = async (_, res) => {
     try {
-        await setOngoingBooks()
         const books = await getBook("ongoing")
 
         res.status(200).json(books)
@@ -140,10 +135,10 @@ const addBook = async (req, res) => {
 
 // PENDING & EXPIRED & CANCELLED & NOSHOW => CONFIRMED
 const setConfirmed = async (req, res) => {
-    const { _id, from, to, room, total, deposit, balance, adminEmail } = await req.body
+    const { _id, from, to, room, total, deposit, balance, payed, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room, total, deposit, balance, reasonToCancel: "not cancelled" }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room, total, deposit, balance, payed, reasonToCancel: "not cancelled" }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
 
@@ -154,42 +149,6 @@ const setConfirmed = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
-}
-
-// PENDING => EXPIRED
-const setExpiredBooks = async () => {
-    const dateNow = moment().tz('Asia/Manila')
-    const books = await getBook("pending")
-    const { roomStart } = await AdminSetting.findOne({})
-
-    await Promise.all(books.map(async book => {
-        book.from.setHours(roomStart, 0, 0, 0)
-        book.to.setHours(roomStart, 0, 0, 0)
-
-        const isExpired = dateNow.isSameOrAfter(book.from)
-
-        if (isExpired) {
-            await Book.findOneAndUpdate({ _id: book._id }, { status: "expired" })
-        }
-    }))
-}
-
-// CONFIRMED => ONGOING
-const setOngoingBooks = async () => {
-    const dateNow = moment().tz('Asia/Manila')
-    const books = await getBook("confirmed")
-    const { roomStart } = await AdminSetting.findOne({})
-
-    await Promise.all(books.map(async book => {
-        book.from.setHours(roomStart)
-        book.to.setHours(roomStart)
-
-        const isOnGoing = dateNow.isSameOrAfter(book.from)
-
-        if (isOnGoing) {
-            await Book.findOneAndUpdate({ _id: book._id }, { status: "ongoing" })
-        }
-    }))
 }
 
 // ONGOING => COMPLETED
@@ -305,7 +264,7 @@ const getUserBooks = async (req, res) => {
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await Book.find({ status, userId: _id })
+        const books = await (await Book.find({ status, userId: _id })).reverse()
 
         res.status(200).json(books)
     } catch (error) {
