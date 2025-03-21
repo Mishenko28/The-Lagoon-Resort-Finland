@@ -47,7 +47,7 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     },
     note: {
         type: String,
-        default: "none"
+        default: ""
     },
     room: {
         type: [roomSchema],

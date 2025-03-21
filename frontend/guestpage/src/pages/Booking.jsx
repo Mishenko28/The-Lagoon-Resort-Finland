@@ -49,9 +49,15 @@ const Booking = () => {
 
     useEffect(() => {
         if (page === "room" && select) {
-            setSelectedRoomTypes(prev => [...prev, roomTypes.map(roomType => roomType.name === select ? { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) } : null).filter(roomType => roomType)[0]])
+            if (roomTypes.filter(roomType => roomType.name === select)[0].numberOfAvailableRooms !== 0) {
+                setSelectedRoomTypes(prev => [...prev, roomTypes.map(roomType => roomType.name === select ? { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) } : null).filter(roomType => roomType)[0]])
+            }
             url.searchParams.delete("select")
             window.history.pushState({}, "", url)
+        }
+
+        if (page === "date") {
+            setSelectedRoomTypes([])
         }
     }, [page])
 

@@ -2,6 +2,7 @@ const RoomType = require('../models/roomTypeModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 const Room = require('../models/roomModel')
 const Archive = require('../models/archiveModel')
+const Book = require('../models/bookModel')
 
 // GET ALL ROOMTYPE
 const getRoomTypes = async (_, res) => {
@@ -14,18 +15,74 @@ const getRoomTypes = async (_, res) => {
     }
 }
 
-// GET AVAILABLE ROOMS
+// GET LIST OF ROOMTYPES WITH AVAILABLE ROOM NUMBERS
+const getAvailableRoomNo = async (req, res) => {
+    const { from, to } = req.body
+
+    try {
+        const books = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+        let availableRooms = await RoomType.find({})
+
+        availableRooms = await Promise.all(availableRooms.map(async roomType => {
+            let rooms = await Room.find({ roomType: roomType.name })
+
+            rooms = rooms.map(room => {
+                let available = true
+
+                books.forEach(book => {
+                    book.room.forEach(r => {
+                        if (r.roomNo == room.roomNo && r.roomType === roomType.name) {
+                            available = false
+                        }
+                    })
+                })
+
+                return { roomNo: room.roomNo, available }
+            })
+
+            return { roomType: roomType.name, rooms }
+        }))
+
+
+
+
+        res.status(200).json(availableRooms)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// GET NUMBER OF AVAILABLE ROOMS PER ROOMTYPE
 const getAvailableRooms = async (req, res) => {
     const { from, to } = req.body
 
     try {
-        if (!from || !to) throw Error("Please provide a date range.")
+        const books = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+
         let roomTypes = await RoomType.find({}).lean()
 
-        roomTypes = roomTypes.map(roomType => ({
-            ...roomType,
-            numberOfAvailableRooms: 2
+        roomTypes = await Promise.all(roomTypes.map(async (roomType) => {
+            let numberOfAvailableRooms = 0
+            let rooms = await Room.find({ roomType: roomType.name })
+
+            rooms.forEach(room => {
+                let available = true
+
+                books.forEach(book => {
+                    book.room.forEach(r => {
+                        if (r.roomNo == room.roomNo && r.roomType === roomType.name) {
+                            available = false
+                        }
+                    })
+                })
+
+                if (available) {
+                    numberOfAvailableRooms++
+                }
+            })
+            return { ...roomType, numberOfAvailableRooms }
         }))
+
 
         res.status(200).json({ roomTypes })
     } catch (error) {
@@ -211,5 +268,6 @@ module.exports = {
     addSubImage,
     editSubImage,
     deleteSubImage,
-    getAvailableRooms
+    getAvailableRooms,
+    getAvailableRoomNo
 }

@@ -2,14 +2,16 @@ const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 const User = require('../models/userModel')
+const UserPersonalData = require('../models/userPersonalDataModel')
+const mongoose = require('mongoose')
 
 // STATUS
 // pending
-// expired
 // confirmed
 // ongoing
 // cancelled
 // noshow
+// expired
 // completed
 
 
@@ -40,7 +42,17 @@ const getBook = async (status) => {
 // GET ALL PENDING
 const getPending = async (_, res) => {
     try {
-        const books = await getBook("pending")
+        let books = await getBook("pending")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -119,7 +131,7 @@ const addBook = async (req, res) => {
     const { email, from, to, note, selectedRoomTypes, total, deposit } = await req.body
     const { downPayment } = await AdminSetting.findOne({})
 
-    let room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, maxPerson: roomType.maxPerson, addedPerson: roomType.addedPerson, rate: roomType.rate, addedPersonRate: roomType.addFeePerPerson }))
+    const room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, maxPerson: roomType.maxPerson, addedPerson: roomType.addedPerson, rate: roomType.rate, addedPersonRate: roomType.addFeePerPerson }))
 
 
     try {
@@ -135,10 +147,16 @@ const addBook = async (req, res) => {
 
 // PENDING & EXPIRED & CANCELLED & NOSHOW => CONFIRMED
 const setConfirmed = async (req, res) => {
-    const { _id, from, to, room, total, deposit, balance, payed, adminEmail } = await req.body
+    const { _id, from, to, room, total, deposit, payed, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room, total, deposit, balance, payed, reasonToCancel: "not cancelled" }, { new: true })
+        const newRoom = room.map(r => {
+            delete r._id
+            return r
+        })
+
+        const balance = total - payed
+        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, reasonToCancel: "not cancelled" }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
 
@@ -264,9 +282,9 @@ const getUserBooks = async (req, res) => {
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await (await Book.find({ status, userId: _id })).reverse()
+        const books = await Book.find({ status, userId: _id })
 
-        res.status(200).json(books)
+        res.status(200).json(books.reverse())
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

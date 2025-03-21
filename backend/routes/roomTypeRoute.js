@@ -11,7 +11,8 @@ const {
     addSubImage,
     editSubImage,
     deleteSubImage,
-    getAvailableRooms
+    getAvailableRooms,
+    getAvailableRoomNo
 } = require('../controllers/roomTypeController')
 
 router.get('/all', getRoomTypes)
@@ -19,6 +20,7 @@ router.post('/searchRooms', getAvailableRooms)
 
 router.use(auth)
 
+router.post('/available-rooms', getAvailableRoomNo)
 router.post('/add', addRoomTypes)
 router.patch('/update', updateRoomTypes)
 router.delete('/delete', deleteRoomType)

@@ -1,0 +1,382 @@
+.booking {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.booking .navs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: var(--primary);
+}
+
+.booking .nav {
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 10px;
+    flex-grow: 1;
+    text-align: center;
+    transition: all 300ms;
+}
+
+.booking .nav.active {
+    background-color: var(--green);
+}
+
+.booking .pending {
+    overflow-x: auto;
+}
+
+.booking table {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--primary);
+    background-color: #fff;
+}
+
+.booking table td,
+.booking table th {
+    font-size: 0.6rem;
+    padding: 20px 5px;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 40px;
+}
+
+.booking table td {
+    position: relative;
+    border: 1px solid var(--light-gray);
+}
+
+.booking table thead {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary);
+    color: #fff;
+    z-index: 1;
+}
+
+.booking table .bttns {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.booking button {
+    border: none;
+    height: 30px;
+    width: 50px;
+    font-size: 0.5rem;
+    border-radius: 5px;
+}
+
+.booking button.green {
+    background-color: var(--green);
+    color: #fff;
+}
+
+.booking button.red {
+    background-color: var(--red);
+    color: #fff;
+}
+
+.booking .confirm-book {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #fff;
+    width: 330px;
+    padding: 20px;
+    color: var(--primary);
+    box-sizing: border-box;
+}
+
+.booking .confirm-book h1 {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.booking .confirm-book .info h2 {
+    font-size: 1rem;
+}
+
+.booking .confirm-book .info h3 {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 400;
+}
+
+.booking .confirm-book .info h4 {
+    font-size: 1.5rem;
+    color: var(--secondary);
+    font-weight: 400;
+}
+
+.booking .confirm-book .date-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.booking .confirm-book .dates {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.booking .confirm-book .date {
+    width: 100%;
+}
+
+.booking .confirm-book .date-wrapper h2 {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.booking .confirm-book .date-wrapper input {
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid var(--gray);
+    background-color: var(--light-gray);
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.booking .confirm-book .selected-rooms {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 200px;
+    overflow: auto;
+    padding-block: 10px;
+}
+
+.booking .confirm-book .room {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 65px;
+    background-color: var(--light-gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.booking .confirm-book .room:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+}
+
+.booking .confirm-book .room:last-of-type .fa-plus {
+    color: #fff;
+}
+
+.booking .confirm-book .room select {
+    font-size: 0.8rem;
+    padding: 3px;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+}
+
+.booking .confirm-book .room .select-room {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+.booking .confirm-book .room .left {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-inline: 10px;
+}
+
+.booking .confirm-book .room .add-person {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.booking .confirm-book .room .fa-user-minus,
+.booking .confirm-book .room .fa-user-plus {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 10px 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.booking .confirm-book .fa-xmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.7rem;
+}
+
+.booking .confirm-book .room .right {
+    display: flex;
+    height: 65px;
+    width: 50px;
+}
+
+.booking .confirm-book .room .fa-minus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    flex-grow: 1;
+    color: #fff;
+}
+
+.booking .confirm-book .total input,
+.booking .confirm-book .total h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.booking .confirm-book .total input {
+    width: 100px;
+    border: 2px solid var(--primary);
+    border-radius: 5px;
+    text-align: end;
+    padding-inline: 5px;
+}
+
+.booking .confirm-book .total {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking .confirm-book .bttns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+
+
+@media (min-width: 1025px) {
+    .booking {
+        gap: 20px;
+    }
+
+    .booking .nav {
+        font-size: 1rem;
+        padding: 20px;
+        cursor: pointer;
+    }
+
+    .booking table {
+        border-bottom: 3px solid var(--primary);
+        width: 100%;
+    }
+
+    .booking table tbody tr:hover {
+        background-color: #eee;
+    }
+
+    .booking table th,
+    .booking table td {
+        font-size: 0.9rem;
+    }
+
+    .booking button {
+        height: 40px;
+        width: 60px;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .booking .confirm-book {
+        gap: 10px;
+        width: 600px;
+        padding: 30px;
+    }
+
+    .booking .confirm-book .info h2 {
+        font-size: 1.5rem;
+    }
+
+    .booking .confirm-book .info h3 {
+        font-size: 1.2rem;
+    }
+
+    .booking .confirm-book .info h4 {
+        font-size: 2rem;
+    }
+
+    .booking .confirm-book .dates {
+        gap: 20px;
+    }
+
+    .booking .confirm-book .date-wrapper h2 {
+        font-size: 1.2rem;
+    }
+
+    .booking .confirm-book .date-wrapper input {
+        padding: 10px 5px;
+        cursor: pointer;
+    }
+
+    .booking .confirm-book .selected-rooms {
+        gap: 15px;
+    }
+
+    .booking .confirm-book .room {
+        min-height: 70px;
+        border-radius: 8px;
+    }
+
+    .booking .confirm-book .room:last-of-type {
+        cursor: pointer;
+    }
+
+    .booking .confirm-book .room select {
+        font-size: 1rem;
+        cursor: pointer;
+        max-width: 180px;
+        padding-block: 10px;
+    }
+
+    .booking .confirm-book .room .select-room {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .booking .confirm-book .room .add-person {
+        gap: 10px;
+    }
+
+    .booking .confirm-book .room .fa-user-minus,
+    .booking .confirm-book .room .fa-user-plus {
+        padding: 10px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .booking .confirm-book .fa-xmark {
+        cursor: pointer;
+    }
+
+    .booking .confirm-book .room .right {
+        height: 70px;
+        cursor: pointer;
+    }
+
+    .booking .confirm-book .total input,
+    .booking .confirm-book .total h2 {
+        font-size: 1.5rem;
+    }
+
+    .booking .confirm-book .total input {
+        width: 150px;
+    }
+}

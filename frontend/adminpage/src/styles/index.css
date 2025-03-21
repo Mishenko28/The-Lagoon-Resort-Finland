@@ -28,7 +28,6 @@
 
     --light-orange: #ff660040;
     --dark-orange: #a03702;
-
 }
 
 body {
@@ -48,6 +47,11 @@ textarea {
 hr {
     border: 0;
     border-top: 1px solid var(--light-gray);
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 

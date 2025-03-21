@@ -13,17 +13,20 @@ import Amenities from './pages/Configurations/Amenities'
 import Gallery from './pages/Configurations/Gallery'
 import AboutUs from './pages/Configurations/AboutUs'
 
+import Admins from './pages/Utilities/Admins'
+import AdminInvite from './pages/AdminInvite'
+import ActivityLogs from './pages/Utilities/ActivityLogs'
+
+import Booking from './pages/Dashboard/Booking'
+
+import Profile from './pages/Profile'
 import Success from './components/Success'
 import Failed from './components/Failed'
 
-import ActivityLogs from './pages/Utilities/ActivityLogs'
 
 // PDF
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
-import Admins from './pages/Utilities/Admins'
-import Profile from './pages/Profile'
-import AdminInvite from './pages/AdminInvite'
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
 // PDF
 
@@ -38,7 +41,7 @@ function App() {
                         <Route index element={<h1>Index</h1>} />
                         {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
                             <Route path='dashboard' element={<Dashboard />}>
-                                {state.admin.role.includes('booking') && <Route path='booking' element={<h1>Booking</h1>} />}
+                                {state.admin.role.includes('booking') && <Route path='booking' element={<Booking />} />}
                                 {state.admin.role.includes('reports') && <Route path='report' element={<h1>Report</h1>} />}
                             </Route>
                         }
