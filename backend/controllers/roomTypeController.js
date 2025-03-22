@@ -20,11 +20,15 @@ const getAvailableRoomNo = async (req, res) => {
     const { from, to } = req.body
 
     try {
-        const books = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+        const confirmedBooks = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+        const OngoingBooks = await Book.find({ status: "ongoing", from: { $lt: to }, to: { $gt: from } })
+
+        const books = confirmedBooks.concat(OngoingBooks)
+
         let availableRooms = await RoomType.find({})
 
         availableRooms = await Promise.all(availableRooms.map(async roomType => {
-            let rooms = await Room.find({ roomType: roomType.name })
+            let rooms = await Room.find({ roomType: roomType.name, active: true })
 
             rooms = rooms.map(room => {
                 let available = true
@@ -57,13 +61,16 @@ const getAvailableRooms = async (req, res) => {
     const { from, to } = req.body
 
     try {
-        const books = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+        const confirmedBooks = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
+        const OngoingBooks = await Book.find({ status: "ongoing", from: { $lt: to }, to: { $gt: from } })
+
+        const books = confirmedBooks.concat(OngoingBooks)
 
         let roomTypes = await RoomType.find({}).lean()
 
         roomTypes = await Promise.all(roomTypes.map(async (roomType) => {
             let numberOfAvailableRooms = 0
-            let rooms = await Room.find({ roomType: roomType.name })
+            let rooms = await Room.find({ roomType: roomType.name, active: true })
 
             rooms.forEach(room => {
                 let available = true

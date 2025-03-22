@@ -114,7 +114,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
 
         toConfirm.room.forEach((room, i) => {
             toConfirm.room.forEach((r, j) => {
-                if (i !== j && room.roomNo === r.roomNo) {
+                if (i !== j && room.roomNo === r.roomNo && room.roomType === r.roomType) {
                     duplicateRoomNo = room.roomNo
                     duplicateInRoomType = room.roomType
                 }
