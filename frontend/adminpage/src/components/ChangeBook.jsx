@@ -5,6 +5,7 @@ import { formatDistance } from "date-fns"
 import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
+import AvailableRooms from "./AvailableRooms"
 
 
 
@@ -167,6 +168,7 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
                         onChange={handleChangeDate}
                     />
                 </div>
+                <AvailableRooms availableRooms={availableRooms} />
                 <hr />
                 {(isRoomNoLoading || isLoading) ?
                     <Loader2 />

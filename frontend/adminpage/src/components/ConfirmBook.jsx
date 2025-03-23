@@ -5,6 +5,7 @@ import { formatDistance } from "date-fns"
 import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
+import AvailableRooms from "./AvailableRooms"
 
 
 export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
@@ -172,50 +173,52 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                         onChange={handleChangeDate}
                     />
                 </div>
+                <AvailableRooms availableRooms={availableRooms} />
                 <hr />
-                {(isRoomNoLoading || isLoading) ?
-                    <Loader2 />
-                    :
-                    <div className="selected-rooms">
-                        <AnimatePresence mode="sync">
-                            {toConfirm?.room.map(room => (
-                                <motion.div
-                                    layout
-                                    initial={{ opacity: 0.5, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="room"
-                                    key={room._id}
-                                >
-                                    <div className="left">
-                                        <div className="select-room">
-                                            <select value={room.roomType} onChange={(e) => handleChangeRoomType(e, room)}>
-                                                {roomTypes.map(roomType => (
-                                                    <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
-                                                ))}
-                                            </select>
-                                            <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
-                                                <option value="0">--select room num--</option>
-                                                {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
-                                                    <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
-                                                ))}
-                                            </select>
+                {
+                    (isRoomNoLoading || isLoading) ?
+                        <Loader2 />
+                        :
+                        <div className="selected-rooms">
+                            <AnimatePresence mode="sync">
+                                {toConfirm?.room.map(room => (
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0.5, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="room"
+                                        key={room._id}
+                                    >
+                                        <div className="left">
+                                            <div className="select-room">
+                                                <select value={room.roomType} onChange={(e) => handleChangeRoomType(e, room)}>
+                                                    {roomTypes.map(roomType => (
+                                                        <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
+                                                    ))}
+                                                </select>
+                                                <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
+                                                    <option value="0">--select room num--</option>
+                                                    {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
+                                                        <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="add-person">
+                                                <i className="fa-solid fa-user-plus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
+                                                <h2>{room.addedPerson}</h2>
+                                                <i className="fa-solid fa-user-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
+                                            </div>
                                         </div>
-                                        <div className="add-person">
-                                            <i className="fa-solid fa-user-plus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
-                                            <h2>{room.addedPerson}</h2>
-                                            <i className="fa-solid fa-user-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
+                                        <div className="right">
+                                            <i className="fa-solid fa-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
                                         </div>
-                                    </div>
-                                    <div className="right">
-                                        <i className="fa-solid fa-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                        <motion.div whileTap={{ scale: 0.9 }} className="room" onClick={createNewRoom}><i className="fa-solid fa-plus" /></motion.div>
-                    </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                            <motion.div whileTap={{ scale: 0.9 }} className="room" onClick={createNewRoom}><i className="fa-solid fa-plus" /></motion.div>
+                        </div>
                 }
                 <hr />
                 <div className="total-wrapper">

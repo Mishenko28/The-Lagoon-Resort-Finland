@@ -129,6 +129,44 @@
     color: var(--primary);
 }
 
+.booking .confirm-book .available-rooms {
+    position: relative;
+}
+
+.booking .confirm-book .available-rooms p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: var(--primary);
+    width: max-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.booking .confirm-book .available-rooms h2 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: var(--primary);
+    font-weight: 400;
+}
+
+.booking .confirm-book .available-rooms .content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 20px;
+    min-width: 200px;
+    background-color: #fff;
+    top: 32px;
+    z-index: 1;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+}
+
 .booking .confirm-book .info h2 {
     font-size: 1rem;
 }
