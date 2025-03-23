@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 
 
-export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
+
+const ChangeBook = ({ setBooks, setToChange, toChange }) => {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomNoLoading, setIsRoomNoLoading] = useState(true)
@@ -17,32 +18,23 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
 
     const [roomStart, setRoomStart] = useState(null)
 
-    const paymentRef = useRef(null)
-
-    const total = toConfirm.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toConfirm.to).setHours(roomStart, 0, 0, 0) - new Date(toConfirm.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
-    const [payed, setPayed] = useState("")
-
-    useEffect(() => {
-        if (paymentRef.current) paymentRef.current.focus()
-    }, [paymentRef])
-
-    useEffect(() => {
-        setToConfirm(prev => ({ ...prev, total, deposit: total * toConfirm.downPayment }))
-    }, [total])
+    const total = toChange.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toChange.to).setHours(roomStart, 0, 0, 0) - new Date(toChange.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
+    const [addPay, setAddPay] = useState("")
 
     useEffect(() => {
         fetchRoomTypes()
         fetchAvailableRooms()
     }, [])
 
+    useEffect(() => {
+        setToChange(prev => ({ ...prev, total }))
+    }, [total])
+
     const fetchAvailableRooms = async () => {
         setIsRoomNoLoading(true)
 
-        axios.post("room-type/available-rooms", { from: toConfirm.from, to: toConfirm.to })
-            .then(res => {
-                setAvailableRooms(res.data)
-                setToConfirm(prev => ({ ...prev, room: prev.room.map(room => ({ ...room, roomNo: 0 })) }))
-            })
+        axios.post("room-type/available-rooms", { from: toChange.from, to: toChange.to, bookedRooms: toChange.room })
+            .then(res => setAvailableRooms(res.data))
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
@@ -81,7 +73,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
             _id: Date.now()
         }
 
-        setToConfirm(prev => ({ ...prev, room: [...prev.room, newRoom] }))
+        setToChange(prev => ({ ...prev, room: [...prev.room, newRoom] }))
     }
 
     const handleChangeRoomType = (e, room) => {
@@ -94,7 +86,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
             roomNo: 0
         }
 
-        setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? newRoom : r) }))
+        setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? newRoom : r) }))
     }
 
     const handleSubmit = async (e) => {
@@ -103,18 +95,18 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
         let duplicateRoomNo = 0
         let duplicateInRoomType = ""
 
-        if (toConfirm.room.length === 0) {
+        if (toChange.room.length === 0) {
             dispatch({ type: 'FAILED', payload: "please add room" })
             return
         }
 
-        if (toConfirm.room.some(room => room.roomNo == 0)) {
+        if (toChange.room.some(room => room.roomNo == 0)) {
             dispatch({ type: 'FAILED', payload: "please fill all room number" })
             return
         }
 
-        toConfirm.room.forEach((room, i) => {
-            toConfirm.room.forEach((r, j) => {
+        toChange.room.forEach((room, i) => {
+            toChange.room.forEach((r, j) => {
                 if (i !== j && room.roomNo == r.roomNo && room.roomType === r.roomType) {
                     duplicateRoomNo = room.roomNo
                     duplicateInRoomType = room.roomType
@@ -127,10 +119,10 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
             return
         }
 
-        axios.post("book/add-confirmed", { ...toConfirm, payed })
+        axios.patch("book/edit", { ...toChange, payed: addPay ? toChange.payed + parseInt(addPay) : toChange.payed })
             .then(res => {
-                setToConfirm(null)
-                setBooks(prev => prev.filter(book => book._id !== res.data._id))
+                setToChange(null)
+                setBooks(prev => prev.map(book => book._id === toChange._id ? res.data : book))
                 dispatch({ type: 'SUCCESS', payload: true })
             })
             .catch((err) => {
@@ -142,31 +134,34 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
     const handleChangeDate = (date) => {
         const [start, end] = date
 
-        setToConfirm(prev => ({ ...prev, from: start, to: end }))
-        end && fetchAvailableRooms()
+        setToChange(prev => ({ ...prev, from: start, to: end }))
+        if (end) {
+            fetchAvailableRooms()
+            setToChange(prev => ({ ...prev, room: prev.room.map(room => ({ ...room, roomNo: 0 })) }))
+        }
     }
 
     return (
         <div className="full-cont">
             <form onSubmit={handleSubmit} className="confirm-book">
-                <i onClick={() => setToConfirm(null)} className="fa-solid fa-xmark" />
-                <h1>Confirm Reservation</h1>
+                <i onClick={() => setToChange(null)} className="fa-solid fa-xmark" />
+                <h1>Change Reservation</h1>
                 <hr />
                 <div className="info">
-                    <h2>{toConfirm.user.name} ({toConfirm.user.sex + ", " + toConfirm.user.age})</h2>
-                    <h3>{toConfirm.user.email}</h3>
-                    <h4>{toConfirm.user.contact}</h4>
+                    <h2>{toChange.user.name} ({toChange.user.sex + ", " + toChange.user.age})</h2>
+                    <h3>{toChange.user.email}</h3>
+                    <h4>{toChange.user.contact}</h4>
                 </div>
                 <hr />
                 <div className="date-wrapper">
-                    <h2>Total Period: {formatDistance(toConfirm.from, toConfirm.to)}</h2>
+                    <h2>Total Period: {formatDistance(toChange.from, toChange.to)}</h2>
                     <DatePicker
                         withPortal
                         selectsRange
                         shouldCloseOnSelect={false}
-                        selected={toConfirm.from}
-                        startDate={toConfirm.from}
-                        endDate={toConfirm.to}
+                        selected={toChange.from}
+                        startDate={toChange.from}
+                        endDate={toChange.to}
                         minDate={new Date()}
                         monthsShown={2}
                         onChange={handleChangeDate}
@@ -178,7 +173,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                     :
                     <div className="selected-rooms">
                         <AnimatePresence mode="sync">
-                            {toConfirm?.room.map(room => (
+                            {toChange?.room.map(room => (
                                 <motion.div
                                     layout
                                     initial={{ opacity: 0.5, scale: 0.9 }}
@@ -195,7 +190,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                                                     <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
                                                 ))}
                                             </select>
-                                            <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
+                                            <select value={room.roomNo} onChange={(e) => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
                                                 <option value="0">--select room num--</option>
                                                 {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
                                                     <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
@@ -203,13 +198,13 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                                             </select>
                                         </div>
                                         <div className="add-person">
-                                            <i className="fa-solid fa-user-plus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
+                                            <i className="fa-solid fa-user-plus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
                                             <h2>{room.addedPerson}</h2>
-                                            <i className="fa-solid fa-user-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
+                                            <i className="fa-solid fa-user-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
                                         </div>
                                     </div>
                                     <div className="right">
-                                        <i className="fa-solid fa-minus" onClick={() => setToConfirm(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
+                                        <i className="fa-solid fa-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
                                     </div>
                                 </motion.div>
                             ))}
@@ -220,24 +215,26 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                 <hr />
                 <div className="total-wrapper">
                     <div className="total">
-                        <h2>Down payment({toConfirm.downPayment * 100}%):</h2>
-                        <h2>₱{total * toConfirm.downPayment}</h2>
-                    </div>
-                    <div className="total">
                         <h2>Total:</h2>
                         <h2>₱{total}</h2>
                     </div>
                     <div className="total">
-                        <h2>Payment received:</h2>
-                        <input value={payed} onChange={(e) => setPayed(e.target.value)} ref={paymentRef} required type="number" />
+                        <h2>Payed:</h2>
+                        <h2>₱{toChange.payed}</h2>
+                    </div>
+                    <div className="total">
+                        <h2>Add payment:</h2>
+                        <input value={addPay} onChange={(e) => setAddPay(e.target.value)} type="number" />
                     </div>
                 </div>
                 <hr />
                 <div className="bttns">
-                    <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Confirm</button>
-                    <button className="red" onClick={() => setToConfirm(null)}>Back</button>
+                    <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Save</button>
+                    <button className="red" onClick={() => setToChange(null)}>Back</button>
                 </div>
             </form >
         </div >
     )
 }
+
+export default ChangeBook

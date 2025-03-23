@@ -17,7 +17,7 @@ const getRoomTypes = async (_, res) => {
 
 // GET LIST OF ROOMTYPES WITH AVAILABLE ROOM NUMBERS
 const getAvailableRoomNo = async (req, res) => {
-    const { from, to } = req.body
+    const { from, to, bookedRooms } = req.body
 
     try {
         const confirmedBooks = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
@@ -41,14 +41,19 @@ const getAvailableRoomNo = async (req, res) => {
                     })
                 })
 
+                bookedRooms && bookedRooms.forEach(r => {
+                    if (r.roomNo == room.roomNo && r.roomType === roomType.name) {
+                        available = true
+                    }
+                })
+
                 return { roomNo: room.roomNo, available }
             })
 
+            rooms.sort((a, b) => a.roomNo - b.roomNo)
+
             return { roomType: roomType.name, rooms }
         }))
-
-
-
 
         res.status(200).json(availableRooms)
     } catch (error) {
@@ -276,5 +281,5 @@ module.exports = {
     editSubImage,
     deleteSubImage,
     getAvailableRooms,
-    getAvailableRoomNo
+    getAvailableRoomNo,
 }

@@ -5,6 +5,28 @@
     height: 100%;
 }
 
+/* DATE PICKER */
+.booking .react-datepicker {
+    width: 90svw;
+}
+
+.booking .react-datepicker__month-container {
+    width: 100%;
+}
+
+.booking .react-datepicker__day-names {
+    display: flex;
+    justify-content: space-around;
+    margin-inline: 0.4rem;
+}
+
+.booking .react-datepicker__week {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* DATE PICKER END */
+
 .booking .navs {
     display: flex;
     flex-wrap: wrap;
@@ -25,7 +47,7 @@
     background-color: var(--green);
 }
 
-.booking .pending {
+.booking .book {
     overflow-x: auto;
 }
 
@@ -67,9 +89,11 @@
 .booking button {
     border: none;
     height: 30px;
-    width: 50px;
+    min-width: 50px;
+    padding: 5px;
     font-size: 0.5rem;
     border-radius: 5px;
+    text-wrap: nowrap;
 }
 
 .booking button.green {
@@ -82,6 +106,12 @@
     color: #fff;
 }
 
+.booking button.blue {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+/* CONFIRM BOOK */
 .booking .confirm-book {
     position: relative;
     display: flex;
@@ -116,19 +146,10 @@
 }
 
 .booking .confirm-book .date-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.booking .confirm-book .dates {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.booking .confirm-book .date {
-    width: 100%;
 }
 
 .booking .confirm-book .date-wrapper h2 {
@@ -255,10 +276,74 @@
     justify-content: space-between;
 }
 
+.booking .cancel-book .bttns,
 .booking .confirm-book .bttns {
     display: flex;
     justify-content: flex-end;
     gap: 5px;
+}
+
+/* CANCEL BOOK */
+.booking .cancel-book {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff;
+    width: 300px;
+    color: var(--primary);
+}
+
+.booking .cancel-book h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.booking .cancel-book h2 {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.booking .cancel-book .room {
+    border: 1px solid var(--dark-orange);
+    border-radius: 5px;
+    padding: 3px 5px;
+    width: min-content;
+}
+
+.booking .cancel-book .cancel-book-info {
+    background-color: var(--light-orange);
+    border-left: 5px solid var(--dark-orange);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.booking .opened-note {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 330px;
+}
+
+.booking .opened-note h1 {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.booking .opened-note p {
+    font-size: 1rem;
+    color: var(--gray);
+}
+
+.booking .opened-note .fa-xmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5rem;
 }
 
 
@@ -288,10 +373,16 @@
         font-size: 0.9rem;
     }
 
+    .booking table td .fa-envelope {
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+
     .booking button {
         height: 40px;
-        width: 60px;
         font-size: 0.8rem;
+        min-width: 60px;
+        padding: 8px;
         cursor: pointer;
     }
 
@@ -378,5 +469,44 @@
 
     .booking .confirm-book .total input {
         width: 150px;
+    }
+
+    /* DATE PICKER */
+    .booking .react-datepicker {
+        width: 60svw;
+    }
+
+    .booking .react-datepicker__month {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        min-height: 200px;
+    }
+
+    .booking .react-datepicker__month-container {
+        width: 50%;
+    }
+
+    .booking .react-datepicker__day {
+        font-size: 1.5rem;
+        width: 3rem;
+        line-height: 3rem;
+    }
+
+    /* DATE PICKER END */
+
+    .booking .opened-note {
+        padding: 20px;
+        width: 500px;
+    }
+
+    .booking .opened-note p {
+        font-size: 1.2rem;
+        white-space: pre-wrap;
+    }
+
+    .booking .opened-note .fa-xmark {
+        font-size: 2rem;
+        cursor: pointer;
     }
 }

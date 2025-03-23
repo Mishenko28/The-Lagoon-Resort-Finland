@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Pending from "./Booking/Pending"
+import Confirmed from "./Booking/Confirmed"
 
 
 
@@ -24,6 +25,7 @@ export default function Booking() {
                 <div className={handleClassName("expired")} onClick={() => setPage("expired")}>Expired</div>
             </div>
             {page === "pending" && <Pending />}
+            {page === "confirmed" && <Confirmed />}
 
         </div>
     )

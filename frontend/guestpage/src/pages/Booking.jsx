@@ -2,14 +2,12 @@ import { useState, useEffect, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
-import { isPast, isAfter, formatDistance, format, isEqual } from 'date-fns'
+import { formatDistance, format } from 'date-fns'
 import { motion, AnimatePresence } from "framer-motion"
 import useAdmin from "../hooks/useAdmin"
 import { Link, useNavigate } from "react-router-dom"
+import DatePicker from "react-datepicker"
 
-const convertToISO = (date) => {
-    return date.toISOString().split('T')[0]
-}
 
 const dateToday = new Date()
 const dateTomorrow = new Date()
@@ -41,11 +39,17 @@ const Booking = () => {
     const [page, setPage] = useState("date")
 
     useEffect(() => {
+        if (roomStart) {
+            setCheckIn(new Date(dateToday.setHours(roomStart, 0, 0, 0)))
+            setCheckOut(new Date(dateTomorrow.setHours(roomStart, 0, 0, 0)))
+        }
+    }, [roomStart])
+
+    useEffect(() => {
         if (formRef.current && select) {
             formRef.current.scrollIntoView({ behavior: "smooth" })
         }
     }, [isLoading])
-
 
     useEffect(() => {
         if (page === "room" && select) {
@@ -62,13 +66,6 @@ const Booking = () => {
     }, [page])
 
     useEffect(() => {
-        if (roomStart) {
-            setCheckIn(new Date(dateToday.setHours(roomStart, 0, 0, 0)))
-            setCheckOut(new Date(dateTomorrow.setHours(roomStart, 0, 0, 0)))
-        }
-    }, [roomStart])
-
-    useEffect(() => {
         const fetchUserDetails = async () => {
             axios.get('user/data', { params: { email: state.user.email } })
                 .then(res => {
@@ -81,18 +78,6 @@ const Booking = () => {
         if (state.user) fetchUserDetails()
         else setIsLoading(false)
     }, [])
-
-    useEffect(() => {
-        if (isPast(checkIn)) {
-            setCheckIn(dateToday)
-        }
-
-        if (isAfter(checkIn, checkOut) || isEqual(checkIn, checkOut)) {
-            const date = new Date(checkIn)
-            setCheckOut(new Date(date.setDate(date.getDate() + 1)))
-        }
-
-    }, [checkIn, checkOut])
 
     const fetchAdminSettings = async () => {
         axios.get('admin-settings/all')
@@ -136,6 +121,13 @@ const Booking = () => {
                 setPage("success")
             })
             .finally(() => setIsRoomsloading(false))
+    }
+
+    const changeDate = (date) => {
+        const [start, end] = date
+
+        setCheckIn(start)
+        setCheckOut(end)
     }
 
     return (
@@ -182,18 +174,20 @@ const Booking = () => {
                                             className="date-picker"
                                         >
                                             <div className="date-wrapper">
-                                                <label>Check In:</label>
-                                                <input type="date" value={convertToISO(checkIn)} onChange={e => setCheckIn(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
+                                                <label>Selected Date: {checkOut && <b>{format(checkIn, 'LLLL d' + (new Date(checkIn).getFullYear() === new Date(checkOut).getFullYear() ? '' : ', yyyy'))} - {format(checkOut, (new Date(checkIn).getMonth() === new Date(checkOut).getMonth() ? '' : 'LLLL ') + 'd, yyyy')}</b>} {checkOut && "(" + formatDistance(checkIn, checkOut) + ")"}</label>
+                                                <DatePicker
+                                                    inline
+                                                    selectsRange
+                                                    showMonthDropdown
+                                                    selected={checkIn}
+                                                    startDate={checkIn}
+                                                    endDate={checkOut}
+                                                    onChange={changeDate}
+                                                    monthsShown={2}
+                                                    minDate={new Date()}
+                                                />
                                             </div>
-                                            <div className="date-wrapper">
-                                                <label>Check Out:</label>
-                                                <input type="date" value={convertToISO(checkOut)} onChange={e => setCheckOut(new Date(new Date(e.target.value).setHours(roomStart, 0, 0, 0)))} />
-                                            </div>
-                                            <div className="date-wrapper">
-                                                <label>Total Period:</label>
-                                                <p>{formatDistance(checkIn, checkOut)}</p>
-                                            </div>
-                                            <button onClick={handleFetchAvailableRooms}>Select Room/s</button>
+                                            <button className="btn" onClick={checkOut && handleFetchAvailableRooms}>Select Room/s</button>
                                         </motion.div>
                                     </AnimatePresence>
                                 }
@@ -210,7 +204,7 @@ const Booking = () => {
                                             >
                                                 <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
                                                 <p>({formatDistance(checkIn, checkOut)})</p>
-                                                <button onClick={() => setPage("date")}>Change Date</button>
+                                                <button className="btn" onClick={() => setPage("date")}>Change Date</button>
                                             </motion.div>
                                             {selectedRoomTypes.length > 0 &&
                                                 <motion.div
@@ -268,7 +262,7 @@ const Booking = () => {
                                                         </div>
                                                     </div>
                                                     <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="requests or concerns? (optional)"></textarea>
-                                                    <button onClick={() => setPage("confirm")}>Continue</button>
+                                                    <button className="btn" onClick={() => setPage("confirm")}>Continue</button>
                                                 </motion.div>
                                             }
                                             <motion.h2 layout>Available Rooms:</motion.h2>
@@ -358,11 +352,11 @@ const Booking = () => {
                                                             <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
                                                         </div>
                                                     </div>
-                                                    <button onClick={() => setPage("room")}>Edit</button>
+                                                    <button className="btn" onClick={() => setPage("room")}>Edit</button>
                                                 </motion.div>
                                             }
                                         </AnimatePresence>
-                                        <button onClick={handleConfirmReservation}>Submit</button>
+                                        <button className="btn" onClick={handleConfirmReservation}>Submit</button>
                                     </div>
                                 }
                                 {page === "success" &&
@@ -375,8 +369,8 @@ const Booking = () => {
                                         <h1>Success</h1>
                                         <p>Your reservation has been successfully made.</p>
                                         <Link to="/profile"></Link>
-                                        <button onClick={() => setPage("date")}>Book Again?</button>
-                                        <button onClick={() => navigate("/my-bookings")}>View Reservation</button>
+                                        <button className="btn" onClick={() => setPage("date")}>Book Again?</button>
+                                        <button className="btn" onClick={() => navigate("/my-bookings")}>View Reservation</button>
                                     </motion.div>
                                 }
                             </>

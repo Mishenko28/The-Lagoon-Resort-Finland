@@ -63,7 +63,17 @@ const getPending = async (_, res) => {
 // GET ALL EXPIRED
 const getExpired = async (_, res) => {
     try {
-        const books = await getBook("expired")
+        let books = await getBook("expired")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -74,7 +84,17 @@ const getExpired = async (_, res) => {
 // GET ALL CONFIRMED
 const getConfirmed = async (_, res) => {
     try {
-        const books = await getBook("confirmed")
+        let books = await getBook("confirmed")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -85,7 +105,17 @@ const getConfirmed = async (_, res) => {
 // GET ALL ONGOING
 const getOngoing = async (_, res) => {
     try {
-        const books = await getBook("ongoing")
+        let books = await getBook("ongoing")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -96,7 +126,17 @@ const getOngoing = async (_, res) => {
 // GET ALL CANCELLED
 const getCancelled = async (_, res) => {
     try {
-        const books = await getBook("cancelled")
+        let books = await getBook("cancelled")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -107,7 +147,17 @@ const getCancelled = async (_, res) => {
 // GET ALL NOSHOW
 const getNoshow = async (_, res) => {
     try {
-        const books = await getBook("noshow")
+        let books = await getBook("noshow")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -118,7 +168,17 @@ const getNoshow = async (_, res) => {
 // GET ALL COMPLETED
 const getCompleted = async (_, res) => {
     try {
-        const books = await getBook("completed")
+        let books = await getBook("completed")
+
+        books = await Promise.all(books.map(async (book) => {
+            const { email } = await User.findOne({ _id: book.userId })
+            const user = await UserPersonalData.findOne({ email: email })
+            const newBook = book.toObject()
+
+            newBook.user = user
+
+            return newBook
+        }))
 
         res.status(200).json(books)
     } catch (error) {
@@ -145,7 +205,7 @@ const addBook = async (req, res) => {
     }
 }
 
-// PENDING & EXPIRED & CANCELLED & NOSHOW => CONFIRMED
+// PENDING & CANCELLED => CONFIRMED
 const setConfirmed = async (req, res) => {
     const { _id, from, to, room, total, deposit, payed, adminEmail } = await req.body
 
@@ -163,7 +223,7 @@ const setConfirmed = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${email}` })
 
-        res.status(200).json({ book })
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -181,13 +241,13 @@ const setCompleted = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed of ${email}` })
 
-        res.status(200).json({ book })
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
 }
 
-// PENDING & CONFIRMED & ONGOING => CANCELLED
+// PENDING & CONFIRMED => CANCELLED
 const setCancelled = async (req, res) => {
     const { _id, reasonToCancel, adminEmail } = await req.body
 
@@ -217,7 +277,7 @@ const setNoshow = async (req, res) => {
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow of ${email}` })
 
-        res.status(200).json({ book })
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -225,23 +285,32 @@ const setNoshow = async (req, res) => {
 
 // EDIT BOOK
 const editBook = async (req, res) => {
-    const { _id, from, to, room, total, deposit, balance, payed, adminEmail } = await req.body
+    const { _id, from, to, room, total, payed, adminEmail } = await req.body
     let editedParts = []
-
+    console.log(payed)
     try {
-        const oldBook = await Amenity.findOne({ _id })
+        const balance = total - payed
 
-        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room, total, deposit, balance, payed }, { new: true })
+        const newRoom = room.map(r => {
+            delete r._id
+            return r
+        })
+
+        const oldBook = await Book.findOne({ _id })
+
+        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
+        const user = await UserPersonalData.findOne({ email: email })
+
+        const newBook = book.toObject()
+        newBook.user = user
 
         // activity log
         oldBook.from != from && editedParts.push("from")
         oldBook.to != to && editedParts.push("to")
         oldBook.room != room && editedParts.push("room")
         oldBook.total != total && editedParts.push("total")
-        oldBook.deposit != deposit && editedParts.push("deposit")
-        oldBook.balance != balance && editedParts.push("balance")
         oldBook.payed != payed && editedParts.push("payed")
 
         if (editedParts.length > 0) {
@@ -258,10 +327,6 @@ const editBook = async (req, res) => {
                             return ` changed room`
                         case "total":
                             return ` changed total from ${oldBook.total} to ${total}`
-                        case "deposit":
-                            return ` changed deposit from ${oldBook.deposit} to ${deposit}`
-                        case "balance":
-                            return ` changed remaining balance from ${oldBook.balance} to ${balance}`
                         case "payed":
                             return ` changed payed balance from ${oldBook.payed} to ${payed}`
                     }
@@ -269,7 +334,7 @@ const editBook = async (req, res) => {
             })
         }
 
-        res.status(200).json({ book })
+        res.status(200).json(newBook)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }

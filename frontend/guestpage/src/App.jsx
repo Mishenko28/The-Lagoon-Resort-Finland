@@ -1,4 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom"
+import "react-datepicker/dist/react-datepicker.css"
 
 import RootLayout from "./layouts/RootLayout"
 import Home from "./pages/Home"

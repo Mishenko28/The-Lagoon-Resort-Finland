@@ -4,6 +4,8 @@ import { format, formatDistanceToNow, formatDistance } from "date-fns"
 import ConfirmBook from "../../../components/ConfirmBook"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
+import CancelBook from "../../../components/CancelBook"
+import Note from "../../../components/Note"
 
 
 
@@ -12,6 +14,9 @@ export default function Pending() {
 
     const [books, setBooks] = useState([])
     const [toConfirm, setToConfirm] = useState(null)
+    const [toCancel, setToCancel] = useState(null)
+
+    const [openedNote, setOpenedNote] = useState("")
 
     useEffect(() => {
         fetchBooks()
@@ -26,7 +31,7 @@ export default function Pending() {
     if (isLoading) return <Loader2 />
 
     return (
-        <div className="pending">
+        <div className="book">
             <table>
                 <thead>
                     <tr>
@@ -77,22 +82,29 @@ export default function Pending() {
                                         </div>
                                     ))}
                                 </td>
-                                <td>{book.note && <i className="fa-solid fa-envelope" />}</td>
+                                <td>{book.note && <i onClick={() => setOpenedNote(book.note)} className="fa-solid fa-envelope" />}</td>
                                 <td>₱{book.deposit}</td>
                                 <td>₱{book.total}</td>
                                 <td>{formatDistanceToNow(book.createdAt, { addSuffix: 1 })}</td>
                                 <td>
                                     <div className="bttns">
                                         <button onClick={() => setToConfirm(book)} className="green">Confirm</button>
-                                        <button className="red">Cancel</button>
+                                        <button onClick={() => setToCancel(book)} className="red">Cancel</button>
                                     </div>
                                 </td>
                             </motion.tr>
                         ))}
                     </AnimatePresence>
+                    {books.length === 0 && (
+                        <tr>
+                            <td colSpan="11" className="center">No pending bookings.</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
+            {toCancel && <CancelBook setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
             {toConfirm && <ConfirmBook setBooks={setBooks} setToConfirm={setToConfirm} toConfirm={toConfirm} />}
+            {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
         </div>
     )
 }

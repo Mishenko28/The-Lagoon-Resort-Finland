@@ -12,7 +12,7 @@ const {
     editSubImage,
     deleteSubImage,
     getAvailableRooms,
-    getAvailableRoomNo
+    getAvailableRoomNo,
 } = require('../controllers/roomTypeController')
 
 router.get('/all', getRoomTypes)

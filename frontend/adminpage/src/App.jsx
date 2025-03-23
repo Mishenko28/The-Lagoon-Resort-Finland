@@ -1,3 +1,4 @@
+import "react-datepicker/dist/react-datepicker.css"
 import Login from './components/Login'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import useAdmin from './hooks/useAdmin'

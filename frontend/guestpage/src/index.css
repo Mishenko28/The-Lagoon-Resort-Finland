@@ -82,7 +82,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 100;
+	z-index: 2;
 }
 
 .header-page {
@@ -221,7 +221,7 @@ header {
 	flex-direction: column;
 	padding: 15px;
 	gap: 15px;
-	z-index: 101;
+	z-index: 1;
 }
 
 header .navigations,
@@ -271,7 +271,7 @@ header .mobile-dropdown {
 	height: 0;
 	overflow: hidden;
 	transition: height 0.3s ease-in-out;
-	z-index: 98;
+	z-index: 1;
 }
 
 header .mobile-dropdown a {
@@ -320,7 +320,7 @@ header .prof-pic {
 	width: 200px;
 	color: var(--dark);
 	padding: 10px;
-	z-index: 99;
+	z-index: 1;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 

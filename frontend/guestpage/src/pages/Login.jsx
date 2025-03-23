@@ -14,8 +14,8 @@ const Login = () => {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('johnthomasalog@gmail.com')
+    const [password, setPassword] = useState('thomas1228')
 
     const submit = (e) => {
         e.preventDefault()

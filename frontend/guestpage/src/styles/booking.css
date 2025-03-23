@@ -6,6 +6,54 @@
     margin-bottom: 100px;
 }
 
+
+/* DATE PICKER */
+.booking .react-datepicker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: none;
+}
+
+.booking .react-datepicker__header {
+    border-bottom: 2px solid var(--dark);
+}
+
+.booking .react-datepicker__day-names {
+    display: flex;
+    justify-content: space-around;
+    font-size: var(--small);
+    margin-inline: 0.4rem;
+}
+
+.booking .react-datepicker__week {
+    display: flex;
+    justify-content: space-around;
+}
+
+.booking .react-datepicker__month-container {
+    border: 2px solid var(--dark);
+    width: 100%;
+    border-radius: 0.3rem;
+}
+
+.booking .react-datepicker__day {
+    font-size: var(--x-small);
+}
+
+.react-datepicker__day--in-range {
+    background-color: var(--dark-secondary);
+    color: var(--light);
+}
+
+.react-datepicker__day--keyboard-selected {
+    background-color: var(--secondary);
+    color: var(--light);
+}
+
+/* DATE PICKER END */
+
+
 .booking .reservation-form {
     display: flex;
     flex-direction: column;
@@ -15,7 +63,7 @@
     padding: 20px;
     border-radius: 10px;
     width: 90%;
-    max-width: 600px;
+    max-width: 1200px;
     align-self: center;
 }
 
@@ -30,6 +78,7 @@
     transform: scaleY(0.5);
 }
 
+
 .booking .reservation-form .date-picker {
     display: flex;
     flex-direction: column;
@@ -43,32 +92,9 @@
     gap: 5px;
 }
 
-.booking .reservation-form .date-picker .date-wrapper:last-of-type {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 10px;
-}
-
 .booking .reservation-form .date-picker label {
     font-size: var(--small);
     color: var(--dark);
-}
-
-.booking .reservation-form .date-picker p {
-    font-size: var(--medium);
-    color: var(--dark);
-    font-weight: 700;
-}
-
-.booking .reservation-form .date-picker input {
-    width: 100%;
-    padding: 10px;
-    border: 3px solid var(--dark);
-    border-radius: 5px;
-    background-color: var(--light);
-    color: var(--dark);
-    font-size: var(--small);
 }
 
 .booking .reservation-form .room-picker {
@@ -262,7 +288,7 @@
     padding: 2px 5px;
 }
 
-.booking .reservation-form button {
+.booking .reservation-form button.btn {
     padding: 12px;
     border: none;
     border-radius: 5px;
@@ -330,6 +356,11 @@
         height: 100%;
     }
 
+    .booking .reservation-form .date-picker label {
+        font-size: var(--medium);
+        color: var(--dark);
+    }
+
     .booking .reservation-form .room-picker .selected-room-type .fa-square-minus,
     .booking .reservation-form .room-picker .selected-room-type .fa-user-minus,
     .booking .reservation-form .room-picker .selected-room-type .left,
@@ -342,4 +373,25 @@
     .booking .note {
         font-size: var(--small);
     }
+
+    /* DATE PICKER */
+    .booking .react-datepicker {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .booking .react-datepicker__month {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        min-height: 300px;
+    }
+
+    .booking .react-datepicker__day {
+        font-size: var(--medium);
+        width: 3rem;
+        line-height: 3rem;
+    }
+
+    /* DATE PICKER END */
 }

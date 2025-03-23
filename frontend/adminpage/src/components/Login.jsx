@@ -7,8 +7,8 @@ import { useState } from 'react'
 function Login() {
     const { dispatch } = useAdmin()
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('johnthomasalog@gmail.com')
+    const [password, setPassword] = useState('thomas1228')
     const [error, setError] = useState('')
 
     const [isLoading, setIsLoading] = useState(false)
