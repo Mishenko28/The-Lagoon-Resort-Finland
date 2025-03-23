@@ -33,13 +33,13 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
 
     useEffect(() => {
         fetchRoomTypes()
-        fetchAvailableRooms()
+        fetchAvailableRooms(toConfirm.from, toConfirm.to)
     }, [])
 
-    const fetchAvailableRooms = async () => {
+    const fetchAvailableRooms = async (from, to) => {
         setIsRoomNoLoading(true)
 
-        axios.post("room-type/available-rooms", { from: toConfirm.from, to: toConfirm.to })
+        axios.post("room-type/available-rooms", { from, to })
             .then(res => {
                 setAvailableRooms(res.data)
                 setToConfirm(prev => ({ ...prev, room: prev.room.map(room => ({ ...room, roomNo: 0 })) }))
@@ -144,7 +144,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
         const [start, end] = date
 
         setToConfirm(prev => ({ ...prev, from: start, to: end }))
-        end && fetchAvailableRooms()
+        end && fetchAvailableRooms(start, end)
     }
 
     return (
@@ -199,8 +199,14 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                                                     ))}
                                                 </select>
                                                 <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
-                                                    <option value="0">--select room num--</option>
-                                                    {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
+                                                    <option value="0">
+                                                        {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.filter(r => r.available).length === 0 ?
+                                                            "no available room"
+                                                            :
+                                                            "--select room num--"
+                                                        }
+                                                    </option>
+                                                    {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
                                                         <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
                                                     ))}
                                                 </select>

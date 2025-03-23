@@ -14,6 +14,14 @@
     width: 100%;
 }
 
+.booking .react-datepicker__month-container:nth-child(even) {
+    background-color: var(--light-gray);
+}
+
+.booking .react-datepicker__header:nth-child(even) {
+    background-color: red;
+}
+
 .booking .react-datepicker__day-names {
     display: flex;
     justify-content: space-around;

@@ -8,7 +8,7 @@ const AvailableRooms = ({ availableRooms }) => {
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (!contentRef.current.contains(e.target) && !btnRef.current.contains(e.target)) {
+            if (contentRef.current && !contentRef.current.contains(e.target) && !btnRef.current.contains(e.target)) {
                 setShowAvailableRooms(false)
             }
         }
@@ -34,12 +34,23 @@ const AvailableRooms = ({ availableRooms }) => {
             </p>
             {showAvailableRooms &&
                 <div ref={contentRef} className="content">
-                    {availableRooms.map((room, i) => (
-                        <h2 key={i}><b>{room.roomType}</b> ({room.rooms.reduce((available, room) => room.available ? available + 1 : available, 0)} rooms)</h2>
-                    ))}
+                    {availableRooms.map((room, i) => {
+                        const total = room.rooms.reduce((available, room) => room.available ? available + 1 : available, 0)
+
+                        return (
+                            <h2 key={i}>
+                                <b>{room.roomType}</b>
+                                {total > 0 ?
+                                    <span>({total} {total > 1 ? "rooms" : "room"})</span>
+                                    :
+                                    <span>(no rooms)</span>
+                                }
+                            </h2>
+                        )
+                    })}
                 </div>
             }
-        </div>
+        </div >
     )
 }
 
