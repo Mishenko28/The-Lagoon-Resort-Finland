@@ -8,9 +8,9 @@ import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
 
 
-
 const ChangeBook = ({ setBooks, setToChange, toChange }) => {
     const { dispatch } = useAdmin()
+
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomNoLoading, setIsRoomNoLoading] = useState(true)
 
@@ -120,6 +120,8 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
             return
         }
 
+        setIsLoading(true)
+
         axios.patch("book/edit", { ...toChange, payed: addPay ? toChange.payed + parseInt(addPay) : toChange.payed })
             .then(res => {
                 setToChange(null)
@@ -130,6 +132,7 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
             })
+            .finally(() => setIsLoading(false))
     }
 
     const handleChangeDate = (date) => {

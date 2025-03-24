@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import useAdmin from "../hooks/useAdmin"
 import { Link, useNavigate } from "react-router-dom"
 import DatePicker from "react-datepicker"
-
+import { socket } from "../socket.js"
 
 const dateToday = new Date()
 const dateTomorrow = new Date()
@@ -37,6 +37,11 @@ const Booking = () => {
     const [userHasDetails, setUserHasDetails] = useState(true)
 
     const [page, setPage] = useState("date")
+
+    useEffect(() => {
+        if (state.user) socket.connect()
+        return () => socket.disconnect()
+    }, [state.user])
 
     useEffect(() => {
         if (roomStart) {
@@ -119,6 +124,7 @@ const Booking = () => {
                 setSelectedRoomTypes([])
                 setNote("")
                 setPage("success")
+                socket.emit('new-booking', res.data.book)
             })
             .finally(() => setIsRoomsloading(false))
     }

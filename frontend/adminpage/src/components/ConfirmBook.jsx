@@ -10,6 +10,7 @@ import AvailableRooms from "./AvailableRooms"
 
 export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
     const { dispatch } = useAdmin()
+
     const [isLoading, setIsLoading] = useState(true)
     const [isRoomNoLoading, setIsRoomNoLoading] = useState(true)
 
@@ -128,6 +129,8 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
             return
         }
 
+        setIsLoading(true)
+
         axios.post("book/add-confirmed", { ...toConfirm, payed })
             .then(res => {
                 setToConfirm(null)
@@ -138,6 +141,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
             })
+            .finally(() => setIsLoading(false))
     }
 
     const handleChangeDate = (date) => {

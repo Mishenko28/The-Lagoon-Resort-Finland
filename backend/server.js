@@ -58,15 +58,16 @@ app.use('/log', activityLogRoute)
 app.use('/otp', otpRoute)
 app.use('/room-type', roomTypeRoute)
 
+
+
 // WEB SOCKET
-io.on('connection', (socket) => {
-    // admin => client
-    socket.on('re fetch', (data) => {
-        io.emit('re fetch', data)
+io.on('connection', socket => {
+    socket.on('new-booking', data => {
+        io.emit('new-booking', data)
     })
-    // client => admin
-    socket.on('new booking', (data) => {
-        io.emit('new booking', data)
+
+    socket.on('cancel-booking', data => {
+        io.emit('cancel-booking', data)
     })
 })
 

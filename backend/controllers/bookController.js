@@ -197,7 +197,9 @@ const addBook = async (req, res) => {
     try {
         const user = await User.findOne({ email })
 
-        const book = await Book.create({ userId: user._id, from, to, note, room, total, deposit, balance: total, downPayment })
+        let book = (await Book.create({ userId: user._id, from, to, note, room, total, deposit, balance: total, downPayment })).toObject()
+
+        book.user = await UserPersonalData.findOne({ email })
 
         res.status(200).json({ book })
     } catch (error) {

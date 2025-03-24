@@ -100,7 +100,7 @@ const Confirmed = () => {
                     </AnimatePresence>
                     {books.length === 0 && (
                         <tr>
-                            <td colSpan="11" className="center">No confirmed bookings.</td>
+                            <td colSpan="12" className="center">No confirmed bookings.</td>
                         </tr>
                     )}
                 </tbody>

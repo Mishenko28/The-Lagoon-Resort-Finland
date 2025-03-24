@@ -6,7 +6,7 @@ import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
 import CancelBook from "../../../components/CancelBook"
 import Note from "../../../components/Note"
-
+import { socket } from "../../../socket"
 
 
 export default function Pending() {
@@ -20,6 +20,20 @@ export default function Pending() {
 
     useEffect(() => {
         fetchBooks()
+        socket.connect()
+
+        const handleNewBooking = (data) => setBooks(prev => [...prev, data])
+        const handleCancelBooking = (data) => setBooks(prev => prev.filter(book => book._id !== data._id))
+
+        socket.on('new-booking', handleNewBooking)
+        socket.on('cancel-booking', handleCancelBooking)
+
+        return () => {
+            socket.off('new-booking', handleNewBooking)
+            socket.off('cancel-booking', handleCancelBooking)
+            socket.disconnect()
+        }
+
     }, [])
 
     const fetchBooks = async () => {

@@ -5,7 +5,7 @@ import Loader from "./Loader"
 import { Link } from "react-router-dom"
 import useAdmin from "../hooks/useAdmin"
 import { motion, AnimatePresence } from "framer-motion"
-
+import { socket } from "../socket"
 
 
 
@@ -22,6 +22,9 @@ const Pending = ({ setTotal }) => {
 
     useEffect(() => {
         fetchPending()
+        socket.connect()
+
+        return () => socket.disconnect()
     }, [])
 
     const fetchPending = async () => {
@@ -56,6 +59,9 @@ const Pending = ({ setTotal }) => {
             .then(res => {
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
                 setTotal(prev => ({ ...prev, pending: prev.pending - 1, cancel: prev.cancel + 1 }))
+                setReason("")
+                setOtherReason("")
+                socket.emit('cancel-booking', res.data)
             })
             .finally(() => setCancelLoading(null))
     }
@@ -120,7 +126,7 @@ const Pending = ({ setTotal }) => {
                                                 </div>
                                             }
                                             <div className="total">
-                                                <h1>Down payment:</h1>
+                                                <h1>Down payment to be settled:</h1>
                                                 <h2>₱{book.deposit}</h2>
                                             </div>
                                         </div>
@@ -161,7 +167,7 @@ const Pending = ({ setTotal }) => {
                                                 </div>
                                                 <div className="other">
                                                     <h2>Others reason:</h2>
-                                                    <textarea value={otherReason} onChange={handleOtherReason} rows={3}></textarea>
+                                                    <textarea required={!reason} value={otherReason} onChange={handleOtherReason} rows={3}></textarea>
                                                 </div>
                                             </div>
                                             <div className="bttns">
