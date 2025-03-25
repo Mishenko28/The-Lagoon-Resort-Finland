@@ -26,7 +26,6 @@ export default function Booking() {
             </div>
             {page === "pending" && <Pending />}
             {page === "confirmed" && <Confirmed />}
-
         </div>
     )
 }

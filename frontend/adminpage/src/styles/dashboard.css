@@ -395,8 +395,17 @@
     font-size: 1.5rem;
 }
 
-.booking .book .book-header {
-    background-color: red;
+.booking .book-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.booking .book-header input {
+    padding: 5px;
+    font-size: 0.8rem;
+    border: 2px solid var(--primary);
+    width: 200px;
 }
 
 
@@ -561,5 +570,12 @@
     .booking .opened-note .fa-xmark {
         font-size: 2rem;
         cursor: pointer;
+    }
+
+    .booking .book-header input {
+        padding: 10px;
+        font-size: 1rem;
+        border: 3px solid var(--primary);
+        width: 300px;
     }
 }
