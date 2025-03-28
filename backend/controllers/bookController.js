@@ -4,6 +4,8 @@ const { ActivityLog, Actions } = require('../models/activityLogModel')
 const User = require('../models/userModel')
 const UserPersonalData = require('../models/userPersonalDataModel')
 const mongoose = require('mongoose')
+const sendMail = require('../Utility/nodeMailer')
+const { Admin } = require('../models/adminModel')
 
 // STATUS
 // pending
@@ -64,6 +66,10 @@ const getExpired = async (req, res) => {
 
         books = await Promise.all(books.map(async (book) => {
             if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+
+            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
                 return null
             }
 
@@ -137,6 +143,9 @@ const getCancelled = async (req, res) => {
             if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
                 return null
             }
+            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
+                return null
+            }
 
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
@@ -164,6 +173,9 @@ const getNoshow = async (req, res) => {
 
         books = await Promise.all(books.map(async (book) => {
             if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
                 return null
             }
 
@@ -196,6 +208,10 @@ const getCompleted = async (req, res) => {
                 return null
             }
 
+            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
+                return null
+            }
+
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
             const newBook = book.toObject()
@@ -222,11 +238,20 @@ const addBook = async (req, res) => {
 
 
     try {
+        const admins = await Admin.find({ role: { $in: ["booking"] } })
         const user = await User.findOne({ email })
 
         let book = (await Book.create({ userId: user._id, from, to, note, room, total, deposit, balance: total, downPayment })).toObject()
 
         book.user = await UserPersonalData.findOne({ email })
+
+        admins.forEach(admin => {
+            sendMail({
+                subject: "The Lagoon Resort Finland Inc. New Booking!",
+                to: admin.email,
+                html: `<h1>${book.user.name} submit a reservation</h1>`
+            })
+        })
 
         res.status(200).json({ book })
     } catch (error) {

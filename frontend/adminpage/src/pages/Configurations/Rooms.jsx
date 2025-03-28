@@ -263,7 +263,7 @@ export default function Rooms() {
                             <AnimatePresence mode='sync'>
                                 {roomTypes.map((roomType, i) => (
                                     <RoomTypes
-                                        key={roomType.name}
+                                        key={roomType._id}
                                         roomType={roomType}
                                         rooms={rooms.filter(room => room.roomType === roomType.name)}
                                         setRooms={setRooms}

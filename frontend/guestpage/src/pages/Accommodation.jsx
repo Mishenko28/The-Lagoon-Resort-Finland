@@ -60,10 +60,12 @@ const Accommodation = () => {
                             <div className="part1">
                                 <img src={roomType.img} />
                                 <h1>₱{roomType.rate} / Night</h1>
-                                <div onClick={() => setSubImgToShow(roomType)} className="subImg-icon">
-                                    <i className="fa-solid fa-image" />
-                                    <p>{roomType.subImg.length}</p>
-                                </div>
+                                {roomType.subImg.length > 0 &&
+                                    <div onClick={() => setSubImgToShow(roomType)} className="subImg-icon">
+                                        <i className="fa-solid fa-image" />
+                                        <p>{roomType.subImg.length}</p>
+                                    </div>
+                                }
                             </div>
                             <div className="part2">
                                 <h2>{roomType.name} ROOM</h2>

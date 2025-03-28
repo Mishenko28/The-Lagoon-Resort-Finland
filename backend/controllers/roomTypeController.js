@@ -145,6 +145,7 @@ const updateRoomTypes = async (req, res) => {
 
         if (editedParts.includes("name")) {
             await Room.updateMany({ roomType: oldRoomType.name }, { roomType: name })
+            await Book.updateMany({ "room.roomType": oldRoomType.name }, { $set: { "room.$[].roomType": name } })
         }
 
         if (editedParts.length > 0) {
@@ -180,6 +181,11 @@ const deleteRoomType = async (req, res) => {
     const { _id, adminEmail } = await req.body
 
     try {
+        const books = await Book.find({ $or: [{ status: "confirmed" }, { status: "ongoing" }] })
+        const { name } = await RoomType.findOne({ _id })
+
+        if (books.some(book => book.room.some(room => room.roomType === name))) throw new Error("Cannot delete roomtype with active bookings.")
+
         const roomType = await RoomType.findOneAndDelete({ _id })
 
         await Room.deleteMany({ roomType: roomType.name })

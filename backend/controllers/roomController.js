@@ -1,6 +1,7 @@
 const Room = require('../models/roomModel')
 const Archive = require('../models/archiveModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
+const Book = require('../models/bookModel')
 
 // GET ALL ROOMS
 const getAllRooms = async (_, res) => {
@@ -20,6 +21,7 @@ const addRoom = async (req, res) => {
     try {
         const existingRoomNo = await Room.findOne({ roomType, roomNo })
         if (existingRoomNo) throw new Error("Room number already exists.")
+        if (roomNo == "0") throw new Error("Room number cannot be 0.")
 
         const room = await Room.create({ roomNo, img, roomType, caption, active })
 
@@ -40,6 +42,7 @@ const updateRoom = async (req, res) => {
     try {
         const existingRoomNo = await Room.findOne({ _id: { $ne: _id }, roomNo, roomType })
         if (existingRoomNo) throw new Error("Room number already exists.")
+        if (roomNo == "0") throw new Error("Room number cannot be 0.")
 
         const oldRoom = await Room.findOne({ _id })
 
@@ -50,6 +53,10 @@ const updateRoom = async (req, res) => {
         img && oldRoom.img != img && editedParts.push("img")
         caption || caption === "" && oldRoom.caption != caption && editedParts.push("caption")
         active !== null && oldRoom.active != active && editedParts.push("active")
+
+        if (editedParts.includes("roomNo")) {
+            await Book.updateMany({ "room.roomNo": oldRoom.roomNo }, { $set: { "room.$.roomNo": roomNo } })
+        }
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -81,6 +88,11 @@ const deleteRoom = async (req, res) => {
     const { _id, adminEmail } = await req.body
 
     try {
+        const books = await Book.find({ $or: [{ status: "confirmed" }, { status: "ongoing" }] })
+        const { roomNo, roomType } = await Room.findOne({ _id })
+
+        if (books.some(book => book.room.some(room => room.roomNo === roomNo && room.roomType === roomType))) throw new Error("Cannot delete room with active bookings.")
+
         const room = await Room.findOneAndDelete({ _id }, { new: true })
 
         // archive
