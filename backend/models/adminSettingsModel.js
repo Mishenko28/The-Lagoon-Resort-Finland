@@ -7,7 +7,11 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
     },
     roomStart: {
         type: Number,
-        default: 8
+        default: 14
+    },
+    roomEnd: {
+        type: Number,
+        default: 12
     },
     emails: {
         type: Array,

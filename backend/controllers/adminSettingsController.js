@@ -18,14 +18,14 @@ const getSettings = async (_, res) => {
 }
 
 const updateSettings = async (req, res) => {
-    const { downPayment, roomStart, phoneNumbers, socials, emails, adminEmail } = await req.body
+    const { downPayment, roomStart, roomEnd, phoneNumbers, socials, emails, adminEmail } = await req.body
     let editedParts = []
     let deletedRoomType = []
 
     try {
         const oldSettings = await AdminSetting.findOne({})
 
-        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomStart, phoneNumbers, socials, emails }, { new: true })
+        const adminSetting = await AdminSetting.findOneAndUpdate({}, { downPayment, roomStart, roomEnd, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
         socials && oldSettings.socials != socials && editedParts.push("socials")
@@ -33,6 +33,7 @@ const updateSettings = async (req, res) => {
         phoneNumbers && oldSettings.phoneNumbers != phoneNumbers && editedParts.push("phoneNumbers")
         downPayment && oldSettings.downPayment != downPayment && editedParts.push("downPayment")
         roomStart && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
+        roomEnd && oldSettings.roomEnd != roomEnd && editedParts.push("roomEnd")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -44,6 +45,8 @@ const updateSettings = async (req, res) => {
                             return ` changed down payment from ${oldSettings.downPayment * 100}% to ${downPayment * 100}%`
                         case "roomStart":
                             return ` changed room start from ${oldSettings.roomStart} to ${roomStart}`
+                        case "roomStart":
+                            return ` changed room end from ${oldSettings.roomEnd} to ${roomEnd}`
                         case "emails":
                             if (oldSettings.emails.length === emails.length) {
                                 return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0]} to ${emails.filter(email => !oldSettings.emails.includes(email))[0]}`

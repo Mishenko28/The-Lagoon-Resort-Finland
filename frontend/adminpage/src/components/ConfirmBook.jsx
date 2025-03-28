@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import Loader2 from "./Loader2"
-import { formatDistance } from "date-fns"
 import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
 
 
-export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
+export default function ConfirmBook({ convertToNight, setBooks, toConfirm, setToConfirm }) {
     const { dispatch } = useAdmin()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -18,11 +17,12 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
     const [availableRooms, setAvailableRooms] = useState([])
 
     const [roomStart, setRoomStart] = useState(null)
+    const [roomEnd, setRoomEnd] = useState(null)
 
     const paymentRef = useRef(null)
 
-    const total = toConfirm.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toConfirm.to).setHours(roomStart, 0, 0, 0) - new Date(toConfirm.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
-    const [payed, setPayed] = useState("")
+    const total = toConfirm.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toConfirm.to).setHours(roomEnd, 0, 0, 0) - new Date(toConfirm.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
+    const [payed, setPayed] = useState(toConfirm.deposit)
 
     useEffect(() => {
         if (paymentRef.current) paymentRef.current.focus()
@@ -64,7 +64,10 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
 
     const fetchRoomStart = async () => {
         axios.get("admin-settings/all")
-            .then(res => setRoomStart(res.data.adminSetting.roomStart))
+            .then(res => {
+                setRoomStart(res.data.adminSetting.roomStart)
+                setRoomEnd(res.data.adminSetting.roomEnd)
+            })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
@@ -131,7 +134,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
 
         setIsLoading(true)
 
-        axios.post("book/add-confirmed", { ...toConfirm, payed })
+        axios.post("book/add-confirmed", { ...toConfirm, payed, from: new Date(toConfirm.from).setHours(roomStart, 0, 0, 0), to: new Date(toConfirm.to).setHours(roomEnd, 0, 0, 0) })
             .then(res => {
                 setToConfirm(null)
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
@@ -164,7 +167,7 @@ export default function ConfirmBook({ setBooks, toConfirm, setToConfirm }) {
                 </div>
                 <hr />
                 <div className="date-wrapper">
-                    <h2>Total Period: {formatDistance(toConfirm.from, toConfirm.to)}</h2>
+                    <h2>Total Period: {convertToNight(toConfirm.from, toConfirm.to)}</h2>
                     <DatePicker
                         withPortal
                         selectsRange

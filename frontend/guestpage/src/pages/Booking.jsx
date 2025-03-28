@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
-import { formatDistance, format } from 'date-fns'
+import { format } from 'date-fns'
 import { motion, AnimatePresence } from "framer-motion"
 import useAdmin from "../hooks/useAdmin"
 import { Link, useNavigate } from "react-router-dom"
@@ -33,10 +33,13 @@ const Booking = () => {
 
     const [downPayment, setDownPayment] = useState(null)
     const [roomStart, setRoomStart] = useState(null)
+    const [roomEnd, setRoomEnd] = useState(null)
 
     const [userHasDetails, setUserHasDetails] = useState(true)
 
     const [page, setPage] = useState("date")
+
+    const totalDays = `${Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))} ${Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)) === 1 ? "night" : "nights"}`
 
     useEffect(() => {
         if (state.user) socket.connect()
@@ -44,11 +47,11 @@ const Booking = () => {
     }, [state.user])
 
     useEffect(() => {
-        if (roomStart) {
+        if (roomStart && roomEnd) {
             setCheckIn(new Date(dateToday.setHours(roomStart, 0, 0, 0)))
-            setCheckOut(new Date(dateTomorrow.setHours(roomStart, 0, 0, 0)))
+            setCheckOut(new Date(dateTomorrow.setHours(roomEnd, 0, 0, 0)))
         }
-    }, [roomStart])
+    }, [roomStart, roomEnd])
 
     useEffect(() => {
         if (formRef.current && select) {
@@ -89,6 +92,7 @@ const Booking = () => {
             .then(res => {
                 setDownPayment(res.data.adminSetting.downPayment)
                 setRoomStart(res.data.adminSetting.roomStart)
+                setRoomEnd(res.data.adminSetting.roomEnd)
             })
             .finally(() => setIsLoading(false))
     }
@@ -111,8 +115,8 @@ const Booking = () => {
 
         axios.post('book/add-pending', {
             email: state.user.email,
-            from: checkIn,
-            to: checkOut,
+            from: checkIn.setHours(roomStart, 0, 0, 0),
+            to: checkOut.setHours(roomEnd, 0, 0, 0),
             note,
             selectedRoomTypes,
             total: selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),
@@ -120,7 +124,7 @@ const Booking = () => {
         })
             .then(res => {
                 setCheckIn(new Date(dateToday.setHours(roomStart, 0, 0, 0)))
-                setCheckOut(new Date(dateTomorrow.setHours(roomStart, 0, 0, 0)))
+                setCheckOut(new Date(dateTomorrow.setHours(roomEnd, 0, 0, 0)))
                 setSelectedRoomTypes([])
                 setNote("")
                 setPage("success")
@@ -180,7 +184,7 @@ const Booking = () => {
                                             className="date-picker"
                                         >
                                             <div className="date-wrapper">
-                                                <label>Selected Date: {checkOut && <b>{format(checkIn, 'LLLL d' + (new Date(checkIn).getFullYear() === new Date(checkOut).getFullYear() ? '' : ', yyyy'))} - {format(checkOut, (new Date(checkIn).getMonth() === new Date(checkOut).getMonth() ? '' : 'LLLL ') + 'd, yyyy')}</b>} {checkOut && "(" + formatDistance(checkIn, checkOut) + ")"}</label>
+                                                <label>Selected Date: {checkOut && <b>{format(checkIn, 'LLLL d' + (new Date(checkIn).getFullYear() === new Date(checkOut).getFullYear() ? '' : ', yyyy'))} - {format(checkOut, (new Date(checkIn).getMonth() === new Date(checkOut).getMonth() ? '' : 'LLLL ') + 'd, yyyy')}</b>} {checkOut && "(" + totalDays + ")"}</label>
                                                 <DatePicker
                                                     inline
                                                     selectsRange
@@ -209,7 +213,7 @@ const Booking = () => {
                                                 key="date"
                                             >
                                                 <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
-                                                <p>({formatDistance(checkIn, checkOut)})</p>
+                                                <p>({totalDays})</p>
                                                 <button className="btn" onClick={() => setPage("date")}>Change Date</button>
                                             </motion.div>
                                             {selectedRoomTypes.length > 0 &&
@@ -309,7 +313,7 @@ const Booking = () => {
                                                 onClick={() => setPage("date")}
                                             >
                                                 <p><b>{format(checkIn, 'LLL d, yyyy')}</b> to <b>{format(checkOut, 'LLL d, yyyy')}</b></p>
-                                                <p>({formatDistance(checkIn, checkOut)})</p>
+                                                <p>({totalDays})</p>
                                             </motion.div>
                                             {selectedRoomTypes.length > 0 &&
                                                 <motion.div

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, formatDistanceToNow, formatDistance } from "date-fns"
+import { format } from "date-fns"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
@@ -9,7 +9,7 @@ import ChangeBook from "../../../components/ChangeBook"
 
 
 
-const Confirmed = () => {
+const Confirmed = ({ convertToNight }) => {
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -36,7 +36,11 @@ const Confirmed = () => {
     return (
         <>
             <div className="book-header">
-                <input value={searchInput} onChange={e => !(searchInput.length === 0 && e.target.value === " ") && setSearchInput(e.target.value)} type="text" placeholder="search for email or guest name" />
+                <input className="search" value={searchInput} onChange={e => !(searchInput.length === 0 && e.target.value === " ") && setSearchInput(e.target.value)} type="text" placeholder="search for email or guest name" />
+                <h1>Total Reservations: {books.length}</h1>
+                <h1>Total Reserved Rooms: {books.reduce((total, currentBook) => currentBook.room.length + total, 0)}</h1>
+                <h1>Total Amount Paid: ₱{books.reduce((total, currentBook) => currentBook.payed + total, 0)}</h1>
+                <h1>Total Amount to be Paid: ₱{books.reduce((total, currentBook) => currentBook.total + total, 0)}</h1>
             </div>
             <div className="book">
                 <table>
@@ -88,7 +92,7 @@ const Confirmed = () => {
                                     <td>
                                         {format(book.from, 'LLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}
                                         <br />
-                                        {formatDistance(book.from, book.to)}
+                                        {convertToNight(book.from, book.to)}
                                     </td>
                                     <td>
                                         {book.room.map((room, i) => (
@@ -121,8 +125,8 @@ const Confirmed = () => {
                         )}
                     </tbody>
                 </table>
-                {toChange && <ChangeBook setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
-                {toCancel && <CancelBook setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
+                {toChange && <ChangeBook convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
+                {toCancel && <CancelBook convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
             </div>
         </>

@@ -8,11 +8,11 @@ const setOngoingBooks = async (req, res, next) => {
 
     try {
         const books = await Book.find({ status: "confirmed" })
-        const { roomStart } = await AdminSetting.findOne({})
+        const { roomStart, roomEnd } = await AdminSetting.findOne({})
 
         await Promise.all(books.map(async book => {
             book.from.setHours(roomStart, 0, 0, 0)
-            book.to.setHours(roomStart, 0, 0, 0)
+            book.to.setHours(roomEnd, 0, 0, 0)
 
             const isOnGoing = dateNow.isSameOrAfter(book.from)
 
@@ -33,11 +33,11 @@ const setExpiredBooks = async (req, res, next) => {
 
     try {
         const books = await Book.find({ status: "pending" })
-        const { roomStart } = await AdminSetting.findOne({})
+        const { roomStart, roomEnd } = await AdminSetting.findOne({})
 
         await Promise.all(books.map(async book => {
             book.from.setHours(roomStart, 0, 0, 0)
-            book.to.setHours(roomStart, 0, 0, 0)
+            book.to.setHours(roomEnd, 0, 0, 0)
 
             const isExpired = dateYesterday.isSameOrAfter(book.from)
 

@@ -3,9 +3,7 @@ import { format, formatDistance } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
 
-
-
-const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
+const NoShowBook = ({ convertToNight, setBooks, setToNoShow, toNoShow }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -13,10 +11,10 @@ const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
 
         setIsLoading(true)
 
-        axios.post("book/add-cancelled", { _id: toCancel._id, reasonToCancel: "Cancelled by admin" })
+        axios.post("book/add-noshow", { _id: toNoShow._id })
             .then(res => {
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
-                setToCancel(null)
+                setToNoShow(null)
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -28,32 +26,32 @@ const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
     return (
         <div className="full-cont">
             <form onSubmit={handleSubmit} className="cancel-book">
-                <h1>Set as Cancelled?</h1>
-                <div className="cancel-book-info">
+                <h1>Set as No-show?</h1>
+                <div className="no-show-book-info">
                     {isLoading ?
                         <Loader2 />
                         :
                         <>
-                            <h2>{toCancel.user.name} ({toCancel.user.sex}, {toCancel.user.age})</h2>
-                            <h2>{toCancel.user.email}</h2>
-                            <h2>{format(toCancel.from, 'LLL d' + (new Date(toCancel.from).getFullYear() === new Date(toCancel.to).getFullYear() ? '' : ', yyyy'))} - {format(toCancel.to, (new Date(toCancel.from).getMonth() === new Date(toCancel.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toCancel.from, toCancel.to)})</h2>
+                            <h2>{toNoShow.user.name} ({toNoShow.user.sex}, {toNoShow.user.age})</h2>
+                            <h2>{toNoShow.user.email}</h2>
+                            <h2>{format(toNoShow.from, 'LLL d' + (new Date(toNoShow.from).getFullYear() === new Date(toNoShow.to).getFullYear() ? '' : ', yyyy'))} - {format(toNoShow.to, (new Date(toNoShow.from).getMonth() === new Date(toNoShow.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toNoShow.from, toNoShow.to)})</h2>
                             <div className="room">
-                                {toCancel.room.map((room, i) => (
+                                {toNoShow.room.map((room, i) => (
                                     <h2 key={room._id}>{room.roomType}</h2>
                                 ))}
                             </div>
-                            <h2>Total: {toCancel.total}</h2>
-                            <h2>Payed: {toCancel.payed}</h2>
+                            <h2>Total: {toNoShow.total}</h2>
+                            <h2>Payed: {toNoShow.payed}</h2>
                         </>
                     }
                 </div>
                 <div className="bttns">
                     <button type="submit" disabled={isLoading} className="green">Yes</button>
-                    <button onClick={() => setToCancel(null)} className="red">Back</button>
+                    <button onClick={() => setToNoShow(null)} className="red">Back</button>
                 </div>
             </form>
         </div>
     )
 }
 
-export default CancelBook
+export default NoShowBook

@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import Loader2 from "./Loader2"
-import { formatDistance } from "date-fns"
 import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
 
 
-const ChangeBook = ({ setBooks, setToChange, toChange }) => {
+const ChangeBook = ({ convertToNight, setBooks, setToChange, toChange }) => {
     const { dispatch } = useAdmin()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -18,8 +17,9 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
     const [availableRooms, setAvailableRooms] = useState([])
 
     const [roomStart, setRoomStart] = useState(null)
+    const [roomEnd, setRoomEnd] = useState(null)
 
-    const total = toChange.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toChange.to).setHours(roomStart, 0, 0, 0) - new Date(toChange.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
+    const total = toChange.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toChange.to).setHours(roomEnd, 0, 0, 0) - new Date(toChange.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
     const [addPay, setAddPay] = useState("")
 
     useEffect(() => {
@@ -55,7 +55,10 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
 
     const fetchRoomStart = async () => {
         axios.get("admin-settings/all")
-            .then(res => setRoomStart(res.data.adminSetting.roomStart))
+            .then(res => {
+                setRoomStart(res.data.adminSetting.roomStart)
+                setRoomEnd(res.data.adminSetting.roomEnd)
+            })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
@@ -122,7 +125,12 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
 
         setIsLoading(true)
 
-        axios.patch("book/edit", { ...toChange, payed: addPay ? toChange.payed + parseInt(addPay) : toChange.payed })
+        axios.patch("book/edit", {
+            ...toChange,
+            payed: addPay ? toChange.payed + parseInt(addPay) : toChange.payed,
+            from: new Date(toChange.from).setHours(roomStart, 0, 0, 0),
+            to: new Date(toChange.to).setHours(roomEnd, 0, 0, 0)
+        })
             .then(res => {
                 setToChange(null)
                 setBooks(prev => prev.map(book => book._id === toChange._id ? res.data : book))
@@ -158,7 +166,7 @@ const ChangeBook = ({ setBooks, setToChange, toChange }) => {
                 </div>
                 <hr />
                 <div className="date-wrapper">
-                    <h2>Total Period: {formatDistance(toChange.from, toChange.to)}</h2>
+                    <h2>Total Period: {convertToNight(toChange.from, toChange.to)}</h2>
                     <DatePicker
                         withPortal
                         selectsRange

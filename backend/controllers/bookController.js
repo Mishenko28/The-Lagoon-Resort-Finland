@@ -34,15 +34,10 @@ const getTotalBooks = async (req, res) => {
     }
 }
 
-const getBook = async (status) => {
-    const book = await Book.find({ status })
-    return book
-}
-
 // GET ALL PENDING
 const getPending = async (_, res) => {
     try {
-        let books = await getBook("pending")
+        let books = await Book.find({ status: "pending" })
 
         books = await Promise.all(books.map(async (book) => {
             const { email } = await User.findOne({ _id: book.userId })
@@ -61,11 +56,17 @@ const getPending = async (_, res) => {
 }
 
 // GET ALL EXPIRED
-const getExpired = async (_, res) => {
+const getExpired = async (req, res) => {
+    const { month } = req.query
+
     try {
-        let books = await getBook("expired")
+        let books = await Book.find({ status: "expired" })
 
         books = await Promise.all(books.map(async (book) => {
+            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
             const newBook = book.toObject()
@@ -74,6 +75,8 @@ const getExpired = async (_, res) => {
 
             return newBook
         }))
+
+        books = books.filter(book => book !== null)
 
         res.status(200).json(books)
     } catch (error) {
@@ -84,7 +87,7 @@ const getExpired = async (_, res) => {
 // GET ALL CONFIRMED
 const getConfirmed = async (_, res) => {
     try {
-        let books = await getBook("confirmed")
+        let books = await Book.find({ status: "confirmed" })
 
         books = await Promise.all(books.map(async (book) => {
             const { email } = await User.findOne({ _id: book.userId })
@@ -105,7 +108,7 @@ const getConfirmed = async (_, res) => {
 // GET ALL ONGOING
 const getOngoing = async (_, res) => {
     try {
-        let books = await getBook("ongoing")
+        let books = await Book.find({ status: "ongoing" })
 
         books = await Promise.all(books.map(async (book) => {
             const { email } = await User.findOne({ _id: book.userId })
@@ -124,11 +127,17 @@ const getOngoing = async (_, res) => {
 }
 
 // GET ALL CANCELLED
-const getCancelled = async (_, res) => {
+const getCancelled = async (req, res) => {
+    const { month } = req.query
+
     try {
-        let books = await getBook("cancelled")
+        let books = await Book.find({ status: "cancelled" })
 
         books = await Promise.all(books.map(async (book) => {
+            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
             const newBook = book.toObject()
@@ -137,6 +146,8 @@ const getCancelled = async (_, res) => {
 
             return newBook
         }))
+
+        books = books.filter(book => book !== null)
 
         res.status(200).json(books)
     } catch (error) {
@@ -145,11 +156,17 @@ const getCancelled = async (_, res) => {
 }
 
 // GET ALL NOSHOW
-const getNoshow = async (_, res) => {
+const getNoshow = async (req, res) => {
+    const { month } = req.query
+
     try {
-        let books = await getBook("noshow")
+        let books = await Book.find({ status: "noshow" })
 
         books = await Promise.all(books.map(async (book) => {
+            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
             const newBook = book.toObject()
@@ -158,6 +175,8 @@ const getNoshow = async (_, res) => {
 
             return newBook
         }))
+
+        books = books.filter(book => book !== null)
 
         res.status(200).json(books)
     } catch (error) {
@@ -166,11 +185,17 @@ const getNoshow = async (_, res) => {
 }
 
 // GET ALL COMPLETED
-const getCompleted = async (_, res) => {
+const getCompleted = async (req, res) => {
+    const { month } = req.query
+
     try {
-        let books = await getBook("completed")
+        let books = await Book.find({ status: "completed" })
 
         books = await Promise.all(books.map(async (book) => {
+            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
+                return null
+            }
+
             const { email } = await User.findOne({ _id: book.userId })
             const user = await UserPersonalData.findOne({ email: email })
             const newBook = book.toObject()
@@ -179,6 +204,8 @@ const getCompleted = async (_, res) => {
 
             return newBook
         }))
+
+        books = books.filter(book => book !== null)
 
         res.status(200).json(books)
     } catch (error) {
@@ -233,9 +260,10 @@ const setConfirmed = async (req, res) => {
 
 // ONGOING => COMPLETED
 const setCompleted = async (req, res) => {
-    const { _id, balance, payed, adminEmail } = await req.body
+    const { _id, total, payed, adminEmail } = await req.body
 
     try {
+        const balance = total - payed
         const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance, payed }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
@@ -289,7 +317,7 @@ const setNoshow = async (req, res) => {
 const editBook = async (req, res) => {
     const { _id, from, to, room, total, payed, adminEmail } = await req.body
     let editedParts = []
-    console.log(payed)
+
     try {
         const balance = total - payed
 

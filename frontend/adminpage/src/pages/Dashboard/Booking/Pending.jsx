@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, formatDistanceToNow, formatDistance } from "date-fns"
+import { format, formatDistanceToNow } from "date-fns"
 import ConfirmBook from "../../../components/ConfirmBook"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
@@ -9,7 +9,7 @@ import Note from "../../../components/Note"
 import { socket } from "../../../socket"
 
 
-export default function Pending() {
+export default function Pending({ convertToNight }) {
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -19,6 +19,7 @@ export default function Pending() {
     const [openedNote, setOpenedNote] = useState("")
 
     const [searchInput, setSearchInput] = useState("")
+
 
     useEffect(() => {
         fetchBooks()
@@ -49,7 +50,11 @@ export default function Pending() {
     return (
         <>
             <div className="book-header">
-                <input value={searchInput} onChange={e => !(searchInput.length === 0 && e.target.value === " ") && setSearchInput(e.target.value)} type="text" placeholder="search for email or guest name" />
+                <input className="search" value={searchInput} onChange={e => !(searchInput.length === 0 && e.target.value === " ") && setSearchInput(e.target.value)} type="text" placeholder="search for email or guest name" />
+                <h1>Total Submissions: {books.length}</h1>
+                <h1>Total Rooms to reserve: {books.reduce((total, currentBook) => currentBook.room.length + total, 0)}</h1>
+                <h1>Total Down payments: ₱{books.reduce((total, currentBook) => currentBook.deposit + total, 0)}</h1>
+                <h1>Sum Total: ₱{books.reduce((total, currentBook) => currentBook.total + total, 0)}</h1>
             </div>
             <div className="book">
                 <table>
@@ -100,7 +105,7 @@ export default function Pending() {
                                     <td>
                                         {format(book.from, 'LLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}
                                         <br />
-                                        {formatDistance(book.from, book.to)}
+                                        {convertToNight(book.from, book.to)}
                                     </td>
                                     <td>
                                         {book.room.map((room, i) => (
@@ -132,8 +137,8 @@ export default function Pending() {
                         )}
                     </tbody>
                 </table>
-                {toCancel && <CancelBook setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
-                {toConfirm && <ConfirmBook setBooks={setBooks} setToConfirm={setToConfirm} toConfirm={toConfirm} />}
+                {toCancel && <CancelBook convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
+                {toConfirm && <ConfirmBook convertToNight={convertToNight} setBooks={setBooks} setToConfirm={setToConfirm} toConfirm={toConfirm} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
             </div >
         </>
