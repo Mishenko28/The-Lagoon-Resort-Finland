@@ -1339,6 +1339,89 @@
     border: 1px solid var(--light-gray);
 }
 
+.map-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+    color: var(--primary);
+}
+
+.map-container .bttns {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    gap: 7px;
+}
+
+.map-container .bttns-down {
+    display: flex;
+    gap: 10px;
+}
+
+.map-container button {
+    padding: 10px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.map-container button:last-of-type {
+    background-color: #fff;
+    color: var(--primary);
+    border: 1px solid var(--light-gray);
+}
+
+.map-container .map-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.map-container .address {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.map-container h1 {
+    font-size: 0.9rem;
+}
+
+.map-container label {
+    font-size: 0.8rem;
+}
+
+.map-container input {
+    padding: 8px;
+    border: 1px solid var(--gray);
+    border-radius: 3px;
+    font-size: 0.8rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.map-container input.edit {
+    font-weight: 700;
+}
+
+.map-container .leaflet-container {
+    height: 200px;
+    width: 100%;
+    border: 1px solid var(--gray);
+    border-radius: 3px;
+    z-index: 0;
+}
+
 
 /* PC */
 @media (min-width: 1025px) {
@@ -1824,8 +1907,10 @@
         font-weight: 500;
     }
 
+    .map-container i,
     .about-us-header .bttns i {
         font-size: 1.2rem;
+        cursor: pointer;
     }
 
     .phone-num-cont .fa-square-xmark,
@@ -1907,5 +1992,47 @@
 
     .confirmation-cont .bttns button:hover {
         cursor: pointer;
+    }
+
+    .map-container {
+        flex-direction: row;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .map-container .bttns {
+        right: 18px;
+    }
+
+    .map-container .map-inputs {
+        gap: 20px;
+        width: 600px;
+    }
+
+    .map-container h1 {
+        font-size: 1rem;
+    }
+
+    .map-container label {
+        font-size: 0.9rem;
+    }
+
+    .map-container input {
+        font-size: 0.9rem;
+    }
+
+    .map-container .map {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .map-container .coords {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .map-container .leaflet-container {
+        height: 400px;
     }
 }

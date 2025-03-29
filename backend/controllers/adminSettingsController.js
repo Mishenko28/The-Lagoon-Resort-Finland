@@ -17,13 +17,13 @@ const getSettings = async (_, res) => {
 }
 
 const updateSettings = async (req, res) => {
-    const { systemEmail, downPayment, roomStart, roomEnd, phoneNumbers, socials, emails, adminEmail } = await req.body
+    const { address, coordinates, systemEmail, downPayment, roomStart, roomEnd, phoneNumbers, socials, emails, adminEmail } = await req.body
     let editedParts = []
 
     try {
         const oldSettings = await AdminSetting.findOne({})
 
-        const adminSetting = await AdminSetting.findOneAndUpdate({}, { systemEmail, downPayment, roomStart, roomEnd, phoneNumbers, socials, emails }, { new: true })
+        const adminSetting = await AdminSetting.findOneAndUpdate({}, { address, coordinates, systemEmail, downPayment, roomStart, roomEnd, phoneNumbers, socials, emails }, { new: true })
 
         // activity log
         socials && oldSettings.socials != socials && editedParts.push("socials")
@@ -33,6 +33,8 @@ const updateSettings = async (req, res) => {
         roomStart && oldSettings.roomStart != roomStart && editedParts.push("roomStart")
         roomEnd && oldSettings.roomEnd != roomEnd && editedParts.push("roomEnd")
         systemEmail && oldSettings.systemEmail != systemEmail && editedParts.push("systemEmail")
+        address && oldSettings.address != address && editedParts.push("address")
+        coordinates && oldSettings.coordinates != coordinates && editedParts.push("coordinates")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -48,6 +50,10 @@ const updateSettings = async (req, res) => {
                             return ` changed room end from ${oldSettings.roomEnd} to ${roomEnd}`
                         case "systemEmail":
                             return ` changed system email from ${oldSettings.systemEmail} to ${systemEmail}`
+                        case "address":
+                            return ` changed address from ${oldSettings.address} to ${address}`
+                        case "coordinates":
+                            return ` changed coordinates from ${oldSettings.coordinates} to ${coordinates}`
                         case "emails":
                             if (oldSettings.emails.length === emails.length) {
                                 return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0]} to ${emails.filter(email => !oldSettings.emails.includes(email))[0]}`
