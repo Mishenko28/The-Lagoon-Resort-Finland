@@ -18,6 +18,7 @@ const {
     setNoshow,
     editBook,
     getUserBooks,
+    getTotalBooksByUser,
     getTotalBooks
 } = require('../controllers/bookController')
 
@@ -30,6 +31,7 @@ router.post('/add-cancelled', setCancelled)
 router.post('/add-noshow', setNoshow)
 
 router.get('/total-book', setOngoingBooks, setExpiredBooks, getTotalBooks)
+router.get('/total-book-user', setOngoingBooks, setExpiredBooks, getTotalBooksByUser)
 router.get('/pending', setExpiredBooks, getPending)
 router.get('/expired', setExpiredBooks, getExpired)
 router.get('/confirmed', setOngoingBooks, getConfirmed)

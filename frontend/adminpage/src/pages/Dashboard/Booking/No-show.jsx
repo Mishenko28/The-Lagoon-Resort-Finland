@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, isPast } from "date-fns"
+import { format } from "date-fns"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
 import DatePicker from "react-datepicker"
+import useAdmin from "../../../hooks/useAdmin"
 
 const NoShow = ({ convertToNight }) => {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -27,6 +29,10 @@ const NoShow = ({ convertToNight }) => {
                 const books = res.data.sort((a, b) => a.to < b.to ? -1 : 1)
 
                 setBooks(books)
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -95,7 +101,6 @@ const NoShow = ({ convertToNight }) => {
                                     </td>
                                     <td>{book.user.contact}</td>
                                     <td>
-                                        {isPast(book.to) && <p>time reached</p>}
                                         {format(book.from, 'LLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}
                                         <br />
                                         {convertToNight(book.from, book.to)}

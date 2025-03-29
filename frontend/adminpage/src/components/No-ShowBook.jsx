@@ -2,8 +2,10 @@ import { useState } from "react"
 import { format, formatDistance } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
+import useAdmin from "../hooks/useAdmin"
 
-const NoShowBook = ({ convertToNight, setBooks, setToNoShow, toNoShow }) => {
+const NoShowBook = ({ fetchTotals, convertToNight, setBooks, setToNoShow, toNoShow }) => {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -15,6 +17,8 @@ const NoShowBook = ({ convertToNight, setBooks, setToNoShow, toNoShow }) => {
             .then(res => {
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
                 setToNoShow(null)
+                dispatch({ type: 'SUCCESS', payload: true })
+                fetchTotals()
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -36,7 +40,7 @@ const NoShowBook = ({ convertToNight, setBooks, setToNoShow, toNoShow }) => {
                             <h2>{toNoShow.user.email}</h2>
                             <h2>{format(toNoShow.from, 'LLL d' + (new Date(toNoShow.from).getFullYear() === new Date(toNoShow.to).getFullYear() ? '' : ', yyyy'))} - {format(toNoShow.to, (new Date(toNoShow.from).getMonth() === new Date(toNoShow.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toNoShow.from, toNoShow.to)})</h2>
                             <div className="room">
-                                {toNoShow.room.map((room, i) => (
+                                {toNoShow.room.map(room => (
                                     <h2 key={room._id}>{room.roomType}</h2>
                                 ))}
                             </div>

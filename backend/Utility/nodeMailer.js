@@ -1,15 +1,17 @@
 const nodemailer = require('nodemailer')
+const AdminSetting = require('../models/adminSettingsModel')
 
-const user = "johnthomasalog@gmail.com"
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user, pass: "fyem mpzq rgxb uati" },
-})
+const sendMail = async ({ to, subject, html }, callback) => {
+    const { systemEmail } = await AdminSetting.findOne({})
 
-const sendMail = ({ to, subject, html }, callback) => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: systemEmail.email, pass: systemEmail.appPassword },
+    })
+
     const mailOptions = {
-        from: user,
+        from: "johnthomasalog@gmail.com",
         to,
         subject,
         html,

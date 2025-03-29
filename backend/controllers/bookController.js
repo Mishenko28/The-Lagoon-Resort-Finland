@@ -17,8 +17,25 @@ const { Admin } = require('../models/adminModel')
 // completed
 
 
-// GET TOTAL BOOKS PER USER
-const getTotalBooks = async (req, res) => {
+// GET TOTAL BOOKS
+const getTotalBooks = async (_, res) => {
+    try {
+        const pending = await Book.countDocuments({ status: "pending" })
+        const confirmed = await Book.countDocuments({ status: "confirmed" })
+        const ongoing = await Book.countDocuments({ status: "ongoing" })
+        const completed = await Book.countDocuments({ status: "completed" })
+        const noshow = await Book.countDocuments({ status: "noshow" })
+        const cancelled = await Book.countDocuments({ status: "cancelled" })
+        const expired = await Book.countDocuments({ status: "expired" })
+
+        res.status(200).json({ pending, confirmed, completed, ongoing, cancelled, noshow, expired })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+// GET TOTAL BOOKS BY USER
+const getTotalBooksByUser = async (req, res) => {
     const { email } = req.query
 
     try {
@@ -426,5 +443,6 @@ module.exports = {
     setNoshow,
     editBook,
     getUserBooks,
+    getTotalBooksByUser,
     getTotalBooks
 }

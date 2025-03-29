@@ -59,6 +59,79 @@
     margin-right: 8px;
 }
 
+.system-email-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: var(--primary);
+    color: #fff;
+    padding: 10px;
+    max-width: 400px;
+}
+
+.system-email-form .head h1 {
+    font-size: 1.3rem;
+}
+
+.system-email-form p {
+    font-size: 0.8rem;
+}
+
+.system-email-form .body {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.system-email-form .body input {
+    border: none;
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 400;
+    background-color: var(--gray);
+    padding: 8px 10px;
+    border-radius: 3px;
+}
+
+.system-email-form .body input.edit {
+    border: 2px solid var(--light-gray);
+}
+
+.system-email-form .top-bttns {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 10px;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.system-email-form .bttns {
+    display: flex;
+    gap: 10px;
+}
+
+.system-email-form button {
+    border: none;
+    font-size: 0.9rem;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 3px;
+    width: max-content;
+    cursor: pointer;
+}
+
+.system-email-form button[type="submit"] {
+    background-color: var(--green);
+}
+
+.system-email-form button[type="button"] {
+    background-color: var(--red);
+}
+
 .room-types {
     display: flex;
     flex-direction: column;

@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
 
 
-const ChangeBook = ({ convertToNight, setBooks, setToChange, toChange }) => {
+const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChange }) => {
     const { dispatch } = useAdmin()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -135,6 +135,7 @@ const ChangeBook = ({ convertToNight, setBooks, setToChange, toChange }) => {
                 setToChange(null)
                 setBooks(prev => prev.map(book => book._id === toChange._id ? res.data : book))
                 dispatch({ type: 'SUCCESS', payload: true })
+                fetchTotals()
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -156,101 +157,107 @@ const ChangeBook = ({ convertToNight, setBooks, setToChange, toChange }) => {
     return (
         <div className="full-cont">
             <form onSubmit={handleSubmit} className="confirm-book">
-                <i onClick={() => setToChange(null)} className="fa-solid fa-xmark" />
-                <h1>Change Reservation</h1>
-                <hr />
-                <div className="info">
-                    <h2>{toChange.user.name} ({toChange.user.sex + ", " + toChange.user.age})</h2>
-                    <h3>{toChange.user.email}</h3>
-                    <h4>{toChange.user.contact}</h4>
-                </div>
-                <hr />
-                <div className="date-wrapper">
-                    <h2>Total Period: {convertToNight(toChange.from, toChange.to)}</h2>
-                    <DatePicker
-                        withPortal
-                        selectsRange
-                        shouldCloseOnSelect={false}
-                        selected={toChange.from}
-                        startDate={toChange.from}
-                        endDate={toChange.to}
-                        minDate={new Date()}
-                        monthsShown={2}
-                        onChange={handleChangeDate}
-                    />
-                </div>
-                <AvailableRooms availableRooms={availableRooms} />
-                <hr />
-                {(isRoomNoLoading || isLoading) ?
+                {isLoading ?
                     <Loader2 />
                     :
-                    <div className="selected-rooms">
-                        <AnimatePresence mode="sync">
-                            {toChange?.room.map(room => (
-                                <motion.div
-                                    layout
-                                    initial={{ opacity: 0.5, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="room"
-                                    key={room._id}
-                                >
-                                    <div className="left">
-                                        <div className="select-room">
-                                            <select value={room.roomType} onChange={(e) => handleChangeRoomType(e, room)}>
-                                                {roomTypes.map(roomType => (
-                                                    <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
-                                                ))}
-                                            </select>
-                                            <select value={room.roomNo} onChange={(e) => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
-                                                <option value="0">
-                                                    {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.filter(r => r.available).length === 0 ?
-                                                        "no available room"
-                                                        :
-                                                        "--select room num--"
-                                                    }
-                                                </option>
-                                                {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
-                                                    <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="add-person">
-                                            <i className="fa-solid fa-user-plus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
-                                            <h2>{room.addedPerson}</h2>
-                                            <i className="fa-solid fa-user-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        <i className="fa-solid fa-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                        <motion.div whileTap={{ scale: 0.9 }} className="room" onClick={createNewRoom}><i className="fa-solid fa-plus" /></motion.div>
-                    </div>
+                    <>
+                        <i onClick={() => setToChange(null)} className="fa-solid fa-xmark" />
+                        <h1>Change Reservation</h1>
+                        <hr />
+                        <div className="info">
+                            <h2>{toChange.user.name} ({toChange.user.sex + ", " + toChange.user.age})</h2>
+                            <h3>{toChange.user.email}</h3>
+                            <h4>{toChange.user.contact}</h4>
+                        </div>
+                        <hr />
+                        <div className="date-wrapper">
+                            <h2>Total Period: {convertToNight(toChange.from, toChange.to)}</h2>
+                            <DatePicker
+                                withPortal
+                                selectsRange
+                                shouldCloseOnSelect={false}
+                                selected={toChange.from}
+                                startDate={toChange.from}
+                                endDate={toChange.to}
+                                minDate={new Date()}
+                                monthsShown={2}
+                                onChange={handleChangeDate}
+                            />
+                        </div>
+                        <AvailableRooms availableRooms={availableRooms} />
+                        <hr />
+                        {isRoomNoLoading ?
+                            <Loader2 />
+                            :
+                            <div className="selected-rooms">
+                                <AnimatePresence mode="sync">
+                                    {toChange?.room.map(room => (
+                                        <motion.div
+                                            layout
+                                            initial={{ opacity: 0.5, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="room"
+                                            key={room._id}
+                                        >
+                                            <div className="left">
+                                                <div className="select-room">
+                                                    <select value={room.roomType} onChange={(e) => handleChangeRoomType(e, room)}>
+                                                        {roomTypes.map(roomType => (
+                                                            <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
+                                                        ))}
+                                                    </select>
+                                                    <select value={room.roomNo} onChange={(e) => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
+                                                        <option value="0">
+                                                            {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.filter(r => r.available).length === 0 ?
+                                                                "no available room"
+                                                                :
+                                                                "--select room num--"
+                                                            }
+                                                        </option>
+                                                        {availableRooms.length > 0 && availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.map(room => room.available && (
+                                                            <option key={room.roomNo} value={room.roomNo}>{room.roomNo}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="add-person">
+                                                    <i className="fa-solid fa-user-plus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: r.addedPerson + 1 } : r) }))} />
+                                                    <h2>{room.addedPerson}</h2>
+                                                    <i className="fa-solid fa-user-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, addedPerson: Math.max(r.addedPerson - 1, 0) } : r) }))} />
+                                                </div>
+                                            </div>
+                                            <div className="right">
+                                                <i className="fa-solid fa-minus" onClick={() => setToChange(prev => ({ ...prev, room: prev.room.filter(r => r._id !== room._id) }))} />
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                                <motion.div whileTap={{ scale: 0.9 }} className="room" onClick={createNewRoom}><i className="fa-solid fa-plus" /></motion.div>
+                            </div>
+                        }
+                        <hr />
+                        <div className="total-wrapper">
+                            <div className="total">
+                                <h2>Total:</h2>
+                                <h2>₱{total}</h2>
+                            </div>
+                            <div className="total">
+                                <h2>Payed:</h2>
+                                <h2>₱{toChange.payed}</h2>
+                            </div>
+                            <div className="total">
+                                <h2>Add payment:</h2>
+                                <input value={addPay} onChange={(e) => setAddPay(e.target.value)} type="number" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div className="bttns">
+                            <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Save</button>
+                            <button className="red" onClick={() => setToChange(null)}>Back</button>
+                        </div>
+                    </>
                 }
-                <hr />
-                <div className="total-wrapper">
-                    <div className="total">
-                        <h2>Total:</h2>
-                        <h2>₱{total}</h2>
-                    </div>
-                    <div className="total">
-                        <h2>Payed:</h2>
-                        <h2>₱{toChange.payed}</h2>
-                    </div>
-                    <div className="total">
-                        <h2>Add payment:</h2>
-                        <input value={addPay} onChange={(e) => setAddPay(e.target.value)} type="number" />
-                    </div>
-                </div>
-                <hr />
-                <div className="bttns">
-                    <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Save</button>
-                    <button className="red" onClick={() => setToChange(null)}>Back</button>
-                </div>
             </form >
         </div >
     )

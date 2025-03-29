@@ -32,7 +32,7 @@ const MyBookings = () => {
     }
 
     const totalBooks = async () => {
-        axios.get("book/total-book", { params: { email: state.user.email } })
+        axios.get("book/total-book-user", { params: { email: state.user.email } })
             .then(res => setTotal(res.data))
             .finally(() => setIsLoading(false))
     }

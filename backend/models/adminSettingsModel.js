@@ -32,5 +32,17 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
     aboutUs: {
         type: String,
         default: ''
+    },
+    systemEmail: {
+        email: {
+            type: String,
+            required: true,
+            default: ""
+        },
+        appPassword: {
+            type: String,
+            required: true,
+            default: ""
+        },
     }
 }, { timestamps: true }), 'adminSettings')

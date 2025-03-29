@@ -2,17 +2,19 @@ import { useEffect, useRef, useState } from "react"
 import { format, formatDistance, isFuture } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
+import useAdmin from "../hooks/useAdmin"
 
 
 
-const CompleteBook = ({ convertToNight, setBooks, setToComplete, toComplete }) => {
+const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, toComplete }) => {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(false)
 
     const [lastPayment, setLastPayment] = useState(toComplete.balance)
     const lastPaymentRef = useRef(null)
 
     useEffect(() => {
-        lastPaymentRef && lastPaymentRef.current.focus()
+        lastPaymentRef.current && lastPaymentRef.current.focus()
     }, [lastPaymentRef])
 
     const handleSubmit = async (e) => {
@@ -24,6 +26,8 @@ const CompleteBook = ({ convertToNight, setBooks, setToComplete, toComplete }) =
             .then(res => {
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
                 setToComplete(null)
+                dispatch({ type: 'SUCCESS', payload: true })
+                fetchTotals()
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })

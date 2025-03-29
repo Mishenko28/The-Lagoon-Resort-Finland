@@ -6,10 +6,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
 import CancelBook from "../../../components/CancelBook"
 import ChangeBook from "../../../components/ChangeBook"
+import useAdmin from "../../../hooks/useAdmin"
 
 
 
-const Confirmed = ({ convertToNight }) => {
+const Confirmed = ({ fetchTotals, convertToNight }) => {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -28,6 +30,10 @@ const Confirmed = ({ convertToNight }) => {
     const fetchBooks = async () => {
         axios.get("book/confirmed")
             .then(res => setBooks(res.data))
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
             .finally(() => setIsLoading(false))
     }
 
@@ -125,8 +131,8 @@ const Confirmed = ({ convertToNight }) => {
                         )}
                     </tbody>
                 </table>
-                {toChange && <ChangeBook convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
-                {toCancel && <CancelBook convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
+                {toChange && <ChangeBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
+                {toCancel && <CancelBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
             </div>
         </>

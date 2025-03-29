@@ -2,10 +2,12 @@ import { useState } from "react"
 import { format, formatDistance } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
+import useAdmin from "../hooks/useAdmin"
 
 
 
-const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
+const CancelBook = ({ fetchTotals, convertToNight, setBooks, setToCancel, toCancel }) => {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -17,6 +19,8 @@ const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
             .then(res => {
                 setBooks(prev => prev.filter(book => book._id !== res.data._id))
                 setToCancel(null)
+                dispatch({ type: 'SUCCESS', payload: true })
+                fetchTotals()
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -38,7 +42,7 @@ const CancelBook = ({ convertToNight, setBooks, setToCancel, toCancel }) => {
                             <h2>{toCancel.user.email}</h2>
                             <h2>{format(toCancel.from, 'LLL d' + (new Date(toCancel.from).getFullYear() === new Date(toCancel.to).getFullYear() ? '' : ', yyyy'))} - {format(toCancel.to, (new Date(toCancel.from).getMonth() === new Date(toCancel.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toCancel.from, toCancel.to)})</h2>
                             <div className="room">
-                                {toCancel.room.map((room, i) => (
+                                {toCancel.room.map(room => (
                                     <h2 key={room._id}>{room.roomType}</h2>
                                 ))}
                             </div>

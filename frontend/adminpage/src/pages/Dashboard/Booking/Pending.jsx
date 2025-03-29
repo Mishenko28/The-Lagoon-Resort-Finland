@@ -7,9 +7,11 @@ import { motion, AnimatePresence } from "framer-motion"
 import CancelBook from "../../../components/CancelBook"
 import Note from "../../../components/Note"
 import { socket } from "../../../socket"
+import useAdmin from "../../../hooks/useAdmin"
 
 
-export default function Pending({ convertToNight }) {
+export default function Pending({ fetchTotals, convertToNight }) {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -25,8 +27,14 @@ export default function Pending({ convertToNight }) {
         fetchBooks()
         socket.connect()
 
-        const handleNewBooking = (data) => setBooks(prev => [...prev, data])
-        const handleCancelBooking = (data) => setBooks(prev => prev.filter(book => book._id !== data._id))
+        const handleNewBooking = (data) => {
+            setBooks(prev => [...prev, data])
+            fetchTotals()
+        }
+        const handleCancelBooking = (data) => {
+            setBooks(prev => prev.filter(book => book._id !== data._id))
+            fetchTotals()
+        }
 
         socket.on('new-booking', handleNewBooking)
         socket.on('cancel-booking', handleCancelBooking)
@@ -42,6 +50,10 @@ export default function Pending({ convertToNight }) {
     const fetchBooks = async () => {
         axios.get("book/pending")
             .then(res => setBooks(res.data))
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
             .finally(() => setIsLoading(false))
     }
 
@@ -137,8 +149,8 @@ export default function Pending({ convertToNight }) {
                         )}
                     </tbody>
                 </table>
-                {toCancel && <CancelBook convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
-                {toConfirm && <ConfirmBook convertToNight={convertToNight} setBooks={setBooks} setToConfirm={setToConfirm} toConfirm={toConfirm} />}
+                {toCancel && <CancelBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
+                {toConfirm && <ConfirmBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToConfirm={setToConfirm} toConfirm={toConfirm} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
             </div >
         </>

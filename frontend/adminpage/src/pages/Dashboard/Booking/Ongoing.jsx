@@ -8,9 +8,11 @@ import CancelBook from "../../../components/CancelBook"
 import ChangeBook from "../../../components/ChangeBook"
 import CompleteBook from "../../../components/CompleteBook"
 import NoShowBook from "../../../components/No-ShowBook"
+import useAdmin from "../../../hooks/useAdmin"
 
 
-export default function Ongoing({ convertToNight }) {
+export default function Ongoing({ fetchTotals, convertToNight }) {
+    const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -34,6 +36,10 @@ export default function Ongoing({ convertToNight }) {
                 const books = res.data.sort((a, b) => a.to < b.to ? -1 : 1)
 
                 setBooks(books)
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -135,10 +141,10 @@ export default function Ongoing({ convertToNight }) {
                         )}
                     </tbody>
                 </table>
-                {toNoShow && <NoShowBook convertToNight={convertToNight} setBooks={setBooks} setToNoShow={setToNoShow} toNoShow={toNoShow} />}
-                {toComplete && <CompleteBook convertToNight={convertToNight} setBooks={setBooks} setToComplete={setToComplete} toComplete={toComplete} />}
-                {toChange && <ChangeBook convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
-                {toCancel && <CancelBook convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
+                {toNoShow && <NoShowBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToNoShow={setToNoShow} toNoShow={toNoShow} />}
+                {toComplete && <CompleteBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToComplete={setToComplete} toComplete={toComplete} />}
+                {toChange && <ChangeBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
+                {toCancel && <CancelBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
             </div>
         </>

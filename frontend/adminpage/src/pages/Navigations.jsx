@@ -99,10 +99,6 @@ export default function Navigations() {
                 <div className="content-cont">
                     {openSettings &&
                         <div ref={settingsRef} className='settings-cont'>
-                            <button>Button1</button>
-                            <button>Button2</button>
-                            <button>Button3</button>
-                            <button>Button4</button>
                             <button className='logout' onClick={handleLogout}>Logout<i className="fa-solid fa-right-from-bracket" /></button>
                         </div>
                     }

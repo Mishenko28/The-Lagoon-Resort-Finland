@@ -20,7 +20,9 @@ const Cancelled = () => {
 
     const fetchPending = async () => {
         axios.get("book/user", { params: { status: "cancelled", email: state.user.email } })
-            .then(res => setBooks(res.data))
+            .then(res => {
+                setBooks(res.data)
+            })
             .finally(() => setIsLoading(false))
     }
 

@@ -38,11 +38,11 @@ app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.json())
 
-// app.use((req, res, next) => {
-//     setTimeout(() => {
-//         next()
-//     }, 2000)
-// })
+app.use((req, res, next) => {
+    setTimeout(() => {
+        next()
+    }, 500)
+})
 
 
 // ROUTES
