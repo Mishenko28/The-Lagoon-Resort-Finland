@@ -3,6 +3,8 @@ import Login from './components/Login'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import useAdmin from './hooks/useAdmin'
 
+import Index from "./pages/Index"
+
 import Navigations from './pages/Navigations'
 import Dashboard from './pages/Dashboard'
 import Configuration from './pages/Configuration'
@@ -34,7 +36,7 @@ function App() {
             <Routes>
                 {state.admin ?
                     <Route path="/" element={<Navigations />}>
-                        <Route index element={<h1>Index</h1>} />
+                        <Route index element={<Index />} />
                         {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
                             <Route path='dashboard' element={<Dashboard />}>
                                 {state.admin.role.includes('booking') && <Route path='booking' element={<Booking />} />}

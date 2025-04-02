@@ -9,13 +9,18 @@ const createOTP = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
 
     try {
+        if (!email) throw Error("Email is required")
         const exist = await User.findOne({ email })
         if (exist) throw Error("This email is already registered")
 
         sendMail({
             to: email,
             subject: "Hello from The Lagoon Resort Finland Inc.!",
-            html: `<h1>Your OTP is ${otp}<h1>`
+            html: `<h3>Dear ${email},<h3>
+                <p>Your One-Time Password (OTP) for verification is: ${otp}</p>
+                <p>This code is valid for 5 minutes. Please do not share this code with anyone for security reasons.</p>
+                <p>Best Regards,</p>
+                <p>The Lagoon Resort Finland Inc.</p>`
         }, (error) => {
             if (error) {
                 throw Error(error)

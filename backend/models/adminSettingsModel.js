@@ -60,10 +60,6 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
         type: String,
         default: ''
     },
-    aboutUs: {
-        type: String,
-        default: ''
-    },
     systemEmail: {
         email: {
             type: String,

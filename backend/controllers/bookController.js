@@ -264,9 +264,30 @@ const addBook = async (req, res) => {
 
         admins.forEach(admin => {
             sendMail({
-                subject: "The Lagoon Resort Finland Inc. New Booking!",
+                subject: "New Reservation Received!",
                 to: admin.email,
-                html: `<h1>${book.user.name} submit a reservation</h1>`
+                html: `<h3>Dear ${admin.personalData.name},</h3>
+                    <p>You have received a new reservation request through the website. Below are the details:</p>
+                    <hr />
+                    <h4>Guest Information:</h4>
+                    <ul>
+                        <li>Name: ${book.user.name}</li>
+                        <li>Email: ${book.user.email}</li>
+                        <li>Contact: ${book.user.contact}</li>
+                    </ul>
+                    <hr />
+                    <h4>Reservation Details:</h4>
+                    <ul>
+                        <li>Check-in Date: ${book.from}</li>
+                        <li>Check-out Date: ${book.to}</li>
+                        <li>Room Type: ${book.room.map(r => r.roomType).join(", ")}</li>
+                        <li>Special Request: ${book.note !== "" ? book.note : "none"}</li>
+                    </ul>
+                    <hr />
+                    <p>Please review the details and process the reservation accordingly.<p>
+                    <p>Thank you.</p>
+                    <p>Best Regards,</p>
+                    <p><b>The Lagoon Resort Finland Inc.<b></p>`
             })
         })
 
