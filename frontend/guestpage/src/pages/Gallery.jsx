@@ -30,7 +30,7 @@ const Gallery = () => {
             <div className="header-page">
                 <img src="/galleryBG.jpg" />
                 <h1>GALLERY</h1>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate accusantium iste reprehenderit molestias sint qui obcaecati ut?</p>
+                <p>Explore the beauty of our resort through our gallery! From stunning rooms to breathtaking views, get a glimpse of the unforgettable experience that awaits you. Let your next adventure begin here!"</p>
             </div>
             {isLoading ?
                 <Loader />

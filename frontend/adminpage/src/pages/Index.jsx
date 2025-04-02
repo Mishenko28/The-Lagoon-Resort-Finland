@@ -5,7 +5,9 @@ import "./../styles/graph.css"
 
 const Index = () => {
     return (
-        <div className="asd">Indexasdasd</div>
+        <div className="asd">
+            graph.....
+        </div>
     )
 }
 

@@ -145,7 +145,7 @@ const Booking = () => {
             <div className="header-page">
                 <img src="/aboutUsBG.jpg" />
                 <h1>BOOKING</h1>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate accusantium iste reprehenderit molestias sint qui obcaecati ut?</p>
+                <p>Secure your stay with just a few clicks! Select your dates, Choose your preferred room and enjoy a seamless booking experience.</p>
             </div>
             {!state.user &&
                 <div className="login-message">
