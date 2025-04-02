@@ -532,6 +532,123 @@
     gap: 5px;
 }
 
+/* REPORT */
+.report {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--primary);
+}
+
+.report .report-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.report hr {
+    width: 100%;
+    border: 1px solid var(--primary);
+}
+
+.report .report-bttns {
+    display: flex;
+    gap: 20px;
+}
+
+.report button.generate,
+.report select {
+    padding: 10px;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    width: 120px;
+    box-sizing: border-box;
+    background-color: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+}
+
+.report button.generate {
+    background-color: var(--green);
+}
+
+.report select option {
+    background-color: var(--secondary);
+    color: #fff;
+}
+
+/* datepicker */
+.report .react-datepicker {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4/3;
+    border: none;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+}
+
+.report .react-datepicker__navigation-icon::before {
+    border-color: var(--primary);
+}
+
+.report .react-datepicker__year--container,
+.report .react-datepicker__month-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.report .react-datepicker__header {
+    background-color: var(--light-gray);
+    border: none;
+}
+
+.report .react-datepicker__day-names {
+    display: flex;
+    justify-content: space-around;
+    margin: 0.4rem;
+}
+
+.report .react-datepicker__month {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.report .react-datepicker__month-wrapper {
+    display: flex;
+    justify-content: space-around;
+    padding-block: 10px;
+}
+
+.report .react-datepicker__year-text,
+.report .react-datepicker__month-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    padding: 5px;
+}
+
+.report .react-datepicker__week {
+    display: flex;
+    justify-content: space-around;
+}
+
+.report .react-datepicker__year {
+    flex-grow: 1;
+    display: flex;
+}
+
+.report .react-datepicker__year-wrapper {
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
 
 
 @media (min-width: 1025px) {

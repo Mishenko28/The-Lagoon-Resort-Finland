@@ -225,7 +225,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                                     className='room'
                                 >
                                     <h1>{room.roomNo}</h1>
-                                    <img src={room.img} />
+                                    <img src={room.img || null} />
                                     <h5>{room.caption}{!room.caption && "no caption"}</h5>
                                     {!room.active && <span>not active</span>}
                                 </motion.div>

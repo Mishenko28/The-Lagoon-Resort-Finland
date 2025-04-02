@@ -19,17 +19,12 @@ import AdminInvite from './pages/AdminInvite'
 import ActivityLogs from './pages/Utilities/ActivityLogs'
 
 import Booking from './pages/Dashboard/Booking'
+import Report from "./pages/Dashboard/Report"
 
 import Profile from './pages/Profile'
 import Success from './components/Success'
 import Failed from './components/Failed'
 
-
-// PDF
-import pdfMake from 'pdfmake/build/pdfmake'
-import pdfFonts from 'pdfmake/build/vfs_fonts'
-pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs
-// PDF
 
 function App() {
     const { state } = useAdmin()
@@ -43,7 +38,7 @@ function App() {
                         {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
                             <Route path='dashboard' element={<Dashboard />}>
                                 {state.admin.role.includes('booking') && <Route path='booking' element={<Booking />} />}
-                                {state.admin.role.includes('reports') && <Route path='report' element={<h1>Report</h1>} />}
+                                {state.admin.role.includes('reports') && <Route path='report' element={<Report />} />}
                             </Route>
                         }
                         {['room', 'amenity', 'gallery', 'aboutUs'].some(section => state.admin.role.includes(section)) &&

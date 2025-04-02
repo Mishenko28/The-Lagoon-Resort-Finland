@@ -3,7 +3,7 @@ const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
 
 // CONFIRMED => ONGOING
-const setOngoingBooks = async (req, res, next) => {
+const setOngoingBooks = async (_, res, next) => {
     const dateNow = moment().tz('Asia/Manila')
 
     try {
@@ -28,7 +28,7 @@ const setOngoingBooks = async (req, res, next) => {
 }
 
 // PENDING => EXPIRED
-const setExpiredBooks = async (req, res, next) => {
+const setExpiredBooks = async (_, res, next) => {
     const dateYesterday = moment().tz('Asia/Manila').add(-1, 'days')
 
     try {

@@ -81,7 +81,7 @@ export default function Socials({ socials, setSocials }) {
             </div>
             {!socialEdit &&
                 <AnimatePresence mode='sync'>
-                    {socials?.map((social, i) => (
+                    {socials?.map(social => (
                         <motion.div
                             layout
                             initial={{ opacity: 0.5, scale: 0.9 }}
@@ -89,7 +89,7 @@ export default function Socials({ socials, setSocials }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={i}
+                            key={social._id}
                         >
                             <h2>{social.app}</h2>
                             <h3 className='link'>{social.link}</h3>
@@ -107,7 +107,7 @@ export default function Socials({ socials, setSocials }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={i}
+                            key={social._id}
                         >
                             <select value={social.app} onChange={e => setSocialEdit(prev => prev.map((app, index) => index === i ? { ...app, app: e.target.value } : app))}>
                                 <option value="facebook">Facebook</option>

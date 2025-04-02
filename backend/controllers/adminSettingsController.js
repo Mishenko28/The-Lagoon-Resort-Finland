@@ -56,11 +56,11 @@ const updateSettings = async (req, res) => {
                             return ` changed coordinates from ${oldSettings.coordinates} to ${coordinates}`
                         case "emails":
                             if (oldSettings.emails.length === emails.length) {
-                                return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0]} to ${emails.filter(email => !oldSettings.emails.includes(email))[0]}`
+                                return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0].url} to ${emails.filter(email => !oldSettings.emails.includes(email))[0].url}`
                             } else if (oldSettings.emails.length > emails.length) {
-                                return ` deleted an email ${oldSettings.emails.filter(email => !emails.includes(email))[0]}`
+                                return ` deleted an email ${oldSettings.emails.filter(email => !emails.includes(email))[0].url}`
                             } else {
-                                return ` added an email ${emails[emails.length - 1]}`
+                                return ` added an email ${emails[emails.length - 1].url}`
                             }
                         case "phoneNumbers":
                             if (oldSettings.phoneNumbers.length === phoneNumbers.length) {

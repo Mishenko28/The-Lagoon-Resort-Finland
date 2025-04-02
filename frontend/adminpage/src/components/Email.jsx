@@ -9,10 +9,9 @@ export default function Email({ emails, setEmails }) {
     const emailRef = useRef(null)
     const [emailLoad, setEmailLoad] = useState(false)
     const [emailEdit, setEmailEdit] = useState(null)
-    const [newEmail, setNewEmail] = useState(null)
+    const [newEmail, setNewEmail] = useState("")
     const [newEmailTogg, setNewEmailTogg] = useState(null)
     const [emailToDelete, setEmailToDelete] = useState(null)
-
 
     useEffect(() => {
         newEmailTogg && emailRef.current.focus()
@@ -60,7 +59,7 @@ export default function Email({ emails, setEmails }) {
         e.preventDefault()
         setEmailLoad(true)
 
-        await axios.patch('/admin-settings/update', { emails: [...emails, newEmail] })
+        await axios.patch('/admin-settings/update', { emails: [...emails, { url: newEmail }] })
             .then((res) => {
                 setEmails(res.data.adminSetting.emails)
                 setNewEmail(null)
@@ -76,6 +75,11 @@ export default function Email({ emails, setEmails }) {
             })
     }
 
+    const handleNewEmail = () => {
+        setNewEmailTogg(true)
+        setNewEmail("")
+    }
+
 
     return (
         <div className="about-us-phone-num-cont">
@@ -83,7 +87,7 @@ export default function Email({ emails, setEmails }) {
             <div className="about-us-header">
                 <h1>Emails:</h1>
                 <div className="bttns">
-                    {!emailEdit && !newEmailTogg && <i className="fa-solid fa-plus" onClick={() => setNewEmailTogg(true)} />}
+                    {!emailEdit && !newEmailTogg && <i className="fa-solid fa-plus" onClick={handleNewEmail} />}
                     {!emailEdit && !newEmailTogg && <i className="fa-solid fa-pen-to-square" onClick={() => setEmailEdit(emails)} />}
                     {(JSON.stringify(emailEdit) !== JSON.stringify(emails) && emailEdit && !emailLoad) && < i className="fa-solid fa-floppy-disk" onClick={updateEmail} />}
                     {emailEdit && <i className="fa-solid fa-square-xmark" onClick={() => setEmailEdit(null)} />}
@@ -91,7 +95,7 @@ export default function Email({ emails, setEmails }) {
             </div>
             {!emailEdit &&
                 <AnimatePresence mode='sync'>
-                    {emails?.map((email, i) => (
+                    {emails?.map(email => (
                         <motion.div
                             layout
                             initial={{ opacity: 0.5, scale: 0.9 }}
@@ -99,9 +103,9 @@ export default function Email({ emails, setEmails }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={i}
+                            key={email._id}
                         >
-                            <h4>{email}</h4>
+                            <h4>{email.url}</h4>
                         </motion.div>
                     ))}
                 </AnimatePresence>
@@ -116,9 +120,9 @@ export default function Email({ emails, setEmails }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={email}
+                            key={email._id}
                         >
-                            <input type="email" value={email} onChange={e => setEmailEdit(prev => prev.map((email, index) => index === i ? e.target.value : email))} />
+                            <input type="email" value={email.url} onChange={e => setEmailEdit(prev => prev.map((email, index) => index === i ? ({ ...email, url: e.target.value }) : email))} />
                             {(!emailLoad && email !== emails[i]) && <i className="fa-solid fa-rotate-left" onClick={() => setEmailEdit(prev => prev.map((data, index) => index === i ? emails[i] : data))} />}
                             {!emailLoad && <i className="fa-solid fa-trash-can" onClick={() => setEmailToDelete(email)} />}
                         </motion.div>
@@ -148,7 +152,7 @@ export default function Email({ emails, setEmails }) {
                         <h1>Are you sure?</h1>
                         <h2>you are about to delete this email:</h2>
                         <div className='phone-num'>
-                            <span>{emailToDelete}</span>
+                            <span>{emailToDelete.url}</span>
                         </div>
                         <div className='bttns'>
                             <button onClick={() => deleteEmail(emails.indexOf(emailToDelete))}><i className="fa-solid fa-trash-can" />Delete</button>

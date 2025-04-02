@@ -1,10 +1,14 @@
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet, useLocation, Link } from "react-router-dom"
 
 export default function Help() {
     return (
         <>
             {useLocation().pathname === '/help' &&
-                <h1>Help</h1>
+                <div className='big-navs-cont'>
+                    <div className='big-navs'>
+                        <Link to="/help/user-manual">USER MANUAL</Link>
+                    </div>
+                </div>
             }
             <Outlet />
         </>

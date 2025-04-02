@@ -5,6 +5,7 @@ import RoomTypes from '../../components/RoomTypes'
 import Loader2 from '../../components/Loader2'
 import useConvertBase64 from '../../hooks/useConvertBase64'
 import { motion, AnimatePresence } from 'framer-motion'
+import DatePicker from "react-datepicker"
 
 export default function Rooms() {
     const { dispatch } = useAdmin()
@@ -17,6 +18,7 @@ export default function Rooms() {
     const [isLoading, setIsLoading] = useState(true)
     const [newRoomTypeIsLoading, setNewRoomTypeIsLoading] = useState(false)
     const [changeDownPaymentIsLoading, setChangeDownPaymentIsLoading] = useState(false)
+    const [changeCheckInOutIsLoading, setChangeCheckInOutIsLoading] = useState(false)
 
     const [isCard, setIsCard] = useState(true)
     const [sort, setSort] = useState({
@@ -29,6 +31,9 @@ export default function Rooms() {
 
     const [newDownPayment, setNewDownPayment] = useState(null)
     const newDownPaymentRef = useRef()
+
+    const [newTime, setNewTime] = useState(null)
+    const newTimeRef = useRef()
 
     const [newRoomTypeTogg, setNewRoomTypeTogg] = useState(false)
     const [newRoomType, setNewRoomType] = useState({
@@ -156,6 +161,24 @@ export default function Rooms() {
 
     }
 
+    const updateCheckInOut = async (e) => {
+        e.preventDefault()
+
+        setChangeCheckInOutIsLoading(true)
+
+        await axios.patch('/admin-settings/update', { roomStart: newTime.roomStart.getHours(), roomEnd: newTime.roomEnd.getHours() })
+            .then((res) => {
+                setAdminSettings(res.data.adminSetting)
+                setNewTime(null)
+                dispatch({ type: 'SUCCESS', payload: true })
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+            .finally(() => setChangeCheckInOutIsLoading(false))
+    }
+
     const updateDownPayment = async (e) => {
         e.preventDefault()
         setChangeDownPaymentIsLoading(true)
@@ -169,6 +192,7 @@ export default function Rooms() {
         await axios.patch('/admin-settings/update', { downPayment: newDownPayment })
             .then((res) => {
                 setAdminSettings(res.data.adminSetting)
+                setNewDownPayment(null)
                 dispatch({ type: 'SUCCESS', payload: true })
             })
             .catch((err) => {
@@ -177,12 +201,20 @@ export default function Rooms() {
             })
 
         setChangeDownPaymentIsLoading(false)
-        setNewDownPayment(null)
     }
 
     const cancelNewRoomType = () => {
         setNewRoomTypeTogg(false)
         setNewRoomType({})
+    }
+
+    const handleChangeTime = () => {
+        const dateNow = new Date()
+
+        setNewTime({
+            roomStart: new Date(dateNow.setHours(adminSettings.roomStart, 0, 0, 0)),
+            roomEnd: new Date(dateNow.setHours(adminSettings.roomEnd, 0, 0, 0))
+        })
     }
 
     return (
@@ -194,6 +226,7 @@ export default function Rooms() {
                     <div className="button-header">
                         <button onClick={() => setNewRoomTypeTogg(true)}><i className="fa-solid fa-folder-plus" />Create Room Type</button>
                         <button onClick={() => setNewDownPayment(adminSettings.downPayment)}><i className="fa-solid fa-square-pen" />Change Down Payment</button>
+                        <button onClick={handleChangeTime}><i className="fa-solid fa-square-pen" />Change Check In and Out Hours</button>
                         <div className='sort-wrapper'>
                             <button ref={sortRef} onClick={() => setSortTogg(!sortTogg)}><i className="fa-solid fa-sort" />Sort Rooms</button>
                             {sortTogg &&
@@ -211,8 +244,49 @@ export default function Rooms() {
                     <div className='infos'>
                         <h1>Rooms: <b>{rooms.length}</b></h1>
                         <h1>Down Payment: <b>{adminSettings.downPayment * 100}%</b></h1>
+                        <h1>Check In (24h format): <b>{adminSettings.roomStart}</b></h1>
+                        <h1>Check Out (24h format): <b>{adminSettings.roomEnd}</b></h1>
                     </div>
                     <AnimatePresence >
+                        {newTime &&
+                            <motion.form
+                                layout
+                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3 }}
+                                className='change-check-in-out'
+                                key="change-check-in-out"
+                                onSubmit={updateCheckInOut}
+                            >
+                                {changeCheckInOutIsLoading && <div className='loader-line'></div>}
+                                <i onClick={() => setNewTime(null)} className="fa-solid fa-xmark" />
+                                <div className='check-in-out'>
+                                    <label>Check In:</label>
+                                    <DatePicker
+                                        selected={newTime.roomStart}
+                                        onChange={(date) => setNewTime(prev => ({ ...prev, roomStart: date }))}
+                                        showTimeSelectOnly
+                                        showTimeSelect
+                                        dateFormat="hh:mm aa"
+                                    />
+                                </div>
+                                <div className='check-in-out'>
+                                    <label>Check Out:</label>
+                                    <DatePicker
+                                        selected={newTime.roomEnd}
+                                        onChange={(date) => setNewTime(prev => ({ ...prev, roomEnd: date }))}
+                                        showTimeSelectOnly
+                                        showTimeSelect
+                                        dateFormat="hh:mm aa"
+                                    />
+                                </div>
+                                <div className='bttns'>
+                                    <button type='submit'>Save</button>
+                                    <button type='button' onClick={() => setNewTime(null)} >Cancel</button>
+                                </div>
+                            </motion.form>
+                        }
                         {newRoomTypeTogg &&
                             <motion.form
                                 layout

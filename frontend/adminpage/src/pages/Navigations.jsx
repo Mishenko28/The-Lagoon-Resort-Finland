@@ -46,7 +46,7 @@ export default function Navigations() {
     return (
         <div className='main-cont'>
             <div className="header-cont">
-                <h1>The Lagoon Resort Finland Inc.</h1>
+                <Link to="/"><h1>The Lagoon Resort Finland Inc.</h1></Link>
                 <div className='right-cont'>
                     <Link to='/profile' className='profile-cont'>
                         <img src={state.admin.profile} />

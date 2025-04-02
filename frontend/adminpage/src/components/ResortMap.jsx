@@ -1,8 +1,18 @@
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import axios from 'axios'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAdmin from '../hooks/useAdmin'
+
+function ChangeCenter({ center }) {
+    const map = useMap()
+
+    useEffect(() => {
+        map.setView(center)
+    }, [center, map])
+
+    return null
+}
 
 const ResortMap = ({ coordinates, setCoordinates, address, setAddress }) => {
     const { dispatch } = useAdmin()
@@ -84,6 +94,7 @@ const ResortMap = ({ coordinates, setCoordinates, address, setAddress }) => {
                     <Marker
                         position={isEditing ? newCoordinates : coordinates}
                     />
+                    <ChangeCenter center={isEditing ? newCoordinates : coordinates} />
                 </MapContainer>
             </div>
         </div>

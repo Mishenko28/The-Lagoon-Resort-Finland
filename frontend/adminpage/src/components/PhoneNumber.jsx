@@ -92,7 +92,7 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
             </div>
             {!phoneNumEdit &&
                 <AnimatePresence mode='sync'>
-                    {phoneNums?.map((phoneNum, i) => (
+                    {phoneNums?.map(phoneNum => (
                         <motion.div
                             layout
                             initial={{ opacity: 0.5, scale: 0.9 }}
@@ -100,7 +100,7 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={i}
+                            key={phoneNum._id}
                         >
                             <h2>{phoneNum.sim}</h2>
                             <h3>{phoneNum.number}</h3>
@@ -118,7 +118,7 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.3 }}
                             className="phone-num-cont"
-                            key={phoneNum.number}
+                            key={phoneNum._id}
                         >
                             <input type="text" value={phoneNum.sim} onChange={e => setPhoneNumEdit(prev => prev.map((num, index) => index === i ? { ...num, sim: e.target.value } : num))} />
                             <input type="number" value={phoneNum.number} onChange={e => setPhoneNumEdit(prev => prev.map((sim, index) => index === i ? { ...sim, number: e.target.value } : sim))} />

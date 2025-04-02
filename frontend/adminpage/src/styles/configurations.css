@@ -687,6 +687,58 @@
     text-align: left;
 }
 
+.change-check-in-out {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--primary);
+    padding: 10px;
+    color: #fff;
+    width: max-content;
+}
+
+.change-check-in-out .check-in-out {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.change-check-in-out input {
+    padding: 5px;
+    border: none;
+    font-size: 0.8rem;
+    color: var(--primary);
+}
+
+.change-check-in-out .bttns {
+    display: flex;
+    gap: 10px;
+}
+
+.change-check-in-out button {
+    padding: 10px 15px;
+    border: none;
+    background-color: var(--green);
+    color: #fff;
+    border-radius: 2px;
+    font-size: 0.6rem;
+    cursor: pointer;
+}
+
+.change-check-in-out button:last-of-type {
+    background-color: var(--red);
+}
+
+.change-check-in-out .fa-xmark {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
 /* amenity */
 
 .amenity-card-wrapper {

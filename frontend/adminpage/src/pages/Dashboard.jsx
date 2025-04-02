@@ -1,11 +1,16 @@
 import "../styles/dashboard.css"
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet, useLocation, Link } from "react-router-dom"
 
 export default function Dashboard() {
     return (
         <>
             {useLocation().pathname === '/dashboard' &&
-                <h1>Dashboard</h1>
+                <div className='big-navs-cont'>
+                    <div className='big-navs'>
+                        <Link to="/dashboard/booking">BOOKINGS</Link>
+                        <Link to="/dashboard/report">REPORTS</Link>
+                    </div>
+                </div>
             }
             <Outlet />
         </>

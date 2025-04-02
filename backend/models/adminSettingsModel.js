@@ -1,5 +1,36 @@
 const mongoose = require('mongoose')
 
+const phoneNumberSchema = new mongoose.Schema({
+    number: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    sim: {
+        type: String,
+        required: true,
+    }
+})
+
+const socialSchema = new mongoose.Schema({
+    app: {
+        type: String,
+        required: true
+    },
+    link: {
+        type: String,
+        required: true
+    }
+})
+
+const emailSchema = new mongoose.Schema({
+    url: {
+        type: String,
+        required: true,
+        unique: true
+    }
+})
+
 module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
     downPayment: {
         type: Number,
@@ -14,15 +45,15 @@ module.exports = mongoose.model('AdminSetting', new mongoose.Schema({
         default: 12
     },
     emails: {
-        type: Array,
+        type: [emailSchema],
         default: []
     },
     phoneNumbers: {
-        type: Array,
+        type: [phoneNumberSchema],
         default: []
     },
     socials: {
-        type: Array,
+        type: [socialSchema],
         default: []
     },
     address: {

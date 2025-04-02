@@ -27,6 +27,10 @@
     gap: 5px;
 }
 
+.header-cont a {
+    text-decoration: none;
+}
+
 .header-cont h1 {
     color: #fff;
     font-size: 1.3rem;
