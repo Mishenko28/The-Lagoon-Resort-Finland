@@ -1,0 +1,197 @@
+.graph-container {
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 100px;
+
+    & .graph-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+
+        & h1 {
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        & h2 {
+            font-size: 1rem;
+            border: 1px solid var(--primary);
+            padding: 2px 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+    }
+
+    & .totals {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        & .total-box {
+            padding: 20px;
+            border: 1px solid var(--primary);
+            width: 160px;
+            border-radius: 15px;
+
+            & .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+
+                & h3 {
+                    font-size: 1rem;
+                    font-weight: 700;
+                }
+
+                & h3:last-of-type {
+                    font-weight: 400;
+                    color: var(--gray);
+                }
+            }
+
+            & h4 {
+                font-size: 1.5rem;
+                font-weight: 900;
+            }
+        }
+    }
+
+    & .graph {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        height: 400px;
+
+        & h1 {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        & .bar-chart {
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        & .recent-sales {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            padding: 10px;
+            height: 100%;
+
+            & .recent-bookings-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                overflow-y: auto;
+
+                & .sale {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 300px;
+
+                    & .left {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        & img {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                        }
+
+                        & h3 {
+                            font-size: 0.9rem;
+                        }
+
+                        & h4 {
+                            font-size: 0.8rem;
+                            color: var(--gray);
+                            font-weight: 400;
+                        }
+                    }
+
+                    & h5 {
+                        font-size: 1.2rem;
+                        font-weight: 900;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1025px) {
+    .graph-container {
+        & .graph-header {
+            & h1 {
+                font-size: 2.5rem;
+            }
+
+            & h2 {
+                font-size: 1.2rem;
+                padding: 10px 15px;
+            }
+        }
+
+        & .totals {
+            gap: 20px;
+
+            & .total-box {
+                padding: 30px;
+
+                & h4 {
+                    font-size: 2rem;
+                }
+            }
+        }
+
+        & .graph {
+            gap: 20px;
+
+            & h1 {
+                font-size: 1rem;
+                font-weight: 800;
+                margin-bottom: 20px;
+            }
+
+            & .bar-chart {
+                padding: 15px;
+            }
+
+            & .recent-sales {
+                padding: 15px;
+
+                & .recent-bookings-list {
+                    gap: 20px;
+
+                    & .sale {
+                        width: 400px;
+
+                        & .left {
+                            & img {
+                                width: 40px;
+                                height: 40px;
+                            }
+                        }
+
+                        & h5 {
+                            font-size: 1.4rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

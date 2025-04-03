@@ -3,9 +3,9 @@ const AdminSetting = require('../models/adminSettingsModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 const User = require('../models/userModel')
 const UserPersonalData = require('../models/userPersonalDataModel')
-const mongoose = require('mongoose')
 const sendMail = require('../Utility/nodeMailer')
 const { Admin } = require('../models/adminModel')
+const Payment = require('../models/paymentModel')
 
 // STATUS
 // pending
@@ -312,6 +312,8 @@ const setConfirmed = async (req, res) => {
 
         const { email } = await User.findOne({ _id: book.userId })
 
+        await Payment.create({ amount: payed, userId: book.userId })
+
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${email}` })
 
@@ -326,6 +328,10 @@ const setCompleted = async (req, res) => {
     const { _id, total, payed, adminEmail } = await req.body
 
     try {
+        const oldBook = await Book.findOne({ _id })
+
+        await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
+
         const balance = total - payed
         const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance, payed }, { new: true })
 
@@ -390,6 +396,8 @@ const editBook = async (req, res) => {
         })
 
         const oldBook = await Book.findOne({ _id })
+
+        await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
 
         const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed }, { new: true })
 

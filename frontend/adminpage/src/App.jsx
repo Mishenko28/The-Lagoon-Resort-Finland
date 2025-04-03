@@ -3,7 +3,7 @@ import Login from './components/Login'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import useAdmin from './hooks/useAdmin'
 
-import Index from "./pages/Index"
+import Graph from "./pages/Graph"
 
 import Navigations from './pages/Navigations'
 import Dashboard from './pages/Dashboard'
@@ -19,6 +19,7 @@ import AboutUs from './pages/Configurations/AboutUs'
 import Admins from './pages/Utilities/Admins'
 import AdminInvite from './pages/AdminInvite'
 import ActivityLogs from './pages/Utilities/ActivityLogs'
+import Database from "./pages/Utilities/Database"
 
 import Booking from './pages/Dashboard/Booking'
 import Report from "./pages/Dashboard/Report"
@@ -36,7 +37,7 @@ function App() {
             <Routes>
                 {state.admin ?
                     <Route path="/" element={<Navigations />}>
-                        <Route index element={<Index />} />
+                        <Route index element={<Graph />} />
                         {['booking', 'reports'].some(section => state.admin.role.includes(section)) &&
                             <Route path='dashboard' element={<Dashboard />}>
                                 {state.admin.role.includes('booking') && <Route path='booking' element={<Booking />} />}
@@ -55,7 +56,7 @@ function App() {
                             <Route path='utilities' element={<Utilities />}>
                                 {state.admin.role.includes('archive') && <Route path='archive' element={<h1>In Developing</h1>} />}
                                 {state.admin.role.includes('activityLogs') && <Route path='activity-logs' element={<ActivityLogs />} />}
-                                {state.admin.role.includes('database') && <Route path='database' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('database') && <Route path='database' element={<Database />} />}
                                 {state.admin.role.includes('users') && <Route path='users' element={<h1>In Developing</h1>} />}
                                 {state.admin.role.includes('admins') && <Route path='admins' element={<Admins />} />}
                             </Route>

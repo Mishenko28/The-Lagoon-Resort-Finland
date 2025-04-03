@@ -16,6 +16,7 @@ const archiveRoute = require('./routes/archiveRoute')
 const activityLogRoute = require('./routes/activityLogRoute')
 const otpRoute = require('./routes/otpRoute')
 const roomTypeRoute = require('./routes/roomTypeRoute')
+const dashboardRoute = require('./routes/dashboardRoute')
 
 
 const app = express()
@@ -57,6 +58,7 @@ app.use('/archive', archiveRoute)
 app.use('/log', activityLogRoute)
 app.use('/otp', otpRoute)
 app.use('/room-type', roomTypeRoute)
+app.use('/dashboard', dashboardRoute)
 
 
 

@@ -1,4 +1,3 @@
-const { max } = require('moment-timezone')
 const mongoose = require('mongoose')
 
 const roomSchema = new mongoose.Schema({

@@ -4,5 +4,10 @@
   },
   "scripts": {
     "dev": "concurrently \"cd frontend && cd adminpage && npm run dev\" \"cd frontend && cd guestpage && npm run dev\" \"cd backend && npm run dev\""
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.1"
   }
 }
