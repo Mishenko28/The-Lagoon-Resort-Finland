@@ -67,16 +67,18 @@ const Database = () => {
                         dispatch({ type: 'SUCCESS', payload: true })
                     })
                     .catch(err => {
-                        setImportFile(null)
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
                         console.log(err)
+                    })
+                    .finally(() => {
+                        setIsLoading(false)
+                        setImportFile(null)
                     })
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: "Invalid JSON format" })
                 console.log(err)
             })
-            .finally(() => setIsLoading(false))
     }
 
     const handleRestore = async () => {
@@ -89,16 +91,18 @@ const Database = () => {
                         dispatch({ type: 'SUCCESS', payload: true })
                     })
                     .catch(err => {
-                        setRestoreFile(null)
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
                         console.log(err)
+                    })
+                    .finally(() => {
+                        setIsLoading(false)
+                        setRestoreFile(null)
                     })
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: "Invalid JSON format" })
                 console.log(err)
             })
-            .finally(() => setIsLoading(false))
     }
 
     const handleBackupOne = async (collection) => {
