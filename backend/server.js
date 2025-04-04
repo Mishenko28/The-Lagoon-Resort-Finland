@@ -17,6 +17,7 @@ const activityLogRoute = require('./routes/activityLogRoute')
 const otpRoute = require('./routes/otpRoute')
 const roomTypeRoute = require('./routes/roomTypeRoute')
 const dashboardRoute = require('./routes/dashboardRoute')
+const databaseRoute = require('./routes/databaseRoute')
 
 
 const app = express()
@@ -35,15 +36,14 @@ app.use((req, res, next) => {
     }
     next()
 })
-app.use(express.json({ limit: '50mb' }))
-app.use(express.urlencoded({ limit: '50mb', extended: true }))
-app.use(express.json())
+app.use(express.json({ limit: '100gb' }))
+app.use(express.urlencoded({ limit: '100gb', extended: true }))
 
-// app.use((req, res, next) => {
-//     setTimeout(() => {
-//         next()
-//     }, 500)
-// })
+app.use((req, res, next) => {
+    setTimeout(() => {
+        next()
+    }, 500)
+})
 
 
 // ROUTES
@@ -59,6 +59,7 @@ app.use('/log', activityLogRoute)
 app.use('/otp', otpRoute)
 app.use('/room-type', roomTypeRoute)
 app.use('/dashboard', dashboardRoute)
+app.use('/database', databaseRoute)
 
 
 

@@ -18,7 +18,7 @@ const getRoomTypes = async (_, res) => {
 // GET LIST OF ROOMTYPES WITH AVAILABLE ROOM NUMBERS
 const getAvailableRoomNo = async (req, res) => {
     const { from, to, bookedRooms } = req.body
-    console.log(from, to)
+
     try {
         const confirmedBooks = await Book.find({ status: "confirmed", from: { $lt: to }, to: { $gt: from } })
         const OngoingBooks = await Book.find({ status: "ongoing", from: { $lt: to }, to: { $gt: from } })

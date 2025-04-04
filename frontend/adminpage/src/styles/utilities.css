@@ -550,6 +550,142 @@
     font-weight: 400;
 }
 
+/* DATABASE */
+
+.database {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: var(--primary);
+    height: 100%;
+
+    & .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & .left {
+            display: flex;
+            flex-direction: column;
+
+            & h1 {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                & img {
+                    width: 25px;
+                    aspect-ratio: 1/1;
+                    border-radius: 50%;
+                }
+            }
+
+            & p {
+                font-size: 0.8rem;
+            }
+        }
+    }
+
+    & .restore-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        & .restore {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            width: 100%;
+            box-sizing: border-box;
+
+            & h1 {
+                font-size: 1rem;
+                font-weight: 600;
+            }
+
+            & p {
+                font-size: 0.8rem;
+                color: var(--gray);
+            }
+
+            & .input-cont {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: inset 0 0 8px var(--light-gray);
+                border-radius: 5px;
+                height: 120px;
+                padding: 5px;
+
+                & input {
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                }
+
+                & i {
+                    position: absolute;
+                    font-size: 3rem;
+                    color: var(--gray);
+                    transform: translateY(10px);
+                }
+            }
+
+            & button:disabled {
+                background-color: var(--gray);
+            }
+
+            & button {
+                padding: 10px 20px;
+                border: none;
+                background-color: var(--primary);
+                color: #fff;
+                border-radius: 8px;
+                font-size: 0.8rem;
+                cursor: pointer;
+            }
+        }
+    }
+
+    & .collection-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-bottom: 50px;
+
+        & .collection:first-of-type {
+            background-color: var(--gold);
+        }
+
+        & .collection {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+
+            & h1 {
+                font-size: 1rem;
+            }
+
+            & button {
+                padding: 10px 20px;
+                border: none;
+                background-color: var(--primary);
+                color: #fff;
+                border-radius: 8px;
+                font-size: 0.8rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 /* PC */
 @media (min-width: 1025px) {
     .logs-table-cont table {
@@ -677,5 +813,62 @@
     .invite-options .fa-xmark:hover {
         cursor: pointer;
         color: var(--red);
+    }
+
+    /* DATABASE */
+    .database {
+        gap: 30px;
+
+        & .header {
+            & .left {
+                & h1 {
+                    font-size: 2.5rem;
+
+                    & img {
+                        width: 35px;
+                    }
+                }
+
+                & p {
+                    font-size: 1rem;
+                }
+            }
+        }
+
+        & .restore-container {
+            flex-direction: row;
+            gap: 30px;
+
+            & .restore {
+                justify-content: space-between;
+                padding: 15px;
+                width: 450px;
+
+                & .input-cont {
+                    height: 160px;
+                }
+            }
+        }
+
+        & .collection-container {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            & .collection {
+                width: calc(50% - 50px);
+                padding: 25px 20px;
+
+                & h1 {
+                    font-size: 1.2rem;
+                }
+
+                & button {
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    font-size: 1rem;
+                }
+            }
+        }
     }
 }
