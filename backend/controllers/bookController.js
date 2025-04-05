@@ -6,6 +6,7 @@ const UserPersonalData = require('../models/userPersonalDataModel')
 const sendMail = require('../Utility/nodeMailer')
 const { Admin } = require('../models/adminModel')
 const Payment = require('../models/paymentModel')
+const { format } = require('date-fns')
 
 // STATUS
 // pending
@@ -325,15 +326,16 @@ const setConfirmed = async (req, res) => {
 
 // ONGOING => COMPLETED
 const setCompleted = async (req, res) => {
-    const { _id, total, payed, adminEmail } = await req.body
+    const { _id, total, addCharges, adminEmail } = await req.body
 
     try {
         const oldBook = await Book.findOne({ _id })
 
-        await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
+        if (total - oldBook.balance > 0) {
+            await Payment.create({ amount: total - oldBook.payed, userId: oldBook.userId })
+        }
 
-        const balance = total - payed
-        const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance, payed }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance: 0, total, payed: total, addCharges }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
 
@@ -384,7 +386,7 @@ const setNoshow = async (req, res) => {
 
 // EDIT BOOK
 const editBook = async (req, res) => {
-    const { _id, from, to, room, total, payed, adminEmail } = await req.body
+    const { _id, from, to, room, total, payed, showed, adminEmail } = await req.body
     let editedParts = []
 
     try {
@@ -397,9 +399,11 @@ const editBook = async (req, res) => {
 
         const oldBook = await Book.findOne({ _id })
 
-        await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
+        if (payed - oldBook.payed > 0) {
+            await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
+        }
 
-        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed, showed }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
         const user = await UserPersonalData.findOne({ email: email })
@@ -408,11 +412,12 @@ const editBook = async (req, res) => {
         newBook.user = user
 
         // activity log
-        oldBook.from != from && editedParts.push("from")
-        oldBook.to != to && editedParts.push("to")
-        oldBook.room != room && editedParts.push("room")
-        oldBook.total != total && editedParts.push("total")
-        oldBook.payed != payed && editedParts.push("payed")
+        from && format(oldBook.from, "MMM d, yyyy") !== format(from, "MMM d, yyyy") && editedParts.push("from")
+        to && format(oldBook.to, "MMM d, yyyy") !== format(to, "MMM d, yyyy") && editedParts.push("to")
+        room && JSON.stringify(oldBook.room) !== JSON.stringify(room) && editedParts.push("room")
+        total && oldBook.total !== total && editedParts.push("total")
+        payed && oldBook.payed !== payed && editedParts.push("payed")
+        showed && oldBook.showed !== showed && editedParts.push("showed")
 
         if (editedParts.length > 0) {
             await ActivityLog.create({
@@ -421,15 +426,17 @@ const editBook = async (req, res) => {
                 activity: `Changed the book information of ${email}. ${editedParts.map(part => {
                     switch (part) {
                         case "from":
-                            return ` changed start date from ${oldBook.from} to ${from}`
+                            return ` changed start date from ${format(oldBook.to, "MMM d, yyyy")} to ${format(from, "MMM d, yyyy")}`
                         case "to":
-                            return ` changed end date from ${oldBook.to} to ${to}`
+                            return ` changed end date from ${format(oldBook.to, "MMM d, yyyy")} to ${format(to, "MMM d, yyyy")}`
                         case "room":
                             return ` changed room`
                         case "total":
                             return ` changed total from ${oldBook.total} to ${total}`
                         case "payed":
                             return ` changed payed balance from ${oldBook.payed} to ${payed}`
+                        case "showed":
+                            return ` marked as showed`
                     }
                 })}`
             })

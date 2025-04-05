@@ -27,6 +27,21 @@ const roomSchema = new mongoose.Schema({
     }
 })
 
+const addChargesSchema = new mongoose.Schema({
+    charge: {
+        type: String,
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true
+    },
+    id: {
+        type: Number,
+        required: true
+    }
+})
+
 module.exports = mongoose.model('Book', new mongoose.Schema({
     userId: {
         type: String,
@@ -75,5 +90,13 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     reasonToCancel: {
         type: String,
         default: "not cancelled"
+    },
+    showed: {
+        type: Boolean,
+        default: false
+    },
+    addCharges: {
+        type: [addChargesSchema],
+        default: []
     }
 }, { timestamps: true }), 'books')

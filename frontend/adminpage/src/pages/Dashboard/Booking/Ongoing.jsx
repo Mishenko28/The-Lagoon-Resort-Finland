@@ -14,6 +14,7 @@ import useAdmin from "../../../hooks/useAdmin"
 export default function Ongoing({ fetchTotals, convertToNight }) {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
+    const [isShowedLoading, setIsShowedLoading] = useState(false)
 
     const [books, setBooks] = useState([])
 
@@ -25,6 +26,8 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
     const [openedNote, setOpenedNote] = useState("")
 
     const [searchInput, setSearchInput] = useState("")
+
+    const [toShowed, setToShowed] = useState(null)
 
     useEffect(() => {
         fetchBooks()
@@ -42,6 +45,20 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                 console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
+    }
+
+    const handleSubmitShowed = async () => {
+        setIsShowedLoading(true)
+        axios.patch("book/edit", { ...toShowed, showed: true })
+            .then(res => {
+                setBooks(prev => prev.map(b => b._id === res.data._id ? res.data : b))
+                setToShowed(null)
+            })
+            .catch((err) => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+            .finally(() => setIsShowedLoading(false))
     }
 
     if (isLoading) return <Loader2 />
@@ -86,6 +103,7 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                 >
                                     <td>{i + 1}</td>
                                     <td>
+                                        {!book.showed && <p className="red">not arrived</p>}
                                         {book.user.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
                                             <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
                                                 {part}
@@ -103,7 +121,7 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                     </td>
                                     <td>{book.user.contact}</td>
                                     <td>
-                                        {isPast(book.to) && <p>time reached</p>}
+                                        {isPast(book.to) && <p className="green">time reached</p>}
                                         {format(book.from, 'LLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}
                                         <br />
                                         {convertToNight(book.from, book.to)}
@@ -125,8 +143,14 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                     <td>₱{book.balance}</td>
                                     <td>
                                         <div className="bttns">
-                                            <button onClick={() => setToComplete(book)} className="green">Complete</button>
-                                            <button onClick={() => setToNoShow(book)} className="gray">No-show</button>
+                                            {book.showed ?
+                                                <button onClick={() => setToComplete(book)} className="green">Complete</button>
+                                                :
+                                                <>
+                                                    <button onClick={() => setToShowed(book)} className="secondary">Showed</button>
+                                                    <button onClick={() => setToNoShow(book)} className="gray">No-show</button>
+                                                </>
+                                            }
                                             <button onClick={() => setToChange(book)} className="blue">Change</button>
                                             <button onClick={() => setToCancel(book)} className="red">Cancel</button>
                                         </div>
@@ -146,6 +170,19 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                 {toChange && <ChangeBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToChange={setToChange} toChange={toChange} />}
                 {toCancel && <CancelBook fetchTotals={fetchTotals} convertToNight={convertToNight} setBooks={setBooks} setToCancel={setToCancel} toCancel={toCancel} />}
                 {openedNote && <Note openedNote={openedNote} setOpenedNote={setOpenedNote} />}
+                {toShowed &&
+                    <div className="full-cont">
+                        <div className="toShow">
+                            {isShowedLoading && <div className="loader-line"></div>}
+                            <h1>Mark as Showed</h1>
+                            <p>Are you sure you want to mark this booking as showed?</p>
+                            <div className="bttns">
+                                <button disabled={isShowedLoading} onClick={handleSubmitShowed} className="green">Yes</button>
+                                <button onClick={() => setToShowed(null)} className="red">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </>
     )

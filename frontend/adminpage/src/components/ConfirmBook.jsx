@@ -105,6 +105,16 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (payed <= 0) {
+            dispatch({ type: 'FAILED', payload: "please fill payment" })
+            return
+        }
+
+        if (payed > total) {
+            dispatch({ type: 'FAILED', payload: "the amount is overpaid" })
+            return
+        }
+
         let duplicateRoomNo = 0
         let duplicateInRoomType = ""
 

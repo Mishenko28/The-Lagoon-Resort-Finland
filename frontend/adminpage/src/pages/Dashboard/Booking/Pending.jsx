@@ -25,6 +25,7 @@ export default function Pending({ fetchTotals, convertToNight }) {
 
     useEffect(() => {
         fetchBooks()
+        fetchTotals()
         socket.connect()
 
         const handleNewBooking = (data) => {

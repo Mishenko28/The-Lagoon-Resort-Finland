@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import Loader from "../components/Loader"
 import "../styles/booking.css"
 import axios from "axios"
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { motion, AnimatePresence } from "framer-motion"
 import useAdmin from "../hooks/useAdmin"
 import { Link, useNavigate } from "react-router-dom"
@@ -184,11 +184,12 @@ const Booking = () => {
                                             className="date-picker"
                                         >
                                             <div className="date-wrapper">
+                                                <label>Check In Time: <b>{format(parse(checkIn.getHours().toString(), "H", new Date()), "h:mm a")}</b></label>
+                                                <label>Check Out Time: <b>{format(parse(checkOut.getHours().toString(), "H", new Date()), "h:mm a")}</b></label>
                                                 <label>Selected Date: {checkOut && <b>{format(checkIn, 'LLLL d' + (new Date(checkIn).getFullYear() === new Date(checkOut).getFullYear() ? '' : ', yyyy'))} - {format(checkOut, (new Date(checkIn).getMonth() === new Date(checkOut).getMonth() ? '' : 'LLLL ') + 'd, yyyy')}</b>} {checkOut && "(" + totalDays + ")"}</label>
                                                 <DatePicker
                                                     inline
                                                     selectsRange
-                                                    showMonthDropdown
                                                     selected={checkIn}
                                                     startDate={checkIn}
                                                     endDate={checkOut}

@@ -96,6 +96,11 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (addPay > toChange.balance) {
+            dispatch({ type: 'FAILED', payload: "the amount is overpaid" })
+            return
+        }
+
         let duplicateRoomNo = 0
         let duplicateInRoomType = ""
 
@@ -245,6 +250,10 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                             <div className="total">
                                 <h2>Payed:</h2>
                                 <h2>₱{toChange.payed}</h2>
+                            </div>
+                            <div className="total">
+                                <h2>Remaining:</h2>
+                                <h2>₱{toChange.balance}</h2>
                             </div>
                             <div className="total">
                                 <h2>Add payment:</h2>

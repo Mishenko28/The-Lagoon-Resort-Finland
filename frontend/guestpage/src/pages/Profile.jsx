@@ -78,6 +78,7 @@ const Profile = () => {
                 dispatch({ type: 'UPDATE_IMG', payload: res.data.personalData.img })
                 setIsEditing(false)
             })
+            .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
 
