@@ -21,6 +21,7 @@ import AdminInvite from './pages/AdminInvite'
 import ActivityLogs from './pages/Utilities/ActivityLogs'
 import Database from "./pages/Utilities/Database"
 import Archive from "./pages/Utilities/Archive"
+import Users from "./pages/Utilities/Users"
 
 import Booking from './pages/Dashboard/Booking'
 import Report from "./pages/Dashboard/Report"
@@ -58,7 +59,7 @@ function App() {
                                 {state.admin.role.includes('archive') && <Route path='archive' element={<Archive />} />}
                                 {state.admin.role.includes('activityLogs') && <Route path='activity-logs' element={<ActivityLogs />} />}
                                 {state.admin.role.includes('database') && <Route path='database' element={<Database />} />}
-                                {state.admin.role.includes('users') && <Route path='users' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('users') && <Route path='users' element={<Users />} />}
                                 {state.admin.role.includes('admins') && <Route path='admins' element={<Admins />} />}
                             </Route>
                         }

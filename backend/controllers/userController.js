@@ -75,38 +75,24 @@ const signUpUser = async (req, res) => {
 
 // GET ALL USERS BY PAGE
 const getUsers = async (req, res) => {
-    const page = await req.query.page
+    const { page, search } = await req.query
 
     try {
         const totalUsers = await User.countDocuments({})
 
-        const users = await User.find({})
+        const users = await User.find(search ? { email: { $regex: `${search}`, $options: 'i' } } : {})
             .sort({ email: -1 })
             .skip((page - 1) * 30)
-            .limit(30)
+            .limit(30).lean()
+
+        for (const user of users) {
+            const personalData = await UserPersonalData.findOne({ email: user.email })
+            user.personalData = personalData ? personalData : null
+            delete user.password
+        }
 
         res.status(200).json({ users, totalUsers })
 
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-
-// SEARCH USER
-const searchUser = async (req, res) => {
-    const user = await req.query.user
-    const page = await req.query.page
-
-    try {
-        const match = await User.find({ email: { $regex: `${user}`, $options: 'i' } })
-            .sort({ createdAt: -1 })
-            .skip((page - 1) * 10)
-            .limit(10)
-
-        const totalUsers = await User.countDocuments({ email: { $regex: `${user}`, $options: 'i' } })
-
-        res.status(200).json({ match, totalUsers })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -161,7 +147,6 @@ const updateUserData = async (req, res) => {
 module.exports = {
     loginUser,
     signUpUser,
-    searchUser,
     getUsers,
     addUserData,
     getUserData,

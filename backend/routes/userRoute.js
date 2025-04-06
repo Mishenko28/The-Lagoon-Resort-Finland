@@ -17,7 +17,6 @@ router.post('/signup', signUpUser)
 
 router.use(auth)
 
-router.get('/search', searchUser)
 router.get('/all', getUsers)
 
 router.get('/data', getUserData)

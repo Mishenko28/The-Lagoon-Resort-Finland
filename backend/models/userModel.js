@@ -10,6 +10,10 @@ module.exports = mongoose.model('User', new mongoose.Schema({
         type: String,
         required: true
     },
+    totalBookings: {
+        type: Number,
+        default: 0
+    },
     personalData: {
         type: Boolean,
         default: false

@@ -740,10 +740,6 @@
                 background-color: var(--primary);
             }
 
-            & tr {
-                position: relative;
-            }
-
             & th {
                 font-size: 1rem;
                 text-align: center;
@@ -830,6 +826,106 @@
                 border-radius: 8px;
                 font-size: 0.8rem;
                 cursor: pointer;
+            }
+        }
+    }
+}
+
+/* USERS */
+
+.users {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    color: var(--primary);
+
+    & .header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        & input.search {
+            padding: 12px 15px;
+            width: 300px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 3px solid var(--primary);
+        }
+
+        & h1 {
+            border: 3px solid var(--primary);
+            background-color: var(--gray);
+            color: #fff;
+            padding: 8px 20px;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        & .page-wrapper {
+            display: flex;
+            align-items: center;
+
+            & button {
+                padding: 10px 20px;
+                font-size: 1rem;
+                font-weight: 400;
+                border: none;
+                background-color: var(--primary);
+                color: #fff;
+                cursor: pointer;
+            }
+
+            & input {
+                padding: 5px;
+                width: 50px;
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: var(--primary);
+                text-align: center;
+                background-color: #fff;
+                border: none;
+            }
+        }
+    }
+
+    & .table-cont {
+        overflow-x: auto;
+        padding-bottom: 50px;
+
+        & table {
+            border-collapse: collapse;
+            border-bottom: 4px solid var(--primary);
+            width: 100%;
+            min-width: 500px;
+            background-color: #fff;
+
+            & thead {
+                background-color: var(--primary);
+            }
+
+            & th {
+                font-size: 1rem;
+                text-align: center;
+                color: #fff;
+                padding-block: 10px;
+                font-weight: 400;
+            }
+
+            & td {
+                font-size: 1rem;
+                text-align: center;
+                padding: 10px;
+                font-weight: 400;
+                border: 1px solid var(--light-gray);
+                max-width: 250px;
+            }
+
+            & img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
             }
         }
     }
