@@ -97,32 +97,11 @@ const deleteRoom = async (req, res) => {
 
         // archive
         if (room) {
-            await Archive.create({ adminEmail, type: "room", data: room })
+            await Archive.create({ adminEmail, type: "room", model: "Room", value: `${room.roomType} - room ${room.roomNo}`, data: room })
         }
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.DELETED], activity: `Deleted a room with a room number of ${room.roomNo} in ${room.roomType} room type` })
-
-        res.status(200).json({ room })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// RESTORE ROOM
-const restoreRoom = async (req, res) => {
-    const { _id, data, adminEmail } = await req.body
-
-    try {
-        const room = await Room.create({ ...data })
-
-        // archive
-        if (room) {
-            await Archive.findOneAndDelete({ _id })
-        }
-
-        // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOM, Actions.RESTORED], activity: `Restored a room with a room number of ${room.roomNo} in ${room.roomType} roomtype` })
 
         res.status(200).json({ room })
     } catch (error) {
@@ -135,5 +114,4 @@ module.exports = {
     addRoom,
     updateRoom,
     deleteRoom,
-    restoreRoom
 }

@@ -7,7 +7,6 @@ const {
     loginAdmin,
     addNewAdmin,
     deleteAdmin,
-    restoreAdmin,
     updateAdmin,
     getAllAdmin,
     updatePassword,
@@ -30,7 +29,6 @@ router.use(auth)
 
 router.post('/add', addNewAdmin)
 router.delete('/delete', deleteAdmin)
-router.post('/restore', restoreAdmin)
 router.patch('/update', updateAdmin)
 router.get('/all', getAllAdmin)
 router.get('/roles', getAllRoles)

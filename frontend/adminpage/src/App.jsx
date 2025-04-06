@@ -20,6 +20,7 @@ import Admins from './pages/Utilities/Admins'
 import AdminInvite from './pages/AdminInvite'
 import ActivityLogs from './pages/Utilities/ActivityLogs'
 import Database from "./pages/Utilities/Database"
+import Archive from "./pages/Utilities/Archive"
 
 import Booking from './pages/Dashboard/Booking'
 import Report from "./pages/Dashboard/Report"
@@ -54,7 +55,7 @@ function App() {
                         }
                         {['archive', 'activityLogs', 'database', 'users', 'admins'].some(section => state.admin.role.includes(section)) &&
                             <Route path='utilities' element={<Utilities />}>
-                                {state.admin.role.includes('archive') && <Route path='archive' element={<h1>In Developing</h1>} />}
+                                {state.admin.role.includes('archive') && <Route path='archive' element={<Archive />} />}
                                 {state.admin.role.includes('activityLogs') && <Route path='activity-logs' element={<ActivityLogs />} />}
                                 {state.admin.role.includes('database') && <Route path='database' element={<Database />} />}
                                 {state.admin.role.includes('users') && <Route path='users' element={<h1>In Developing</h1>} />}

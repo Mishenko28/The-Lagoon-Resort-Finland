@@ -6,17 +6,13 @@ const getAllActivityLogs = async (req, res) => {
     const actions = Object.values(Actions).map(action => { return action })
 
     try {
-        let logs = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).sort({ createdAt: -1 }).skip((page - 1) * 20).limit(20)
+        let logs = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).sort({ createdAt: -1 }).skip((page - 1) * 20).limit(20).lean()
 
         logs = await Promise.all(logs.map(async log => {
             const { personalData } = await Admin.findOne({ email: log.adminEmail }) || { personalData: { name: log.adminEmail } }
+            log.name = personalData.name
 
-            return {
-                _id: log._id,
-                name: personalData.name,
-                activity: log.activity,
-                createdAt: log.createdAt
-            }
+            return log
         }))
 
         const logCount = await ActivityLog.find(email === 'all' ? {} : { adminEmail: email }).find(action === 'all' ? {} : { action }).countDocuments()

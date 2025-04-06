@@ -102,34 +102,13 @@ const deleteAdmin = async (req, res) => {
 
         // archive
         if (admin) {
-            await Archive.create({ adminEmail, type: "admin", data: deletedAdmin })
+            await Archive.create({ adminEmail, type: "admin", model: "Admin", value: deletedAdmin.email, data: deletedAdmin })
         }
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.DELETED], activity: `Deleted an admin with the email of "${deletedAdmin.email}"` })
 
         res.status(200).json({ admin: deletedAdmin })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// RESTORE ADMIN
-const restoreAdmin = async (req, res) => {
-    const { _id, data, adminEmail } = await req.body
-
-    try {
-        const admin = await Admin.create({ ...data })
-
-        // archive
-        if (admin) {
-            await Archive.findOneAndDelete({ _id })
-        }
-
-        // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.RESTORED], activity: `Restored an admin with the email of "${admin.email}"` })
-
-        res.status(200).json({ admin })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -391,7 +370,6 @@ module.exports = {
     loginAdmin,
     addNewAdmin,
     deleteAdmin,
-    restoreAdmin,
     updateAdmin,
     getAllAdmin,
     updatePassword,

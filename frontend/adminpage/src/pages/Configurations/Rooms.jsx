@@ -6,6 +6,7 @@ import Loader2 from '../../components/Loader2'
 import useConvertBase64 from '../../hooks/useConvertBase64'
 import { motion, AnimatePresence } from 'framer-motion'
 import DatePicker from "react-datepicker"
+import { parse, format } from 'date-fns'
 
 export default function Rooms() {
     const { dispatch } = useAdmin()
@@ -244,8 +245,8 @@ export default function Rooms() {
                     <div className='infos'>
                         <h1>Rooms: <b>{rooms.length}</b></h1>
                         <h1>Down Payment: <b>{adminSettings.downPayment * 100}%</b></h1>
-                        <h1>Check In (24h format): <b>{adminSettings.roomStart}</b></h1>
-                        <h1>Check Out (24h format): <b>{adminSettings.roomEnd}</b></h1>
+                        <h1>Check In: <b>{format(parse(adminSettings.roomStart.toString(), "H", new Date()), "h:mm a")}</b></h1>
+                        <h1>Check Out: <b>{format(parse(adminSettings.roomEnd.toString(), "H", new Date()), "h:mm a")}</b></h1>
                     </div>
                     <AnimatePresence >
                         {newTime &&

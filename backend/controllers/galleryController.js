@@ -80,32 +80,11 @@ const deletePicture = async (req, res) => {
 
         // archive
         if (picture) {
-            await Archive.create({ adminEmail, type: "picture", data: picture })
+            await Archive.create({ adminEmail, type: "picture", model: "Picture", value: picture.caption, data: picture })
         }
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.GALLERY, Actions.DELETED], activity: `Deleted a picture with a caption of "${picture.caption}"` })
-
-        res.status(200).json({ picture })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// RESTORE PICTURE
-const restorePicture = async (req, res) => {
-    const { _id, data, adminEmail } = await req.body
-
-    try {
-        const picture = await Picture.create({ ...data })
-
-        // archive
-        if (picture) {
-            await Archive.findOneAndDelete({ _id })
-        }
-
-        // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.GALLERY, Actions.RESTORED], activity: `Restored a picture with a caption of "${picture.caption}"` })
 
         res.status(200).json({ picture })
     } catch (error) {
@@ -118,5 +97,4 @@ module.exports = {
     addPicture,
     updatePicture,
     deletePicture,
-    restorePicture
 }

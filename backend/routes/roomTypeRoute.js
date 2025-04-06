@@ -7,7 +7,6 @@ const {
     addRoomTypes,
     updateRoomTypes,
     deleteRoomType,
-    restoreRoomType,
     addSubImage,
     editSubImage,
     deleteSubImage,
@@ -24,7 +23,6 @@ router.post('/available-rooms', getAvailableRoomNo)
 router.post('/add', addRoomTypes)
 router.patch('/update', updateRoomTypes)
 router.delete('/delete', deleteRoomType)
-router.post('/restore', restoreRoomType)
 router.post('/addSubImage', addSubImage)
 router.post('/editSubImage', editSubImage)
 router.delete('/deleteSubImage', deleteSubImage)

@@ -1,5 +1,6 @@
 const AdminSetting = require('../models/adminSettingsModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
+const Archive = require('../models/archiveModel')
 
 const getSettings = async (_, res) => {
     try {
@@ -24,6 +25,10 @@ const updateSettings = async (req, res) => {
         const oldSettings = await AdminSetting.findOne({})
 
         const adminSetting = await AdminSetting.findOneAndUpdate({}, { address, coordinates, systemEmail, downPayment, roomStart, roomEnd, phoneNumbers, socials, emails }, { new: true })
+
+        const handleArchive = async (type, value, data) => {
+            await Archive.create({ adminEmail, type, model: "AdminSetting", value, data })
+        }
 
         // activity log
         socials && oldSettings.socials != socials && editedParts.push("socials")
@@ -58,6 +63,7 @@ const updateSettings = async (req, res) => {
                             if (oldSettings.emails.length === emails.length) {
                                 return ` changed email from ${oldSettings.emails.filter(email => !emails.includes(email))[0].url} to ${emails.filter(email => !oldSettings.emails.includes(email))[0].url}`
                             } else if (oldSettings.emails.length > emails.length) {
+                                handleArchive("email", `${oldSettings.emails.filter(email => !emails.includes(email))[0].url}`, oldSettings.emails.filter(email => !emails.includes(email))[0])
                                 return ` deleted an email ${oldSettings.emails.filter(email => !emails.includes(email))[0].url}`
                             } else {
                                 return ` added an email ${emails[emails.length - 1].url}`
@@ -92,7 +98,7 @@ const updateSettings = async (req, res) => {
                                         phoneNumber = element
                                     }
                                 })
-
+                                handleArchive("number", `${phoneNumber.sim} ${phoneNumber.number}`, phoneNumber)
                                 return ` deleted a phone number ${phoneNumber.sim} ${phoneNumber.number}`
                             } else {
                                 const phoneNumber = phoneNumbers[phoneNumbers.length - 1]
@@ -128,7 +134,7 @@ const updateSettings = async (req, res) => {
                                         social = element
                                     }
                                 })
-
+                                handleArchive("social", `${social.app} ${social.link}`, social)
                                 return ` deleted a social media ${social.app} ${social.link}`
                             } else {
                                 const social = socials[socials.length - 1]

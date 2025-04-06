@@ -279,8 +279,8 @@ const addBook = async (req, res) => {
                     <hr />
                     <h4>Reservation Details:</h4>
                     <ul>
-                        <li>Check-in Date: ${book.from}</li>
-                        <li>Check-out Date: ${book.to}</li>
+                        <li>Check-in Date: ${format(book.from, "MMM d, yyyy")}</li>
+                        <li>Check-out Date: ${format(book.to, "MMM d, yyyy")}</li>
                         <li>Room Type: ${book.room.map(r => r.roomType).join(", ")}</li>
                         <li>Special Request: ${book.note !== "" ? book.note : "none"}</li>
                     </ul>
@@ -312,6 +312,31 @@ const setConfirmed = async (req, res) => {
         const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, reasonToCancel: "not cancelled" }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
+        const { name } = await UserPersonalData.findOne({ email: email })
+
+        sendMail({
+            subject: "Reservation Confirmation! - The Lagoon Resort Finland Inc.",
+            to: email,
+            html: `<h3>Hi ${name},</h3>
+                    <p>We’re happy to let you know that your reservation at The Lagoon Resort Finland Inc. has been successfully confirmed!</p>
+                    <hr />
+                    <h4>Reservation Details:</h4>
+                    <ul>
+                        <li>Reservation ID: ${book._id}</li>
+                        <li>Check-in Date: ${format(book.from, "MMM d, yyyy h:mm a")}</li>
+                        <li>Check-out Date: ${format(book.to, "MMM d, yyyy h:mm a")}</li>
+                        <li>Room Type: ${book.room.map(r => r.roomType).join(", ")}</li>
+                        <li>Number of Guest: ${book.room.reduce((persons, current) => current.maxPerson + current.addedPerson + persons, 0)}</li>
+                        <li>Amount Total: ₱${book.total}</li>
+                        <li>Down payment: ₱${book.payed}</li>
+                    </ul>
+                    <hr />
+                    <p>Kindly present a valid ID upon check-in for verification purposes. This helps us ensure a smooth and secure check-in process.</p>
+                    <hr />
+                    <p>If you have any questions or special requests, feel free to reply to this email or contact us directly. We look forward to welcoming you and making your stay with us memorable! Thank you for choosing The Lagoon Resort Finland Inc!<p>
+                    <p>Best Regards,</p>
+                    <p><b>The Lagoon Resort Finland Inc.<b></p>`
+        })
 
         await Payment.create({ amount: payed, userId: book.userId })
 

@@ -187,37 +187,18 @@ const deleteRoomType = async (req, res) => {
         if (books.some(book => book.room.some(room => room.roomType === name))) throw new Error("Cannot delete roomtype with active bookings.")
 
         const roomType = await RoomType.findOneAndDelete({ _id })
+        const deletedRooms = await Room.find({ roomType: name })
 
-        await Room.deleteMany({ roomType: roomType.name })
+        await Room.deleteMany({ roomType: name })
 
         // archive
         if (roomType) {
-            await Archive.create({ adminEmail, type: "roomtype", data: roomType })
+            await Archive.create({ adminEmail, type: "roomtype", model: "RoomType", value: name, data: roomType })
+            await Promise.all(deletedRooms.map(async room => await Archive.create({ adminEmail, type: "room", model: "Room", value: `${room.roomType} - room ${room.roomNo}`, data: room })))
         }
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ROOMTYPE, Actions.DELETED], activity: `Deleted roomtype with a name of ${roomType.name}` })
-
-        res.status(200).json({ roomType })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// RESTORE ROOMTYPE
-const restoreRoomType = async (req, res) => {
-    const { _id, data } = await req.body
-
-    try {
-        const roomType = await RoomType.create({ ...data })
-
-        // archive
-        if (roomType) {
-            await Archive.findOneAndDelete({ _id })
-        }
-
-        // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.ROOMTYPE, Actions.RESTORED], activity: `Restored an roomtype with a name of ${roomType.name}` })
 
         res.status(200).json({ roomType })
     } catch (error) {
@@ -282,7 +263,6 @@ module.exports = {
     addRoomTypes,
     updateRoomTypes,
     deleteRoomType,
-    restoreRoomType,
     addSubImage,
     editSubImage,
     deleteSubImage,

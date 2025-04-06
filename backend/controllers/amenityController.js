@@ -86,32 +86,11 @@ const deleteAmenity = async (req, res) => {
 
         // archive
         if (amenity) {
-            await Archive.create({ adminEmail, type: "amenity", data: amenity })
+            await Archive.create({ adminEmail, type: "amenity", model: "Amenity", value: amenity.name, data: amenity })
         }
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.DELETED], activity: `Deleted an amenity with a name of ${amenity.name}` })
-
-        res.status(200).json({ amenity })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-// RESTORE AMENITY
-const restoreAmenity = async (req, res) => {
-    const { _id, data } = await req.body
-
-    try {
-        const amenity = await Amenity.create({ ...data })
-
-        // archive
-        if (amenity) {
-            await Archive.findOneAndDelete({ _id })
-        }
-
-        // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.AMENITY, Actions.RESTORED], activity: `Restored an amenity with a name of ${amenity.name}` })
 
         res.status(200).json({ amenity })
     } catch (error) {
@@ -124,5 +103,4 @@ module.exports = {
     addAmenity,
     updateAmenity,
     deleteAmenity,
-    restoreAmenity
 }

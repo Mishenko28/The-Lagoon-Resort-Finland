@@ -620,6 +620,8 @@
                 border-radius: 5px;
                 height: 120px;
                 padding: 5px;
+                background-color: unset;
+                z-index: 0;
 
                 & input {
                     width: 100%;
@@ -632,6 +634,7 @@
                     font-size: 3rem;
                     color: var(--gray);
                     transform: translateY(10px);
+                    z-index: -1;
                 }
             }
 
@@ -677,6 +680,152 @@
                 padding: 10px 20px;
                 border: none;
                 background-color: var(--primary);
+                color: #fff;
+                border-radius: 8px;
+                font-size: 0.8rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+/* ARCHIVES */
+.archive {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    color: var(--primary);
+
+    & .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & h1 {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 3rem;
+        }
+
+        & select {
+            padding: 12px 20px;
+            border: none;
+            background-color: var(--primary);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+
+            & option {
+                background-color: #fff;
+                color: var(--primary);
+            }
+        }
+    }
+
+    & .table-cont {
+        overflow-x: auto;
+        padding-bottom: 50px;
+
+        & table {
+            border-collapse: collapse;
+            border-bottom: 4px solid var(--primary);
+            width: 100%;
+            min-width: 500px;
+            background-color: #fff;
+
+            & thead {
+                background-color: var(--primary);
+            }
+
+            & tr {
+                position: relative;
+            }
+
+            & th {
+                font-size: 1rem;
+                text-align: center;
+                color: #fff;
+                padding-block: 10px;
+                font-weight: 400;
+            }
+
+            & td:nth-child(3) {
+                text-align: left;
+            }
+
+            & td {
+                font-size: 1rem;
+                text-align: center;
+                padding: 10px;
+                font-weight: 400;
+                border: 1px solid var(--light-gray);
+                max-width: 250px;
+
+                & button {
+                    padding: 15px 20px;
+                    border: none;
+                    background-color: var(--primary);
+                    color: #fff;
+                    border-radius: 8px;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                }
+
+                & p {
+                    color: #fff;
+                    padding: 12px;
+                    width: 100px;
+                    margin: 0 auto;
+                    border-radius: 5px;
+                }
+            }
+        }
+    }
+
+    & .confirm-restore {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #fff;
+        padding: 20px;
+        width: 300px;
+
+        & h1 {
+            font-size: 2rem;
+        }
+
+        & p {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+
+        & h2 {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #fff;
+            max-width: max-content;
+            padding: 5px 10px;
+            overflow-wrap: break-word;
+        }
+
+        & .bttns {
+            display: flex;
+            gap: 10px;
+            align-self: flex-end;
+
+            & button:last-of-type {
+                background-color: var(--red);
+            }
+
+            & button {
+                padding: 15px 20px;
+                border: none;
+                background-color: var(--green);
                 color: #fff;
                 border-radius: 8px;
                 font-size: 0.8rem;
