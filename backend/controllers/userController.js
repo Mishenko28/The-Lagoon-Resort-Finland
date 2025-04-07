@@ -144,11 +144,36 @@ const updateUserData = async (req, res) => {
     }
 }
 
+const addUser = async (req, res) => {
+    const { email, password, age, contact, img, name, sex } = await req.body
+
+    try {
+        if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) {
+            throw Error("password must atleast 8 characters")
+        }
+
+        const personalData = await UserPersonalData.create({ email, age, contact, img, name, sex, })
+
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(password, salt)
+
+        const user = (await User.create({ email, password: hash })).toObject()
+
+        user.personalData = personalData
+        delete user.password
+
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 module.exports = {
     loginUser,
     signUpUser,
     getUsers,
     addUserData,
     getUserData,
-    updateUserData
+    updateUserData,
+    addUser
 }

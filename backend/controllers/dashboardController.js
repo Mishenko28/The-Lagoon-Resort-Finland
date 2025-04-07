@@ -21,16 +21,6 @@ const getTotalBookPerMonth = async (year) => {
     return bookings
 }
 
-const randomArrayofNumber = () => {
-    const array = []
-
-    for (let i = 0; i < 12; i++) {
-        array.push(Math.floor(Math.random() * (30 - 10) + 10))
-    }
-
-    return array
-}
-
 const getAllData = async (_, res) => {
     try {
         const payments = await Payment.find({ createdAt: { $gte: startOfMonth } })

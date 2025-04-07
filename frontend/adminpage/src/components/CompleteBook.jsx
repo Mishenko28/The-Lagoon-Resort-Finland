@@ -116,10 +116,8 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                                 {openAddChargeDropDown &&
                                     <div className="charges">
                                         <h3 onClick={() => handleAddCharge("Extra Bed")}>Extra Bed</h3>
-                                        <h3 onClick={() => handleAddCharge("Food / Beverage")}>Food / Beverage</h3>
                                         <h3 onClick={() => handleAddCharge("Room Damage")}>Room Damage</h3>
                                         <h3 onClick={() => handleAddCharge("Missing Item")}>Missing Item</h3>
-                                        <h3 onClick={() => handleAddCharge("Water Activity")}>Water Activity</h3>
                                     </div>
                                 }
                             </div>

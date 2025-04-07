@@ -184,8 +184,8 @@ const Booking = () => {
                                             className="date-picker"
                                         >
                                             <div className="date-wrapper">
-                                                <label>Check In Time: <b>{format(parse(checkIn.getHours().toString(), "H", new Date()), "h:mm a")}</b></label>
-                                                <label>Check Out Time: <b>{format(parse(checkOut.getHours().toString(), "H", new Date()), "h:mm a")}</b></label>
+                                                <label>Check In Time: <b>{format(parse(roomStart.toString(), "H", new Date()), "h:mm a")}</b></label>
+                                                <label>Check Out Time: <b>{format(parse(roomEnd.toString(), "H", new Date()), "h:mm a")}</b></label>
                                                 <label>Selected Date: {checkOut && <b>{format(checkIn, 'LLLL d' + (new Date(checkIn).getFullYear() === new Date(checkOut).getFullYear() ? '' : ', yyyy'))} - {format(checkOut, (new Date(checkIn).getMonth() === new Date(checkOut).getMonth() ? '' : 'LLLL ') + 'd, yyyy')}</b>} {checkOut && "(" + totalDays + ")"}</label>
                                                 <DatePicker
                                                     inline

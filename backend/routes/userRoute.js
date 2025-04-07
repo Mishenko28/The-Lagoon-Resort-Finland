@@ -9,7 +9,8 @@ const {
     searchUser,
     addUserData,
     getUserData,
-    updateUserData
+    updateUserData,
+    addUser
 } = require('../controllers/userController')
 
 router.post('/login', loginUser)
@@ -20,6 +21,7 @@ router.use(auth)
 router.get('/all', getUsers)
 
 router.get('/data', getUserData)
+router.post('/add', addUser)
 router.post('/data', addUserData)
 router.patch('/data', updateUserData)
 
