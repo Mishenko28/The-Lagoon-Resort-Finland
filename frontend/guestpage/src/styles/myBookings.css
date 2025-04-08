@@ -19,12 +19,18 @@
 
 .my-booking .book a,
 .my-booking .book button {
-    background-color: var(--light);
+    background-color: var(--primary);
+    border: none;
+    color: var(--light);
     padding: 15px 20px;
     width: fit-content;
     border-radius: 5px;
     cursor: pointer;
     font-size: var(--small);
+}
+
+.my-booking .book button.red {
+    background-color: var(--red);
 }
 
 .my-booking .book h3 {
@@ -148,6 +154,48 @@
     font-weight: 500;
 }
 
+.my-booking .book .rooms .feedback {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    & h1 {
+        font-size: var(--medium);
+        font-weight: 500;
+    }
+
+    & .rating {
+        display: flex;
+        gap: 5px;
+
+        i {
+            font-size: var(--medium);
+            color: var(--dark);
+            cursor: pointer;
+        }
+    }
+
+    & textarea {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid var(--primary);
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    & .anonymous {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        & input[type=checkbox] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    }
+}
+
 .my-booking .book .total-wrapper {
     display: flex;
     flex-direction: column;
@@ -174,24 +222,8 @@
     padding: 2px 4px;
 }
 
-.my-booking .book button.cancel {
-    color: var(--red);
-    border: 1px solid var(--red);
-}
-
-.my-booking .book button.back {
-    color: var(--primary);
-    border: 1px solid var(--primary);
-}
-
-.my-booking .book button.submit {
-    background-color: var(--primary);
-    border: 1px solid var(--primary);
-    color: var(--light);
-}
-
 .my-booking .book a.book-now {
-    color: var(--primary);
+    color: var(--light);
     border: 1px solid var(--primary);
 }
 

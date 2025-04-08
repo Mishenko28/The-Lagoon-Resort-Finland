@@ -13,6 +13,11 @@ const Completed = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [books, setBooks] = useState([])
 
+    const [star, setStar] = useState(0)
+    const [feedback, setFeedback] = useState("")
+    const [anonymous, setAnonymous] = useState(false)
+    const [toRateId, setToRateId] = useState("")
+
     useEffect(() => {
         fetchConfirmed()
     }, [])
@@ -21,6 +26,24 @@ const Completed = () => {
         axios.get("book/user", { params: { status: "completed", email: state.user.email } })
             .then(res => setBooks(res.data))
             .finally(() => setIsLoading(false))
+    }
+
+    const handleCloseRating = () => {
+        setStar(0)
+        setFeedback("")
+        setAnonymous(false)
+        setToRateId("")
+    }
+    const handleOpenRating = (_id) => {
+        setToRateId(_id)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        axios.post("/feedback/create", { email: state.user.email, star, feedback, anonymous, bookId: toRateId })
+        handleCloseRating()
+        setIsLoading(true)
+        fetchConfirmed()
     }
 
     return (
@@ -41,7 +64,7 @@ const Completed = () => {
                         >
                             <div className="date">
                                 <h1>{format(book.from, 'LLLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}</h1>
-                                <h2>({formatDistance(book.from, book.to)})</h2>
+                                <h2>({`${Math.ceil((new Date(book.to) - new Date(book.from)) / (1000 * 60 * 60 * 24))} ${Math.ceil((new Date(book.to) - new Date(book.from)) / (1000 * 60 * 60 * 24)) === 1 ? "night" : "nights"}`})</h2>
                             </div>
                             <hr />
                             <div className="rooms">
@@ -58,6 +81,19 @@ const Completed = () => {
                                     </div>
                                 ))}
                                 <hr />
+                                {book.addCharges.length > 0 &&
+                                    <>
+                                        <div className="room-wrapper">
+                                            {book.addCharges.map(charge => (
+                                                <div key={charge._id} className="room">
+                                                    <h1>{charge.charge}</h1>
+                                                    <h2>₱{charge.amount}</h2>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <hr />
+                                    </>
+                                }
                                 <div className="total-wrapper">
                                     {Math.ceil((new Date(book.to) - new Date(book.from)) / (1000 * 60 * 60 * 24)) > 1 ?
                                         <>
@@ -77,6 +113,43 @@ const Completed = () => {
                                         </div>
                                     }
                                 </div>
+                                <hr />
+                                {book.feedback &&
+                                    <div className="feedback">
+                                        <h1>Your Feedback:</h1>
+                                        <div className="rating">
+                                            <i className="fa-solid fa-star" style={{ color: book.feedback.star >= 1 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" style={{ color: book.feedback.star >= 2 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" style={{ color: book.feedback.star >= 3 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" style={{ color: book.feedback.star >= 4 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" style={{ color: book.feedback.star >= 5 ? "var(--gold)" : "" }} />
+                                        </div>
+                                        <textarea disabled value={book.feedback.feedback}></textarea>
+                                    </div>
+                                }
+                                {(toRateId !== book._id && !book.feedback) &&
+                                    <button onClick={() => handleOpenRating(book._id)}>Give Feedback</button>
+                                }
+                                {toRateId === book._id &&
+                                    <form onSubmit={handleSubmit} className="feedback">
+                                        <h1>Rate your stay</h1>
+                                        <div className="rating">
+                                            <i className="fa-solid fa-star" onClick={() => setStar(1)} style={{ color: star >= 1 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" onClick={() => setStar(2)} style={{ color: star >= 2 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" onClick={() => setStar(3)} style={{ color: star >= 3 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" onClick={() => setStar(4)} style={{ color: star >= 4 ? "var(--gold)" : "" }} />
+                                            <i className="fa-solid fa-star" onClick={() => setStar(5)} style={{ color: star >= 5 ? "var(--gold)" : "" }} />
+                                        </div>
+                                        <textarea rows={3} placeholder="Leave a feedback..." value={feedback} onChange={(e) => setFeedback(e.target.value)}></textarea>
+                                        <div className="anonymous">
+                                            <input type="checkbox" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} /> Leave feedback anonymously
+                                        </div>
+                                        <div className="bttns">
+                                            <button type="button" className="red" onClick={handleCloseRating}>Cancel</button>
+                                            {star > 0 && <button type="submit">Submit</button>}
+                                        </div>
+                                    </form>
+                                }
                             </div>
                         </motion.div>
                     ))}

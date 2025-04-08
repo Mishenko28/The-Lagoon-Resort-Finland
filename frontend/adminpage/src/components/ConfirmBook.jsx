@@ -105,6 +105,15 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (!toConfirm.to) {
+            dispatch({ type: 'FAILED', payload: "please select the check out date" })
+            return
+        }
+
+        if (new Date(toConfirm.from).getDate() == new Date(toConfirm.to).getDate()) {
+            dispatch({ type: 'FAILED', payload: "check in and check out can not be the same" })
+            return
+        }
         if (payed <= 0) {
             dispatch({ type: 'FAILED', payload: "please fill payment" })
             return
@@ -141,7 +150,6 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
             dispatch({ type: 'FAILED', payload: `duplicate room number ${duplicateRoomNo} in ${duplicateInRoomType}` })
             return
         }
-
         setIsLoading(true)
 
         axios.post("book/add-confirmed", { ...toConfirm, payed, from: new Date(toConfirm.from).setHours(roomStart, 0, 0, 0), to: new Date(toConfirm.to).setHours(roomEnd, 0, 0, 0) })
@@ -193,6 +201,7 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                                 minDate={new Date()}
                                 monthsShown={2}
                                 onChange={handleChangeDate}
+                                className={!toConfirm.to || new Date(toConfirm.from).getDate() == new Date(toConfirm.to).getDate() ? "error" : ""}
                             />
                         </div>
                         <AvailableRooms availableRooms={availableRooms} />
@@ -219,7 +228,7 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                                                             <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
                                                         ))}
                                                     </select>
-                                                    <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
+                                                    <select value={room.roomNo} onChange={(e) => setToConfirm(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))} className={room.roomNo == 0 ? "error" : ""}>
                                                         <option value="0">
                                                             {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.filter(r => r.available).length === 0 ?
                                                                 "no available room"
@@ -251,11 +260,11 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                         <div className="total-wrapper">
                             <div className="total">
                                 <h2>Down payment({toConfirm.downPayment * 100}%):</h2>
-                                <h2>₱{total * toConfirm.downPayment}</h2>
+                                <h2>₱{total * toConfirm.downPayment < 0 ? 0 : total * toConfirm.downPayment}</h2>
                             </div>
                             <div className="total">
                                 <h2>Total:</h2>
-                                <h2>₱{total}</h2>
+                                <h2>₱{total < 0 ? 0 : total}</h2>
                             </div>
                             <div className="total">
                                 <h2>Payment received:</h2>

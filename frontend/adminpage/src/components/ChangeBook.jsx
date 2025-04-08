@@ -20,6 +20,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
     const [roomEnd, setRoomEnd] = useState(null)
 
     const total = toChange.room.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addedPersonRate), 0) * Math.ceil((new Date(toChange.to).setHours(roomEnd, 0, 0, 0) - new Date(toChange.from).setHours(roomStart, 0, 0, 0)) / (1000 * 60 * 60 * 24)) || 0
+
     const [addPay, setAddPay] = useState("")
 
     useEffect(() => {
@@ -95,6 +96,16 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        if (!toChange.to) {
+            dispatch({ type: 'FAILED', payload: "please select the check out date" })
+            return
+        }
+
+        if (new Date(toChange.from).getDate() == new Date(toChange.to).getDate()) {
+            dispatch({ type: 'FAILED', payload: "check in and check out can not be the same" })
+            return
+        }
 
         if (addPay > toChange.balance) {
             dispatch({ type: 'FAILED', payload: "the amount is overpaid" })
@@ -176,7 +187,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                         </div>
                         <hr />
                         <div className="date-wrapper">
-                            <h2>Total Period: {convertToNight(toChange.from, toChange.to)}</h2>
+                            <h2>Total Period: {toChange.to && convertToNight(toChange.from, toChange.to)}</h2>
                             <DatePicker
                                 withPortal
                                 selectsRange
@@ -187,6 +198,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                                 minDate={new Date()}
                                 monthsShown={2}
                                 onChange={handleChangeDate}
+                                className={!toChange.to || new Date(toChange.from).getDate() == new Date(toChange.to).getDate() ? "error" : ""}
                             />
                         </div>
                         <AvailableRooms availableRooms={availableRooms} />
@@ -213,7 +225,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                                                             <option key={roomType._id} value={roomType.name}>{roomType.name}</option>
                                                         ))}
                                                     </select>
-                                                    <select value={room.roomNo} onChange={(e) => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))}>
+                                                    <select value={room.roomNo} onChange={(e) => setToChange(prev => ({ ...prev, room: prev.room.map(r => r._id === room._id ? { ...r, roomNo: e.target.value } : r) }))} className={room.roomNo == 0 ? "error" : ""}>
                                                         <option value="0">
                                                             {availableRooms.filter(r => r.roomType === room.roomType)[0].rooms.filter(r => r.available).length === 0 ?
                                                                 "no available room"
@@ -245,7 +257,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                         <div className="total-wrapper">
                             <div className="total">
                                 <h2>Total:</h2>
-                                <h2>₱{total}</h2>
+                                <h2>₱{total < 0 ? 0 : total}</h2>
                             </div>
                             <div className="total">
                                 <h2>Payed:</h2>
@@ -253,7 +265,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                             </div>
                             <div className="total">
                                 <h2>Remaining:</h2>
-                                <h2>₱{toChange.balance}</h2>
+                                <h2>₱{total - toChange.payed < 0 ? 0 : total - toChange.payed}</h2>
                             </div>
                             <div className="total">
                                 <h2>Add payment:</h2>

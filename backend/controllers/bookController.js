@@ -314,6 +314,8 @@ const setConfirmed = async (req, res) => {
         const { email } = await User.findOne({ _id: book.userId })
         const { name } = await UserPersonalData.findOne({ email: email })
 
+        await User.findOneAndUpdate({ _id: book.userId }, { $inc: { totalBookings: 1 } })
+
         sendMail({
             subject: "Reservation Confirmation! - The Lagoon Resort Finland Inc.",
             to: email,
@@ -480,7 +482,7 @@ const getUserBooks = async (req, res) => {
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await Book.find({ status, userId: _id })
+        const books = await Book.find({ status, userId: _id }).populate("feedback")
 
         res.status(200).json(books.reverse())
     } catch (error) {

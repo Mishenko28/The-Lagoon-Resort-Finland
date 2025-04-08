@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import Loader2 from "../components/Loader2"
 import useAdmin from "../hooks/useAdmin"
+import { motion, AnimatePresence } from "framer-motion"
 
 
 
@@ -18,25 +19,55 @@ const Graph = () => {
     const [newUsers, setNewUsers] = useState(0)
     const [recentSales, setRecentSales] = useState([])
     const [bookings, setBookings] = useState(null)
+    const [feedbacks, setFeedbacks] = useState([])
+
+    const [submitLoading, setSubmitLoading] = useState(null)
 
     useEffect(() => {
         fetchAllData()
     }, [])
 
     const fetchAllData = async () => {
-        axios.get("dashboard/all")
-            .then(res => {
-                setRevenue(res.data.revenue)
-                setTotalBook(res.data.totalBook)
-                setNewUsers(res.data.newUsers)
-                setRecentSales(res.data.recentSales)
-                setBookings(res.data.bookings)
-            })
+        await Promise.all([
+            axios.get("feedback/new")
+                .then(res => setFeedbacks(res.data)),
+
+            axios.get("dashboard/all")
+                .then(res => {
+                    setRevenue(res.data.revenue)
+                    setTotalBook(res.data.totalBook)
+                    setNewUsers(res.data.newUsers)
+                    setRecentSales(res.data.recentSales)
+                    setBookings(res.data.bookings)
+                })
+        ])
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
                 console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
+    }
+
+    const handleApproved = async (id) => {
+        setSubmitLoading({ id, status: "approve" })
+        axios.post("feedback/approve", { _id: id })
+            .then(res => setFeedbacks(prev => prev.filter(feedback => feedback._id !== res.data._id)))
+            .catch(err => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+            .finally(() => setSubmitLoading(null))
+    }
+
+    const handleReject = async (id) => {
+        setSubmitLoading({ id, status: "reject" })
+        axios.post("feedback/reject", { _id: id })
+            .then(res => setFeedbacks(prev => prev.filter(feedback => feedback._id !== res.data._id)))
+            .catch(err => {
+                dispatch({ type: 'FAILED', payload: err.response.data.error })
+                console.log(err.response.data.error)
+            })
+            .finally(() => setSubmitLoading(null))
     }
 
     return (
@@ -100,8 +131,14 @@ const Graph = () => {
                         <div className="recent-sales">
                             <h1>Recent Sales</h1>
                             <div className="recent-bookings-list">
-                                {recentSales.map(sale => (
-                                    <div className="sale" key={sale._id}>
+                                {recentSales.map((sale, i) => (
+                                    <motion.div
+                                        initial={{ opacity: 0.5, scale: 0 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: (i + 1) * 0.1 }}
+                                        className="sale"
+                                        key={sale._id}
+                                    >
                                         <div className="left">
                                             <img src={sale.img} />
                                             <div>
@@ -110,11 +147,47 @@ const Graph = () => {
                                             </div>
                                         </div>
                                         <h5>+₱{sale.payed.toLocaleString()}</h5>
-                                    </div>
+                                    </motion.div>
                                 ))}
                                 {recentSales.length === 0 && <div className="sale">No recent sales</div>}
                             </div>
                         </div>
+                        {feedbacks.length > 0 &&
+                            <div className="feedbacks">
+                                <h1>Feedbacks</h1>
+                                <div className="feedback-list">
+                                    <AnimatePresence mode="sync">
+                                        {feedbacks.map(feedback => (
+                                            <motion.div
+                                                layout
+                                                initial={{ opacity: 0.5, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="feedback"
+                                                key={feedback._id}
+                                            >
+                                                <div className="left">
+                                                    <img src={feedback.user.img} />
+                                                    <div>
+                                                        <h3>{feedback.user.name}</h3>
+                                                        <h4>{feedback.user.email}</h4>
+                                                    </div>
+                                                </div>
+                                                <div className="right">
+                                                    <div>{Array.from({ length: 5 }, (_, i) => <i key={i} style={feedback.star > i ? { color: "var(--gold)" } : null} className="fa-solid fa-star" />)}</div>
+                                                    <h5>{feedback.feedback}</h5>
+                                                </div>
+                                                <div className="bttns">
+                                                    <button disabled={submitLoading} onClick={() => handleApproved(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "approve") ? "Loading..." : "Approve"}</button>
+                                                    <button disabled={submitLoading} onClick={() => handleReject(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "reject") ? "Loading..." : "Reject"}</button>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </>
             }

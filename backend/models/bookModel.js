@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Feedback = require('./feedbackModel')
 
 const roomSchema = new mongoose.Schema({
     roomType: {
@@ -98,5 +99,10 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     addCharges: {
         type: [addChargesSchema],
         default: []
+    },
+    feedback: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Feedback',
+        default: null
     }
 }, { timestamps: true }), 'books')

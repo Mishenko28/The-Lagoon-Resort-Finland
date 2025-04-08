@@ -86,7 +86,7 @@ const Pending = ({ setTotal }) => {
                         >
                             <div className="date">
                                 <h1>{format(book.from, 'LLLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}</h1>
-                                <h2>({formatDistance(book.from, book.to)})</h2>
+                                <h2>({`${Math.ceil((new Date(book.to) - new Date(book.from)) / (1000 * 60 * 60 * 24))} ${Math.ceil((new Date(book.to) - new Date(book.from)) / (1000 * 60 * 60 * 24)) === 1 ? "night" : "nights"}`})</h2>
                             </div>
                             <hr />
                             {cancelLoading === book._id ?
@@ -142,7 +142,7 @@ const Pending = ({ setTotal }) => {
                                         </>
                                     }
                                     {(!isCancelling || (isCancelling._id !== book._id)) ?
-                                        <button onClick={() => handleToggCancel(book)} className="cancel">Cancel this reservation</button>
+                                        <button onClick={() => handleToggCancel(book)} className="red">Cancel this reservation</button>
                                         :
                                         <motion.form
                                             initial={{ opacity: 0 }}
@@ -171,7 +171,7 @@ const Pending = ({ setTotal }) => {
                                                 </div>
                                             </div>
                                             <div className="bttns">
-                                                <button onClick={() => handleToggCancel(null)} className="back">Back</button>
+                                                <button onClick={() => handleToggCancel(null)} className="red">Back</button>
                                                 <button type="submit" className="submit">Submit</button>
                                             </div>
                                         </motion.form>

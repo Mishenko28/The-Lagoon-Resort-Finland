@@ -175,6 +175,11 @@
     box-sizing: border-box;
 }
 
+.booking .confirm-book .error {
+    border: 2px solid var(--red-dark) !important;
+    background-color: var(--light-orange) !important;
+}
+
 .booking .confirm-book h1 {
     font-size: 1.5rem;
     color: var(--primary);
