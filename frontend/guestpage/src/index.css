@@ -7,6 +7,7 @@
 	font-family: sans-serif;
 	text-decoration: none;
 	list-style: none;
+	scrollbar-width: none;
 }
 
 a,
@@ -31,7 +32,7 @@ textarea {
 	--red-9: hsl(0, 100%, 90%);
 	--red-4: hsl(0, 100%, 40%);
 
-	--gold: hsl(45, 100%, 50%);
+	--gold: #ffbf00;
 	--dark-gold: hsl(45, 100%, 30%);
 
 	/* font size */

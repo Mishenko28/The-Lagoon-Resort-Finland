@@ -5,6 +5,8 @@ const secretKey = crypto.createHash("sha256").update(process.env.PASSWORD).diges
 const iv = Buffer.alloc(16, 0)
 const zlib = require("zlib")
 
+const { Actions, ActivityLog } = require("../models/activityLogModel")
+
 
 function encryptJSON(jsonData) {
     const compressed = zlib.gzipSync(JSON.stringify(jsonData))
@@ -33,7 +35,7 @@ function decryptJSON(encryptedData) {
     }
 }
 
-const getAllCollectionNames = async (req, res) => {
+const getAllCollectionNames = async (_, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray()
         const collectionNames = collections.map(collection => collection.name)
@@ -45,6 +47,8 @@ const getAllCollectionNames = async (req, res) => {
 }
 
 const getAllCollections = async (req, res) => {
+    const { adminEmail } = req.body
+
     try {
         const collections = await mongoose.connection.db.listCollections().toArray()
         let backupData = {}
@@ -56,6 +60,12 @@ const getAllCollections = async (req, res) => {
             backupData[collectionName] = encrypt
         }
 
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.EXPORT, Actions.DATABASE],
+            activity: `Export of all collections`,
+        })
+
         res.status(200).json(backupData)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -63,12 +73,18 @@ const getAllCollections = async (req, res) => {
 }
 
 const getOneCollection = async (req, res) => {
-    const { collectionName } = req.query
+    const { collectionName, adminEmail } = req.query
 
     try {
         const Model = mongoose.models[collectionName] || mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
         const data = await Model.find({})
         const encrypt = encryptJSON(data)
+
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.EXPORT, Actions.DATABASE],
+            activity: `Export collection of ${collectionName}`,
+        })
 
         res.status(200).json({ [collectionName]: encrypt })
     } catch (error) {
@@ -77,7 +93,7 @@ const getOneCollection = async (req, res) => {
 }
 
 const restoreCollection = async (req, res) => {
-    const { collections } = req.body
+    const { collections, adminEmail } = req.body
 
     try {
         for (const collectionName of Object.keys(collections)) {
@@ -87,6 +103,12 @@ const restoreCollection = async (req, res) => {
             await Model.insertMany(decryptedData)
         }
 
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.RESTORED, Actions.DATABASE],
+            activity: `Restored a collection/s`,
+        })
+
         res.status(200).json({ success: true })
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -94,7 +116,7 @@ const restoreCollection = async (req, res) => {
 }
 
 const importCollection = async (req, res) => {
-    const { collections } = req.body
+    const { collections, adminEmail } = req.body
 
     try {
         for (const collectionName of Object.keys(collections)) {
@@ -109,6 +131,12 @@ const importCollection = async (req, res) => {
                 }
             }))
         }
+
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.IMPORT, Actions.DATABASE],
+            activity: `Import a collection/s`,
+        })
 
         res.status(200).json({ success: true })
     } catch (error) {

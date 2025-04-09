@@ -565,9 +565,19 @@
         color: var(--red);
         cursor: pointer;
     }
+
+    & .other {
+        font-size: 1.2rem;
+        padding: 5px;
+        width: 120px;
+        border: 1px solid var(--primary);
+        font-weight: 700;
+        color: var(--primary);
+        border-radius: 5px;
+    }
 }
 
-.booking .set-confirm-book input {
+.booking .set-confirm-book input.amount {
     padding: 5px;
     border: 1px solid var(--primary);
     border-radius: 5px;
@@ -900,6 +910,9 @@
     .booking .opened-note p {
         font-size: 1.2rem;
         white-space: pre-wrap;
+        overflow-wrap: break-word;
+        overflow-y: auto;
+        max-height: 80svh;
     }
 
     .booking .opened-note .fa-xmark {

@@ -4,6 +4,7 @@ const UserPersonalData = require('../models/userPersonalDataModel')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
+const { Actions, ActivityLog } = require("../models/activityLogModel")
 
 
 const createToken = (id) => {
@@ -145,7 +146,7 @@ const updateUserData = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-    const { email, password, age, contact, img, name, sex } = await req.body
+    const { email, password, age, contact, img, name, sex, adminEmail } = await req.body
 
     try {
         if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) {
@@ -161,6 +162,8 @@ const addUser = async (req, res) => {
 
         user.personalData = personalData
         delete user.password
+
+        await ActivityLog.create({ adminEmail, action: [Actions.CREATED], activity: `added a user named ${name}` })
 
         res.status(200).json(user)
     } catch (error) {

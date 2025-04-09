@@ -61,7 +61,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
             id = Math.floor(Math.random() * 1000000)
         } while (addCharges.some(item => item.id === id))
 
-        setAddCharges(prev => [{ id, charge: value, amount: 0 }, ...prev])
+        setAddCharges(prev => [{ id, charge: value, amount: 0, specify: value === "Other" }, ...prev])
         setOpenAddChargeDropDown(false)
     }
 
@@ -91,7 +91,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                             <h2>Payed: ₱{toComplete.payed}</h2>
                             <h2>Remaining: ₱{toComplete.balance}</h2>
                             <hr />
-                            <h2>Room Last Payment: <input disabled required value={toComplete.balance} type="text" /></h2>
+                            <h2>Room Last Payment: <input className="amount" disabled required value={toComplete.balance} type="text" /></h2>
                             <AnimatePresence mode="sync">
                                 {addCharges.map(item => (
                                     <motion.h2
@@ -103,8 +103,15 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                                         key={item.id}
                                         className="payment"
                                     >
-                                        <span><i className="fa-solid fa-square-xmark" onClick={() => setAddCharges(prev => prev.filter(charge => charge.id !== item.id))} /> {item.charge}</span>
-                                        <input type="number" value={item.amount || ""} onChange={e => setAddCharges(prev => prev.map(charge => charge.id === item.id ? ({ ...charge, amount: parseInt(e.target.value) || 0 }) : charge))} />
+                                        <span>
+                                            <i className="fa-solid fa-square-xmark" onClick={() => setAddCharges(prev => prev.filter(charge => charge.id !== item.id))} />
+                                            {item.specify ?
+                                                <input className="other" value={item.charge} type="text" onChange={e => setAddCharges(prev => prev.map(p => p.id === item.id ? ({ ...p, charge: e.target.value }) : p))} />
+                                                :
+                                                <>{item.charge}</>
+                                            }
+                                        </span>
+                                        <input className="amount" type="number" value={item.amount || ""} onChange={e => setAddCharges(prev => prev.map(charge => charge.id === item.id ? ({ ...charge, amount: parseInt(e.target.value) || 0 }) : charge))} />
                                     </motion.h2>
                                 ))}
                             </AnimatePresence>
@@ -118,6 +125,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                                         <h3 onClick={() => handleAddCharge("Extra Bed")}>Extra Bed</h3>
                                         <h3 onClick={() => handleAddCharge("Room Damage")}>Room Damage</h3>
                                         <h3 onClick={() => handleAddCharge("Missing Item")}>Missing Item</h3>
+                                        <h3 onClick={() => handleAddCharge("Other")}>Others - specify</h3>
                                     </div>
                                 }
                             </div>

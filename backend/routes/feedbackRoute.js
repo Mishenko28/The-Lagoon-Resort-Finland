@@ -6,9 +6,11 @@ const {
     createFeedback,
     getNewFeedback,
     approvedFeedback,
-    rejectFeedback
+    rejectFeedback,
+    getFeedback
 } = require('../controllers/feedbackController')
 
+router.get('/all', getFeedback)
 
 router.use(auth)
 

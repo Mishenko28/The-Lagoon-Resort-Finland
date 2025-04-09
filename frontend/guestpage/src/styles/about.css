@@ -29,7 +29,7 @@
             display: flex;
             flex-direction: column;
             gap: 50px;
-            background-color: var(--light-7);
+            background-color: var(--light-8);
             padding: 20px 8px;
 
             & h1 {
@@ -57,7 +57,7 @@
                     background-image: linear-gradient(90deg,
                             var(--light-8) 0%,
                             var(--light) 50%,
-                            var(--light-8) 100%);
+                            var(--light-9) 100%);
                     padding: 2px 8px;
                 }
 
@@ -78,7 +78,7 @@
                     background-image: linear-gradient(90deg,
                             var(--light-8) 0%,
                             var(--light) 50%,
-                            var(--light-8) 100%);
+                            var(--light-9) 100%);
                     padding: 2px 10px;
 
                     & p {

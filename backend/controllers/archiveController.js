@@ -74,7 +74,7 @@ const restore = async (req, res) => {
             await Model.create({ ...archive.data })
         }
 
-        await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.RESTORED], activity: `Restored ${archive.type} "${archive.value}"` })
+        await ActivityLog.create({ adminEmail, action: [Actions.ARCHIVE, Actions.RESTORED], activity: `Restored ${archive.type} "${archive.value}"` })
 
         res.status(200).json(restored)
     } catch (error) {

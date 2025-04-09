@@ -247,7 +247,7 @@ const Booking = () => {
                                                                             </div>
                                                                         </div>
                                                                         <div className="bottom">
-                                                                            <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: roomType.addedPerson + 1 } : roomType))} className="left">
+                                                                            <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.min(roomType.addedPerson + 1, 10) } : roomType))} className="left">
                                                                                 <i className="fa-solid fa-user-plus" />
                                                                                 <p>₱{roomType.addFeePerPerson}</p>
                                                                             </div>
@@ -291,7 +291,7 @@ const Booking = () => {
                                                         <div className="room-type-info">
                                                             <h3>{roomType.name}</h3>
                                                             <p>₱{roomType.rate}</p>
-                                                            <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} (<i className="fa-solid fa-person-circle-plus" />₱{roomType.addFeePerPerson})</p>
+                                                            <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
                                                         </div>
                                                         <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) }])} />
                                                         {selectedRoomTypes.reduce((acc, curr) => curr.name === roomType.name ? acc + 1 : acc, 0) === roomType.numberOfAvailableRooms &&

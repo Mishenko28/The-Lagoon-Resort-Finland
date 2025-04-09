@@ -21,13 +21,17 @@ module.exports.Actions = Actions = {
     UPDATED: 'updated',
     DELETED: 'deleted',
     RESTORED: 'restored',
+    IMPORT: 'import',
+    EXPORT: 'export',
 
     ROOM: 'room',
     AMENITY: 'amenity',
     GALLERY: 'gallery',
     BOOKING: 'booking',
     ROOMTYPE: 'roomtype',
+    FEEDBACK: 'feedback',
+    DATABASE: 'database',
+    ARCHIVE: 'archive',
 
-    ADMIN: 'admin',
-    USER: 'user'
+    ADMIN: 'admin'
 }

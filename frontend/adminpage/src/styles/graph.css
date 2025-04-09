@@ -20,7 +20,8 @@
 
         & h2 {
             font-size: 1rem;
-            border: 1px solid var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 2px 5px;
             border-radius: 5px;
             white-space: nowrap;
@@ -35,7 +36,8 @@
 
         & .total-box {
             padding: 20px;
-            border: 1px solid var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 160px;
             border-radius: 15px;
 
@@ -75,7 +77,8 @@
         }
 
         & .bar-chart {
-            border: 1px solid var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 10px;
             overflow-x: auto;
@@ -85,7 +88,8 @@
         & .recent-sales {
             display: flex;
             flex-direction: column;
-            border: 1px solid var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 10px;
             height: 400px;
@@ -136,7 +140,8 @@
         & .feedbacks {
             display: flex;
             flex-direction: column;
-            border: 1px solid var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 10px;
             height: 400px;

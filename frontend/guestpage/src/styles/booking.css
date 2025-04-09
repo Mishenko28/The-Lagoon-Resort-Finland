@@ -159,8 +159,12 @@
     font-family: 'poppins';
 }
 
+.booking .reservation-form .room-picker .room-type p:last-of-type {
+    font-size: var(--medium);
+}
+
 .booking .reservation-form .room-picker .room-type p {
-    font-size: var(--x-small);
+    font-size: var(--small);
     font-family: 'poppins';
 }
 
