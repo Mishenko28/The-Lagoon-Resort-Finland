@@ -83,7 +83,7 @@ const AboutUs = () => {
                                 <h2>Follow us on social media</h2>
                                 <div className="links">
                                     {socials.map(item => (
-                                        <a href={item.link}>
+                                        <a target="_blank" href={item.link}>
                                             <i className={`fa-brands fa-${item.app}`} />
                                         </a>
                                     ))}
