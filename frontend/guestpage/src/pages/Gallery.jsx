@@ -28,7 +28,7 @@ const Gallery = () => {
     return (
         <div className="gallery">
             <div className="header-page">
-                <img src="/galleryBG.jpg" />
+                <img src="/beach.jpg" />
                 <h1>GALLERY</h1>
                 <p>Explore the beauty of our resort through our gallery! From stunning rooms to breathtaking views, get a glimpse of the unforgettable experience that awaits you. Let your next adventure begin here!"</p>
             </div>

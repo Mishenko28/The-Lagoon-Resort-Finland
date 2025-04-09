@@ -2,6 +2,7 @@ const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
 const User = require('../models/userModel')
 const UserPersonalData = require('../models/userPersonalDataModel')
+const { Actions, ActivityLog } = require('../models/activityLogModel')
 
 const status = [
     "pending",
@@ -47,6 +48,12 @@ const getDailyReport = async (req, res) => {
             book.user = user
         }
 
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.CREATED, Actions.REPORT],
+            activity: "Daily Report",
+        })
+
         res.status(200).json({ newBooksTotal, revenue, checkIn, checkOut })
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -67,6 +74,12 @@ const getWeeklyReport = async (req, res) => {
             const total = await Book.countDocuments({ status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
             return { status, total }
         }))
+
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.CREATED, Actions.REPORT],
+            activity: "Weekly Report",
+        })
 
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
     } catch (error) {
@@ -97,6 +110,12 @@ const getMonthlyReport = async (req, res) => {
             return { status, total }
         }))
 
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.CREATED, Actions.REPORT],
+            activity: "Monthly Report",
+        })
+
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -125,6 +144,12 @@ const getYearlyReport = async (req, res) => {
             const total = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
             return { status, total }
         }))
+
+        await ActivityLog.create({
+            adminEmail,
+            action: [Actions.CREATED, Actions.REPORT],
+            activity: "Yearly Report",
+        })
 
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
     } catch (error) {

@@ -32,6 +32,7 @@ module.exports.Actions = Actions = {
     FEEDBACK: 'feedback',
     DATABASE: 'database',
     ARCHIVE: 'archive',
+    REPORT: 'report',
 
     ADMIN: 'admin'
 }

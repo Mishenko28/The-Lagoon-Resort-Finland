@@ -143,7 +143,7 @@ const Booking = () => {
     return (
         <div className="booking">
             <div className="header-page">
-                <img src="/aboutUsBG.jpg" />
+                <img src="/booking.jpg" />
                 <h1>BOOKING</h1>
                 <p>Secure your stay with just a few clicks! Select your dates, Choose your preferred room and enjoy a seamless booking experience.</p>
             </div>

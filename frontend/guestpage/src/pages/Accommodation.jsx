@@ -37,7 +37,7 @@ const Accommodation = () => {
     return (
         <div className="accommodation">
             <div className="header-page">
-                <img src="accommodationBG.jpg" />
+                <img src="accomm.jpg" />
                 <div>
                     <h1>ROOMS &</h1>
                     <h1>ACCOMMODATION</h1>

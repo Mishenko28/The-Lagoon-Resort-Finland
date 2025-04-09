@@ -26,7 +26,7 @@ const Amenity = () => {
     return (
         <div className="amenity">
             <div className="header-page">
-                <img src="/amenityBG.jpeg" />
+                <img src="/amenity.png" />
                 <h1>AMENITIES</h1>
                 <p>Enjoy a stay filled with comfort and convenience! Our thoughtfully designed amenities ensure a relaxing and memorable experience from the moment you arrive. Sit back, unwind, and make the most of your stay.</p>
             </div>

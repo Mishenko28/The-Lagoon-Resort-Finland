@@ -45,7 +45,7 @@ const Home = () => {
     return (
         <div className="home-page">
             <div className="header-page">
-                <img src="/galleryBG.jpg" />
+                <img src="/homeBG.png" />
                 <h1>THE LAGOON RESORT FINLAND INC.</h1>
                 <p>Escape the ordinary and experience a relaxing getaway surrounded by nature and comfort. A perfect destination for those seeking peace, adventure, or quality time with family and friends.</p>
             </div>

@@ -14,8 +14,8 @@ const Login = () => {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    const [email, setEmail] = useState('johnthomasalog@gmail.com')
-    const [password, setPassword] = useState('thomas1228')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const submit = (e) => {
         e.preventDefault()
@@ -32,7 +32,7 @@ const Login = () => {
 
     return (
         <div className="login">
-            <img src="/loginSignUpBG.avif" />
+            <img src="/login.png" />
             <form onSubmit={submit} className='login-and-sign-up-form'>
                 <h1>LOGIN</h1>
                 {isLoading ?

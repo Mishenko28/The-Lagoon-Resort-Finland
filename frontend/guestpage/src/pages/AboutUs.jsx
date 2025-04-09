@@ -34,7 +34,7 @@ const AboutUs = () => {
     return (
         <div className="about-us">
             <div className="header-page">
-                <img src="/aboutUsBG.jpg" />
+                <img src="/about.png" />
                 <h1>ABOUT US</h1>
                 <p>Need help with your booking? Our support team is here for you! Contact us anytime for assistance.</p>
             </div>
