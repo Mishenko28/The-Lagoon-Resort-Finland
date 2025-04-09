@@ -19,6 +19,7 @@ const roomTypeRoute = require('./routes/roomTypeRoute')
 const dashboardRoute = require('./routes/dashboardRoute')
 const databaseRoute = require('./routes/databaseRoute')
 const feedbackRoute = require('./routes/feedbackRoute')
+const reportRoute = require('./routes/reportRoute')
 
 const app = express()
 const server = createServer(app)
@@ -61,6 +62,7 @@ app.use('/room-type', roomTypeRoute)
 app.use('/dashboard', dashboardRoute)
 app.use('/database', databaseRoute)
 app.use('/feedback', feedbackRoute)
+app.use('/report', reportRoute)
 
 
 

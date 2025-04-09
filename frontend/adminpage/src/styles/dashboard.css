@@ -636,6 +636,7 @@
     flex-direction: column;
     gap: 10px;
     color: var(--primary);
+    height: 100%;
 }
 
 .report .report-content {

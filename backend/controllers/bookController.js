@@ -309,7 +309,7 @@ const setConfirmed = async (req, res) => {
         })
 
         const balance = total - payed
-        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, reasonToCancel: "not cancelled" }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, confirmedDate: new Date() }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
         const { name } = await UserPersonalData.findOne({ email: email })

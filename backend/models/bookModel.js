@@ -104,5 +104,9 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Feedback',
         default: null
+    },
+    confirmedDate: {
+        type: Date,
+        default: null
     }
 }, { timestamps: true }), 'books')
