@@ -31,8 +31,8 @@ const getDailyReport = async (req, res) => {
             return acc + parseInt(payment.amount)
         }, 0)
 
-        let checkIn = await Book.find({ from: { $gte: start, $lte: end } }).lean()
-        let checkOut = await Book.find({ to: { $gte: start, $lte: end } }).lean()
+        let checkIn = await Book.find({ status: "confirmed", from: { $gte: start, $lte: end } }).lean()
+        let checkOut = await Book.find({ status: "ongoing", to: { $gte: start, $lte: end } }).lean()
 
         for (const book of checkIn) {
             const { email } = await User.findOne({ _id: book.userId }).lean()
