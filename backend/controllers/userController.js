@@ -82,7 +82,7 @@ const getUsers = async (req, res) => {
         const totalUsers = await User.countDocuments({})
 
         const users = await User.find(search ? { email: { $regex: `${search}`, $options: 'i' } } : {})
-            .sort({ email: -1 })
+            .sort({ createdAt: -1 })
             .skip((page - 1) * 30)
             .limit(30).lean()
 
@@ -171,6 +171,32 @@ const addUser = async (req, res) => {
     }
 }
 
+const populateUser = async (req, res) => {
+    const { email, password, createdAt, userPersonalData: { name, age, contact, img, sex } } = req.body
+
+    try {
+
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(password, salt)
+
+        const exist = await User.findOne({ email })
+
+        if (exist) {
+            throw Error("Email already exist")
+        }
+
+        await User.create({ email, password: hash, personalData: name ? true : false, createdAt })
+
+        if (name) {
+            await UserPersonalData.create({ email, name, age, contact, img, sex, createdAt })
+        }
+
+        res.status(200).json({ success: true })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
 module.exports = {
     loginUser,
     signUpUser,
@@ -178,5 +204,6 @@ module.exports = {
     addUserData,
     getUserData,
     updateUserData,
-    addUser
+    addUser,
+    populateUser
 }

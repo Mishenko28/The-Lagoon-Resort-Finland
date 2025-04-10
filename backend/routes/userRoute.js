@@ -10,7 +10,8 @@ const {
     addUserData,
     getUserData,
     updateUserData,
-    addUser
+    addUser,
+    populateUser
 } = require('../controllers/userController')
 
 router.post('/login', loginUser)
@@ -24,5 +25,8 @@ router.get('/data', getUserData)
 router.post('/add', addUser)
 router.post('/data', addUserData)
 router.patch('/data', updateUserData)
+
+
+router.post('/populate', populateUser)
 
 module.exports = router

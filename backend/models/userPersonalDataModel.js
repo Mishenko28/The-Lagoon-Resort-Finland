@@ -4,7 +4,6 @@ module.exports = mongoose.model('UserPersonalData', new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
     },
     name: {
         type: String,
