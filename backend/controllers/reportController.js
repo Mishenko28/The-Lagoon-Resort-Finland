@@ -51,7 +51,7 @@ const getDailyReport = async (req, res) => {
         await ActivityLog.create({
             adminEmail,
             action: [Actions.CREATED, Actions.REPORT],
-            activity: "Daily Report",
+            activity: "Generate a daily Report",
         })
 
         res.status(200).json({ newBooksTotal, revenue, checkIn, checkOut })
@@ -78,7 +78,7 @@ const getWeeklyReport = async (req, res) => {
         await ActivityLog.create({
             adminEmail,
             action: [Actions.CREATED, Actions.REPORT],
-            activity: "Weekly Report",
+            activity: "Generate a weekly Report",
         })
 
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
@@ -113,7 +113,7 @@ const getMonthlyReport = async (req, res) => {
         await ActivityLog.create({
             adminEmail,
             action: [Actions.CREATED, Actions.REPORT],
-            activity: "Monthly Report",
+            activity: "Generate a monthly Report",
         })
 
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
@@ -148,7 +148,7 @@ const getYearlyReport = async (req, res) => {
         await ActivityLog.create({
             adminEmail,
             action: [Actions.CREATED, Actions.REPORT],
-            activity: "Yearly Report",
+            activity: "Generate a yearly Report",
         })
 
         res.status(200).json({ totalBookings, revenue, totalPerStatus })
