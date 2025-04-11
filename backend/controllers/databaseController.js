@@ -73,7 +73,8 @@ const getAllCollections = async (req, res) => {
 }
 
 const getOneCollection = async (req, res) => {
-    const { collectionName, adminEmail } = req.query
+    const { adminEmail } = req.body
+    const { collectionName } = req.query
 
     try {
         const Model = mongoose.models[collectionName] || mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
