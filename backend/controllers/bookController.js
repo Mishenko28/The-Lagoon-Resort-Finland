@@ -538,7 +538,7 @@ const populateCompleted = async (_, res) => {
                 })
             }
         }
-        const total = room.reduce((total, current) => current.rate + total, 0)
+        const roomTotal = room.reduce((total, current) => current.rate + total, 0)
 
         const totalCount = await User.countDocuments({ personalData: true })
         const allUser = await User.find({ personalData: true })
@@ -564,6 +564,10 @@ const populateCompleted = async (_, res) => {
         } while (isFuture(to))
 
         to.setHours(roomEnd, 0, 0, 0)
+
+        const totalDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+
+        const total = roomTotal * totalDays
 
         const book = await Book.create({
             userId: user._id,
@@ -647,7 +651,7 @@ const populateNoShow = async (_, res) => {
                 })
             }
         }
-        const total = room.reduce((total, current) => current.rate + total, 0)
+        const roomTotal = room.reduce((total, current) => current.rate + total, 0)
 
         const totalCount = await User.countDocuments({ personalData: true })
         const allUser = await User.find({ personalData: true })
@@ -673,6 +677,9 @@ const populateNoShow = async (_, res) => {
         } while (isFuture(to))
 
         to.setHours(roomEnd, 0, 0, 0)
+
+        const totalDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+        const total = roomTotal * totalDays
 
         const book = await Book.create({
             userId: user._id,
@@ -749,7 +756,7 @@ const populateCancelled = async (_, res) => {
                 })
             }
         }
-        const total = room.reduce((total, current) => current.rate + total, 0)
+        const roomTotal = room.reduce((total, current) => current.rate + total, 0)
 
         const totalCount = await User.countDocuments({ personalData: true })
         const allUser = await User.find({ personalData: true })
@@ -773,6 +780,9 @@ const populateCancelled = async (_, res) => {
         } while (isFuture(to))
 
         to.setHours(roomEnd, 0, 0, 0)
+
+        const totalDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+        const total = roomTotal * totalDays
 
         const book = await Book.create({
             userId: user._id,
@@ -843,7 +853,7 @@ const populateExpired = async (_, res) => {
                 })
             }
         }
-        const total = room.reduce((total, current) => current.rate + total, 0)
+        const roomTotal = room.reduce((total, current) => current.rate + total, 0)
 
         const totalCount = await User.countDocuments({ personalData: true })
         const allUser = await User.find({ personalData: true })
@@ -867,6 +877,9 @@ const populateExpired = async (_, res) => {
         } while (isFuture(to))
 
         to.setHours(roomEnd, 0, 0, 0)
+
+        const totalDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+        const total = roomTotal * totalDays
 
         const book = await Book.create({
             userId: user._id,
