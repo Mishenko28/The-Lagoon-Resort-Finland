@@ -19,7 +19,11 @@ const {
     editBook,
     getUserBooks,
     getTotalBooksByUser,
-    getTotalBooks
+    getTotalBooks,
+    populateCompleted,
+    populateNoShow,
+    populateCancelled,
+    populateExpired
 } = require('../controllers/bookController')
 
 router.use(auth)
@@ -42,4 +46,10 @@ router.get('/completed', getCompleted)
 router.get('/user', setOngoingBooks, setExpiredBooks, getUserBooks)
 
 router.patch('/edit', editBook)
+
+router.post('/populate-completed', populateCompleted)
+router.post('/populate-no-show', populateNoShow)
+router.post('/populate-cancelled', populateCancelled)
+router.post('/populate-expired', populateExpired)
+
 module.exports = router

@@ -148,9 +148,9 @@ const Report = () => {
                     { text: book.user.age, fontSize: 10 },
                     { text: book.user.contact, fontSize: 10 },
                     { text: book.room.map(r => `${r.roomType} R${r.roomNo}`).join(", "), fontSize: 10 },
-                    { text: book.payed, fontSize: 10 },
-                    { text: book.total, fontSize: 10 },
-                    { text: book.balance, fontSize: 10 }
+                    { text: book.payed.toLocaleString(), fontSize: 10 },
+                    { text: book.total.toLocaleString(), fontSize: 10 },
+                    { text: book.balance.toLocaleString(), fontSize: 10 }
                 ]
             })
 
@@ -195,7 +195,7 @@ const Report = () => {
                 return [
                     { text: status.status, fontSize: 12, },
                     { text: status.totalBooks, fontSize: 12, alignment: "center" },
-                    { text: status.totalAmount, fontSize: 12, alignment: "center" }
+                    { text: status.totalAmount.toLocaleString(), fontSize: 12, alignment: "center" }
                 ]
             })
 
@@ -309,7 +309,7 @@ const Report = () => {
                                 [
                                     { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
                                     { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
-                                    { text: revenue, alignment: 'center', fontSize: 12, bold: true }
+                                    { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'center', fontSize: 12, bold: true }
                                 ]
                             ]
                         }
@@ -346,8 +346,8 @@ const Report = () => {
                                         ...statusTable(totalPerStatus),
                                         [
                                             { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
-                                            { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
-                                            { text: revenue, alignment: 'center', fontSize: 12, bold: true }
+                                            { text: totalPerStatus.reduce((total, status) => total + status.totalBooks, 0), alignment: 'center', fontSize: 12, bold: true },
+                                            { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'center', fontSize: 12, bold: true }
                                         ]
                                     ]
                                 }
@@ -360,7 +360,7 @@ const Report = () => {
                             {
                                 columns: [
                                     { text: "Revenue: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: "₱" + revenue, fontSize: 12 }
+                                    { text: "₱" + revenue.toLocaleString(), fontSize: 12 }
                                 ], marginBottom: 5
                             }
                         ],

@@ -4,6 +4,7 @@ import Home from './pages/home'
 import Login from './pages/Login'
 import axios from 'axios'
 import User from './pages/User'
+import Booking from './pages/Booking'
 
 const saveAdmin = ({ email, token }) => {
 	localStorage.setItem("admin", JSON.stringify({ email, token }))
@@ -39,6 +40,7 @@ const App = () => {
 					<Header setAdmin={setAdmin} removeAdmin={removeAdmin} setPage={setPage} />
 					{page === "home" && <Home />}
 					{page === "user" && <User />}
+					{page === "booking" && <Booking />}
 				</>
 			}
 		</div>

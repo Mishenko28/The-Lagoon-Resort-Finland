@@ -6,7 +6,7 @@ const UserPersonalData = require('../models/userPersonalDataModel')
 const sendMail = require('../Utility/nodeMailer')
 const { Admin } = require('../models/adminModel')
 const Payment = require('../models/paymentModel')
-const { format } = require('date-fns')
+const { format, isFuture } = require('date-fns')
 
 // STATUS
 // pending
@@ -490,6 +490,403 @@ const getUserBooks = async (req, res) => {
     }
 }
 
+const populateCompleted = async (_, res) => {
+    try {
+        const { roomStart } = await AdminSetting.findOne({})
+        const { roomEnd } = await AdminSetting.findOne({})
+        const { downPayment } = await AdminSetting.findOne({})
+
+        let room = []
+        if (Math.random() < 0.5) {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "STANDARD",
+                    roomNo: Math.floor(Math.random() * 6) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1000,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "SUPERIOR",
+                    roomNo: Math.floor(Math.random() * 4) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1400,
+                    addedPersonRate: 200
+                })
+            }
+        } else {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "FAMILY",
+                    roomNo: Math.floor(Math.random() * 5) + 1,
+                    maxPerson: 5,
+                    addedPerson: 0,
+                    rate: 1800,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "APARTMENT",
+                    roomNo: Math.floor(Math.random() * 2) + 1,
+                    maxPerson: 6,
+                    addedPerson: 0,
+                    rate: 2000,
+                    addedPersonRate: 300
+                })
+            }
+        }
+        const total = room.reduce((total, current) => current.rate + total, 0)
+
+        const totalCount = await User.countDocuments({ personalData: true })
+        const allUser = await User.find({ personalData: true })
+
+        let user
+        let date
+        do {
+            user = allUser[Math.floor(Math.random() * totalCount)];
+            date = new Date(user.createdAt)
+            date.setDate(date.getDate() + 5)
+        } while (isFuture(date))
+
+        await User.findOneAndUpdate({ _id: user._id }, { $inc: { totalBookings: 1 } })
+
+        const from = new Date(user.createdAt.setHours(roomStart, 0, 0, 0))
+        let to
+        let randomDays
+
+        do {
+            randomDays = Math.floor(Math.random() * 15) + 1
+            to = new Date(user.createdAt)
+            to.setDate(to.getDate() + randomDays)
+        } while (isFuture(to))
+
+        to.setHours(roomEnd, 0, 0, 0)
+
+        const book = await Book.create({
+            userId: user._id,
+            status: "completed",
+            showed: true,
+            downPayment,
+            from,
+            to,
+            room,
+            total,
+            deposit: total * downPayment,
+            balance: 0,
+            payed: total,
+            confirmedDate: from,
+            createdAt: user.createdAt
+        })
+
+        await Payment.create({
+            amount: total * downPayment,
+            userId: user._id,
+            createdAt: from
+        })
+
+        await Payment.create({
+            amount: total * downPayment,
+            userId: user._id,
+            createdAt: to
+        })
+
+        res.status(200).json(book)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+const populateNoShow = async (_, res) => {
+    try {
+        const { roomStart } = await AdminSetting.findOne({})
+        const { roomEnd } = await AdminSetting.findOne({})
+        const { downPayment } = await AdminSetting.findOne({})
+
+        let room = []
+        if (Math.random() < 0.5) {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "STANDARD",
+                    roomNo: Math.floor(Math.random() * 6) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1000,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "SUPERIOR",
+                    roomNo: Math.floor(Math.random() * 4) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1400,
+                    addedPersonRate: 200
+                })
+            }
+        } else {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "FAMILY",
+                    roomNo: Math.floor(Math.random() * 5) + 1,
+                    maxPerson: 5,
+                    addedPerson: 0,
+                    rate: 1800,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "APARTMENT",
+                    roomNo: Math.floor(Math.random() * 2) + 1,
+                    maxPerson: 6,
+                    addedPerson: 0,
+                    rate: 2000,
+                    addedPersonRate: 300
+                })
+            }
+        }
+        const total = room.reduce((total, current) => current.rate + total, 0)
+
+        const totalCount = await User.countDocuments({ personalData: true })
+        const allUser = await User.find({ personalData: true })
+
+        let user
+        let date
+        do {
+            user = allUser[Math.floor(Math.random() * totalCount)];
+            date = new Date(user.createdAt)
+            date.setDate(date.getDate() + 5)
+        } while (isFuture(date))
+
+        await User.findOneAndUpdate({ _id: user._id }, { $inc: { totalBookings: 1 } })
+
+        const from = new Date(user.createdAt.setHours(roomStart, 0, 0, 0))
+        let to
+        let randomDays
+
+        do {
+            randomDays = Math.floor(Math.random() * 15) + 1
+            to = new Date(user.createdAt)
+            to.setDate(to.getDate() + randomDays)
+        } while (isFuture(to))
+
+        to.setHours(roomEnd, 0, 0, 0)
+
+        const book = await Book.create({
+            userId: user._id,
+            status: "noshow",
+            downPayment,
+            from,
+            to,
+            room,
+            total,
+            deposit: total * downPayment,
+            balance: total - (total * downPayment),
+            payed: total * downPayment,
+            confirmedDate: from,
+            createdAt: user.createdAt
+        })
+
+        await Payment.create({
+            amount: total * downPayment,
+            userId: user._id,
+            createdAt: from
+        })
+
+        res.status(200).json(book)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+const populateCancelled = async (_, res) => {
+    try {
+        const { roomStart } = await AdminSetting.findOne({})
+        const { roomEnd } = await AdminSetting.findOne({})
+        const { downPayment } = await AdminSetting.findOne({})
+
+        let room = []
+        if (Math.random() < 0.5) {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "STANDARD",
+                    roomNo: Math.floor(Math.random() * 6) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1000,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "SUPERIOR",
+                    roomNo: Math.floor(Math.random() * 4) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1400,
+                    addedPersonRate: 200
+                })
+            }
+        } else {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "FAMILY",
+                    roomNo: Math.floor(Math.random() * 5) + 1,
+                    maxPerson: 5,
+                    addedPerson: 0,
+                    rate: 1800,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "APARTMENT",
+                    roomNo: Math.floor(Math.random() * 2) + 1,
+                    maxPerson: 6,
+                    addedPerson: 0,
+                    rate: 2000,
+                    addedPersonRate: 300
+                })
+            }
+        }
+        const total = room.reduce((total, current) => current.rate + total, 0)
+
+        const totalCount = await User.countDocuments({ personalData: true })
+        const allUser = await User.find({ personalData: true })
+
+        let user
+        let date
+        do {
+            user = allUser[Math.floor(Math.random() * totalCount)];
+            date = new Date(user.createdAt)
+            date.setDate(date.getDate() + 5)
+        } while (isFuture(date))
+
+        const from = new Date(user.createdAt.setHours(roomStart, 0, 0, 0))
+        let to
+        let randomDays
+
+        do {
+            randomDays = Math.floor(Math.random() * 15) + 1
+            to = new Date(user.createdAt)
+            to.setDate(to.getDate() + randomDays)
+        } while (isFuture(to))
+
+        to.setHours(roomEnd, 0, 0, 0)
+
+        const book = await Book.create({
+            userId: user._id,
+            status: "cancelled",
+            downPayment,
+            from,
+            to,
+            room,
+            total,
+            deposit: total * downPayment,
+            balance: total,
+            payed: 0,
+            reasonToCancel: "Cancelled by admin",
+            createdAt: user.createdAt
+        })
+
+        res.status(200).json(book)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+const populateExpired = async (_, res) => {
+    try {
+        const { roomStart } = await AdminSetting.findOne({})
+        const { roomEnd } = await AdminSetting.findOne({})
+        const { downPayment } = await AdminSetting.findOne({})
+
+        let room = []
+        if (Math.random() < 0.5) {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "STANDARD",
+                    roomNo: Math.floor(Math.random() * 6) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1000,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "SUPERIOR",
+                    roomNo: Math.floor(Math.random() * 4) + 1,
+                    maxPerson: 2,
+                    addedPerson: 0,
+                    rate: 1400,
+                    addedPersonRate: 200
+                })
+            }
+        } else {
+            if (Math.random() < 0.5) {
+                room.push({
+                    roomType: "FAMILY",
+                    roomNo: Math.floor(Math.random() * 5) + 1,
+                    maxPerson: 5,
+                    addedPerson: 0,
+                    rate: 1800,
+                    addedPersonRate: 100
+                })
+            } else {
+                room.push({
+                    roomType: "APARTMENT",
+                    roomNo: Math.floor(Math.random() * 2) + 1,
+                    maxPerson: 6,
+                    addedPerson: 0,
+                    rate: 2000,
+                    addedPersonRate: 300
+                })
+            }
+        }
+        const total = room.reduce((total, current) => current.rate + total, 0)
+
+        const totalCount = await User.countDocuments({ personalData: true })
+        const allUser = await User.find({ personalData: true })
+
+        let user
+        let date
+        do {
+            user = allUser[Math.floor(Math.random() * totalCount)];
+            date = new Date(user.createdAt)
+            date.setDate(date.getDate() + 5)
+        } while (isFuture(date))
+
+        const from = new Date(user.createdAt.setHours(roomStart, 0, 0, 0))
+        let to
+        let randomDays
+
+        do {
+            randomDays = Math.floor(Math.random() * 15) + 1
+            to = new Date(user.createdAt)
+            to.setDate(to.getDate() + randomDays)
+        } while (isFuture(to))
+
+        to.setHours(roomEnd, 0, 0, 0)
+
+        const book = await Book.create({
+            userId: user._id,
+            status: "expired",
+            downPayment,
+            from,
+            to,
+            room,
+            total,
+            deposit: total * downPayment,
+            balance: total,
+            payed: 0,
+            createdAt: user.createdAt
+        })
+
+        res.status(200).json(book)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
 
 module.exports = {
     getPending,
@@ -507,5 +904,9 @@ module.exports = {
     editBook,
     getUserBooks,
     getTotalBooksByUser,
-    getTotalBooks
+    getTotalBooks,
+    populateCompleted,
+    populateNoShow,
+    populateCancelled,
+    populateExpired
 }

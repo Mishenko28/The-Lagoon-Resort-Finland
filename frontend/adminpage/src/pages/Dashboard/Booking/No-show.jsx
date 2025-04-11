@@ -6,9 +6,11 @@ import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
 import DatePicker from "react-datepicker"
 import useAdmin from "../../../hooks/useAdmin"
+import { useNavigate } from "react-router-dom"
 
 const NoShow = ({ convertToNight }) => {
     const { dispatch } = useAdmin()
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -81,6 +83,7 @@ const NoShow = ({ convertToNight }) => {
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                     key={book._id}
+                                    onClick={() => navigate(`/utilities/users?search=${book.user.email}`)}
                                 >
                                     <td>{i + 1}</td>
                                     <td>

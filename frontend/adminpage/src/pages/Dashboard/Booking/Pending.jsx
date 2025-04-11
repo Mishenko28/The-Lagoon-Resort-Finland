@@ -8,10 +8,12 @@ import CancelBook from "../../../components/CancelBook"
 import Note from "../../../components/Note"
 import { socket } from "../../../socket"
 import useAdmin from "../../../hooks/useAdmin"
+import { useNavigate } from "react-router-dom"
 
 
 export default function Pending({ fetchTotals, convertToNight }) {
     const { dispatch } = useAdmin()
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -95,6 +97,7 @@ export default function Pending({ fetchTotals, convertToNight }) {
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                     key={book._id}
+                                    onClick={() => navigate(`/utilities/users?search=${book.user.email}`)}
                                 >
                                     <td>{i + 1}</td>
                                     <td>

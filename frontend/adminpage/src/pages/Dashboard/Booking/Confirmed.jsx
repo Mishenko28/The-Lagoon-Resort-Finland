@@ -7,11 +7,13 @@ import Note from "../../../components/Note"
 import CancelBook from "../../../components/CancelBook"
 import ChangeBook from "../../../components/ChangeBook"
 import useAdmin from "../../../hooks/useAdmin"
+import { useNavigate } from "react-router-dom"
 
 
 
 const Confirmed = ({ fetchTotals, convertToNight }) => {
     const { dispatch } = useAdmin()
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
 
     const [books, setBooks] = useState([])
@@ -76,6 +78,7 @@ const Confirmed = ({ fetchTotals, convertToNight }) => {
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                     key={book._id}
+                                    onClick={() => navigate(`/utilities/users?search=${book.user.email}`)}
                                 >
                                     <td>{i + 1}</td>
                                     <td>

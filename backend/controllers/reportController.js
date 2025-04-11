@@ -49,8 +49,14 @@ const getDailyReport = async (req, res) => {
         }
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
-            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            let totalBooks
+
+            if (status === "expired") {
+                totalBooks = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
+            } else {
+                totalBooks = await Book.countDocuments({ status, to: { $gte: start, $lte: end } })
+            }
+            const totalAmount = (await Book.find({ status, to: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
             return { status, totalBooks, totalAmount }
         }))
 
@@ -71,14 +77,14 @@ const getWeeklyReport = async (req, res) => {
     const { start, end } = req.query
 
     try {
-        const totalBookings = await Book.countDocuments({ confirmedDate: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
+        const totalBookings = await Book.countDocuments({ from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
         const revenue = (await Payment.find({ createdAt: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })).reduce((acc, payment) => {
             return acc + parseInt(payment.amount)
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
-            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            const totalBooks = await Book.countDocuments({ status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
+            const totalAmount = (await Book.find({ status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
             return { status, totalBooks, totalAmount }
         }))
 
@@ -107,14 +113,14 @@ const getMonthlyReport = async (req, res) => {
     end.setHours(23, 59, 59, 999)
 
     try {
-        const totalBookings = await Book.countDocuments({ confirmedDate: { $gte: start, $lte: end } })
+        const totalBookings = await Book.countDocuments({ from: { $gte: start, $lte: end } })
         const revenue = (await Payment.find({ createdAt: { $gte: start, $lte: end } })).reduce((acc, payment) => {
             return acc + parseInt(payment.amount)
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
-            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            const totalBooks = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
+            const totalAmount = (await Book.find({ status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
             return { status, totalBooks, totalAmount }
         }))
 
@@ -143,14 +149,14 @@ const getYearlyReport = async (req, res) => {
     end.setHours(23, 59, 59, 999)
 
     try {
-        const totalBookings = await Book.countDocuments({ confirmedDate: { $gte: start, $lte: end } })
+        const totalBookings = await Book.countDocuments({ from: { $gte: start, $lte: end } })
         const revenue = (await Payment.find({ createdAt: { $gte: start, $lte: end } })).reduce((acc, payment) => {
             return acc + parseInt(payment.amount)
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
-            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            const totalBooks = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
+            const totalAmount = (await Book.find({ status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
             return { status, totalBooks, totalAmount }
         }))
 
