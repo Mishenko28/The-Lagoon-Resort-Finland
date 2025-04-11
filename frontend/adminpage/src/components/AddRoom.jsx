@@ -39,7 +39,6 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)

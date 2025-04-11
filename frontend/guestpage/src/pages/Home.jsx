@@ -41,7 +41,7 @@ const Home = () => {
                 setFeedbacks(res.data)
             })
     }
-    console.log(feedbacks)
+
     return (
         <div className="home-page">
             <div className="header-page">

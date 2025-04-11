@@ -53,7 +53,6 @@ const Users = () => {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -97,7 +96,6 @@ const Users = () => {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setAddUserLoading(false))
     }
@@ -146,7 +144,7 @@ const Users = () => {
                                             <td><img src={user.personalData?.img || "/profile.webp"} /></td>
                                             <td>
                                                 {user.email.split(new RegExp(`(${search})`, 'gi')).map((part, i) => (
-                                                    <span key={i} style={part.toLowerCase() === search.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                                    <span key={i} style={part.toLowerCase() === search.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                         {part}
                                                     </span>
                                                 ))}

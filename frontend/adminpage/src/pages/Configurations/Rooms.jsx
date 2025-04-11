@@ -59,7 +59,6 @@ export default function Rooms() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
         }
 
@@ -70,7 +69,6 @@ export default function Rooms() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
         }
         const fetchRoomTypes = async () => {
@@ -80,7 +78,6 @@ export default function Rooms() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
         }
 
@@ -154,7 +151,7 @@ export default function Rooms() {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                    .log(err.response.data.error)
             })
             .finally(() => {
                 setNewRoomTypeIsLoading(false)
@@ -175,7 +172,6 @@ export default function Rooms() {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setChangeCheckInOutIsLoading(false))
     }
@@ -198,7 +194,6 @@ export default function Rooms() {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setChangeDownPaymentIsLoading(false)

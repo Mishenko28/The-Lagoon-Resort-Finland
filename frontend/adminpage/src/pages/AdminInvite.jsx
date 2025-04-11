@@ -46,7 +46,6 @@ export default function AdminInvite() {
                 })
                 .catch(err => {
                     setError(err.response.data.error)
-                    console.log(err)
                 })
                 .finally(() => {
                     setIsLoading(false)
@@ -83,7 +82,6 @@ export default function AdminInvite() {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)

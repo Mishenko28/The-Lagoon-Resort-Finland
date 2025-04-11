@@ -39,7 +39,6 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
             .then(res => setAvailableRooms(res.data))
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsRoomNoLoading(false))
     }
@@ -49,7 +48,6 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
             .then(res => setRoomTypes(res.data.roomTypes))
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => fetchRoomStart())
     }
@@ -62,7 +60,6 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -155,7 +152,6 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }

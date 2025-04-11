@@ -28,7 +28,6 @@ export default function Profile() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
                 .finally(() => {
                     setIsLoading(false)
@@ -76,7 +75,6 @@ export default function Profile() {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsEditLoading(false)

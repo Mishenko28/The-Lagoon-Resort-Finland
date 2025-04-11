@@ -32,7 +32,7 @@ const NoShow = ({ convertToNight }) => {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                    .log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -85,14 +85,14 @@ const NoShow = ({ convertToNight }) => {
                                     <td>{i + 1}</td>
                                     <td>
                                         {book.user.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
                                     </td>
                                     <td>
                                         {book.user.name.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}

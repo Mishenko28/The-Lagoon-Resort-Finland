@@ -28,7 +28,6 @@ export default function Email({ emails, setEmails }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setEmailEdit(null)
@@ -48,7 +47,6 @@ export default function Email({ emails, setEmails }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setEmailLoad(false)
@@ -68,7 +66,6 @@ export default function Email({ emails, setEmails }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setEmailLoad(false)

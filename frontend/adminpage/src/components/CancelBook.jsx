@@ -24,7 +24,6 @@ const CancelBook = ({ fetchTotals, convertToNight, setBooks, setToCancel, toCanc
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }

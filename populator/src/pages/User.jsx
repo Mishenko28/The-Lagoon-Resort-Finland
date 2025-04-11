@@ -47,7 +47,7 @@ const User = () => {
 
                 const year = Math.floor(Math.random() * (2025 - 2024 + 1)) + 2024
                 const month = year === 2025 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 12) + 1
-                const day = Math.floor(Math.random() * (31 - 1 + 1)) + 1
+                const day = month === 3 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * (31 - 1 + 1)) + 1
                 const hour = Math.floor(Math.random() * (23 - 0 + 1)) + 0
                 const minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0
                 const createdAt = new Date(year, month, day, hour, minute)
@@ -66,7 +66,7 @@ const User = () => {
                             setLoadingPercentage(prev => i == numberOfUsers - 1 ? 0 : prev + (100 / numberOfUsers))
                         })
                 } catch (error) {
-                    console.log(error.response.data.error)
+                    console.log(error.response)
                 }
             })
         )

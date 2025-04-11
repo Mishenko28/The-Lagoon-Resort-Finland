@@ -21,7 +21,6 @@ export default function Socials({ socials, setSocials }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setSocialEdit(null)
@@ -41,7 +40,6 @@ export default function Socials({ socials, setSocials }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setSocialLoad(false)
@@ -60,7 +58,7 @@ export default function Socials({ socials, setSocials }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                    .log(err.response.data.error)
             })
             .finally(() => {
                 setSocialLoad(false)

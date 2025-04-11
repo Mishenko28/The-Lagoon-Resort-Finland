@@ -37,7 +37,6 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)

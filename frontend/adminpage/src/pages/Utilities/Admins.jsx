@@ -37,7 +37,6 @@ export default function Admins() {
                 })
                 .catch(err => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
                 })
                 .finally(() => {
                     setIsLoading(false)
@@ -51,7 +50,6 @@ export default function Admins() {
                 })
                 .catch(err => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
                 })
         }
 
@@ -66,7 +64,6 @@ export default function Admins() {
             .then(res => setSystemEmail(res.data.adminSetting.systemEmail))
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setSystemEmailIsLoading(false))
     }
@@ -101,7 +98,6 @@ export default function Admins() {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setSystemEmailIsLoading(false))
     }

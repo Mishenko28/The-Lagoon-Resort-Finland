@@ -54,7 +54,6 @@ export default function ActivityLogs() {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
     }
 

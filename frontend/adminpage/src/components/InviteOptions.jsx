@@ -24,7 +24,6 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -44,7 +43,6 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)

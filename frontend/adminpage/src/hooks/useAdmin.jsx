@@ -47,7 +47,7 @@ export function AdminContextProvider({ children }) {
                 })
                 .catch(err => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
+                        .log(err)
                 })
                 .finally(() => {
                     setIsLoading(false)

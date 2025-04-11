@@ -28,7 +28,6 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -46,7 +45,6 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)

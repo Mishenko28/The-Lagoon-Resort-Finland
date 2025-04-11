@@ -27,7 +27,6 @@ export default function AddRoomSubImage({ isAddingSubImg, setIsAddingSubImg, set
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)

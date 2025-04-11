@@ -40,7 +40,6 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)
@@ -65,7 +64,6 @@ export default function EditRoom({ editRoom, setEditRoom, setRooms }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)

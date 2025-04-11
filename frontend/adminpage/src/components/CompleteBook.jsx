@@ -49,7 +49,6 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }

@@ -3,7 +3,6 @@ const Payment = require('../models/paymentModel')
 const User = require('../models/userModel')
 const UserPersonalData = require('../models/userPersonalDataModel')
 const { Actions, ActivityLog } = require('../models/activityLogModel')
-const { format } = require("date-fns")
 
 const status = [
     "pending",
@@ -49,13 +48,19 @@ const getDailyReport = async (req, res) => {
             book.user = user
         }
 
+        const totalPerStatus = await Promise.all(status.map(async (status) => {
+            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
+            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            return { status, totalBooks, totalAmount }
+        }))
+
         await ActivityLog.create({
             adminEmail,
             action: [Actions.CREATED, Actions.REPORT],
             activity: "Generate a daily Report",
         })
 
-        res.status(200).json({ newBooksTotal, revenue, checkIn, checkOut })
+        res.status(200).json({ newBooksTotal, revenue, checkIn, checkOut, totalPerStatus })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -72,8 +77,9 @@ const getWeeklyReport = async (req, res) => {
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const total = await Book.countDocuments({ status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
-            return { status, total }
+            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })
+            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: new Date(start).setHours(0, 0, 0, 0), $lte: new Date(end).setHours(23, 59, 59, 999) } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            return { status, totalBooks, totalAmount }
         }))
 
         await ActivityLog.create({
@@ -107,8 +113,9 @@ const getMonthlyReport = async (req, res) => {
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const total = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
-            return { status, total }
+            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
+            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            return { status, totalBooks, totalAmount }
         }))
 
         await ActivityLog.create({
@@ -142,8 +149,9 @@ const getYearlyReport = async (req, res) => {
         }, 0)
 
         const totalPerStatus = await Promise.all(status.map(async (status) => {
-            const total = await Book.countDocuments({ status, from: { $gte: start, $lte: end } })
-            return { status, total }
+            const totalBooks = await Book.countDocuments({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })
+            const totalAmount = (await Book.find({ confirmedDate: { $ne: null }, status, from: { $gte: start, $lte: end } })).reduce((acc, book) => acc + parseInt(book.payed), 0)
+            return { status, totalBooks, totalAmount }
         }))
 
         await ActivityLog.create({

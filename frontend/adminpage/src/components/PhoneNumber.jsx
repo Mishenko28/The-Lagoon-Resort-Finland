@@ -26,7 +26,6 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setPhoneNumEdit(null)
@@ -45,7 +44,6 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setPhoneNumsLoad(false)
@@ -71,7 +69,6 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setPhoneNumsLoad(false)

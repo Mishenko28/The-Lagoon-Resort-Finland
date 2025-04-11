@@ -32,7 +32,7 @@ const Cancelled = ({ convertToNight }) => {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                    .log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -85,14 +85,14 @@ const Cancelled = ({ convertToNight }) => {
                                     <td>{i + 1}</td>
                                     <td>
                                         {book.user.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
                                     </td>
                                     <td>
                                         {book.user.name.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
@@ -108,7 +108,7 @@ const Cancelled = ({ convertToNight }) => {
                                     <td>
                                         {book.room.map((room, i) => (
                                             <div key={i}>
-                                                {room.roomType} (room {room.roomNo})
+                                                {room.roomType} (room {room.roomNo > 0 ? room.roomNo : "N/A"})
                                                 {room.addedPerson > 0 &&
                                                     <span>(+{room.addedPerson} < i className="fa-solid fa-person" />)</span>
                                                 }

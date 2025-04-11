@@ -47,7 +47,6 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsRoomNoLoading(false))
     }
@@ -57,7 +56,6 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
             .then(res => setRoomTypes(res.data.roomTypes))
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => fetchRoomStart())
     }
@@ -70,7 +68,6 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -161,7 +158,6 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }

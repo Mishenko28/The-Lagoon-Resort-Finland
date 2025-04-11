@@ -42,7 +42,6 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -56,7 +55,6 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsShowedLoading(false))
     }
@@ -105,14 +103,14 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                     <td>
                                         {!book.showed && <p className="red">not arrived</p>}
                                         {book.user.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
                                     </td>
                                     <td>
                                         {book.user.name.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
-                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--primary)", color: "#fff" } : null}>
+                                            <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}

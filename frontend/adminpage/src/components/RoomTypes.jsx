@@ -58,7 +58,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)
@@ -86,7 +85,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -121,7 +119,6 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => {
                 setIsLoading(false)

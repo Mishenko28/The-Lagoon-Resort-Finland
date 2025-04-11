@@ -41,7 +41,6 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)
@@ -66,7 +65,6 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)

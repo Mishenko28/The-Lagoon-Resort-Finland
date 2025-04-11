@@ -68,7 +68,6 @@ const Database = () => {
                     })
                     .catch(err => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err)
                     })
                     .finally(() => {
                         setIsLoading(false)
@@ -77,7 +76,6 @@ const Database = () => {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: "Invalid JSON format" })
-                console.log(err)
             })
     }
 
@@ -92,7 +90,6 @@ const Database = () => {
                     })
                     .catch(err => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err)
                     })
                     .finally(() => {
                         setIsLoading(false)
@@ -101,7 +98,6 @@ const Database = () => {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: "Invalid JSON format" })
-                console.log(err)
             })
     }
 
@@ -113,7 +109,6 @@ const Database = () => {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setIsLoading(false))
     }
@@ -126,7 +121,6 @@ const Database = () => {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setIsLoading(false))
     }
@@ -136,7 +130,6 @@ const Database = () => {
             .then(res => setCollections(res.data))
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setIsLoading(false))
     }

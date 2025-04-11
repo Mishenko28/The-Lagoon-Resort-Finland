@@ -38,7 +38,6 @@ export default function EditPhoto({ editPhoto, setEditPhoto, setPhotos }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)
@@ -63,7 +62,6 @@ export default function EditPhoto({ editPhoto, setEditPhoto, setPhotos }) {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
 
         setIsLoading(false)

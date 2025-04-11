@@ -39,7 +39,6 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
                 })
                 .catch(err => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
                 })
                 .finally(() => {
                     setRolesLoading(false)
@@ -79,7 +78,6 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)

@@ -66,7 +66,6 @@ export default function Amenities() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
 
             setIsLoading(false)

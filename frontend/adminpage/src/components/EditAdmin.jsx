@@ -45,7 +45,6 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                 })
                 .catch(err => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err)
                 })
                 .finally(() => {
                     setRolesLoading(false)
@@ -83,7 +82,6 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -112,7 +110,6 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => {
                 setIsLoading(false)

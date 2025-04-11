@@ -37,7 +37,6 @@ const Archive = () => {
             .then(res => setArchive(res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))))
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsLoading(false))
     }
@@ -52,7 +51,6 @@ const Archive = () => {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setIsRestoring(false))
     }

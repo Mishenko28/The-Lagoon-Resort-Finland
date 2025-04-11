@@ -71,7 +71,7 @@ export default function Gallery() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
+                        .log(err.response.data.error)
                 })
 
             await axios.get('/room-type/all')
@@ -80,7 +80,6 @@ export default function Gallery() {
                 })
                 .catch((err) => {
                     dispatch({ type: 'FAILED', payload: err.response.data.error })
-                    console.log(err.response.data.error)
                 })
 
             setIsLoading(false)
@@ -128,7 +127,7 @@ export default function Gallery() {
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                    .log(err.response.data.error)
             })
 
         setNewPhotoLoading(false)

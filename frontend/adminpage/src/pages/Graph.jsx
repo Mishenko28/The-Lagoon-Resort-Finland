@@ -23,7 +23,7 @@ const Graph = () => {
     const [bookings, setBookings] = useState(null)
     const [feedbacks, setFeedbacks] = useState([])
     const [roomAvailability, setRoomAvailability] = useState([])
-    console.log(roomAvailability)
+
     const [submitLoading, setSubmitLoading] = useState(null)
 
     useEffect(() => {
@@ -52,7 +52,6 @@ const Graph = () => {
         ])
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err)
             })
             .finally(() => setIsLoading(false))
     }
@@ -63,7 +62,6 @@ const Graph = () => {
             .then(res => setFeedbacks(prev => prev.filter(feedback => feedback._id !== res.data._id)))
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setSubmitLoading(null))
     }
@@ -74,7 +72,6 @@ const Graph = () => {
             .then(res => setFeedbacks(prev => prev.filter(feedback => feedback._id !== res.data._id)))
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
             })
             .finally(() => setSubmitLoading(null))
     }

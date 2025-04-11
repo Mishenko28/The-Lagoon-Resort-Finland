@@ -43,6 +43,7 @@ const Report = () => {
                 let checkIn
                 let checkOut
                 let roomAvailability
+                let totalPerStatus
 
                 await Promise.all([
                     axios.post("room-type/available-rooms", { from: day, to: tomottow })
@@ -54,11 +55,11 @@ const Report = () => {
                             revenue = res.data.revenue
                             checkIn = res.data.checkIn
                             checkOut = res.data.checkOut
+                            totalPerStatus = res.data.totalPerStatus
                         })
                 ])
                     .catch((err) => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err.response.data.error)
                     })
                     .finally(() => setIsLoading(false))
 
@@ -67,7 +68,8 @@ const Report = () => {
                     revenue,
                     checkIn,
                     checkOut,
-                    roomAvailability
+                    roomAvailability,
+                    totalPerStatus
                 })
                 break
 
@@ -85,7 +87,6 @@ const Report = () => {
                     })
                     .catch((err) => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err.response.data.error)
                     })
                     .finally(() => setIsLoading(false))
                 break
@@ -102,7 +103,6 @@ const Report = () => {
                     })
                     .catch((err) => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err.response.data.error)
                     })
                     .finally(() => setIsLoading(false))
                 break
@@ -119,7 +119,6 @@ const Report = () => {
                     })
                     .catch((err) => {
                         dispatch({ type: 'FAILED', payload: err.response.data.error })
-                        console.log(err.response.data.error)
                     })
                     .finally(() => setIsLoading(false))
                 break
@@ -195,7 +194,8 @@ const Report = () => {
             let table = totalPerStatus.map(status => {
                 return [
                     { text: status.status, fontSize: 12, },
-                    { text: status.total, fontSize: 12, alignment: "center" }
+                    { text: status.totalBooks, fontSize: 12, alignment: "center" },
+                    { text: status.totalAmount, fontSize: 12, alignment: "center" }
                 ]
             })
 
@@ -238,26 +238,6 @@ const Report = () => {
                             }
                         ]
                     ], marginBottom: 20
-                },
-                report === "daily" ? {} : {
-                    table: {
-                        widths: [150, 50],
-                        headerRows: 1,
-                        body: [
-                            [
-                                { text: "Booking", colSpan: 2, alignment: 'center', fontSize: 15, bold: true }, ""
-                            ],
-                            [
-                                { text: "Status", alignment: 'center', fontSize: 12, bold: true },
-                                { text: "Total", alignment: 'center', fontSize: 12, bold: true },
-                            ],
-                            ...statusTable(totalPerStatus),
-                            [
-                                { text: "Total Bookings", alignment: 'center', fontSize: 12, bold: true },
-                                { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
-                            ]
-                        ]
-                    }
                 },
                 report !== "daily" ? {} : {
                     table: {
@@ -311,18 +291,69 @@ const Report = () => {
                         ]
                     }, marginBottom: 20
                 },
-
-                report !== "daily" ? {} : {
-                    table: {
-                        headerRows: 1,
-                        body: [
-                            [
-                                { text: "Room Availability Today", alignment: 'center', colSpan: 3, fontSize: 15, bold: true }, "", ""
-                            ],
-                            ...roomAvailabilityTable(roomAvailability)
-                        ]
+                report !== "daily" ?
+                    {
+                        table: {
+                            widths: ["*", "auto", "auto"],
+                            headerRows: 1,
+                            body: [
+                                [
+                                    { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 15, bold: true }, "", ""
+                                ],
+                                [
+                                    { text: "Status", alignment: 'center', fontSize: 12, bold: true },
+                                    { text: "Total Booked", alignment: 'center', fontSize: 12, bold: true },
+                                    { text: "Total Amount", alignment: 'center', fontSize: 12, bold: true }
+                                ],
+                                ...statusTable(totalPerStatus),
+                                [
+                                    { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
+                                    { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
+                                    { text: revenue, alignment: 'center', fontSize: 12, bold: true }
+                                ]
+                            ]
+                        }
                     }
-                },
+                    :
+                    {
+                        columnGap: 20,
+                        columns: [
+                            {
+                                table: {
+                                    widths: ["auto", "auto", "*"],
+                                    headerRows: 1,
+                                    body: [
+                                        [
+                                            { text: "Room Availability Today", alignment: 'center', colSpan: 3, fontSize: 15, bold: true }, "", ""
+                                        ],
+                                        ...roomAvailabilityTable(roomAvailability)
+                                    ]
+                                }
+                            },
+                            {
+                                table: {
+                                    widths: ["*", "auto", "auto"],
+                                    headerRows: 1,
+                                    body: [
+                                        [
+                                            { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 15, bold: true }, "", ""
+                                        ],
+                                        [
+                                            { text: "Status", alignment: 'center', fontSize: 12, bold: true },
+                                            { text: "Total Booked", alignment: 'center', fontSize: 12, bold: true },
+                                            { text: "Total Amount", alignment: 'center', fontSize: 12, bold: true }
+                                        ],
+                                        ...statusTable(totalPerStatus),
+                                        [
+                                            { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
+                                            { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
+                                            { text: revenue, alignment: 'center', fontSize: 12, bold: true }
+                                        ]
+                                    ]
+                                }
+                            },
+                        ]
+                    },
                 {
                     columns: [
                         [

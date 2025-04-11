@@ -7,7 +7,7 @@ export default function Dashboard() {
             {useLocation().pathname === '/dashboard' &&
                 <div className='big-navs-cont'>
                     <div className='big-navs'>
-                        <Link to="/dashboard/booking">BOOKINGS</Link>
+                        <Link to="/dashboard/booking?page=pending">BOOKINGS</Link>
                         <Link to="/dashboard/report">REPORTS</Link>
                     </div>
                 </div>
