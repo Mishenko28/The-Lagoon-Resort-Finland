@@ -5,7 +5,6 @@
     gap: 20px;
     height: 100%;
     overflow-y: auto;
-    padding-bottom: 100px;
 
     & .graph-header {
         display: flex;
@@ -35,11 +34,15 @@
         gap: 10px;
 
         & .total-box {
+            flex-grow: 1;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 160px;
             border-radius: 15px;
+
+            &:nth-child(3) {
+                cursor: pointer;
+            }
 
             & .top {
                 display: flex;
@@ -86,6 +89,7 @@
         }
 
         & .recent-sales {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             background-color: #fff;
@@ -104,12 +108,12 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    width: 300px;
 
                     & .left {
                         display: flex;
                         align-items: center;
                         gap: 10px;
+                        cursor: pointer;
 
                         & img {
                             width: 30px;
@@ -132,6 +136,76 @@
                     & h5 {
                         font-size: 1.2rem;
                         font-weight: 900;
+                    }
+                }
+            }
+        }
+
+        & .room-availability {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 10px;
+            height: 400px;
+            width: 450px;
+
+            & .labels {
+                display: flex;
+                gap: 5px;
+
+                & h2 {
+                    font-size: 0.9rem;
+                    padding: 6px;
+                    border-radius: 5px;
+                    font-weight: 700;
+                    margin-bottom: 20px;
+
+                    &:nth-child(1) {
+                        background-color: var(--light-green);
+                    }
+
+                    &:nth-child(2) {
+                        background-color: var(--light-red);
+                    }
+                }
+            }
+
+            & .room-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                overflow-y: auto;
+
+                & .room-type {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    & h2 {
+                        background-color: var(--gray);
+                        padding: 5px;
+                        border-radius: 3px;
+                        color: #fff;
+                        text-align: center;
+                        font-size: 1rem;
+                        font-weight: 500;
+                    }
+
+                    & .rooms {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+
+                        & h3 {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: calc(12.5% - 8.75px);
+                            aspect-ratio: 1/1;
+                            font-size: 1.2rem;
+                        }
                     }
                 }
             }
@@ -162,6 +236,7 @@
                         align-items: center;
                         gap: 10px;
                         width: 300px;
+                        cursor: pointer;
 
                         & img {
                             width: 30px;
@@ -260,7 +335,6 @@
                     gap: 20px;
 
                     & .sale {
-                        width: 400px;
 
                         & .left {
                             & img {

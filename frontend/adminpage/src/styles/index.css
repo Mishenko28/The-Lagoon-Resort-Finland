@@ -13,7 +13,7 @@
     --secondary: #393E46;
 
     --green: #4CAF50;
-    --green-light: #4CAF5026;
+    --light-green: #4caf4f84;
 
     --blue: #2196F3;
     --blue-light: #2196F326;
@@ -25,6 +25,7 @@
     --gray: #666666;
 
     --red: #ab0000;
+    --light-red: #ab00006c;
     --red-dark: #990000;
 
     --light-orange: #ff660040;

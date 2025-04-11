@@ -9,7 +9,7 @@ const now = new Date()
 const getTotalBookPerMonth = async (year) => {
     const books = await Book.find({
         createdAt: { $gte: new Date(year, 0, 1), $lt: new Date(year + 1, 0, 1) },
-        status: { $nin: ['pending', 'cancelled'] }
+        status: { $nin: ['pending', 'cancelled', 'expired'] }
     })
 
     const bookings = Array(12).fill(0)
@@ -29,12 +29,13 @@ const getAllData = async (_, res) => {
             return acc + parseFloat(payment.amount)
         }, 0)
 
-        const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled'] }, createdAt: { $gte: startOfMonth(new Date()) } })
+        const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled', "expired"] }, createdAt: { $gte: startOfMonth(new Date()) } })
         const newUsers = await User.countDocuments({ createdAt: { $gte: startOfMonth(new Date()) } })
-        let recentSales = await Payment.find({}).populate('userId').sort({ createdAt: -1 }).limit(10)
+        let recentSales = await Payment.find({}).populate('userId').sort({ createdAt: -1 }).limit(20)
 
         recentSales = await Promise.all(recentSales.map(async payment => {
             payment.toObject()
+
             const { name, img } = await UserPersonalData.findOne({ email: payment.userId.email })
 
             return {

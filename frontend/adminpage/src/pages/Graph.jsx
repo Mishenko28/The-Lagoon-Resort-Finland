@@ -6,6 +6,7 @@ import axios from "axios"
 import Loader2 from "../components/Loader2"
 import useAdmin from "../hooks/useAdmin"
 import { motion, AnimatePresence } from "framer-motion"
+import { useNavigate } from "react-router-dom"
 
 
 
@@ -13,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion"
 const Graph = () => {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate()
 
     const [revenue, setRevenue] = useState(0)
     const [totalBook, setTotalBook] = useState(0)
@@ -20,7 +22,8 @@ const Graph = () => {
     const [recentSales, setRecentSales] = useState([])
     const [bookings, setBookings] = useState(null)
     const [feedbacks, setFeedbacks] = useState([])
-
+    const [roomAvailability, setRoomAvailability] = useState([])
+    console.log(roomAvailability)
     const [submitLoading, setSubmitLoading] = useState(null)
 
     useEffect(() => {
@@ -28,6 +31,9 @@ const Graph = () => {
     }, [])
 
     const fetchAllData = async () => {
+        const tomottow = new Date()
+        tomottow.setDate(tomottow.getDate() + 1)
+
         await Promise.all([
             axios.get("feedback/new")
                 .then(res => setFeedbacks(res.data)),
@@ -39,11 +45,14 @@ const Graph = () => {
                     setNewUsers(res.data.newUsers)
                     setRecentSales(res.data.recentSales)
                     setBookings(res.data.bookings)
-                })
+                }),
+
+            axios.post("room-type/available-rooms", { from: new Date(), to: tomottow })
+                .then(res => setRoomAvailability(res.data))
         ])
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
-                console.log(err.response.data.error)
+                console.log(err)
             })
             .finally(() => setIsLoading(false))
     }
@@ -95,7 +104,7 @@ const Graph = () => {
                             </div>
                             <h4>+{totalBook}</h4>
                         </div>
-                        <div className="total-box">
+                        <div className="total-box" onClick={() => navigate("/utilities/users")}>
                             <div className="top">
                                 <h3>New Users</h3>
                                 <h3><i className="fa-solid fa-users" /></h3>
@@ -139,7 +148,7 @@ const Graph = () => {
                                         className="sale"
                                         key={sale._id}
                                     >
-                                        <div className="left">
+                                        <div onClick={() => navigate(`/utilities/users?search=${sale.email}`)} className="left">
                                             <img src={sale.img} />
                                             <div>
                                                 <h3>{sale.name}</h3>
@@ -150,6 +159,25 @@ const Graph = () => {
                                     </motion.div>
                                 ))}
                                 {recentSales.length === 0 && <div className="sale">No recent sales</div>}
+                            </div>
+                        </div>
+                        <div className="room-availability">
+                            <h1>Room Occupancy Today</h1>
+                            <div className="labels">
+                                <h2>available</h2>
+                                <h2>occupied</h2>
+                            </div>
+                            <div className="room-wrapper">
+                                {roomAvailability.map(room => (
+                                    <div className="room-type" key={room._id}>
+                                        <h2>{room.roomType} ROOMS</h2>
+                                        <div className="rooms">
+                                            {room.rooms.map(r => (
+                                                <h3 onClick={() => navigate("/dashboard/booking?page=ongoing")} style={{ cursor: r.available ? "" : "pointer", backgroundColor: r.available ? "var(--light-green)" : "var(--light-red)" }}>{r.roomNo}</h3>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         {feedbacks.length > 0 &&
@@ -167,7 +195,7 @@ const Graph = () => {
                                                 className="feedback"
                                                 key={feedback._id}
                                             >
-                                                <div className="left">
+                                                <div onClick={() => navigate(`/utilities/users?search=${feedback.user.email}`)} className="left">
                                                     <img src={feedback.user.img} />
                                                     <div>
                                                         <h3>{feedback.user.name}</h3>

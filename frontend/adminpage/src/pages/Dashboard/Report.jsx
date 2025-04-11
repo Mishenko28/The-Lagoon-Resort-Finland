@@ -47,6 +47,7 @@ const Report = () => {
                 await Promise.all([
                     axios.post("room-type/available-rooms", { from: day, to: tomottow })
                         .then(res => roomAvailability = res.data),
+
                     axios.get("report/daily", { params: { day } })
                         .then(res => {
                             newBooksTotal = res.data.newBooksTotal

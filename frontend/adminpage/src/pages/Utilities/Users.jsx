@@ -5,9 +5,13 @@ import axios from "axios"
 import { format } from 'date-fns'
 import useConvertBase64 from "../../hooks/useConvertBase64"
 import { motion, AnimatePresence } from "framer-motion"
+import { useSearchParams, useNavigate } from "react-router-dom"
 
 
 const Users = () => {
+    const search = useSearchParams()[0].get('search') || ""
+    const navigate = useNavigate()
+
     const [base64, convertToBase64] = useConvertBase64("/profile.webp")
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
@@ -15,7 +19,6 @@ const Users = () => {
 
     const [users, setUsers] = useState([])
     const [totalUsers, setTotalUsers] = useState(0)
-    const [search, setSearch] = useState("")
     const [page, setPage] = useState(1)
 
     const [newUserTogg, setNewUserTogg] = useState(false)
@@ -106,7 +109,7 @@ const Users = () => {
                 :
                 <>
                     <div className="header">
-                        <input className="search" value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search Email" />
+                        <input className="search" value={search} onChange={e => navigate(`?search=${e.target.value}`)} type="text" placeholder="Search Email" />
                         <div className="page-wrapper">
                             <button onClick={() => setPage(prev => Math.max(1, prev - 1))} className="prev"><i className="fa-solid fa-caret-left" /></button>
                             <input onBlur={() => page === "" && setPage(1)} type="number" onChange={e => setPage(e.target.value === "" ? "" : Math.min(Math.ceil(totalUsers / 30), e.target.value))} value={page} />

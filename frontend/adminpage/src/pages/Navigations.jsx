@@ -61,7 +61,7 @@ export default function Navigations() {
                         <div className='parent-cont'>
                             < NavLink onClick={() => handleOpenNav('dashboard')} to='/dashboard'>Dashboard<i className="fa-solid fa-chart-simple" /></NavLink>
                             <div className={`child-cont ${openNav === 'dashboard' ? 'open' : ''}`}>
-                                {state.admin.role.includes('booking') && <NavLink to='/dashboard/booking'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>}
+                                {state.admin.role.includes('booking') && <NavLink to='/dashboard/booking?page=pending'>Bookings<i className="fa-solid fa-book-bookmark" /></NavLink>}
                                 {state.admin.role.includes('reports') && <NavLink to='/dashboard/report'>Reports<i className="fa-solid fa-chart-line" /></NavLink>}
                             </div>
                         </div>
