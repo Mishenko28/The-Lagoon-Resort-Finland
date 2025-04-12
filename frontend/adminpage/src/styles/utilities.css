@@ -257,6 +257,7 @@
 .admin-form .input-group .roles input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 .admin-form .input-group .roles .role {
@@ -454,6 +455,7 @@
 .invite-options .roles input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 .invite-options .link-wrapper {
@@ -957,10 +959,6 @@
 
     .admin-form .input-group .roles-wrapper {
         min-width: 250px;
-    }
-
-    .admin-form .input-group .roles input[type="checkbox"]:hover {
-        cursor: pointer;
     }
 
     /* DATABASE */

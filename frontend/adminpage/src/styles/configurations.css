@@ -414,6 +414,7 @@
 .room-add .room-add-input input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 .room-add .bttns {
@@ -808,6 +809,7 @@
 .gallery-add-cont .hide-wrapper input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 .gallery-add-cont input {
@@ -1511,10 +1513,6 @@
 
     .gallery-add img {
         width: 200px;
-    }
-
-    .gallery-add-cont .hide-wrapper input[type="checkbox"] {
-        cursor: pointer;
     }
 
     .gallery-cont {
