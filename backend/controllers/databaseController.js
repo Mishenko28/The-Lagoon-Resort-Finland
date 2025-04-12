@@ -7,6 +7,22 @@ const zlib = require("zlib")
 
 const { Actions, ActivityLog } = require("../models/activityLogModel")
 
+function reviveDates(obj) {
+    if (Array.isArray(obj)) {
+        return obj.map(reviveDates)
+    } else if (obj && typeof obj === 'object') {
+        const result = {}
+        for (const [key, value] of Object.entries(obj)) {
+            if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value)) {
+                result[key] = new Date(value)
+            } else {
+                result[key] = reviveDates(value)
+            }
+        }
+        return result
+    }
+    return obj
+}
 
 function encryptJSON(jsonData) {
     const compressed = zlib.gzipSync(JSON.stringify(jsonData))
@@ -101,7 +117,8 @@ const restoreCollection = async (req, res) => {
             const Model = mongoose.models[collectionName] || mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName)
             const decryptedData = decryptJSON(collections[collectionName])
             await Model.deleteMany({})
-            await Model.insertMany(decryptedData)
+            const reviveData = reviveDates(decryptedData)
+            await Model.insertMany(reviveData)
         }
 
         await ActivityLog.create({
@@ -123,8 +140,8 @@ const importCollection = async (req, res) => {
         for (const collectionName of Object.keys(collections)) {
             const Model = mongoose.models[collectionName] || mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName)
             const decryptedData = decryptJSON(collections[collectionName])
-
-            await Promise.all(decryptedData.map(async data => {
+            const reviveData = reviveDates(decryptedData)
+            await Promise.all(reviveData.map(async data => {
                 if (await Model.findOne({ _id: data._id })) {
                     return Model.updateOne({ _id: data._id }, data)
                 } else {
