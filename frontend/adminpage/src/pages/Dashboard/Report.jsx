@@ -227,54 +227,53 @@ const Report = () => {
             header: { text: 'THE LAGOON RESORT FINLAND INC. GENERAL REPORT', margin: [0, 30], alignment: 'center', fontSize: 18, bold: true },
             content: [
                 {
+                    columnGap: 30,
                     columns: [
                         [
                             {
                                 columns: [
-                                    { text: "Report: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: report, fontSize: 12 }
+                                    { text: "Report: ", fontSize: 10, bold: true, width: "auto" },
+                                    { text: report, fontSize: 10, alignment: "right" }
                                 ], marginBottom: 5
                             },
                             {
                                 columns: [
-                                    { text: "Reporting Date: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: date, fontSize: 12 }
+                                    { text: "Reporting Date: ", fontSize: 10, bold: true, width: "auto" },
+                                    { text: date, fontSize: 10, alignment: "right" }
                                 ], marginBottom: 5
                             },
                             {
                                 columns: [
-                                    { text: "Revenue: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: "₱" + revenue.toLocaleString(), fontSize: 12 }
+                                    { text: "Revenue: ", fontSize: 10, bold: true, width: "auto" },
+                                    { text: "₱" + revenue.toLocaleString(), fontSize: 10, alignment: "right" }
                                 ], marginBottom: 5
                             }
                         ],
                         [
                             {
                                 columns: [
-                                    { text: "Prepared by: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: state.admin.email, fontSize: 12 }
+                                    { text: "Prepared by: ", fontSize: 10, bold: true, width: "auto" },
+                                    { text: state.admin.email, fontSize: 10, alignment: "right" }
                                 ], marginBottom: 5
                             },
                             {
                                 columns: [
-                                    { text: "Prepared Date: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: new Date().toLocaleDateString(), fontSize: 12 }
+                                    { text: "Prepared Date: ", fontSize: 10, bold: true, width: "auto" },
+                                    { text: new Date().toLocaleDateString(), fontSize: 10, alignment: "right" }
                                 ], marginBottom: 5
                             },
                             report === "daily" ?
                                 {
-
                                     columns: [
-                                        { text: "New Bookings: ", fontSize: 12, bold: true, width: 90 },
-                                        { text: newBooksTotal.toLocaleString(), fontSize: 12 }
+                                        { text: "New Bookings: ", fontSize: 10, bold: true, width: "auto" },
+                                        { text: newBooksTotal.toLocaleString(), fontSize: 10, alignment: "right" }
                                     ], marginBottom: 5
                                 }
                                 :
                                 {
-
                                     columns: [
-                                        { text: "Total Bookings: ", fontSize: 12, bold: true, width: 90 },
-                                        { text: totalBookings.toLocaleString(), fontSize: 12 }
+                                        { text: "Total Bookings: ", fontSize: 10, bold: true, width: "auto" },
+                                        { text: totalBookings.toLocaleString(), fontSize: 10, alignment: "right" }
                                     ], marginBottom: 5
                                 }
                         ]
