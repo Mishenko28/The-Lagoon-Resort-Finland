@@ -49,8 +49,8 @@ const NoShowBook = ({ fetchTotals, convertToNight, setBooks, setToNoShow, toNoSh
                     }
                 </div>
                 <div className="bttns">
-                    <button type="submit" disabled={isLoading} className="green">Yes</button>
-                    <button onClick={() => setToNoShow(null)} className="red">Back</button>
+                    <button type="submit" disabled={isLoading} className="submit">Yes</button>
+                    <button onClick={() => setToNoShow(null)} className="cancel">Back</button>
                 </div>
             </form>
         </div>

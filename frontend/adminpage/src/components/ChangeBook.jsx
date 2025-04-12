@@ -270,8 +270,8 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                         </div>
                         <hr />
                         <div className="bttns">
-                            <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Save</button>
-                            <button className="red" onClick={() => setToChange(null)}>Back</button>
+                            <button disabled={isLoading || isRoomNoLoading} type="submit" className="submit">Save</button>
+                            <button className="cancel" onClick={() => setToChange(null)}>Back</button>
                         </div>
                     </>
                 }

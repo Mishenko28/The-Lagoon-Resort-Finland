@@ -118,8 +118,8 @@ export default function Profile() {
                                 <input type="number" value={editProfile.contact} onChange={(e) => setEditProfile(prev => ({ ...prev, contact: e.target.value }))} />
                             </h2>
                             <div className='bttns'>
-                                <button disabled={isLoading} type='submit'>Save Changes</button>
-                                <button onClick={() => setEditProfile(null)}>Cancel</button>
+                                <button className='submit' disabled={isLoading} type='submit'>Save Changes</button>
+                                <button className='cancel' onClick={() => setEditProfile(null)}>Cancel</button>
                             </div>
                         </form>
                         :

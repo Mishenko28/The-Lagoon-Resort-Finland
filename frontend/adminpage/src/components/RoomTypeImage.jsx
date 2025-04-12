@@ -67,12 +67,12 @@ const RoomTypeImage = ({ setRoomTypes, roomType, setShowImage }) => {
                 }
                 <div className="bttns">
                     {isEditing ?
-                        <button onClick={handleCancel}>Cancel</button>
+                        <button className="cancel" onClick={handleCancel}>Cancel</button>
                         :
-                        <button onClick={() => setIsEditing(true)}>Edit</button>
+                        <button className="edit" onClick={() => setIsEditing(true)}>Edit</button>
                     }
-                    {(isEditing && roomType.img !== image || roomType.caption !== caption) && <button disabled={isLoading} onClick={handleSave}>Save</button>}
-                    {!isEditing && <button onClick={() => setShowImage(false)}>Close</button>}
+                    {(isEditing && roomType.img !== image || roomType.caption !== caption) && <button className="submit" disabled={isLoading} onClick={handleSave}>Save</button>}
+                    {!isEditing && <button className="cancel" onClick={() => setShowImage(false)}>Close</button>}
                 </div>
             </div>
         </div>

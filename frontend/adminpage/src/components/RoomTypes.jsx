@@ -171,8 +171,8 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                             <p>Additional Fee:</p>
                             <input type='number' onChange={(e) => setNewDetails(prev => ({ ...prev, addFeePerPerson: e.target.value }))} value={newDetails.addFeePerPerson} />
                             <div className='bttns'>
-                                <button type='button' onClick={() => setIsEditing(false)}>Cancel</button>
-                                {<button disabled={isLoading} type='submit'>Save</button>}
+                                <button className='cancel' type='button' onClick={() => setIsEditing(false)}>Cancel</button>
+                                {<button className='submit' disabled={isLoading} type='submit'>Save</button>}
                             </div>
                         </form>
                         :
@@ -193,20 +193,20 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                     <h1>Are you sure you want to delete this room type?</h1>
                     <h2><i className="fa-solid fa-triangle-exclamation" />Warning: Deleting this room type will also remove all associated rooms.</h2>
                     <div className='bttns'>
-                        <button disabled={isLoading} onClick={handleDelete}><i className="fa-solid fa-trash-can" />Delete</button>
-                        <button onClick={() => setConfirmDeleteTogg(false)}>Cancel</button>
+                        <button className='delete' disabled={isLoading} onClick={handleDelete}><i className="fa-solid fa-trash-can" />Delete</button>
+                        <button className='cancel' onClick={() => setConfirmDeleteTogg(false)}>Cancel</button>
                     </div>
                 </div>
                 :
                 <div className='room-type-content'>
                     {roomSettTogg &&
                         <div className='room-settings'>
-                            <button onClick={() => setAddRoomTogg(true)}><i className="fa-solid fa-plus" />Add</button>
-                            <button onClick={handleRename}><i className="fa-solid fa-pen-to-square" />Rename</button>
-                            <button onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={handleEdit}><i className="fa-solid fa-pen" />Edit</button>
+                            <p onClick={() => setAddRoomTogg(true)}><i className="fa-solid fa-plus" />Add</p>
+                            <p onClick={handleRename}><i className="fa-solid fa-pen-to-square" />Rename</p>
+                            <p onClick={() => setConfirmDeleteTogg(true)}><i className="fa-solid fa-trash-can" />Delete</p>
+                            <p onClick={handleEdit}><i className="fa-solid fa-pen" />Edit</p>
                             <hr />
-                            <button onClick={() => navigate('/configuration/gallery#room-types')}><i className="fa-solid fa-image" />Images</button>
+                            <p onClick={() => navigate('/configuration/gallery#room-types')}><i className="fa-solid fa-image" />Images</p>
                         </div>
                     }
                     {isCard &&
@@ -266,7 +266,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                     }
                     {rooms.length === 0 &&
                         <div className='no-room'>
-                            <button onClick={() => setAddRoomTogg(true)}>Add Room Now</button>
+                            <button className='cancel' onClick={() => setAddRoomTogg(true)}>Add Room Now</button>
                         </div>
                     }
                 </div>

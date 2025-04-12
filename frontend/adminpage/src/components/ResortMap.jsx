@@ -73,8 +73,8 @@ const ResortMap = ({ coordinates, setCoordinates, address, setAddress }) => {
                 </div>
                 {isEditing &&
                     <div className='bttns-down'>
-                        <button type='submit' disabled={isLoading}>Save</button>
-                        <button type='button' onClick={() => setIsEditing(false)}>Cancel</button>
+                        <button className='submit' type='submit' disabled={isLoading}>Save</button>
+                        <button className='cancel' type='button' onClick={() => setIsEditing(false)}>Cancel</button>
                     </div>
                 }
             </form>

@@ -126,8 +126,8 @@
 }
 
 .settings-cont {
-    position: fixed;
-    top: 87px;
+    top: 4px;
+    position: absolute;
     right: 4px;
     display: flex;
     flex-direction: column;

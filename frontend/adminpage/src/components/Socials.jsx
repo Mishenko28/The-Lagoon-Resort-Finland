@@ -154,8 +154,8 @@ export default function Socials({ socials, setSocials }) {
                             <span>{socialToDelete.link}</span>
                         </div>
                         <div className='bttns'>
-                            <button onClick={() => deleteSocial(socialToDelete.index)}><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={() => setSocialToDelete(null)}>Cancel</button>
+                            <button className='delete' onClick={() => deleteSocial(socialToDelete.index)}><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button className='cancel' onClick={() => setSocialToDelete(null)}>Cancel</button>
                         </div>
                     </div>
                 </div>

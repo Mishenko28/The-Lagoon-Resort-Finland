@@ -133,8 +133,8 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                 </div>
                 <hr />
                 <div className="bttns">
-                    <button type="submit" disabled={isLoading} className="green">Confirm</button>
-                    <button onClick={() => setToComplete(null)} className="red">Back</button>
+                    <button type="submit" disabled={isLoading} className="submit">Confirm</button>
+                    <button onClick={() => setToComplete(null)} className="cancel">Back</button>
                 </div>
             </form>
         </div>

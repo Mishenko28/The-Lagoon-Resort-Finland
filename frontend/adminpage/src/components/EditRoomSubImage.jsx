@@ -71,8 +71,8 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
                         </div>
 
                         <div className="delete-bttns">
-                            <button disabled={isLoading} onClick={handleDelete}><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={handleCancelDelete}>Cancel</button>
+                            <button className="delete" disabled={isLoading} onClick={handleDelete}><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button className="cancel" onClick={handleCancelDelete}>Cancel</button>
                         </div>
                     </>
                     :
@@ -80,8 +80,8 @@ export default function EditRoomSubImage({ editingSubImg, setEditingSubImg, setR
                         <img src={base64} />
                         <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />
                         <div className="bttns">
-                            <button disabled={isLoading} type="submit" onClick={handleSave}>Save</button>
-                            <button onClick={() => setEditingSubImg(null)}>Cancel</button>
+                            <button className="submit" disabled={isLoading} type="submit" onClick={handleSave}>Save</button>
+                            <button className="cancel" onClick={() => setEditingSubImg(null)}>Cancel</button>
                             <button className="delete" disabled={isLoading} onClick={() => setDeleteTogg(true)}>Delete</button>
                         </div>
                     </>

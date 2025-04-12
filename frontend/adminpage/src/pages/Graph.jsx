@@ -47,7 +47,7 @@ const Graph = () => {
                     setBookings(res.data.bookings)
                 }),
 
-            axios.post("room-type/available-rooms", { from: new Date(), to: tomottow })
+            axios.post("room-type/available-rooms", { from: new Date(), to: new Date() })
                 .then(res => setRoomAvailability(res.data))
         ])
             .catch((err) => {
@@ -204,8 +204,8 @@ const Graph = () => {
                                                     <h5>{feedback.feedback}</h5>
                                                 </div>
                                                 <div className="bttns">
-                                                    <button disabled={submitLoading} onClick={() => handleApproved(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "approve") ? "Loading..." : "Approve"}</button>
-                                                    <button disabled={submitLoading} onClick={() => handleReject(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "reject") ? "Loading..." : "Reject"}</button>
+                                                    <button className="submit" disabled={submitLoading} onClick={() => handleApproved(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "approve") ? "Loading..." : "Approve"}</button>
+                                                    <button className="delete" disabled={submitLoading} onClick={() => handleReject(feedback._id)}>{(submitLoading?.id === feedback._id && submitLoading?.status === "reject") ? "Loading..." : "Reject"}</button>
                                                 </div>
                                             </motion.div>
                                         ))}

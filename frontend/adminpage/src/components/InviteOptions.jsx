@@ -65,8 +65,8 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
                     <>
                         <h4>Are you sure you want to delete this link?</h4>
                         <div className="bttns">
-                            <button onClick={handleDelete} className="del"><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={() => setDeleteTogg(false)}>Cancel</button>
+                            <button className="delete" onClick={handleDelete} ><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button className="cancel" onClick={() => setDeleteTogg(false)}>Cancel</button>
                         </div>
                     </>
                     :
@@ -76,12 +76,12 @@ export default function InviteOptions({ setInvites, inviteOptionTogg, setInviteO
                         <h2>Link</h2>
                         <div className="link-wrapper">
                             <h3>{inviteOptionTogg.link}</h3>
-                            <button type="button" onClick={handleCopy} className="copy">{copyHTMLText}</button>
+                            <button type="button" onClick={handleCopy} className="edit">{copyHTMLText}</button>
                         </div>
                         <div className="bttns">
-                            <button disabled={isLoading} type="submit">Resend</button>
-                            <button onClick={() => setInviteOptionTogg(null)}>Cancel</button>
-                            <button onClick={() => setDeleteTogg(true)} disabled={isLoading}>Delete Link</button>
+                            <button className="submit" disabled={isLoading} type="submit">Resend</button>
+                            <button className="cancel" onClick={() => setInviteOptionTogg(null)}>Cancel</button>
+                            <button className="delete" onClick={() => setDeleteTogg(true)} disabled={isLoading}>Delete Link</button>
                         </div>
                     </>
                 }

@@ -64,7 +64,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
                         <label>Set as active:</label>
                         <input onChange={(e) => setNewRoom(prev => ({ ...prev, active: e.target.checked }))} checked={newRoom.active} type="checkbox" />
                     </div>
-                    <button disabled={isLoading} type='submit'>Add</button>
+                    <button className='submit' disabled={isLoading} type='submit'>Add</button>
                 </form>
                 <i onClick={() => setAddRoomTogg(false)} className="fa-solid fa-xmark" />
             </div>

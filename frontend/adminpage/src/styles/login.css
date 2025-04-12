@@ -41,16 +41,12 @@
 
 .login-container button[type="submit"] {
     width: 100%;
-    padding: 10px;
-    background-color: var(--green);
-    color: #fff;
+    background-color: var(--red);
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
-.login-container button[type="submit"]:hover {
-    background-color: #45a049;
+    &:hover {
+        background-color: var(--red-dark);
+    }
 }
 
 .login-container .show-pass {

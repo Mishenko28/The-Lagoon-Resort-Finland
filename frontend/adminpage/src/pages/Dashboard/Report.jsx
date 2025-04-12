@@ -400,7 +400,7 @@ const Report = () => {
                         widths: ["auto", "*", 100],
                         body: [
                             [
-                                { text: "Payments Today", alignment: 'center', colSpan: 3, fontSize: 12, bold: true }, "", ""
+                                { text: "Payments", alignment: 'center', colSpan: 3, fontSize: 12, bold: true }, "", ""
                             ],
                             [
                                 { text: "No.", alignment: 'center', fontSize: 10 },

@@ -99,13 +99,13 @@ export default function EditAmenity({ editAmenity, setEditAmenity, setAmenities 
                     <div className='bttns'>
                         {deleteTogg ?
                             <>
-                                <button disabled={isLoading} onClick={handleDelete}>Yes</button>
-                                <button disabled={isLoading} onClick={(e) => handleConfirmDelete(e, false)}>No</button>
+                                <button className='delete' disabled={isLoading} onClick={handleDelete}>Delete</button>
+                                <button className='cancel' disabled={isLoading} onClick={(e) => handleConfirmDelete(e, false)}>Cancel</button>
                             </>
                             :
                             <>
-                                <button disabled={isLoading} type='button' onClick={(e) => handleConfirmDelete(e, true)}>Delete</button>
-                                <button disabled={isLoading} type='submit'>Save</button>
+                                <button className='delete' disabled={isLoading} type='button' onClick={(e) => handleConfirmDelete(e, true)}>Delete</button>
+                                <button className='submit' disabled={isLoading} type='submit'>Save</button>
                             </>
                         }
                     </div>

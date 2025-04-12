@@ -133,8 +133,8 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                     <label>{state.admin.email}</label>
                     <input ref={passwordRef} value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="verify your password" />
                     <div className="bttns2">
-                        <button type="submit" disabled={isLoading}><i className="fa-solid fa-trash-can" />Delete</button>
-                        <button onClick={() => setDeleteTogg(false)}>Cancel</button>
+                        <button className="delete" type="submit" disabled={isLoading}><i className="fa-solid fa-trash-can" />Delete</button>
+                        <button className="cancel" onClick={() => setDeleteTogg(false)}>Cancel</button>
                     </div>
                 </form>
                 :
@@ -196,9 +196,9 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                                 </div>
                             </div>
                             <div className="bttns">
-                                <button type="submit" disabled={isLoading}>Save</button>
-                                <button onClick={() => setEditAdmin(null)}>Cancel</button>
-                                <button disabled={isLoading} onClick={() => setDeleteTogg(true)}>Delete</button>
+                                <button className="submit" type="submit" disabled={isLoading}>Save</button>
+                                <button className="cancel" onClick={() => setEditAdmin(null)}>Cancel</button>
+                                <button className="delete" disabled={isLoading} onClick={() => setDeleteTogg(true)}>Delete</button>
                             </div>
                         </>
                     }

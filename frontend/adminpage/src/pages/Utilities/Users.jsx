@@ -184,8 +184,8 @@ const Users = () => {
                                     </select>
                                     <input type="number" placeholder="contact number" value={newUser.contact} onChange={e => setNewUser(prev => ({ ...prev, contact: e.target.value }))} />
                                     <div className="bttns">
-                                        <button disabled={addUserLoading} type="submit">Confirm</button>
-                                        <button type="button">Cancel</button>
+                                        <button className="submit" disabled={addUserLoading} type="submit">Confirm</button>
+                                        <button className="cancel" onClick={handleCloseAddUser} type="button">Cancel</button>
                                     </div>
                                 </form>
                             </div>

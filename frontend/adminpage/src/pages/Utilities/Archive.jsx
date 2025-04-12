@@ -134,8 +134,8 @@ const Archive = () => {
                                 <p>you are about to restore this {toRestore.type}:</p>
                                 <h2 style={{ background: colors[toRestore.type] }}>{toRestore.value}</h2>
                                 <div className="bttns">
-                                    <button disabled={isRestoring} onClick={() => handleRestore(toRestore)}>Confirm</button>
-                                    <button onClick={() => setToRestore(null)}>Cancel</button>
+                                    <button className="submit" disabled={isRestoring} onClick={() => handleRestore(toRestore)}>Confirm</button>
+                                    <button className="cancel" onClick={() => setToRestore(null)}>Cancel</button>
                                 </div>
                             </div>
                         </div>

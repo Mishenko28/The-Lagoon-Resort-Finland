@@ -62,7 +62,7 @@ export default function AddAmenities({ setAmenities, setAddAmenityTogg }) {
                         <label>Set as active:</label>
                         <input onChange={(e) => setNewAmenity(prev => ({ ...prev, active: e.target.checked }))} checked={newAmenity.active} type="checkbox" />
                     </div>
-                    <button disabled={isLoading} type='submit'>Add</button>
+                    <button className='submit' disabled={isLoading} type='submit'>Add</button>
                 </form>
                 <i onClick={() => setAddAmenityTogg(false)} className="fa-solid fa-xmark" />
             </div>

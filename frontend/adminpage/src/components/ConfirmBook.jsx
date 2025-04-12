@@ -269,8 +269,8 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                         </div>
                         <hr />
                         <div className="bttns">
-                            <button disabled={isLoading || isRoomNoLoading} type="submit" className="green">Confirm</button>
-                            <button className="red" onClick={() => setToConfirm(null)}>Back</button>
+                            <button className="submit" disabled={isLoading || isRoomNoLoading} type="submit">Confirm</button>
+                            <button className="cancel" onClick={() => setToConfirm(null)}>Back</button>
                         </div>
                     </>
                 }

@@ -48,10 +48,9 @@
     padding: 10px;
     border: none;
     background-color: var(--primary);
-    color: #fff;
-    font-size: 0.7rem;
     margin-top: 10px;
     border-radius: 15px;
+
 }
 
 .profile .personal {
@@ -161,25 +160,6 @@
     gap: 10px;
 }
 
-.profile .edit-mode .bttns button {
-    padding: 10px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.profile .edit-mode .bttns button:nth-child(2) {
-    background-color: #fff;
-    color: var(--gray);
-    border: 1px solid var(--light-gray);
-}
-
-
-
-
 @media (min-width: 1025px) {
     .profile {
         flex-wrap: wrap;
@@ -201,7 +181,6 @@
     }
 
     .profile .header button:hover {
-        cursor: pointer;
         background-color: var(--primary-dark);
     }
 
@@ -235,9 +214,5 @@
 
     .profile .role {
         height: 100%;
-    }
-
-    .profile .edit-mode .bttns button:hover {
-        cursor: pointer;
     }
 }

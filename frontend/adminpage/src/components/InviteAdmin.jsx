@@ -91,8 +91,8 @@ export default function InviteAdmin({ setInvites, setInviteNewAdmin }) {
                             ))}
                         </div>
                         <div className="bttns">
-                            <button disabled={isLoading} type="submit">Send</button>
-                            <button onClick={() => setInviteNewAdmin(false)}>Cancel</button>
+                            <button className="submit" disabled={isLoading} type="submit">Send</button>
+                            <button className="cancel" onClick={() => setInviteNewAdmin(false)}>Cancel</button>
                         </div>
                     </>
                 }

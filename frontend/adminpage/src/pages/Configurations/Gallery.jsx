@@ -152,8 +152,8 @@ export default function Gallery() {
                             <input checked={newPhoto.hide} type="checkbox" onChange={() => setNewPhoto(prev => ({ ...prev, hide: !prev.hide }))} />
                         </div>
                         <div className='bttns'>
-                            <button onClick={submitNewPhoto}>Add</button>
-                            <button onClick={handleClear}>Clear</button>
+                            <button className='submit' onClick={submitNewPhoto}>Add</button>
+                            <button className='cancel' onClick={handleClear}>Clear</button>
                         </div>
                     </div>
                     <div className="button-header">

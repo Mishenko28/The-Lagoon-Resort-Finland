@@ -120,8 +120,8 @@ const Confirmed = ({ fetchTotals, convertToNight }) => {
                                     <td>₱{book.balance.toLocaleString()}</td>
                                     <td>
                                         <div className="bttns">
-                                            <button onClick={e => { e.stopPropagation(), setToChange(book) }} className="blue">Change</button>
-                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="red">Cancel</button>
+                                            <button onClick={e => { e.stopPropagation(), setToChange(book) }} className="edit">Change</button>
+                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="delete">Cancel</button>
                                         </div>
                                     </td>
                                 </motion.tr>

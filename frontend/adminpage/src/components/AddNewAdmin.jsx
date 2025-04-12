@@ -153,8 +153,8 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
                             </div>
                         </div>
                         <div className="bttns">
-                            <button type="submit" disabled={isLoading}>Save</button>
-                            <button onClick={() => setNewAdminTogg(false)}>Cancel</button>
+                            <button className="submit" type="submit" disabled={isLoading}>Save</button>
+                            <button className="cancel" onClick={() => setNewAdminTogg(false)}>Cancel</button>
                         </div>
                     </>
                 }

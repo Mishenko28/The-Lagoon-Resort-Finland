@@ -144,8 +144,8 @@ export default function Admins() {
                                 }
                                 {systemEmailIsEditing &&
                                     <div className="bttns">
-                                        <button onClick={() => setSystemEmailIsEditing(false)} type="button">Cancel</button>
-                                        {JSON.stringify(systemEmail) !== JSON.stringify(newSystemEmail) && <button type="submit">Save</button>}
+                                        <button onClick={() => setSystemEmailIsEditing(false)} type="button" className="cancel">Cancel</button>
+                                        {JSON.stringify(systemEmail) !== JSON.stringify(newSystemEmail) && <button className="submit" type="submit">Save</button>}
                                     </div>
                                 }
                             </motion.form>

@@ -51,8 +51,8 @@ const CancelBook = ({ fetchTotals, convertToNight, setBooks, setToCancel, toCanc
                     }
                 </div>
                 <div className="bttns">
-                    <button type="submit" disabled={isLoading} className="green">Yes</button>
-                    <button onClick={() => setToCancel(null)} className="red">Back</button>
+                    <button type="submit" disabled={isLoading} className="submit">Yes</button>
+                    <button onClick={() => setToCancel(null)} className="cancel">Back</button>
                 </div>
             </form>
         </div>

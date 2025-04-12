@@ -122,41 +122,6 @@
     justify-content: center;
 }
 
-.booking button {
-    border: none;
-    height: 30px;
-    min-width: 50px;
-    padding: 5px;
-    font-size: 0.5rem;
-    border-radius: 5px;
-    text-wrap: nowrap;
-}
-
-.booking button.green {
-    background-color: var(--green);
-    color: #fff;
-}
-
-.booking button.secondary {
-    background-color: var(--secondary);
-    color: #fff;
-}
-
-.booking button.red {
-    background-color: var(--red);
-    color: #fff;
-}
-
-.booking button.blue {
-    background-color: var(--blue);
-    color: #fff;
-}
-
-.booking button.gray {
-    background-color: var(--gray);
-    color: #fff;
-}
-
 /* CONFIRM BOOK */
 .booking .confirm-book {
     position: relative;
@@ -772,14 +737,6 @@
     .booking table td .fa-envelope {
         cursor: pointer;
         font-size: 1.5rem;
-    }
-
-    .booking button {
-        height: 40px;
-        font-size: 0.8rem;
-        min-width: 60px;
-        padding: 8px;
-        cursor: pointer;
     }
 
     .booking .confirm-book {

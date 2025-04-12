@@ -138,8 +138,8 @@ export default function Pending({ fetchTotals, convertToNight }) {
                                     <td>{formatDistanceToNow(book.createdAt, { addSuffix: 1 })}</td>
                                     <td>
                                         <div className="bttns">
-                                            <button onClick={e => { e.stopPropagation(), setToConfirm(book) }} className="green">Confirm</button>
-                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="red">Cancel</button>
+                                            <button onClick={e => { e.stopPropagation(), setToConfirm(book) }} className="submit">Confirm</button>
+                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="delete">Cancel</button>
                                         </div>
                                     </td>
                                 </motion.tr>

@@ -5,22 +5,13 @@
     margin-bottom: 30px;
 }
 
-.button-header button {
-    padding: 10px 15px;
-    border: none;
-    background-color: var(--primary);
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0.7em;
-}
-
 .button-header .sort-wrapper {
     position: relative;
 }
 
 .button-header .sort-wrapper .selections {
     position: absolute;
-    top: 34px;
+    top: 100%;
     left: 0;
     display: flex;
     flex-direction: column;
@@ -29,8 +20,9 @@
     border: 1px solid var(--light-gray);
     border-radius: 8px;
     padding: 5px;
-    width: max-content;
+    min-width: 100%;
     z-index: 1;
+    box-sizing: border-box;
 }
 
 .button-header .sort-wrapper .selections h1 {
@@ -42,6 +34,10 @@
     text-align: start;
     color: var(--gray);
     font-weight: 500;
+
+    &:hover {
+        background-color: var(--light-gray);
+    }
 }
 
 .button-header .sort-wrapper .selections h1 i {
@@ -112,24 +108,6 @@
 .system-email-form .bttns {
     display: flex;
     gap: 10px;
-}
-
-.system-email-form button {
-    border: none;
-    font-size: 0.9rem;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 3px;
-    width: max-content;
-    cursor: pointer;
-}
-
-.system-email-form button[type="submit"] {
-    background-color: var(--green);
-}
-
-.system-email-form button[type="button"] {
-    background-color: var(--red);
 }
 
 .room-types {
@@ -203,15 +181,6 @@
 .room-cont .room-type-header .room-type-details .bttns {
     display: flex;
     gap: 5px;
-}
-
-.room-cont .room-type-header .room-type-details .bttns button {
-    padding: 10px;
-    border: none;
-    background-color: unset;
-    border: 1px solid var(--light-gray);
-    border-radius: 2px;
-    font-size: 0.8rem;
 }
 
 .room-cont .room-type-header input {
@@ -293,16 +262,21 @@
     z-index: 1;
 }
 
-.room-cont .room-type-content .room-settings button {
+.room-cont .room-type-content .room-settings p {
     display: flex;
     gap: 8px;
     border: none;
-    width: 60px;
+    width: 80px;
     padding-block: 4px;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     background-color: #fff;
     font-weight: 500;
     color: var(--gray);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--light-gray);
+    }
 }
 
 .room-cont .room-type-content .no-room {
@@ -311,16 +285,6 @@
     align-items: center;
     width: 100%;
     height: 100px;
-}
-
-.room-cont .room-type-content .no-room button {
-    padding: 10px;
-    border: 1px solid var(--light-gray);
-    background-color: #fff;
-    border-radius: 2px;
-    border-radius: 8px;
-    color: var(--gray);
-    font-weight: 500;
 }
 
 .room-cont .room-type-delete {
@@ -357,23 +321,6 @@
     gap: 5px;
     justify-content: center;
     align-items: center;
-    border: none;
-    width: 80px;
-    padding-block: 10px;
-    color: #fff;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-.room-cont .room-type-delete .bttns button:first-child {
-    background-color: var(--red);
-}
-
-.room-cont .room-type-delete .bttns button:last-child {
-    background-color: #fff;
-    border: 1px solid var(--light-gray);
-    color: var(--primary);
 }
 
 .room-cont .room-type-image {
@@ -414,15 +361,6 @@
     display: flex;
     justify-content: flex-start;
     gap: 10px;
-}
-
-.room-cont .room-type-image .bttns button {
-    padding: 10px;
-    border: none;
-    background-color: unset;
-    border: 1px solid var(--light-gray);
-    border-radius: 2px;
-    font-size: 0.8rem;
 }
 
 .room-add {
@@ -485,17 +423,7 @@
 }
 
 .room-add button {
-    width: 60px;
     align-self: flex-end;
-    padding-block: 10px;
-    background-color: var(--green);
-    border: none;
-    color: #fff;
-    border-radius: 2px;
-}
-
-.room-add .bttns button:first-child {
-    background-color: var(--red);
 }
 
 .room-add .fa-xmark {
@@ -548,15 +476,6 @@
     color: #fff;
 }
 
-.change-down-payment button {
-    padding: 5px 10px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0.6rem;
-}
-
 .add-room-type {
     position: relative;
     display: flex;
@@ -595,12 +514,6 @@
 
 .add-room-type button {
     align-self: flex-start;
-    padding: 10px 20px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0.6rem;
 }
 
 .card-and-table-togg-cont {
@@ -614,12 +527,10 @@
 }
 
 .card-and-table-togg-cont button {
-    padding: 8px 15px;
     border: none;
     background-color: #fff;
-    font-size: 0.6em;
-    font-weight: 700;
-    border-radius: 10px;
+    color: var(--primary);
+    transition: all 0.3s;
 }
 
 .room-table-cont {
@@ -689,7 +600,7 @@
     background-color: var(--primary);
     padding: 10px;
     color: #fff;
-    width: max-content;
+    width: 300px;
 }
 
 .change-check-in-out .check-in-out {
@@ -699,29 +610,17 @@
 }
 
 .change-check-in-out input {
-    padding: 5px;
+    padding: 10px;
     border: none;
     font-size: 0.8rem;
     color: var(--primary);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .change-check-in-out .bttns {
     display: flex;
     gap: 10px;
-}
-
-.change-check-in-out button {
-    padding: 10px 15px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0.6rem;
-    cursor: pointer;
-}
-
-.change-check-in-out button:last-of-type {
-    background-color: var(--red);
 }
 
 .change-check-in-out .fa-xmark {
@@ -898,23 +797,6 @@
     display: flex;
     gap: 10px;
     align-self: flex-start;
-}
-
-.gallery-add-cont .bttns button {
-    padding-block: 8px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 8px;
-    width: 70px;
-    font-size: 0.6rem;
-    font-weight: 700;
-}
-
-.gallery-add-cont button:last-of-type {
-    background-color: #fff;
-    color: var(--primary);
-    border: 1px solid var(--light-gray);
 }
 
 .gallery-add-cont .hide-wrapper {
@@ -1115,30 +997,6 @@
     gap: 10px;
 }
 
-.add-room-sub-img .bttns button {
-    padding: 10px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.add-room-sub-img .bttns button:nth-child(2) {
-    background-color: #fff;
-    color: var(--gray);
-    border: 1px solid var(--light-gray);
-}
-
-.add-room-sub-img .bttns .delete {
-    position: absolute;
-    right: 0;
-    background-color: var(--red);
-    color: #fff;
-    border: 1px solid var(--light-gray);
-}
-
 .add-room-sub-img .fa-xmark {
     position: absolute;
     right: 5px;
@@ -1177,25 +1035,6 @@
 .add-room-sub-img .delete-bttns {
     display: flex;
     gap: 10px;
-}
-
-.add-room-sub-img .delete-bttns button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 10px;
-    border: none;
-    background-color: var(--red);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.add-room-sub-img .delete-bttns button:last-of-type {
-    background-color: #fff;
-    color: var(--primary);
-    border: 1px solid var(--light-gray);
 }
 
 /* about us */
@@ -1366,18 +1205,6 @@
     display: flex;
     gap: 5px;
     align-items: center;
-    padding: 10px;
-    border: none;
-    background-color: var(--red);
-    color: #fff;
-    border-radius: 10px;
-    font-weight: 500;
-}
-
-.confirmation-cont .bttns button:last-of-type {
-    background-color: #fff;
-    color: var(--primary);
-    border: 1px solid var(--light-gray);
 }
 
 .map-container {
@@ -1403,23 +1230,6 @@
 .map-container .bttns-down {
     display: flex;
     gap: 10px;
-}
-
-.map-container button {
-    padding: 10px;
-    border: none;
-    background-color: var(--green);
-    color: #fff;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.map-container button:last-of-type {
-    background-color: #fff;
-    color: var(--primary);
-    border: 1px solid var(--light-gray);
 }
 
 .map-container .map-inputs {
@@ -1466,19 +1276,6 @@
 
 /* PC */
 @media (min-width: 1025px) {
-    .button-header button {
-        cursor: pointer;
-        padding: 15px 20px;
-    }
-
-    .button-header .sort-wrapper .selections {
-        top: 45px;
-    }
-
-    .button-header button:hover {
-        background-color: var(--primary-dark);
-    }
-
     .room-cont .room-type-header {
         padding: 10px;
     }
@@ -1493,10 +1290,6 @@
 
     .room-cont .room-type-header h2 span {
         font-size: 1rem;
-    }
-
-    .room-cont .room-type-header .room-type-details .bttns button {
-        cursor: pointer;
     }
 
     .room-cont .room-type-header input {
@@ -1543,15 +1336,10 @@
         width: 200px;
     }
 
-    .room-cont .room-type-content .room-settings button {
+    .room-cont .room-type-content .room-settings p {
         width: 100px;
         padding-block: 6px;
         font-size: 0.8rem;
-        cursor: pointer;
-    }
-
-    .room-cont .room-type-content .no-room button {
-        padding: 15px;
         cursor: pointer;
     }
 
@@ -1568,16 +1356,6 @@
         margin: 20px;
     }
 
-    .room-cont .room-type-delete .bttns button {
-        width: 100px;
-        padding-block: 15px;
-        cursor: pointer;
-    }
-
-    .room-cont .room-type-image .bttns button {
-        cursor: pointer;
-    }
-
     .room-add form {
         width: 350px;
     }
@@ -1589,12 +1367,6 @@
     .room-add .room-add-input input[type="checkbox"] {
         width: 25px;
         height: 25px;
-    }
-
-    .room-add button {
-        width: 80px;
-        padding-block: 12px;
-        cursor: pointer;
     }
 
     .infos h1 {
@@ -1620,11 +1392,6 @@
         font-size: 1rem;
     }
 
-    .change-down-payment button {
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
     .add-room-type {
         max-width: 350px;
         padding: 50px 10px 10px 10px;
@@ -1633,11 +1400,6 @@
     .add-room-type h1 {
         top: 15px;
         font-size: 1rem;
-    }
-
-    .add-room-type button {
-        padding: 15px 25px;
-        cursor: pointer;
     }
 
     .room-table-cont img {
@@ -1668,18 +1430,6 @@
     .room-table-cont table td span {
         padding: 4px;
         font-size: 0.8rem;
-    }
-
-    .button-header .sort-wrapper .selections h1 {
-        cursor: pointer;
-    }
-
-    .button-header .sort-wrapper .selections h1:hover {
-        background-color: var(--primary-dark);
-    }
-
-    .card-and-table-togg-cont button {
-        cursor: pointer;
     }
 
     .amenity-card {
@@ -1761,11 +1511,6 @@
 
     .gallery-add img {
         width: 200px;
-    }
-
-    .gallery-add-cont .bttns button {
-        cursor: pointer;
-        padding-block: 10px;
     }
 
     .gallery-add-cont .hide-wrapper input[type="checkbox"] {
@@ -1883,14 +1628,6 @@
         width: 280px;
     }
 
-    .add-room-sub-img .bttns button {
-        padding: 10px 20px;
-    }
-
-    .add-room-sub-img .bttns button:hover {
-        cursor: pointer;
-    }
-
     .add-room-sub-img .img-cont {
         padding: 15px 25px;
     }
@@ -1901,14 +1638,6 @@
 
     .add-room-sub-img .img-cont img {
         width: 200px;
-    }
-
-    .add-room-sub-img .delete-bttns button {
-        padding: 10px 20px;
-    }
-
-    .add-room-sub-img .delete-bttns button:hover {
-        cursor: pointer;
     }
 
     .about-us {
@@ -2001,14 +1730,6 @@
     .about-us-phone-num-cont .confirmation-cont {
         gap: 15px;
         width: 300px;
-    }
-
-    .confirmation-cont .bttns button {
-        padding: 10px 20px;
-    }
-
-    .confirmation-cont .bttns button:hover {
-        cursor: pointer;
     }
 
     .map-container {

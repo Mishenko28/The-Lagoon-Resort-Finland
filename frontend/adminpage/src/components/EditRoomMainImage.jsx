@@ -40,8 +40,8 @@ export default function EditRoomMainImage({ isEditingMainImg, setIsEditingMainIm
                 <img src={base64} />
                 <input type="file" accept='png, jpeg, jpg' onChange={(e) => convertToBase64(e.target.files[0])} />
                 <div className="bttns">
-                    <button disabled={isLoading} type="submit">Save</button>
-                    <button onClick={() => setIsEditingMainImg(null)}>Cancel</button>
+                    <button className="submit" disabled={isLoading} type="submit">Save</button>
+                    <button className="cancel" onClick={() => setIsEditingMainImg(null)}>Cancel</button>
                 </div>
                 <i onClick={() => setIsEditingMainImg(null)} className="fa-solid fa-xmark" />
             </form>

@@ -278,8 +278,8 @@ export default function Rooms() {
                                     />
                                 </div>
                                 <div className='bttns'>
-                                    <button type='submit'>Save</button>
-                                    <button type='button' onClick={() => setNewTime(null)} >Cancel</button>
+                                    <button className='submit' type='submit'>Save</button>
+                                    <button className='delete' type='button' onClick={() => setNewTime(null)} >Cancel</button>
                                 </div>
                             </motion.form>
                         }
@@ -303,7 +303,7 @@ export default function Rooms() {
                                 <textarea value={newRoomType.caption} onChange={e => setNewRoomType(prev => ({ ...prev, caption: e.target.value }))} rows={4} placeholder='caption'></textarea>
                                 <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
                                 {newRoomType.img && <img src={newRoomType.img} />}
-                                <button disabled={newRoomTypeIsLoading} type='submit'>Add</button>
+                                <button className='submit' disabled={newRoomTypeIsLoading} type='submit'>Add</button>
                                 <i onClick={cancelNewRoomType} className="fa-solid fa-xmark" />
                             </motion.form>
                         }
@@ -321,7 +321,7 @@ export default function Rooms() {
                                 {changeDownPaymentIsLoading && <div className='loader-line'></div>}
                                 <h1>Change Down Payment: Percentage (1-100)</h1>
                                 <input ref={newDownPaymentRef} onChange={(e) => setNewDownPayment(Math.min(e.target.value / 100, 1))} value={newDownPayment * 100 === 0 ? "" : newDownPayment * 100} type='number' placeholder='type here' />
-                                <button disabled={!newDownPayment || changeDownPaymentIsLoading} type='submit'>Save</button>
+                                <button className='submit' disabled={!newDownPayment || changeDownPaymentIsLoading} type='submit'>Save</button>
                                 <i onClick={() => setNewDownPayment(null)} className="fa-solid fa-xmark" />
                             </motion.form>
                         }

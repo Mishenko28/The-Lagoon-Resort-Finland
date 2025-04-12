@@ -145,15 +145,15 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                     <td>
                                         <div className="bttns">
                                             {book.showed ?
-                                                <button onClick={e => { e.stopPropagation(), setToComplete(book) }} className="green">Complete</button>
+                                                <button onClick={e => { e.stopPropagation(), setToComplete(book) }} className="submit">Complete</button>
                                                 :
                                                 <>
-                                                    <button onClick={e => { e.stopPropagation(), setToShowed(book) }} className="secondary">Showed</button>
-                                                    <button onClick={e => { e.stopPropagation(), setToNoShow(book) }} className="gray">No-show</button>
+                                                    <button onClick={e => { e.stopPropagation(), setToShowed(book) }} className="cancel">Showed</button>
+                                                    <button onClick={e => { e.stopPropagation(), setToNoShow(book) }}>No-show</button>
                                                 </>
                                             }
-                                            <button onClick={e => { e.stopPropagation(), setToChange(book) }} className="blue">Change</button>
-                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="red">Cancel</button>
+                                            <button onClick={e => { e.stopPropagation(), setToChange(book) }} className="edit">Change</button>
+                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="delete">Cancel</button>
                                         </div>
                                     </td>
                                 </motion.tr>
@@ -178,8 +178,8 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                             <h1>Mark as Showed</h1>
                             <p>Are you sure you want to mark this booking as showed?</p>
                             <div className="bttns">
-                                <button disabled={isShowedLoading} onClick={handleSubmitShowed} className="green">Yes</button>
-                                <button onClick={() => setToShowed(null)} className="red">Back</button>
+                                <button disabled={isShowedLoading} onClick={handleSubmitShowed} className="submit">Yes</button>
+                                <button onClick={() => setToShowed(null)} className="cancel">Back</button>
                             </div>
                         </div>
                     </div>

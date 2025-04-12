@@ -149,7 +149,7 @@
             border-radius: 15px;
             padding: 10px;
             height: 400px;
-            width: 450px;
+            width: 420px;
 
             & .labels {
                 display: flex;
@@ -268,21 +268,6 @@
                     & .bttns {
                         display: flex;
                         gap: 5px;
-
-                        & button:last-of-type {
-                            background: var(--red);
-                        }
-
-                        & button {
-                            background: var(--primary);
-                            color: white;
-                            border: none;
-                            border-radius: 5px;
-                            padding: 10px;
-                            width: 80px;
-                            font-size: 0.8rem;
-                            cursor: pointer;
-                        }
                     }
                 }
             }

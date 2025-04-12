@@ -16,7 +16,7 @@
     --light-green: #4caf4f84;
 
     --blue: #2196F3;
-    --blue-light: #2196F326;
+    --blue-light: #2195f34d;
 
     --gold: #FFD700;
     --gold-dark: #c5a800;
@@ -66,6 +66,74 @@ input[type=number]::-webkit-inner-spin-button {
     }
 }
 
+button {
+    background-color: var(--primary);
+    color: #fff;
+    border: 2px solid var(--primary);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    min-width: 80px;
+
+    &:hover {
+        background-color: var(--gray);
+        transition: all 0.3s;
+    }
+
+    &.submit {
+        background-color: var(--green);
+        border: 2px solid var(--green);
+
+        &:hover {
+            background-color: var(--light-green);
+            color: var(--green);
+            transition: all 0.3s;
+        }
+    }
+
+    &.delete {
+        background-color: var(--red);
+        border: 2px solid var(--red);
+
+        &:hover {
+            background-color: var(--light-red);
+            color: var(--red);
+            transition: all 0.3s;
+        }
+    }
+
+    &.edit {
+        background-color: var(--blue);
+        border: 2px solid var(--blue);
+
+        &:hover {
+            background-color: var(--blue-light);
+            color: var(--blue);
+            transition: all 0.3s;
+        }
+    }
+
+    &.cancel {
+        background-color: unset;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        font-weight: 600;
+
+        &:hover {
+            background-color: var(--light-gray);
+            transition: all 0.3s;
+        }
+    }
+}
+
+@media (min-width: 1025px) {
+    button {
+        border-radius: 6px;
+        padding: 12px 18px;
+        font-size: 0.9rem;
+    }
+}
 
 
 

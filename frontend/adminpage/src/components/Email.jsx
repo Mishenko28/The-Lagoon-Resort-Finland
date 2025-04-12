@@ -152,8 +152,8 @@ export default function Email({ emails, setEmails }) {
                             <span>{emailToDelete.url}</span>
                         </div>
                         <div className='bttns'>
-                            <button onClick={() => deleteEmail(emails.indexOf(emailToDelete))}><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={() => setEmailToDelete(null)}>Cancel</button>
+                            <button className='delete' onClick={() => deleteEmail(emails.indexOf(emailToDelete))}><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button className='cancel' onClick={() => setEmailToDelete(null)}>Cancel</button>
                         </div>
                     </div>
                 </div>

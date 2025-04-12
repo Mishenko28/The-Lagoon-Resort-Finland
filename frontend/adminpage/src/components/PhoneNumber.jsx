@@ -153,8 +153,8 @@ export default function PhoneNumber({ phoneNums, setPhoneNums }) {
                             <span>{phoneNumToDelete.number}</span>
                         </div>
                         <div className='bttns'>
-                            <button onClick={() => deletePhoneNum(phoneNumToDelete.index)}><i className="fa-solid fa-trash-can" />Delete</button>
-                            <button onClick={() => setPhoneNumToDelete(null)}>Cancel</button>
+                            <button className='delete' onClick={() => deletePhoneNum(phoneNumToDelete.index)}><i className="fa-solid fa-trash-can" />Delete</button>
+                            <button className='cancel' onClick={() => setPhoneNumToDelete(null)}>Cancel</button>
                         </div>
                     </div>
                 </div>
