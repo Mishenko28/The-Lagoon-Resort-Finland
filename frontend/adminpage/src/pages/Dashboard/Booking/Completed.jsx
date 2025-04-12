@@ -119,10 +119,10 @@ const Completed = ({ convertToNight }) => {
                                         ))}
                                     </td>
                                     <td>{book.note && <i onClick={() => setOpenedNote(book.note)} className="fa-solid fa-envelope" />}</td>
-                                    <td>₱{book.deposit}</td>
-                                    <td>₱{book.total}</td>
-                                    <td>₱{book.payed}</td>
-                                    <td>₱{book.balance}</td>
+                                    <td>₱{book.deposit.toLocaleString()}</td>
+                                    <td>₱{book.total.toLocaleString()}</td>
+                                    <td>₱{book.payed.toLocaleString()}</td>
+                                    <td>₱{book.balance.toLocaleString()}</td>
                                 </motion.tr>
                             ))}
                         </AnimatePresence>

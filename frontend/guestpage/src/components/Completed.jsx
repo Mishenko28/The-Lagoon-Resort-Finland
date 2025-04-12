@@ -72,11 +72,11 @@ const Completed = () => {
                                     <div className="room-wrapper" key={room._id}>
                                         <div key={room._id} className="room">
                                             <h1>{room.roomType}</h1>
-                                            <h2>₱{room.rate}</h2>
+                                            <h2>₱{room.rate.toLocaleString()}</h2>
                                         </div>
                                         <div className="added-person">
                                             <h1>{Array.from({ length: room.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}{room.addedPerson !== 0 && " + "}{Array.from({ length: room.addedPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)} ({room.addedPerson + room.maxPerson})</h1>
-                                            {room.addedPerson !== 0 && <h2>({room.addedPerson} x {room.addedPersonRate}) ₱{room.addedPerson * room.addedPersonRate}</h2>}
+                                            {room.addedPerson !== 0 && <h2>({room.addedPerson} x {room.addedPersonRate.toLocaleString()}) ₱{(room.addedPerson * room.addedPersonRate).toLocaleString()}</h2>}
                                         </div>
                                     </div>
                                 ))}
@@ -87,7 +87,7 @@ const Completed = () => {
                                             {book.addCharges.map(charge => (
                                                 <div key={charge._id} className="room">
                                                     <h1>{charge.charge}</h1>
-                                                    <h2>₱{charge.amount}</h2>
+                                                    <h2>₱{charge.amount.toLocaleString()}</h2>
                                                 </div>
                                             ))}
                                         </div>
@@ -99,17 +99,17 @@ const Completed = () => {
                                         <>
                                             <div className="total">
                                                 <h1>Total per day:</h1>
-                                                <h2>₱{book.room.reduce((acc, curr) => acc + (curr.rate + (curr.addedPerson * curr.addedPersonRate)), 0)}</h2>
+                                                <h2>₱{book.room.reduce((acc, curr) => acc + (curr.rate + (curr.addedPerson * curr.addedPersonRate)), 0).toLocaleString()}</h2>
                                             </div>
                                             <div className="total">
                                                 <h1>Final total:</h1>
-                                                <h2>({formatDistance(book.from, book.to)} x {book.room.reduce((acc, curr) => acc + (curr.rate + (curr.addedPerson * curr.addedPersonRate)), 0)}) ₱{book.total}</h2>
+                                                <h2>({formatDistance(book.from, book.to)} x {book.room.reduce((acc, curr) => acc + (curr.rate + (curr.addedPerson * curr.addedPersonRate)), 0).toLocaleString()}) ₱{book.total.toLocaleString()}</h2>
                                             </div>
                                         </>
                                         :
                                         <div className="total">
                                             <h1>Total:</h1>
-                                            <h2>₱{book.total}</h2>
+                                            <h2>₱{book.total.toLocaleString()}</h2>
                                         </div>
                                     }
                                 </div>

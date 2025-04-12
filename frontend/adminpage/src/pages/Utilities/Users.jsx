@@ -113,7 +113,7 @@ const Users = () => {
                             <input onBlur={() => page === "" && setPage(1)} type="number" onChange={e => setPage(e.target.value === "" ? "" : Math.min(Math.ceil(totalUsers / 30), e.target.value))} value={page} />
                             <button onClick={() => setPage(prev => Math.min(Math.ceil(totalUsers / 30), prev + 1))} className="next"><i className="fa-solid fa-caret-right" /></button>
                         </div>
-                        <h1>Total Users: {totalUsers}</h1>
+                        <h1>Total Users: {totalUsers.toLocaleString()}</h1>
                         <button className="add" onClick={() => setNewUserTogg(true)}>Add User</button>
                     </div>
                     <div className="table-cont">

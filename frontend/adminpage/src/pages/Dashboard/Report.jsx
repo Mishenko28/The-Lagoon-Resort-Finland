@@ -44,6 +44,7 @@ const Report = () => {
                 let checkOut
                 let roomAvailability
                 let totalPerStatus
+                let payments
 
                 await Promise.all([
                     axios.post("room-type/available-rooms", { from: day, to: tomottow })
@@ -56,6 +57,7 @@ const Report = () => {
                             checkIn = res.data.checkIn
                             checkOut = res.data.checkOut
                             totalPerStatus = res.data.totalPerStatus
+                            payments = res.data.payments
                         })
                 ])
                     .catch((err) => {
@@ -69,7 +71,8 @@ const Report = () => {
                     checkIn,
                     checkOut,
                     roomAvailability,
-                    totalPerStatus
+                    totalPerStatus,
+                    payments
                 })
                 break
 
@@ -82,7 +85,8 @@ const Report = () => {
                             date: `${format(start, "M/d/yyyy")} - ${format(end, "M/d/yyyy")}`,
                             totalBookings: res.data.totalBookings,
                             revenue: res.data.revenue,
-                            totalPerStatus: res.data.totalPerStatus
+                            totalPerStatus: res.data.totalPerStatus,
+                            payments: res.data.payments
                         })
                     })
                     .catch((err) => {
@@ -98,7 +102,8 @@ const Report = () => {
                             date: format(month, "MMMM yyyy"),
                             totalBookings: res.data.totalBookings,
                             revenue: res.data.revenue,
-                            totalPerStatus: res.data.totalPerStatus
+                            totalPerStatus: res.data.totalPerStatus,
+                            payments: res.data.payments
                         })
                     })
                     .catch((err) => {
@@ -114,7 +119,8 @@ const Report = () => {
                             date: format(year, "yyyy"),
                             totalBookings: res.data.totalBookings,
                             revenue: res.data.revenue,
-                            totalPerStatus: res.data.totalPerStatus
+                            totalPerStatus: res.data.totalPerStatus,
+                            payments: res.data.payments
                         })
                     })
                     .catch((err) => {
@@ -135,7 +141,8 @@ const Report = () => {
         checkIn = [],
         checkOut = [],
         roomAvailability = [],
-        totalPerStatus = []
+        totalPerStatus = [],
+        payments = []
     }) => {
         /** @type {import('pdfmake/interfaces').TDocumentDefinitions} */
 
@@ -148,9 +155,9 @@ const Report = () => {
                     { text: book.user.age, fontSize: 10 },
                     { text: book.user.contact, fontSize: 10 },
                     { text: book.room.map(r => `${r.roomType} R${r.roomNo}`).join(", "), fontSize: 10 },
-                    { text: book.payed.toLocaleString(), fontSize: 10 },
-                    { text: book.total.toLocaleString(), fontSize: 10 },
-                    { text: book.balance.toLocaleString(), fontSize: 10 }
+                    { text: book.payed.toLocaleString(), fontSize: 10, alignment: "right" },
+                    { text: book.total.toLocaleString(), fontSize: 10, alignment: "right" },
+                    { text: book.balance.toLocaleString(), fontSize: 10, alignment: "right" }
                 ]
             })
 
@@ -175,7 +182,7 @@ const Report = () => {
                             [
                                 { text: room.roomType, rowSpan: room.rooms.length },
                                 { text: `R${r.roomNo}`, fontSize: 10, margin: [0, 0, 0, 0] },
-                                { text: r.available ? "Available" : "Occupied", fontSize: 10, margin: [0, 0, 0, 0], alignment: "center", background: r.available ? "#0f0" : "#f00" }
+                                { text: r.available ? "Available" : "Occupied", fontSize: 10, margin: [0, 0, 0, 0], alignment: "center", background: r.available ? "#0f0" : "#f00", padding: 10 }
                             ]
                         )
                     } else {
@@ -193,9 +200,21 @@ const Report = () => {
         const statusTable = (totalPerStatus) => {
             let table = totalPerStatus.map(status => {
                 return [
-                    { text: status.status, fontSize: 12, },
-                    { text: status.totalBooks, fontSize: 12, alignment: "center" },
-                    { text: status.totalAmount.toLocaleString(), fontSize: 12, alignment: "center" }
+                    { text: status.status, fontSize: 10, },
+                    { text: status.totalBooks.toLocaleString(), fontSize: 10, alignment: "center" },
+                    { text: status.totalAmount.toLocaleString(), fontSize: 10, alignment: "right" }
+                ]
+            })
+
+            return table
+        }
+
+        const dailyPaymentTable = (payments) => {
+            let table = payments.map((payment, i) => {
+                return [
+                    { text: i + 1, fontSize: 10, alignment: "center" },
+                    { text: payment.name, fontSize: 10 },
+                    { text: parseInt(payment.amount).toLocaleString(), fontSize: 10, alignment: "right" }
                 ]
             })
 
@@ -205,7 +224,7 @@ const Report = () => {
         const docDefinition = {
             pageSize: 'A4',
             pageMargins: [40, 80, 40, 60],
-            header: { text: 'THE LAGOON RESORT FINLAND INC.', margin: [0, 30], alignment: 'center', fontSize: 20, bold: true },
+            header: { text: 'THE LAGOON RESORT FINLAND INC. GENERAL REPORT', margin: [0, 30], alignment: 'center', fontSize: 18, bold: true },
             content: [
                 {
                     columns: [
@@ -221,6 +240,12 @@ const Report = () => {
                                     { text: "Reporting Date: ", fontSize: 12, bold: true, width: 90 },
                                     { text: date, fontSize: 12 }
                                 ], marginBottom: 5
+                            },
+                            {
+                                columns: [
+                                    { text: "Revenue: ", fontSize: 12, bold: true, width: 90 },
+                                    { text: "₱" + revenue.toLocaleString(), fontSize: 12 }
+                                ], marginBottom: 5
                             }
                         ],
                         [
@@ -235,7 +260,23 @@ const Report = () => {
                                     { text: "Prepared Date: ", fontSize: 12, bold: true, width: 90 },
                                     { text: new Date().toLocaleDateString(), fontSize: 12 }
                                 ], marginBottom: 5
-                            }
+                            },
+                            report === "daily" ?
+                                {
+
+                                    columns: [
+                                        { text: "New Bookings: ", fontSize: 12, bold: true, width: 90 },
+                                        { text: newBooksTotal.toLocaleString(), fontSize: 12 }
+                                    ], marginBottom: 5
+                                }
+                                :
+                                {
+
+                                    columns: [
+                                        { text: "Total Bookings: ", fontSize: 12, bold: true, width: 90 },
+                                        { text: totalBookings.toLocaleString(), fontSize: 12 }
+                                    ], marginBottom: 5
+                                }
                         ]
                     ], marginBottom: 20
                 },
@@ -245,10 +286,10 @@ const Report = () => {
                         headerRows: 3,
                         body: [
                             [
-                                { text: "Check In Today", alignment: 'center', colSpan: 9, fontSize: 15, bold: true }, "", "", "", "", "", "", "", ""
+                                { text: "Check In Today", alignment: 'center', colSpan: 9, fontSize: 12, bold: true }, "", "", "", "", "", "", "", ""
                             ],
                             [
-                                { text: "No.", rowSpan: 2, alignment: 'center', fontSize: 10 }, { text: "Guest", alignment: 'center', colSpan: 4, fontSize: 12, bold: true }, "", "", "", { text: "Reservation", alignment: 'center', colSpan: 4, fontSize: 12, bold: true }, "", "", ""
+                                { text: "No.", rowSpan: 2, alignment: 'center', fontSize: 10 }, { text: "Guest", alignment: 'center', colSpan: 4, fontSize: 10, bold: true }, "", "", "", { text: "Reservation", alignment: 'center', colSpan: 4, fontSize: 10, bold: true }, "", "", ""
                             ],
                             [
                                 "",
@@ -271,10 +312,10 @@ const Report = () => {
                         headerRows: 3,
                         body: [
                             [
-                                { text: "Check Out Today", alignment: 'center', colSpan: 9, fontSize: 15, bold: true }, "", "", "", "", "", "", "", ""
+                                { text: "Check Out Today", alignment: 'center', colSpan: 9, fontSize: 12, bold: true }, "", "", "", "", "", "", "", ""
                             ],
                             [
-                                { text: "No.", rowSpan: 2, alignment: 'center', fontSize: 10 }, { text: "Guest", alignment: 'center', colSpan: 4, fontSize: 12, bold: true }, "", "", "", { text: "Reservation", alignment: 'center', colSpan: 4, fontSize: 12, bold: true }, "", "", ""
+                                { text: "No.", rowSpan: 2, alignment: 'center', fontSize: 10 }, { text: "Guest", alignment: 'center', colSpan: 4, fontSize: 10, bold: true }, "", "", "", { text: "Reservation", alignment: 'center', colSpan: 4, fontSize: 10, bold: true }, "", "", ""
                             ],
                             [
                                 "",
@@ -298,21 +339,21 @@ const Report = () => {
                             headerRows: 1,
                             body: [
                                 [
-                                    { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 15, bold: true }, "", ""
+                                    { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 12, bold: true }, "", ""
                                 ],
                                 [
-                                    { text: "Status", alignment: 'center', fontSize: 12, bold: true },
-                                    { text: "Total Booked", alignment: 'center', fontSize: 12, bold: true },
-                                    { text: "Total Amount", alignment: 'center', fontSize: 12, bold: true }
+                                    { text: "Status", alignment: 'center', fontSize: 10 },
+                                    { text: "Total Booked", alignment: 'center', fontSize: 10 },
+                                    { text: "Total Amount", alignment: 'center', fontSize: 10 }
                                 ],
                                 ...statusTable(totalPerStatus),
                                 [
-                                    { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
-                                    { text: totalBookings, alignment: 'center', fontSize: 12, bold: true },
-                                    { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'center', fontSize: 12, bold: true }
+                                    { text: "Sum Total", alignment: 'center', fontSize: 10, bold: true },
+                                    { text: totalBookings.toLocaleString(), alignment: 'center', fontSize: 10, bold: true },
+                                    { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'right', fontSize: 10, bold: true }
                                 ]
                             ]
-                        }
+                        }, marginBottom: 20
                     }
                     :
                     {
@@ -324,7 +365,7 @@ const Report = () => {
                                     headerRows: 1,
                                     body: [
                                         [
-                                            { text: "Room Availability Today", alignment: 'center', colSpan: 3, fontSize: 15, bold: true }, "", ""
+                                            { text: "Room Availability Today", alignment: 'center', colSpan: 3, fontSize: 12, bold: true }, "", ""
                                         ],
                                         ...roomAvailabilityTable(roomAvailability)
                                     ]
@@ -336,53 +377,43 @@ const Report = () => {
                                     headerRows: 1,
                                     body: [
                                         [
-                                            { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 15, bold: true }, "", ""
+                                            { text: "Booking", colSpan: 3, alignment: 'center', fontSize: 12, bold: true }, "", ""
                                         ],
                                         [
-                                            { text: "Status", alignment: 'center', fontSize: 12, bold: true },
-                                            { text: "Total Booked", alignment: 'center', fontSize: 12, bold: true },
-                                            { text: "Total Amount", alignment: 'center', fontSize: 12, bold: true }
+                                            { text: "Status", alignment: 'center', fontSize: 10 },
+                                            { text: "Total Booked", alignment: 'center', fontSize: 10 },
+                                            { text: "Total Amount", alignment: 'center', fontSize: 10 }
                                         ],
                                         ...statusTable(totalPerStatus),
                                         [
-                                            { text: "Sum Total", alignment: 'center', fontSize: 12, bold: true },
-                                            { text: totalPerStatus.reduce((total, status) => total + status.totalBooks, 0), alignment: 'center', fontSize: 12, bold: true },
-                                            { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'center', fontSize: 12, bold: true }
+                                            { text: "Sum Total", alignment: 'center', fontSize: 10, bold: true },
+                                            { text: totalPerStatus.reduce((total, status) => total + status.totalBooks, 0).toLocaleString(), alignment: 'center', fontSize: 10, bold: true },
+                                            { text: totalPerStatus.reduce((total, status) => total + status.totalAmount, 0).toLocaleString(), alignment: 'right', fontSize: 10, bold: true }
                                         ]
                                     ]
                                 }
                             },
-                        ]
+                        ], marginBottom: 20
                     },
                 {
-                    columns: [
-                        [
-                            {
-                                columns: [
-                                    { text: "Revenue: ", fontSize: 12, bold: true, width: 90 },
-                                    { text: "₱" + revenue.toLocaleString(), fontSize: 12 }
-                                ], marginBottom: 5
-                            }
-                        ],
-                        [
-                            report === "daily" ?
-                                {
-
-                                    columns: [
-                                        { text: "New Bookings: ", fontSize: 12, bold: true, width: 90 },
-                                        { text: newBooksTotal, fontSize: 12 }
-                                    ], marginBottom: 5
-                                }
-                                :
-                                {
-
-                                    columns: [
-                                        { text: "Total Bookings: ", fontSize: 12, bold: true, width: 90 },
-                                        { text: totalBookings, fontSize: 12 }
-                                    ], marginBottom: 5
-                                }
+                    table: {
+                        widths: ["auto", "*", 100],
+                        body: [
+                            [
+                                { text: "Payments Today", alignment: 'center', colSpan: 3, fontSize: 12, bold: true }, "", ""
+                            ],
+                            [
+                                { text: "No.", alignment: 'center', fontSize: 10 },
+                                { text: "Guest", alignment: 'center', fontSize: 10 },
+                                { text: "Amount", alignment: 'center', fontSize: 10 }
+                            ],
+                            ...dailyPaymentTable(payments),
+                            [
+                                { text: "Total", alignment: 'center', colSpan: 2, fontSize: 10, bold: true }, "",
+                                { text: payments.reduce((total, payment) => total + parseInt(payment.amount), 0).toLocaleString(), alignment: 'right', fontSize: 10, bold: true }
+                            ]
                         ]
-                    ], marginTop: 20
+                    }
                 }
             ]
         }

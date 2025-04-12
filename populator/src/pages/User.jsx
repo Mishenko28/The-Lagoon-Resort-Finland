@@ -45,7 +45,7 @@ const User = () => {
 
                 populatedNames.push(email)
 
-                const year = Math.floor(Math.random() * (2025 - 2024 + 1)) + 2024
+                const year = Math.random() > 0.3 ? 2024 : 2025
                 const month = year === 2025 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 12) + 1
                 const day = month === 3 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * (31 - 1 + 1)) + 1
                 const hour = Math.floor(Math.random() * (23 - 0 + 1)) + 0

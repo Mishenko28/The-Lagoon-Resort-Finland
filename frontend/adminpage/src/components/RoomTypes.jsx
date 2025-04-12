@@ -177,9 +177,9 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                         </form>
                         :
                         <>
-                            <h2><span>rate: ₱</span>{roomType.rate}</h2>
+                            <h2><span>rate: ₱</span>{roomType.rate.toLocaleString()}</h2>
                             <h2><span>max person: </span>{roomType.maxPerson}</h2>
-                            <h2><span>additional person: ₱</span>{roomType.addFeePerPerson}</h2>
+                            <h2><span>additional person: ₱</span>{roomType.addFeePerPerson.toLocaleString()}</h2>
                         </>
                     }
                 </div>

@@ -26,7 +26,7 @@
 
     --red: #ab0000;
     --light-red: #ab00006c;
-    --red-dark: #990000;
+    --red-dark: #6f0000;
 
     --light-orange: #ff660040;
     --dark-orange: #a03702;
@@ -54,6 +54,16 @@ hr {
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
+}
+
+.fa-xmark {
+    color: var(--red);
+    font-size: 1.8rem;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--red-dark);
+    }
 }
 
 
@@ -319,8 +329,6 @@ input[type=number]::-webkit-inner-spin-button {
     position: absolute;
     top: 5px;
     right: 5px;
-    font-size: 1.5rem;
-    cursor: pointer;
 }
 
 .big-navs-cont {

@@ -99,14 +99,14 @@ const Graph = () => {
                                 <h3>Total Booking</h3>
                                 <h3><i className="fa-solid fa-book" /></h3>
                             </div>
-                            <h4>+{totalBook}</h4>
+                            <h4>+{totalBook.toLocaleString()}</h4>
                         </div>
                         <div className="total-box" onClick={() => navigate("/utilities/users")}>
                             <div className="top">
                                 <h3>New Users</h3>
                                 <h3><i className="fa-solid fa-users" /></h3>
                             </div>
-                            <h4>+{newUsers}</h4>
+                            <h4>+{newUsers.toLocaleString()}</h4>
                         </div>
                     </div>
                     <div className="graph">
@@ -152,7 +152,7 @@ const Graph = () => {
                                                 <h4>{sale.email}</h4>
                                             </div>
                                         </div>
-                                        <h5>+₱{sale.payed.toLocaleString()}</h5>
+                                        <h5>+₱{parseInt(sale.payed).toLocaleString()}</h5>
                                     </motion.div>
                                 ))}
                                 {recentSales.length === 0 && <div className="sale">No recent sales</div>}

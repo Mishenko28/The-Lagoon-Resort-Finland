@@ -90,7 +90,7 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
     },
     reasonToCancel: {
         type: String,
-        default: "not cancelled"
+        default: null
     },
     showed: {
         type: Boolean,
@@ -106,6 +106,10 @@ module.exports = mongoose.model('Book', new mongoose.Schema({
         default: null
     },
     confirmedDate: {
+        type: Date,
+        default: null
+    },
+    cancelledDate: {
         type: Date,
         default: null
     }

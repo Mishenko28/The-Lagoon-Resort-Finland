@@ -328,7 +328,6 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    font-size: 1.7rem;
 }
 
 .booking .confirm-book .room .right {
@@ -483,7 +482,6 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    font-size: 1.5rem;
 }
 
 .booking .book-header {
@@ -851,10 +849,6 @@
         cursor: pointer;
     }
 
-    .booking .confirm-book .fa-xmark {
-        cursor: pointer;
-    }
-
     .booking .confirm-book .room .right {
         height: 70px;
         cursor: pointer;
@@ -908,11 +902,6 @@
         overflow-wrap: break-word;
         overflow-y: auto;
         max-height: 80svh;
-    }
-
-    .booking .opened-note .fa-xmark {
-        font-size: 2rem;
-        cursor: pointer;
     }
 
     .booking .book-header h1 {

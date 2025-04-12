@@ -138,22 +138,22 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                         ))}
                                     </td>
                                     <td>{book.note && <i onClick={() => setOpenedNote(book.note)} className="fa-solid fa-envelope" />}</td>
-                                    <td>₱{book.deposit}</td>
-                                    <td>₱{book.total}</td>
-                                    <td>₱{book.payed}</td>
-                                    <td>₱{book.balance}</td>
+                                    <td>₱{book.deposit.toLocaleString()}</td>
+                                    <td>₱{book.total.toLocaleString()}</td>
+                                    <td>₱{book.payed.toLocaleString()}</td>
+                                    <td>₱{book.balance.toLocaleString()}</td>
                                     <td>
                                         <div className="bttns">
                                             {book.showed ?
-                                                <button onClick={() => setToComplete(book)} className="green">Complete</button>
+                                                <button onClick={e => { e.stopPropagation(), setToComplete(book) }} className="green">Complete</button>
                                                 :
                                                 <>
-                                                    <button onClick={() => setToShowed(book)} className="secondary">Showed</button>
-                                                    <button onClick={() => setToNoShow(book)} className="gray">No-show</button>
+                                                    <button onClick={e => { e.stopPropagation(), setToShowed(book) }} className="secondary">Showed</button>
+                                                    <button onClick={e => { e.stopPropagation(), setToNoShow(book) }} className="gray">No-show</button>
                                                 </>
                                             }
-                                            <button onClick={() => setToChange(book)} className="blue">Change</button>
-                                            <button onClick={() => setToCancel(book)} className="red">Cancel</button>
+                                            <button onClick={e => { e.stopPropagation(), setToChange(book) }} className="blue">Change</button>
+                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="red">Cancel</button>
                                         </div>
                                     </td>
                                 </motion.tr>

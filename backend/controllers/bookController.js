@@ -380,7 +380,7 @@ const setCancelled = async (req, res) => {
     const { _id, reasonToCancel, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel, cancelledDate: new Date() }, { new: true })
 
         const { email } = await User.findOne({ _id: book.userId })
 
@@ -796,6 +796,7 @@ const populateCancelled = async (_, res) => {
             balance: total,
             payed: 0,
             reasonToCancel: "Cancelled by admin",
+            cancelledDate: user.createdAt,
             createdAt: user.createdAt
         })
 

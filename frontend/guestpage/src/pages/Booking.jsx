@@ -242,14 +242,14 @@ const Booking = () => {
                                                                         <div className="top">
                                                                             <h3>{roomType.name}</h3>
                                                                             <div className="right">
-                                                                                <p>₱{roomType.rate} {roomType.addedPerson > 0 && "+ " + roomType.addedPerson * roomType.addFeePerPerson}</p>
+                                                                                <p>₱{roomType.rate.toLocaleString()} {roomType.addedPerson > 0 && "+ " + (roomType.addedPerson * roomType.addFeePerPerson).toLocaleString()}</p>
                                                                                 <i className="fa-solid fa-square-minus" onClick={() => setSelectedRoomTypes(prev => prev.filter((_, index) => index !== i))} />
                                                                             </div>
                                                                         </div>
                                                                         <div className="bottom">
                                                                             <div onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.min(roomType.addedPerson + 1, 10) } : roomType))} className="left">
                                                                                 <i className="fa-solid fa-user-plus" />
-                                                                                <p>₱{roomType.addFeePerPerson}</p>
+                                                                                <p>₱{roomType.addFeePerPerson.toLocaleString()}</p>
                                                                             </div>
                                                                             <i onClick={() => setSelectedRoomTypes(prev => prev.map((roomType, index) => index === i ? { ...roomType, addedPerson: Math.max(roomType.addedPerson - 1, 0) } : roomType))} className="fa-solid fa-user-minus" />
                                                                             <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
@@ -266,11 +266,11 @@ const Booking = () => {
                                                         <div>
                                                             <div className="total">
                                                                 <h3>Down Payment: ({downPayment * 100}%)</h3>
-                                                                <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                                <p>₱{(selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * downPayment * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))).toLocaleString()}</p>
                                                             </div>
                                                             <div className="total">
                                                                 <h3>Total:</h3>
-                                                                <p>₱{selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))}</p>
+                                                                <p>₱{(selectedRoomTypes.reduce((acc, curr) => acc + curr.rate + (curr.addedPerson * curr.addFeePerPerson), 0) * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))).toLocaleString()}</p>
                                                             </div>
                                                         </div>
                                                         <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="requests or concerns? (optional)"></textarea>
@@ -290,7 +290,7 @@ const Booking = () => {
                                                         <img src={roomType.img} />
                                                         <div className="room-type-info">
                                                             <h3>{roomType.name}</h3>
-                                                            <p>₱{roomType.rate}</p>
+                                                            <p>₱{roomType.rate.toLocaleString()}</p>
                                                             <p>{Array.from({ length: roomType.maxPerson }, (_, i) => <i className={"fa-solid fa-person" + (i % 2 !== 0 ? "-dress" : "")} key={i} />)}</p>
                                                         </div>
                                                         <i className="fa-solid fa-plus" onClick={() => setSelectedRoomTypes(prev => [...prev, { ...roomType, addedPerson: 0, animationId: Math.floor(100000 + Math.random() * 900000) }])} />

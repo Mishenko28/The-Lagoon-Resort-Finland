@@ -59,7 +59,7 @@ const Accommodation = () => {
                         >
                             <div className="part1">
                                 <img src={roomType.img} />
-                                <h1>₱{roomType.rate} / Night</h1>
+                                <h1>₱{roomType.rate.toLocaleString()} / Night</h1>
                                 {roomType.subImg.length > 0 &&
                                     <div onClick={() => setSubImgToShow(roomType)} className="subImg-icon">
                                         <i className="fa-solid fa-image" />

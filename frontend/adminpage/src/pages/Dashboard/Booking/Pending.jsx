@@ -133,13 +133,13 @@ export default function Pending({ fetchTotals, convertToNight }) {
                                         ))}
                                     </td>
                                     <td>{book.note && <i onClick={() => setOpenedNote(book.note)} className="fa-solid fa-envelope" />}</td>
-                                    <td>₱{book.deposit}</td>
-                                    <td>₱{book.total}</td>
+                                    <td>₱{book.deposit.toLocaleString()}</td>
+                                    <td>₱{book.total.toLocaleString()}</td>
                                     <td>{formatDistanceToNow(book.createdAt, { addSuffix: 1 })}</td>
                                     <td>
                                         <div className="bttns">
-                                            <button onClick={() => setToConfirm(book)} className="green">Confirm</button>
-                                            <button onClick={() => setToCancel(book)} className="red">Cancel</button>
+                                            <button onClick={e => { e.stopPropagation(), setToConfirm(book) }} className="green">Confirm</button>
+                                            <button onClick={e => { e.stopPropagation(), setToCancel(book) }} className="red">Cancel</button>
                                         </div>
                                     </td>
                                 </motion.tr>
