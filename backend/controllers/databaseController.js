@@ -7,14 +7,23 @@ const zlib = require("zlib")
 
 const { Actions, ActivityLog } = require("../models/activityLogModel")
 
+
 function reviveDates(obj) {
     if (Array.isArray(obj)) {
         return obj.map(reviveDates)
     } else if (obj && typeof obj === 'object') {
         const result = {}
         for (const [key, value] of Object.entries(obj)) {
-            if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value)) {
+            if (
+                typeof value === 'string' &&
+                /^\d{4}-\d{2}-\d{2}T/.test(value)
+            ) {
                 result[key] = new Date(value)
+            } else if (
+                typeof value === 'string' &&
+                /^[a-f\d]{24}$/i.test(value)
+            ) {
+                result[key] = new mongoose.Types.ObjectId(value)
             } else {
                 result[key] = reviveDates(value)
             }
@@ -23,6 +32,8 @@ function reviveDates(obj) {
     }
     return obj
 }
+
+
 
 function encryptJSON(jsonData) {
     const compressed = zlib.gzipSync(JSON.stringify(jsonData))

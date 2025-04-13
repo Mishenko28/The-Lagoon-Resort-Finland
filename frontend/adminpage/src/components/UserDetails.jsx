@@ -24,12 +24,10 @@ const UserDetails = ({ props: { userToShow, setUserToShow } }) => {
     }, [])
 
     const fetchBookings = async () => {
-        for (const stat of status) {
-            await axios.get("book/user", { params: { status: stat, email: userToShow.email } })
-                .then(res => setBookings(prev => [...prev, ...res.data]))
-                .catch(error => dispatch({ type: "FAILED", payload: error.response.data.error }))
-        }
-        setIsLoading(false)
+        await axios.get("book/user", { params: { status: "all", email: userToShow.email } })
+            .then(res => setBookings(res.data))
+            .catch(error => dispatch({ type: "FAILED", payload: error.response.data.error }))
+            .finally(() => setIsLoading(false))
     }
 
     return (

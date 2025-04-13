@@ -372,7 +372,13 @@ const getUserBooks = async (req, res) => {
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await Book.find({ status, user: _id }).populate("feedback")
+        let books = []
+
+        if (status === "all") {
+            books = await Book.find({ user: _id }).populate("feedback")
+        } else {
+            books = await Book.find({ status, user: _id }).populate("feedback")
+        }
 
         res.status(200).json(books.reverse())
     } catch (error) {
