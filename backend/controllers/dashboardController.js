@@ -1,13 +1,16 @@
 const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
 const User = require('../models/userModel')
-const { startOfMonth } = require('date-fns')
+const { startOfMonth, startOfYear, endOfYear } = require('date-fns')
+const moment = require('moment-timezone')
 
-const now = new Date()
+const now = moment().tz('Asia/Manila')
+const prev = moment().subtract(1, 'year').tz('Asia/Manila')
 
 const getTotalBookPerMonth = async (year) => {
+    console.log("🚀 ~ getTotalBookPerMonth ~ year:", year)
     const books = await Book.find({
-        createdAt: { $gte: new Date(year, 0, 1), $lt: new Date(year + 1, 0, 1) },
+        createdAt: { $gte: startOfYear(year), $lt: endOfYear(year) },
         status: { $nin: ['pending', 'cancelled', 'expired'] }
     })
 
@@ -22,24 +25,24 @@ const getTotalBookPerMonth = async (year) => {
 
 const getAllData = async (_, res) => {
     try {
-        const payments = await Payment.find({ createdAt: { $gte: startOfMonth(new Date()) } })
+        const payments = await Payment.find({ createdAt: { $gte: startOfMonth(now) } })
 
         const revenue = payments.reduce((acc, payment) => {
             return acc + parseFloat(payment.amount)
         }, 0)
 
-        const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled', "expired"] }, createdAt: { $gte: startOfMonth(new Date()) } })
-        const newUsers = await User.countDocuments({ createdAt: { $gte: startOfMonth(new Date()) } })
+        const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled', "expired"] }, createdAt: { $gte: startOfMonth(now) } })
+        const newUsers = await User.countDocuments({ createdAt: { $gte: startOfMonth(now) } })
         const recentSales = await Payment.find({}).populate({ path: 'userId', populate: 'details' }).sort({ createdAt: -1 }).limit(20)
 
         const bookings = {
             previousYear: {
-                year: now.getFullYear() - 1,
-                value: await getTotalBookPerMonth(now.getFullYear() - 1)
+                year: new Date(prev).getFullYear(),
+                value: await getTotalBookPerMonth(prev)
             },
             currentYear: {
-                year: now.getFullYear(),
-                value: await getTotalBookPerMonth(now.getFullYear())
+                year: new Date(now).getFullYear(),
+                value: await getTotalBookPerMonth(now)
             }
         }
 

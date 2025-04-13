@@ -1,7 +1,7 @@
 const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
-const User = require('../models/userModel')
 const { Actions, ActivityLog } = require('../models/activityLogModel')
+const { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } = require('date-fns')
 
 const status = [
     "pending",
@@ -63,12 +63,8 @@ const getDailyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { day } = req.query
 
-    const start = new Date(day)
-    start.setHours(0, 0, 0, 0)
-
-    const end = new Date(day)
-    end.setHours(23, 59, 59, 999)
-
+    const start = startOfDay(day)
+    const end = endOfDay(day)
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -92,8 +88,8 @@ const getDailyReport = async (req, res) => {
 const getWeeklyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { start: startDate, end: endDate } = req.query
-    let start = startDate
-    let end = endDate
+    let start = startOfWeek(startDate)
+    let end = endOfWeek(endDate)
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -118,13 +114,8 @@ const getMonthlyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { month } = req.query
 
-    const start = new Date(month)
-    start.setDate(1)
-    start.setHours(0, 0, 0, 0)
-
-    const end = new Date(month)
-    end.setMonth(end.getMonth() + 1)
-    end.setHours(23, 59, 59, 999)
+    const start = startOfMonth(month)
+    const end = endOfMonth(month)
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -149,13 +140,8 @@ const getYearlyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { year } = req.query
 
-    const start = new Date(year)
-    start.setMonth(0, 1)
-    start.setHours(0, 0, 0, 0)
-
-    const end = new Date(year)
-    end.setMonth(11, 31)
-    end.setHours(23, 59, 59, 999)
+    const start = startOfYear(year)
+    const end = endOfYear(year)
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
