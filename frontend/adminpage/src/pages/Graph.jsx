@@ -145,14 +145,14 @@ const Graph = () => {
                                         className="sale"
                                         key={sale._id}
                                     >
-                                        <div onClick={() => navigate(`/utilities/users?search=${sale.email}`)} className="left">
-                                            <img src={sale.img} />
+                                        <div onClick={() => navigate(`/utilities/users?search=${sale.userId.email}`)} className="left">
+                                            <img src={sale.userId.details.img} />
                                             <div>
-                                                <h3>{sale.name}</h3>
-                                                <h4>{sale.email}</h4>
+                                                <h3>{sale.userId.details.name}</h3>
+                                                <h4>{sale.userId.email}</h4>
                                             </div>
                                         </div>
-                                        <h5>+₱{parseInt(sale.payed).toLocaleString()}</h5>
+                                        <h5>+₱{parseInt(sale.amount).toLocaleString()}</h5>
                                     </motion.div>
                                 ))}
                                 {recentSales.length === 0 && <div className="sale">No recent sales</div>}
@@ -193,9 +193,9 @@ const Graph = () => {
                                                 key={feedback._id}
                                             >
                                                 <div onClick={() => navigate(`/utilities/users?search=${feedback.user.email}`)} className="left">
-                                                    <img src={feedback.user.img} />
+                                                    <img src={feedback.user.details.img} />
                                                     <div>
-                                                        <h3>{feedback.user.name}</h3>
+                                                        <h3>{feedback.user.details.name}</h3>
                                                         <h4>{feedback.user.email}</h4>
                                                     </div>
                                                 </div>

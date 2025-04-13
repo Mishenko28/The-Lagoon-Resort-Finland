@@ -16,7 +16,7 @@ const loginUser = async (req, res) => {
     const { email, password } = await req.body
 
     try {
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email }).populate('details', 'img').select('email password').lean()
 
         if (!user) {
             throw Error("Email is not registered")
@@ -31,8 +31,7 @@ const loginUser = async (req, res) => {
         let img = null
 
         if (user.personalData) {
-            const personalData = await UserPersonalData.findOne({ email })
-            img = personalData.img
+            img = user.details.img
         }
 
         const token = createToken(user._id)
@@ -84,13 +83,8 @@ const getUsers = async (req, res) => {
         const users = await User.find(search ? { email: { $regex: `${search}`, $options: 'i' } } : {})
             .sort({ createdAt: -1 })
             .skip((page - 1) * 30)
-            .limit(30).lean()
-
-        for (const user of users) {
-            const personalData = await UserPersonalData.findOne({ email: user.email })
-            user.personalData = personalData ? personalData : null
-            delete user.password
-        }
+            .limit(30)
+            .populate('details')
 
         res.status(200).json({ users, totalUsers })
 
@@ -110,10 +104,10 @@ const addUserData = async (req, res) => {
             throw Error("user already has data")
         }
 
-        await User.findOneAndUpdate({ email }, { personalData: true })
         const personalData = await UserPersonalData.create({ email, name, age, sex, contact, img })
+        await User.findOneAndUpdate({ email }, { personalData: true, details: personalData._id })
 
-        res.status(200).json({ personalData })
+        res.status(200).json(personalData)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -124,9 +118,9 @@ const getUserData = async (req, res) => {
     const email = await req.query.email
 
     try {
-        const personalData = await UserPersonalData.findOne({ email }) || null
+        const { details } = await User.findOne({ email }).populate('details') || null
 
-        res.status(200).json({ personalData })
+        res.status(200).json(details)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -139,7 +133,7 @@ const updateUserData = async (req, res) => {
     try {
         const personalData = await UserPersonalData.findOneAndUpdate({ email }, { name, age, sex, contact, img }, { new: true })
 
-        res.status(200).json({ personalData })
+        res.status(200).json(personalData)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -158,10 +152,9 @@ const addUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const user = (await User.create({ email, password: hash })).toObject()
+        await User.create({ email, password: hash, personalData: true, details: personalData._id })
 
-        user.personalData = personalData
-        delete user.password
+        const user = await User.findOne({ email }).populate('details')
 
         await ActivityLog.create({ adminEmail, action: [Actions.CREATED], activity: `added a user named ${name}` })
 
@@ -185,11 +178,13 @@ const populateUser = async (req, res) => {
             throw Error("Email already exist")
         }
 
-        await User.create({ email, password: hash, personalData: name ? true : false, createdAt })
+        let personalData = null
 
         if (name) {
-            await UserPersonalData.create({ email, name, age, contact, img, sex, createdAt })
+            personalData = await UserPersonalData.create({ email, name, age, contact, img, sex, createdAt })
         }
+
+        await User.create({ email, password: hash, personalData: personalData ? true : false, details: personalData ? personalData._id : null, createdAt })
 
         res.status(200).json({ success: true })
     } catch (error) {

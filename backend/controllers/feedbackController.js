@@ -1,7 +1,6 @@
 const Feedback = require('../models/feedbackModel')
 const User = require('../models/userModel')
 const Book = require('../models/bookModel')
-const UserPersonalData = require('../models/userPersonalDataModel')
 const { Actions, ActivityLog } = require('../models/activityLogModel')
 
 const createFeedback = async (req, res) => {
@@ -21,14 +20,7 @@ const createFeedback = async (req, res) => {
 
 const getNewFeedback = async (_, res) => {
     try {
-        const feedbacks = await Feedback.find({ new: true }).populate('user', 'email').lean()
-
-        for (const feedback of feedbacks) {
-            const { name, img } = await UserPersonalData.findOne({ email: feedback.user.email }).lean()
-
-            feedback.user.name = name
-            feedback.user.img = img
-        }
+        const feedbacks = await Feedback.find({ new: true }).populate({ path: 'user', populate: 'details' })
 
         res.status(200).json(feedbacks)
     } catch (error) {
@@ -66,14 +58,7 @@ const rejectFeedback = async (req, res) => {
 
 const getFeedback = async (_, res) => {
     try {
-        const feedbacks = await Feedback.find({ approved: true }).populate('user', 'email').sort({ createdAt: -1 }).limit(10).lean()
-
-        for (const feedback of feedbacks) {
-            const { name, img } = await UserPersonalData.findOne({ email: feedback.user.email }).lean()
-
-            feedback.user.name = name
-            feedback.user.img = img
-        }
+        const feedbacks = await Feedback.find({ approved: true }).populate({ path: 'user', populate: 'details' }).sort({ createdAt: -1 }).limit(10)
 
         res.status(200).json(feedbacks)
     } catch (error) {

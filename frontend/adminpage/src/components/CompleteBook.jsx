@@ -68,7 +68,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
     return (
         <div className="full-cont">
             <form onSubmit={handleSubmit} className="set-confirm-book">
-                <h1>Set as completed?</h1>
+                <h1>Set as completed</h1>
                 {isFuture(toComplete.to) && <p><i className="fa-solid fa-triangle-exclamation" /> {`There are ${formatDistance(toComplete.to, new Date())} remaining for this reservation`}</p>}
                 <hr />
                 <div className="book-info">
@@ -76,7 +76,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                         <Loader2 />
                         :
                         <>
-                            <h2>{toComplete.user.name} ({toComplete.user.sex}, {toComplete.user.age})</h2>
+                            <h2>{toComplete.user.details.name} ({toComplete.user.details.sex}, {toComplete.user.details.age})</h2>
                             <h2>{toComplete.user.email}</h2>
                             <h2>{format(toComplete.from, 'LLL d' + (new Date(toComplete.from).getFullYear() === new Date(toComplete.to).getFullYear() ? '' : ', yyyy'))} - {format(toComplete.to, (new Date(toComplete.from).getMonth() === new Date(toComplete.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toComplete.from, toComplete.to)})</h2>
                             <hr />

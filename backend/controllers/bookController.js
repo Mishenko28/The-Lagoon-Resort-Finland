@@ -2,7 +2,6 @@ const Book = require('../models/bookModel')
 const AdminSetting = require('../models/adminSettingsModel')
 const { ActivityLog, Actions } = require('../models/activityLogModel')
 const User = require('../models/userModel')
-const UserPersonalData = require('../models/userPersonalDataModel')
 const sendMail = require('../Utility/nodeMailer')
 const { Admin } = require('../models/adminModel')
 const Payment = require('../models/paymentModel')
@@ -16,6 +15,18 @@ const { format, isFuture } = require('date-fns')
 // noshow
 // expired
 // completed
+
+const getMonthRange = (month) => {
+    const start = new Date(month)
+    start.setDate(1)
+    start.setHours(0, 0, 0, 0)
+
+    const end = new Date(month)
+    end.setMonth(end.getMonth() + 1)
+    end.setHours(23, 59, 59, 999)
+
+    return { start, end }
+}
 
 
 // GET TOTAL BOOKS
@@ -40,13 +51,13 @@ const getTotalBooksByUser = async (req, res) => {
     const { email } = req.query
 
     try {
-        const { _id: userId } = await User.findOne({ email })
+        const { _id } = await User.findOne({ email })
 
-        const pending = await Book.countDocuments({ status: "pending", userId })
-        const confirm = await Book.countDocuments({ status: "confirmed", userId })
-        const ongoing = await Book.countDocuments({ status: "ongoing", userId })
-        const complete = await Book.countDocuments({ status: "completed", userId })
-        const cancel = await Book.countDocuments({ status: "cancelled", userId })
+        const pending = await Book.countDocuments({ status: "pending", user: _id })
+        const confirm = await Book.countDocuments({ status: "confirmed", user: _id })
+        const ongoing = await Book.countDocuments({ status: "ongoing", user: _id })
+        const complete = await Book.countDocuments({ status: "completed", user: _id })
+        const cancel = await Book.countDocuments({ status: "cancelled", user: _id })
 
         res.status(200).json({ pending, confirm, ongoing, complete, cancel })
     } catch (error) {
@@ -57,17 +68,7 @@ const getTotalBooksByUser = async (req, res) => {
 // GET ALL PENDING
 const getPending = async (_, res) => {
     try {
-        let books = await Book.find({ status: "pending" })
-
-        books = await Promise.all(books.map(async (book) => {
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
+        let books = await Book.find({ status: "pending" }).populate({ path: 'user', populate: 'details' })
 
         res.status(200).json(books)
     } catch (error) {
@@ -79,28 +80,10 @@ const getPending = async (_, res) => {
 const getExpired = async (req, res) => {
     const { month } = req.query
 
+    const { start, end } = getMonthRange(month)
+
     try {
-        let books = await Book.find({ status: "expired" })
-
-        books = await Promise.all(books.map(async (book) => {
-            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
-                return null
-            }
-
-            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
-                return null
-            }
-
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
-
-        books = books.filter(book => book !== null)
+        let books = await Book.find({ status: "expired", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
 
         res.status(200).json(books)
     } catch (error) {
@@ -111,17 +94,7 @@ const getExpired = async (req, res) => {
 // GET ALL CONFIRMED
 const getConfirmed = async (_, res) => {
     try {
-        let books = await Book.find({ status: "confirmed" })
-
-        books = await Promise.all(books.map(async (book) => {
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
+        let books = await Book.find({ status: "confirmed" }).populate({ path: 'user', populate: 'details' })
 
         res.status(200).json(books)
     } catch (error) {
@@ -132,17 +105,7 @@ const getConfirmed = async (_, res) => {
 // GET ALL ONGOING
 const getOngoing = async (_, res) => {
     try {
-        let books = await Book.find({ status: "ongoing" })
-
-        books = await Promise.all(books.map(async (book) => {
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
+        let books = await Book.find({ status: "ongoing" }).populate({ path: 'user', populate: 'details' })
 
         res.status(200).json(books)
     } catch (error) {
@@ -154,27 +117,10 @@ const getOngoing = async (_, res) => {
 const getCancelled = async (req, res) => {
     const { month } = req.query
 
+    const { start, end } = getMonthRange(month)
+
     try {
-        let books = await Book.find({ status: "cancelled" })
-
-        books = await Promise.all(books.map(async (book) => {
-            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
-                return null
-            }
-            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
-                return null
-            }
-
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
-
-        books = books.filter(book => book !== null)
+        let books = await Book.find({ status: "cancelled", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
 
         res.status(200).json(books)
     } catch (error) {
@@ -186,27 +132,10 @@ const getCancelled = async (req, res) => {
 const getNoshow = async (req, res) => {
     const { month } = req.query
 
+    const { start, end } = getMonthRange(month)
+
     try {
-        let books = await Book.find({ status: "noshow" })
-
-        books = await Promise.all(books.map(async (book) => {
-            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
-                return null
-            }
-            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
-                return null
-            }
-
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
-
-        books = books.filter(book => book !== null)
+        let books = await Book.find({ status: "noshow", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
 
         res.status(200).json(books)
     } catch (error) {
@@ -218,28 +147,10 @@ const getNoshow = async (req, res) => {
 const getCompleted = async (req, res) => {
     const { month } = req.query
 
+    const { start, end } = getMonthRange(month)
+
     try {
-        let books = await Book.find({ status: "completed" })
-
-        books = await Promise.all(books.map(async (book) => {
-            if (book.from.getMonth() !== new Date(month).getMonth() && book.to.getMonth() !== new Date(month).getMonth()) {
-                return null
-            }
-
-            if (book.from.getFullYear() !== new Date(month).getFullYear() && book.to.getFullYear() !== new Date(month).getFullYear()) {
-                return null
-            }
-
-            const { email } = await User.findOne({ _id: book.userId })
-            const user = await UserPersonalData.findOne({ email: email })
-            const newBook = book.toObject()
-
-            newBook.user = user
-
-            return newBook
-        }))
-
-        books = books.filter(book => book !== null)
+        let books = await Book.find({ status: "completed", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
 
         res.status(200).json(books)
     } catch (error) {
@@ -254,14 +165,13 @@ const addBook = async (req, res) => {
 
     const room = selectedRoomTypes.map(roomType => ({ roomType: roomType.name, maxPerson: roomType.maxPerson, addedPerson: roomType.addedPerson, rate: roomType.rate, addedPersonRate: roomType.addFeePerPerson }))
 
-
     try {
         const admins = await Admin.find({ role: { $in: ["booking"] } })
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email }).populate('details')
 
-        let book = (await Book.create({ userId: user._id, from, to, note, room, total, deposit, balance: total, downPayment })).toObject()
+        const { _id } = await Book.create({ user: user._id, from, to, note, room, total, deposit, balance: total, downPayment })
 
-        book.user = await UserPersonalData.findOne({ email })
+        const book = await Book.findOne({ _id }).populate({ path: 'user', populate: 'details' })
 
         admins.forEach(admin => {
             sendMail({
@@ -272,9 +182,9 @@ const addBook = async (req, res) => {
                     <hr />
                     <h4>Guest Information:</h4>
                     <ul>
-                        <li>Name: ${book.user.name}</li>
-                        <li>Email: ${book.user.email}</li>
-                        <li>Contact: ${book.user.contact}</li>
+                        <li>Name: ${book.user.details.name}</li>
+                        <li>Email: ${book.user.details.email}</li>
+                        <li>Contact: ${book.user.details.contact}</li>
                     </ul>
                     <hr />
                     <h4>Reservation Details:</h4>
@@ -292,7 +202,7 @@ const addBook = async (req, res) => {
             })
         })
 
-        res.status(200).json({ book })
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -309,17 +219,15 @@ const setConfirmed = async (req, res) => {
         })
 
         const balance = total - payed
-        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, confirmedDate: new Date() }, { new: true })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "confirmed", from, to, room: newRoom, total, deposit, balance, payed, confirmedDate: new Date() }, { new: true }).populate({ path: 'user', populate: 'details' })
 
-        const { email } = await User.findOne({ _id: book.userId })
-        const { name } = await UserPersonalData.findOne({ email: email })
-
-        await User.findOneAndUpdate({ _id: book.userId }, { $inc: { totalBookings: 1 } })
+        book.user.totalBookings++
+        await book.user.save()
 
         sendMail({
             subject: "Reservation Confirmation! - The Lagoon Resort Finland Inc.",
-            to: email,
-            html: `<h3>Hi ${name},</h3>
+            to: book.user.email,
+            html: `<h3>Hi ${book.user.details.name},</h3>
                     <p>We’re happy to let you know that your reservation at The Lagoon Resort Finland Inc. has been successfully confirmed!</p>
                     <hr />
                     <h4>Reservation Details:</h4>
@@ -340,10 +248,10 @@ const setConfirmed = async (req, res) => {
                     <p><b>The Lagoon Resort Finland Inc.<b></p>`
         })
 
-        await Payment.create({ amount: payed, userId: book.userId })
+        await Payment.create({ amount: payed, userId: book.user })
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${email}` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${book.user.email}` })
 
         res.status(200).json(book)
     } catch (error) {
@@ -359,15 +267,13 @@ const setCompleted = async (req, res) => {
         const oldBook = await Book.findOne({ _id })
 
         if (total - oldBook.balance > 0) {
-            await Payment.create({ amount: total - oldBook.payed, userId: oldBook.userId })
+            await Payment.create({ amount: total - oldBook.payed, userId: oldBook.user })
         }
 
-        const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance: 0, total, payed: total, addCharges }, { new: true })
-
-        const { email } = await User.findOne({ _id: book.userId })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance: 0, total, payed: total, addCharges }, { new: true }).populate('user')
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed of ${email}` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirm a book as completed of ${book.user.email}` })
 
         res.status(200).json(book)
     } catch (error) {
@@ -380,12 +286,10 @@ const setCancelled = async (req, res) => {
     const { _id, reasonToCancel, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel, cancelledDate: new Date() }, { new: true })
-
-        const { email } = await User.findOne({ _id: book.userId })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel, cancelledDate: new Date() }, { new: true }).populate('user')
 
         // activity log
-        await ActivityLog.create({ adminEmail: adminEmail || email + "(guest)", action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${email}` })
+        await ActivityLog.create({ adminEmail: adminEmail || email + "(guest)", action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${book.user.email}` })
 
         res.status(200).json(book)
     } catch (error) {
@@ -398,12 +302,10 @@ const setNoshow = async (req, res) => {
     const { _id, adminEmail } = await req.body
 
     try {
-        const book = await Book.findOneAndUpdate({ _id }, { status: "noshow" }, { new: true })
-
-        const { email } = await User.findOne({ _id: book.userId })
+        const book = await Book.findOneAndUpdate({ _id }, { status: "noshow" }, { new: true }).populate('user')
 
         // activity log
-        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow of ${email}` })
+        await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Set a book as noshow of ${book.user.email}` })
 
         res.status(200).json(book)
     } catch (error) {
@@ -427,16 +329,10 @@ const editBook = async (req, res) => {
         const oldBook = await Book.findOne({ _id })
 
         if (payed - oldBook.payed > 0) {
-            await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.userId })
+            await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.user })
         }
 
-        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed, showed }, { new: true })
-
-        const { email } = await User.findOne({ _id: book.userId })
-        const user = await UserPersonalData.findOne({ email: email })
-
-        const newBook = book.toObject()
-        newBook.user = user
+        const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed, showed }, { new: true }).populate({ path: 'user', populate: 'details' })
 
         // activity log
         from && format(oldBook.from, "MMM d, yyyy") !== format(from, "MMM d, yyyy") && editedParts.push("from")
@@ -450,7 +346,7 @@ const editBook = async (req, res) => {
             await ActivityLog.create({
                 adminEmail,
                 action: [Actions.BOOKING, Actions.UPDATED],
-                activity: `Changed the book information of ${email}. ${editedParts.map(part => {
+                activity: `Changed the book information of ${book.user.email}. ${editedParts.map(part => {
                     switch (part) {
                         case "from":
                             return ` changed start date from ${format(oldBook.to, "MMM d, yyyy")} to ${format(from, "MMM d, yyyy")}`
@@ -469,7 +365,7 @@ const editBook = async (req, res) => {
             })
         }
 
-        res.status(200).json(newBook)
+        res.status(200).json(book)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -482,7 +378,7 @@ const getUserBooks = async (req, res) => {
     try {
         const { _id } = await User.findOne({ email })
 
-        const books = await Book.find({ status, userId: _id }).populate("feedback")
+        const books = await Book.find({ status, user: _id }).populate("feedback")
 
         res.status(200).json(books.reverse())
     } catch (error) {
@@ -570,7 +466,7 @@ const populateCompleted = async (_, res) => {
         const total = roomTotal * totalDays
 
         const book = await Book.create({
-            userId: user._id,
+            user: user._id,
             status: "completed",
             showed: true,
             downPayment,
@@ -682,7 +578,7 @@ const populateNoShow = async (_, res) => {
         const total = roomTotal * totalDays
 
         const book = await Book.create({
-            userId: user._id,
+            user: user._id,
             status: "noshow",
             downPayment,
             from,
@@ -785,7 +681,7 @@ const populateCancelled = async (_, res) => {
         const total = roomTotal * totalDays
 
         const book = await Book.create({
-            userId: user._id,
+            user: user._id,
             status: "cancelled",
             downPayment,
             from,
@@ -883,7 +779,7 @@ const populateExpired = async (_, res) => {
         const total = roomTotal * totalDays
 
         const book = await Book.create({
-            userId: user._id,
+            user: user._id,
             status: "expired",
             downPayment,
             from,

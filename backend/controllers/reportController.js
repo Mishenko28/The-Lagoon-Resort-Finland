@@ -1,7 +1,6 @@
 const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
 const User = require('../models/userModel')
-const UserPersonalData = require('../models/userPersonalDataModel')
 const { Actions, ActivityLog } = require('../models/activityLogModel')
 
 const status = [
@@ -15,16 +14,10 @@ const status = [
 ]
 
 const getReport = async (start, end) => {
-    const payments = await Payment.find({ createdAt: { $gte: start, $lte: end } }).populate("userId", "email").lean()
+    const payments = await Payment.find({ createdAt: { $gte: start, $lte: end } }).populate({ path: "userId", populate: 'details' })
     const revenue = payments.reduce((acc, payment) => {
         return acc + parseInt(payment.amount)
     }, 0)
-
-    for (const payment of payments) {
-        const { name } = await UserPersonalData.findOne({ email: payment.userId.email })
-        payment.name = name
-        delete payment.userId
-    }
 
     const totalPerStatus = await Promise.all(status.map(async (status) => {
         let totalBooks
@@ -81,22 +74,8 @@ const getDailyReport = async (req, res) => {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
         const newBooksTotal = await Book.countDocuments({ confirmedDate: { $gte: start, $lte: end } })
 
-        let checkIn = await Book.find({ status: "confirmed", from: { $gte: start, $lte: end } }).lean()
-        let checkOut = await Book.find({ status: "ongoing", to: { $gte: start, $lte: end } }).lean()
-
-        for (const book of checkIn) {
-            const { email } = await User.findOne({ _id: book.userId }).lean()
-            const user = await UserPersonalData.findOne({ email }).lean()
-
-            book.user = user
-        }
-
-        for (const book of checkOut) {
-            const { email } = await User.findOne({ _id: book.userId }).lean()
-            const user = await UserPersonalData.findOne({ email }).lean()
-
-            book.user = user
-        }
+        const checkIn = await Book.find({ status: "ongoing", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' })
+        const checkOut = await Book.find({ status: "ongoing", to: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' })
 
         await ActivityLog.create({
             adminEmail,

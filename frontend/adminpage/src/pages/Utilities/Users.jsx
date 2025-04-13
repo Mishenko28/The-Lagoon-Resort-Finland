@@ -93,6 +93,7 @@ const Users = () => {
                 setUsers(prev => [...prev, res.data])
                 setTotalUsers(prev => prev + 1)
                 handleCloseAddUser()
+                dispatch({ type: 'SUCCESS', payload: true })
             })
             .catch(err => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -141,7 +142,7 @@ const Users = () => {
                                             transition={{ duration: 0.3 }}
                                             key={user._id}
                                         >
-                                            <td><img src={user.personalData?.img || "/profile.webp"} /></td>
+                                            <td><img src={user.details?.img || "/profile.webp"} /></td>
                                             <td>
                                                 {user.email.split(new RegExp(`(${search})`, 'gi')).map((part, i) => (
                                                     <span key={i} style={part.toLowerCase() === search.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
@@ -149,10 +150,10 @@ const Users = () => {
                                                     </span>
                                                 ))}
                                             </td>
-                                            <td>{user.personalData?.name}</td>
-                                            <td>{user.personalData?.age}</td>
-                                            <td>{user.personalData?.sex}</td>
-                                            <td>{user.personalData?.contact}</td>
+                                            <td>{user.details?.name}</td>
+                                            <td>{user.details?.age}</td>
+                                            <td>{user.details?.sex}</td>
+                                            <td>{user.details?.contact}</td>
                                             <td>{user.totalBookings}</td>
                                             <td>{format(user.createdAt, "MMM d, yyyy h:mm a")}</td>
                                         </motion.tr>

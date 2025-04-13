@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
-const User = require('./userModel')
 
 module.exports = mongoose.model('Feedback', new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: 'User',
         required: true
     },
     star: {

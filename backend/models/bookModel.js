@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const Feedback = require('./feedbackModel')
 
 const roomSchema = new mongoose.Schema({
     roomType: {
@@ -44,9 +43,9 @@ const addChargesSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('Book', new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     status: {
         type: String,

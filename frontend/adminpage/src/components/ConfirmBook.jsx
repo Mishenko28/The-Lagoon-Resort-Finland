@@ -180,9 +180,9 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                         <h1>Confirm Reservation</h1>
                         <hr />
                         <div className="info">
-                            <h2>{toConfirm.user.name} ({toConfirm.user.sex + ", " + toConfirm.user.age})</h2>
+                            <h2>{toConfirm.user.details.name} ({toConfirm.user.details.sex + ", " + toConfirm.user.details.age})</h2>
                             <h3>{toConfirm.user.email}</h3>
-                            <h4>{toConfirm.user.contact}</h4>
+                            <h4>{toConfirm.user.details.contact}</h4>
                         </div>
                         <hr />
                         <div className="date-wrapper">

@@ -150,10 +150,10 @@ const Report = () => {
             let table = books.map((book, i) => {
                 return [
                     { text: i + 1, fontSize: 10 },
-                    { text: book.user.name, fontSize: 10 },
-                    { text: book.user.sex, fontSize: 10, position: "some value" },
-                    { text: book.user.age, fontSize: 10 },
-                    { text: book.user.contact, fontSize: 10 },
+                    { text: book.user.details.name, fontSize: 10 },
+                    { text: book.user.details.sex, fontSize: 10, position: "some value" },
+                    { text: book.user.details.age, fontSize: 10 },
+                    { text: book.user.details.contact, fontSize: 10 },
                     { text: book.room.map(r => `${r.roomType} R${r.roomNo}`).join(", "), fontSize: 10 },
                     { text: book.payed.toLocaleString(), fontSize: 10, alignment: "right" },
                     { text: book.total.toLocaleString(), fontSize: 10, alignment: "right" },
@@ -213,7 +213,7 @@ const Report = () => {
             let table = payments.map((payment, i) => {
                 return [
                     { text: i + 1, fontSize: 10, alignment: "center" },
-                    { text: payment.name, fontSize: 10 },
+                    { text: payment.userId.details.name, fontSize: 10 },
                     { text: parseInt(payment.amount).toLocaleString(), fontSize: 10, alignment: "right" }
                 ]
             })

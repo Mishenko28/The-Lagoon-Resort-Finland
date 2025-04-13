@@ -143,11 +143,11 @@ const Home = () => {
                             {feedbacks.map(feedback => (
                                 <div key={feedback._id} className="testi">
                                     <img className="quote" src="/inclusions/quote.png" />
-                                    <img className="pic" src={feedback.user.img} />
+                                    <img className="pic" src={feedback.user.details.img} />
                                     {feedback.anonymous ?
-                                        <h2>{maskName(feedback.user.name)}</h2>
+                                        <h2>{maskName(feedback.user.details.name)}</h2>
                                         :
-                                        <h2>{feedback.user.name}</h2>
+                                        <h2>{feedback.user.details.name}</h2>
                                     }
                                     <p>{feedback.feedback}</p>
                                     <div className="stars">{Array.from({ length: 5 }, (_, i) => <i key={i} style={feedback.star > i ? { color: "var(--gold)" } : null} className="fa-solid fa-star" />)}</div>

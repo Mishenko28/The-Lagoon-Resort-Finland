@@ -177,9 +177,9 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                         <h1>Change Reservation</h1>
                         <hr />
                         <div className="info">
-                            <h2>{toChange.user.name} ({toChange.user.sex + ", " + toChange.user.age})</h2>
+                            <h2>{toChange.user.details.name} ({toChange.user.details.sex + ", " + toChange.user.details.age})</h2>
                             <h3>{toChange.user.email}</h3>
-                            <h4>{toChange.user.contact}</h4>
+                            <h4>{toChange.user.details.contact}</h4>
                         </div>
                         <hr />
                         <div className="date-wrapper">

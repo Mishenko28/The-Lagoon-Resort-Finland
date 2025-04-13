@@ -1,8 +1,7 @@
 const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
 const User = require('../models/userModel')
-const UserPersonalData = require('../models/userPersonalDataModel')
-const { startOfMonth, format } = require('date-fns')
+const { startOfMonth } = require('date-fns')
 
 const now = new Date()
 
@@ -31,21 +30,7 @@ const getAllData = async (_, res) => {
 
         const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled', "expired"] }, createdAt: { $gte: startOfMonth(new Date()) } })
         const newUsers = await User.countDocuments({ createdAt: { $gte: startOfMonth(new Date()) } })
-        let recentSales = await Payment.find({}).populate('userId').sort({ createdAt: -1 }).limit(20)
-
-        recentSales = await Promise.all(recentSales.map(async payment => {
-            payment.toObject()
-
-            const { name, img } = await UserPersonalData.findOne({ email: payment.userId.email })
-
-            return {
-                _id: payment._id,
-                name,
-                img,
-                email: payment.userId.email,
-                payed: payment.amount
-            }
-        }))
+        const recentSales = await Payment.find({}).populate({ path: 'userId', populate: 'details' }).sort({ createdAt: -1 }).limit(20)
 
         const bookings = {
             previousYear: {

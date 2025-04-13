@@ -87,22 +87,22 @@ const Expired = ({ convertToNight }) => {
                                 >
                                     <td>{i + 1}</td>
                                     <td>
-                                        {book.user.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
+                                        {book.user.details.email.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
                                             <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
                                     </td>
                                     <td>
-                                        {book.user.name.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
+                                        {book.user.details.name.split(new RegExp(`(${searchInput})`, 'gi')).map((part, i) => (
                                             <span key={i} style={part.toLowerCase() === searchInput.toLowerCase() ? { backgroundColor: "var(--light-gray)" } : null}>
                                                 {part}
                                             </span>
                                         ))}
                                         <br />
-                                        {book.user.sex}, {book.user.age}yrs old
+                                        {book.user.details.sex}, {book.user.details.age}yrs old
                                     </td>
-                                    <td>{book.user.contact}</td>
+                                    <td>{book.user.details.contact}</td>
                                     <td>
                                         {format(book.from, 'LLL d' + (new Date(book.from).getFullYear() === new Date(book.to).getFullYear() ? '' : ', yyyy'))} - {format(book.to, (new Date(book.from).getMonth() === new Date(book.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')}
                                         <br />
@@ -118,7 +118,7 @@ const Expired = ({ convertToNight }) => {
                                             </div>
                                         ))}
                                     </td>
-                                    <td>{book.note && <i onClick={() => setOpenedNote(book.note)} className="fa-solid fa-envelope" />}</td>
+                                    <td>{book.note && <i onClick={e => { e.stopPropagation(), setOpenedNote(book.note) }} className="fa-solid fa-envelope" />}</td>
                                     <td>₱{book.deposit.toLocaleString()}</td>
                                     <td>₱{book.total.toLocaleString()}</td>
                                     <td>₱{book.payed.toLocaleString()}</td>

@@ -8,7 +8,8 @@ module.exports = mongoose.model('User', new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     totalBookings: {
         type: Number,
@@ -17,5 +18,10 @@ module.exports = mongoose.model('User', new mongoose.Schema({
     personalData: {
         type: Boolean,
         default: false
+    },
+    details: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserPersonalData',
+        default: null
     }
 }, { timestamps: true }), 'users')

@@ -6,7 +6,6 @@ const {
     loginUser,
     signUpUser,
     getUsers,
-    searchUser,
     addUserData,
     getUserData,
     updateUserData,

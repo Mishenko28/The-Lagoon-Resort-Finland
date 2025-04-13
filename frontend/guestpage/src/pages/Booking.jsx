@@ -77,8 +77,8 @@ const Booking = () => {
         const fetchUserDetails = async () => {
             axios.get('user/data', { params: { email: state.user.email } })
                 .then(res => {
-                    setUserHasDetails(res.data.personalData ? true : false)
-                    if (res.data.personalData) fetchAdminSettings()
+                    setUserHasDetails(res.data)
+                    if (res.data) fetchAdminSettings()
                     else setIsLoading(false)
                 })
         }
@@ -128,7 +128,7 @@ const Booking = () => {
                 setSelectedRoomTypes([])
                 setNote("")
                 setPage("success")
-                socket.emit('new-booking', res.data.book)
+                socket.emit('new-booking', res.data)
             })
             .finally(() => setIsRoomsloading(false))
     }

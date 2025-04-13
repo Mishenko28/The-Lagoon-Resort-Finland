@@ -35,8 +35,9 @@ const Profile = () => {
     const fetchUserDetails = async () => {
         axios.get('user/data', { params: { email: state.user.email } })
             .then(res => {
-                setUserDetails(res.data.personalData)
-                if (res.data.personalData) {
+                setUserDetails(res.data)
+                console.log(res.data)
+                if (res.data) {
                     setIsEditing(false)
                     setNoData(false)
                 }
@@ -74,8 +75,8 @@ const Profile = () => {
             ...formData
         })
             .then(res => {
-                setUserDetails(res.data.personalData)
-                dispatch({ type: 'UPDATE_IMG', payload: res.data.personalData.img })
+                setUserDetails(res.data)
+                dispatch({ type: 'UPDATE_IMG', payload: res.data.img })
                 setIsEditing(false)
             })
             .catch(err => setError(err.response.data.error))
@@ -97,8 +98,8 @@ const Profile = () => {
             ...formData
         })
             .then(res => {
-                setUserDetails(res.data.personalData)
-                dispatch({ type: 'UPDATE_IMG', payload: res.data.personalData.img })
+                setUserDetails(res.data)
+                dispatch({ type: 'UPDATE_IMG', payload: res.data.img })
                 setIsEditing(false)
                 setNoData(false)
                 book && navigate('/booking')
