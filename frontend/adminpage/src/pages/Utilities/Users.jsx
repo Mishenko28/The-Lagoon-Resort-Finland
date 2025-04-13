@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import useConvertBase64 from "../../hooks/useConvertBase64"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSearchParams, useNavigate } from "react-router-dom"
+import UserDetails from "../../components/UserDetails"
 
 
 const Users = () => {
@@ -33,6 +34,8 @@ const Users = () => {
     })
     const [confirmPass, setConfirmPass] = useState("")
     const [addUserLoading, setAddUserLoading] = useState(false)
+
+    const [userToShow, setUserToShow] = useState(null)
 
     useEffect(() => {
         setNewUser(prev => ({ ...prev, img: base64 }))
@@ -141,6 +144,7 @@ const Users = () => {
                                             exit={{ opacity: 0 }}
                                             transition={{ duration: 0.3 }}
                                             key={user._id}
+                                            onClick={() => setUserToShow(user)}
                                         >
                                             <td><img src={user.details?.img || "/profile.webp"} /></td>
                                             <td>
@@ -194,6 +198,7 @@ const Users = () => {
                     }
                 </>
             }
+            {userToShow && <UserDetails props={{ userToShow, setUserToShow }} />}
         </div>
     )
 }
