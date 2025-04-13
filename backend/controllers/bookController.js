@@ -6,6 +6,8 @@ const sendMail = require('../Utility/nodeMailer')
 const { Admin } = require('../models/adminModel')
 const Payment = require('../models/paymentModel')
 const { format, isFuture } = require('date-fns')
+const moment = require('moment-timezone')
+const TIMEZONE = 'Asia/Manila'
 
 // STATUS
 // pending
@@ -15,18 +17,6 @@ const { format, isFuture } = require('date-fns')
 // noshow
 // expired
 // completed
-
-const getMonthRange = (month) => {
-    const start = new Date(month)
-    start.setDate(1)
-    start.setHours(0, 0, 0, 0)
-
-    const end = new Date(month)
-    end.setMonth(end.getMonth() + 1)
-    end.setHours(23, 59, 59, 999)
-
-    return { start, end }
-}
 
 
 // GET TOTAL BOOKS
@@ -80,7 +70,8 @@ const getPending = async (_, res) => {
 const getExpired = async (req, res) => {
     const { month } = req.query
 
-    const { start, end } = getMonthRange(month)
+    const start = moment(month).tz(TIMEZONE).startOf('month')
+    const end = moment(month).tz(TIMEZONE).endOf('month')
 
     try {
         let books = await Book.find({ status: "expired", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
@@ -117,7 +108,8 @@ const getOngoing = async (_, res) => {
 const getCancelled = async (req, res) => {
     const { month } = req.query
 
-    const { start, end } = getMonthRange(month)
+    const start = moment(month).tz(TIMEZONE).startOf('month')
+    const end = moment(month).tz(TIMEZONE).endOf('month')
 
     try {
         let books = await Book.find({ status: "cancelled", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
@@ -132,7 +124,8 @@ const getCancelled = async (req, res) => {
 const getNoshow = async (req, res) => {
     const { month } = req.query
 
-    const { start, end } = getMonthRange(month)
+    const start = moment(month).tz(TIMEZONE).startOf('month')
+    const end = moment(month).tz(TIMEZONE).endOf('month')
 
     try {
         let books = await Book.find({ status: "noshow", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()
@@ -147,7 +140,8 @@ const getNoshow = async (req, res) => {
 const getCompleted = async (req, res) => {
     const { month } = req.query
 
-    const { start, end } = getMonthRange(month)
+    const start = moment(month).tz(TIMEZONE).startOf('month')
+    const end = moment(month).tz(TIMEZONE).endOf('month')
 
     try {
         let books = await Book.find({ status: "completed", from: { $gte: start, $lte: end } }).populate({ path: 'user', populate: 'details' }).lean()

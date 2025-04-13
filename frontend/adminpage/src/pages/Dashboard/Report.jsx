@@ -66,6 +66,7 @@ const Report = () => {
                     .finally(() => setIsLoading(false))
 
                 generatePDF({
+                    date: new Date(day).toLocaleDateString(),
                     newBooksTotal,
                     revenue,
                     checkIn,

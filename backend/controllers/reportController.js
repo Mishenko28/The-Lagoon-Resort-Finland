@@ -1,7 +1,9 @@
 const Book = require('../models/bookModel')
 const Payment = require('../models/paymentModel')
 const { Actions, ActivityLog } = require('../models/activityLogModel')
-const { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } = require('date-fns')
+const moment = require('moment-timezone')
+
+const TIMEZONE = 'Asia/Manila'
 
 const status = [
     "pending",
@@ -63,8 +65,8 @@ const getDailyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { day } = req.query
 
-    const start = startOfDay(day)
-    const end = endOfDay(day)
+    const start = moment(day).tz(TIMEZONE).startOf('day')
+    const end = moment(day).tz(TIMEZONE).endOf('day')
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -88,8 +90,9 @@ const getDailyReport = async (req, res) => {
 const getWeeklyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { start: startDate, end: endDate } = req.query
-    let start = startOfWeek(startDate)
-    let end = endOfWeek(endDate)
+
+    const start = moment(startDate).tz(TIMEZONE).startOf('week')
+    const end = moment(endDate).tz(TIMEZONE).endOf('week')
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -114,8 +117,8 @@ const getMonthlyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { month } = req.query
 
-    const start = startOfMonth(month)
-    const end = endOfMonth(month)
+    const start = moment(month).tz(TIMEZONE).startOf('month')
+    const end = moment(month).tz(TIMEZONE).endOf('month')
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
@@ -140,8 +143,8 @@ const getYearlyReport = async (req, res) => {
     const { adminEmail } = req.body
     const { year } = req.query
 
-    const start = startOfYear(year)
-    const end = endOfYear(year)
+    const start = moment(year).tz(TIMEZONE).startOf('year')
+    const end = moment(year).tz(TIMEZONE).endOf('year')
 
     try {
         const { payments, revenue, totalPerStatus } = await getReport(start, end)
