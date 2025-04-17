@@ -1,0 +1,91 @@
+.user-manual {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--primary);
+
+    & .manual-body {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        overflow: hidden;
+        border-radius: 8px;
+
+        & h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary);
+            color: #fff;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--primary-dark);
+            }
+        }
+
+        & .sub-body {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+
+            & .sub-body-item {
+
+                & h2 {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    background-color: var(--secondary);
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    font-size: 1rem;
+                    color: #fff;
+                    font-weight: 500;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: var(--primary);
+                    }
+                }
+
+                & .content-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    overflow-x: auto;
+                    gap: 10px;
+                    padding: 10px;
+
+                    & .page {
+                        display: flex;
+
+                        & .content-text {
+                            flex-grow: 1;
+                            padding: 10px;
+
+                            & h3 {
+                                font-size: 1.5rem;
+                                font-weight: 900;
+                            }
+
+                            & p {
+                                margin-top: 10px;
+                                text-indent: 40px;
+                                color: var(--secondary);
+                                text-align: justify;
+                            }
+                        }
+
+                        & img {
+                            min-width: 900px;
+                            max-width: 900px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

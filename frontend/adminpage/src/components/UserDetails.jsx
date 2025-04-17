@@ -36,15 +36,16 @@ const UserDetails = ({ props: { userToShow, setUserToShow } }) => {
                 <i className="fa-solid fa-xmark" onClick={() => setUserToShow(null)} />
                 <h1>User Details</h1>
                 <h2>{userToShow.email}</h2>
-                <div className="user-details-content">
-                    <img src={userToShow.details?.img} />
-                    <div className="info">
-                        <p>{userToShow.details?.name}</p>
-                        <p>{userToShow.details?.age}</p>
-                        <p>{userToShow.details?.sex}</p>
-                        <p>{userToShow.details?.contact}</p>
-                    </div>
-                </div>
+                {userToShow.personalData &&
+                    <div className="user-details-content">
+                        <img src={userToShow.details?.img} />
+                        <div className="info">
+                            <p>{userToShow.details?.name}</p>
+                            <p>{userToShow.details?.age}</p>
+                            <p>{userToShow.details?.sex}</p>
+                            <p>{userToShow.details?.contact}</p>
+                        </div>
+                    </div>}
                 {isLoading ?
                     <Loader2 />
                     :
@@ -61,6 +62,7 @@ const UserDetails = ({ props: { userToShow, setUserToShow } }) => {
                                     <p>Paid: ₱<b>{book.payed.toLocaleString()}</b></p>
                                 </div>
                             ))}
+                            {books.length <= 0 && <p className="none">none</p>}
                         </div>
                     </div>
                 }

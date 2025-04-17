@@ -115,6 +115,10 @@
                         gap: 10px;
                         cursor: pointer;
 
+                        &:hover {
+                            background-color: var(--light-gray);
+                        }
+
                         & img {
                             width: 30px;
                             height: 30px;

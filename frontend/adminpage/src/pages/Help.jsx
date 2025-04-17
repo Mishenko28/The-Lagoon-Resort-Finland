@@ -1,4 +1,5 @@
 import { Outlet, useLocation, Link } from "react-router-dom"
+import "../styles/help.css"
 
 export default function Help() {
     return (

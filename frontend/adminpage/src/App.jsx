@@ -26,6 +26,8 @@ import Users from "./pages/Utilities/Users"
 import Booking from './pages/Dashboard/Booking'
 import Report from "./pages/Dashboard/Report"
 
+import UserManual from "./pages/Help/UserManual"
+
 import Profile from './pages/Profile'
 import Success from './components/Success'
 import Failed from './components/Failed'
@@ -64,7 +66,7 @@ function App() {
                             </Route>
                         }
                         <Route path='help' element={<Help />}>
-                            <Route path='user-manual' element={<h1>User Manual</h1>} />
+                            <Route path='user-manual' element={<UserManual />} />
                         </Route>
                         <Route path="profile" element={<Profile />} />
                         <Route path="*" element={<Navigate to='/' />} />
