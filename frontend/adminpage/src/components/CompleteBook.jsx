@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { format, formatDistance, isFuture } from "date-fns"
+import { format, formatDistance, isFuture, differenceInYears } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
 import useAdmin from "../hooks/useAdmin"
@@ -76,7 +76,7 @@ const CompleteBook = ({ fetchTotals, convertToNight, setBooks, setToComplete, to
                         <Loader2 />
                         :
                         <>
-                            <h2>{toComplete.user.details.name} ({toComplete.user.details.sex}, {toComplete.user.details.age})</h2>
+                            <h2>{toComplete.user.details.name} ({toComplete.user.details.sex}, {differenceInYears(new Date(), toComplete.user.details.birthDate)})</h2>
                             <h2>{toComplete.user.email}</h2>
                             <h2>{format(toComplete.from, 'LLL d' + (new Date(toComplete.from).getFullYear() === new Date(toComplete.to).getFullYear() ? '' : ', yyyy'))} - {format(toComplete.to, (new Date(toComplete.from).getMonth() === new Date(toComplete.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toComplete.from, toComplete.to)})</h2>
                             <hr />

@@ -4,6 +4,7 @@ import useAdmin from "../hooks/useAdmin"
 import "../styles/profile.css"
 import axios from "axios"
 import Loader from "../components/Loader"
+import { differenceInYears } from 'date-fns'
 
 
 
@@ -21,7 +22,7 @@ const Profile = () => {
 
     const [formData, setFormData] = useState({
         name: "",
-        age: "",
+        birthDate: "",
         sex: "",
         contact: "",
         img: "/profile.webp"
@@ -63,7 +64,7 @@ const Profile = () => {
     const handleEditData = async (e) => {
         e.preventDefault()
 
-        if (!formData.name || !formData.age || !formData.sex || !formData.contact || !formData.img) {
+        if (!formData.name || !formData.birthDate || !formData.sex || !formData.contact || !formData.img) {
             setError("Please fill all fields")
             return
         }
@@ -86,7 +87,7 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (!formData.name || !formData.age || !formData.sex || !formData.contact) {
+        if (!formData.name || !formData.birthDate || !formData.sex || !formData.contact) {
             setError("Please fill all fields")
             return
         }
@@ -111,7 +112,7 @@ const Profile = () => {
         setIsEditing(true)
         setFormData({
             name: userDetails.name,
-            age: userDetails.age,
+            birthDate: new Date(userDetails.birthDate).toISOString().split('T')[0],
             sex: userDetails.sex,
             contact: userDetails.contact,
             img: userDetails.img
@@ -138,7 +139,7 @@ const Profile = () => {
                             <div className="sub">
                                 <div className="info-wrapper">
                                     <p>Age:</p>
-                                    <h3>{userDetails.age}</h3>
+                                    <h3>{differenceInYears(new Date(), userDetails.birthDate)}</h3>
                                 </div>
                                 <div className="info-wrapper">
                                     <p>Sex:</p>
@@ -169,8 +170,8 @@ const Profile = () => {
                                 <input value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} type="text" />
                             </div>
                             <div className="info-wrapper">
-                                <p>Age:</p>
-                                <input value={formData.age} onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))} type="number" />
+                                <p>Birth Date:</p>
+                                <input value={formData.birthDate} onChange={(e) => setFormData(prev => ({ ...prev, birthDate: e.target.value }))} type="date" />
                             </div>
                             <div className="info-wrapper">
                                 <p>Sex:</p>

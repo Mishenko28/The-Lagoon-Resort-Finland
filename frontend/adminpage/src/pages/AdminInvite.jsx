@@ -24,7 +24,7 @@ export default function AdminInvite() {
         img: base64,
         name: '',
         sex: '',
-        age: '',
+        birthDate: '',
         contact: '',
         role: []
     })
@@ -61,7 +61,7 @@ export default function AdminInvite() {
         if (newAdmin.img === ''
             || newAdmin.password === ''
             || newAdmin.name === ''
-            || newAdmin.age === ''
+            || newAdmin.birthDate === ''
             || newAdmin.sex === ''
             || newAdmin.contact === '') {
             dispatch({ type: 'FAILED', payload: 'Please fill all fields' })
@@ -127,8 +127,8 @@ export default function AdminInvite() {
                                         </select>
                                     </div>
                                     <div className="input-group">
-                                        <label>Age</label>
-                                        <input type="number" value={newAdmin.age} onChange={(e) => setNewAdmin(prev => ({ ...prev, age: e.target.value }))} />
+                                        <label>Birth Date</label>
+                                        <input type="date" value={newAdmin.birthDate} onChange={(e) => setNewAdmin(prev => ({ ...prev, birthDate: e.target.value }))} />
                                     </div>
                                     <div className="input-group">
                                         <label>Contact Number</label>

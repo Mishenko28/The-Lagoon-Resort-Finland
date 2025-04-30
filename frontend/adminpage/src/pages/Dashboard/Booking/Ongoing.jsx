@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, isPast } from "date-fns"
+import { format, isPast, differenceInYears } from "date-fns"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
@@ -118,7 +118,7 @@ export default function Ongoing({ fetchTotals, convertToNight }) {
                                             </span>
                                         ))}
                                         <br />
-                                        {book.user.details.sex}, {book.user.details.age}yrs old
+                                        {book.user.details.sex}, {differenceInYears(new Date(), book.user.details.birthDate)}yrs old
                                     </td>
                                     <td>{book.user.contact}</td>
                                     <td>

@@ -27,12 +27,12 @@ module.exports.Admin = mongoose.model('Admin', new mongoose.Schema({
             type: String,
             required: true
         },
-        age: {
-            type: Number,
-            required: true
-        },
         contact: {
             type: String,
+            required: true
+        },
+        birthDate: {
+            type: Date,
             required: true
         }
     }

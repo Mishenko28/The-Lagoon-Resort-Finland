@@ -202,7 +202,7 @@ const addBook = async (req, res) => {
     }
 }
 
-// PENDING & CANCELLED => CONFIRMED
+// PENDING  => CONFIRMED
 const setConfirmed = async (req, res) => {
     const { _id, from, to, room, total, deposit, payed, adminEmail } = await req.body
 
@@ -242,7 +242,7 @@ const setConfirmed = async (req, res) => {
                     <p><b>The Lagoon Resort Finland Inc.<b></p>`
         })
 
-        await Payment.create({ amount: payed, userId: book.user })
+        await Payment.create({ amount: payed, type: "down payment", userId: book.user })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.BOOKING, Actions.UPDATED], activity: `Confirmed a book of ${book.user.email}` })
@@ -261,7 +261,7 @@ const setCompleted = async (req, res) => {
         const oldBook = await Book.findOne({ _id })
 
         if (total - oldBook.balance > 0) {
-            await Payment.create({ amount: total - oldBook.payed, userId: oldBook.user })
+            await Payment.create({ amount: total - oldBook.payed, type: "check-out payment", userId: oldBook.user })
         }
 
         const book = await Book.findOneAndUpdate({ _id }, { status: "completed", balance: 0, total, payed: total, addCharges }, { new: true }).populate('user')
@@ -323,7 +323,7 @@ const editBook = async (req, res) => {
         const oldBook = await Book.findOne({ _id })
 
         if (payed - oldBook.payed > 0) {
-            await Payment.create({ amount: payed - oldBook.payed, userId: oldBook.user })
+            await Payment.create({ amount: payed - oldBook.payed, type: 'partial payment', userId: oldBook.user })
         }
 
         const book = await Book.findOneAndUpdate({ _id }, { _id, from, to, room: newRoom, total, balance, payed, showed }, { new: true }).populate({ path: 'user', populate: 'details' })
@@ -454,7 +454,7 @@ const populateCompleted = async (_, res) => {
         let randomDays
 
         do {
-            randomDays = Math.floor(Math.random() * 15) + 1
+            randomDays = Math.floor(Math.random() * 7) + 1
             to = new Date(user.createdAt)
             to.setDate(to.getDate() + randomDays)
         } while (isFuture(to))
@@ -484,12 +484,14 @@ const populateCompleted = async (_, res) => {
         await Payment.create({
             amount: total * downPayment,
             userId: user._id,
+            type: "down payment",
             createdAt: from
         })
 
         await Payment.create({
             amount: total * downPayment,
             userId: user._id,
+            type: "check-out payment",
             createdAt: to
         })
 
@@ -567,7 +569,7 @@ const populateNoShow = async (_, res) => {
         let randomDays
 
         do {
-            randomDays = Math.floor(Math.random() * 15) + 1
+            randomDays = Math.floor(Math.random() * 7) + 1
             to = new Date(user.createdAt)
             to.setDate(to.getDate() + randomDays)
         } while (isFuture(to))
@@ -595,6 +597,7 @@ const populateNoShow = async (_, res) => {
         await Payment.create({
             amount: total * downPayment,
             userId: user._id,
+            type: "down payment",
             createdAt: from
         })
 
@@ -670,7 +673,7 @@ const populateCancelled = async (_, res) => {
         let randomDays
 
         do {
-            randomDays = Math.floor(Math.random() * 15) + 1
+            randomDays = Math.floor(Math.random() * 7) + 1
             to = new Date(user.createdAt)
             to.setDate(to.getDate() + randomDays)
         } while (isFuture(to))
@@ -768,7 +771,7 @@ const populateExpired = async (_, res) => {
         let randomDays
 
         do {
-            randomDays = Math.floor(Math.random() * 15) + 1
+            randomDays = Math.floor(Math.random() * 7) + 1
             to = new Date(user.createdAt)
             to.setDate(to.getDate() + randomDays)
         } while (isFuture(to))

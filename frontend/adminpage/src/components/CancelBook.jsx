@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { format, formatDistance } from "date-fns"
+import { format, differenceInYears } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
 import useAdmin from "../hooks/useAdmin"
@@ -37,7 +37,7 @@ const CancelBook = ({ fetchTotals, convertToNight, setBooks, setToCancel, toCanc
                         <Loader2 />
                         :
                         <>
-                            <h2>{toCancel.user.details.name} ({toCancel.user.details.sex}, {toCancel.user.details.age})</h2>
+                            <h2>{toCancel.user.details.name} ({toCancel.user.details.sex}, {differenceInYears(new Date(), toCancel.user.details.birthDate)})</h2>
                             <h2>{toCancel.user.details.email}</h2>
                             <h2>{format(toCancel.from, 'LLL d' + (new Date(toCancel.from).getFullYear() === new Date(toCancel.to).getFullYear() ? '' : ', yyyy'))} - {format(toCancel.to, (new Date(toCancel.from).getMonth() === new Date(toCancel.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toCancel.from, toCancel.to)})</h2>
                             <div className="room">

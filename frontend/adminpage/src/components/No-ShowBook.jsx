@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { format, formatDistance } from "date-fns"
+import { format, differenceInYears } from "date-fns"
 import Loader2 from "./Loader2"
 import axios from "axios"
 import useAdmin from "../hooks/useAdmin"
@@ -35,7 +35,7 @@ const NoShowBook = ({ fetchTotals, convertToNight, setBooks, setToNoShow, toNoSh
                         <Loader2 />
                         :
                         <>
-                            <h2>{toNoShow.user.details.name} ({toNoShow.user.details.sex}, {toNoShow.user.details.age})</h2>
+                            <h2>{toNoShow.user.details.name} ({toNoShow.user.details.sex}, {differenceInYears(new Date(), toNoShow.user.details.birthDate)})</h2>
                             <h2>{toNoShow.user.details.email}</h2>
                             <h2>{format(toNoShow.from, 'LLL d' + (new Date(toNoShow.from).getFullYear() === new Date(toNoShow.to).getFullYear() ? '' : ', yyyy'))} - {format(toNoShow.to, (new Date(toNoShow.from).getMonth() === new Date(toNoShow.to).getMonth() ? '' : 'LLL ') + 'd, yyyy')} ({convertToNight(toNoShow.from, toNoShow.to)})</h2>
                             <div className="room">

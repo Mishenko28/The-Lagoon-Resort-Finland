@@ -4,7 +4,7 @@ import useAdmin from "../../hooks/useAdmin";
 import axios from "axios";
 import AddNewAdmin from "../../components/AddNewAdmin";
 import EditAdmin from "../../components/EditAdmin";
-import { formatDistance } from "date-fns";
+import { formatDistance, differenceInYears } from "date-fns";
 import InviteOptions from "../../components/InviteOptions";
 import InviteAdmin from "../../components/InviteAdmin";
 import { motion, AnimatePresence } from "framer-motion";
@@ -187,7 +187,7 @@ export default function Admins() {
                                                     ))}
                                                 </td>
                                                 <td>{admin.personalData.sex}</td>
-                                                <td>{admin.personalData.age}</td>
+                                                <td>{differenceInYears(new Date(), admin.personalData.birthDate)}</td>
                                                 <td>{admin.personalData.contact}</td>
                                             </motion.tr>
                                         ))}

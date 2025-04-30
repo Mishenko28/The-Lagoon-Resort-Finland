@@ -64,7 +64,7 @@ const loginAdmin = async (req, res) => {
 
 // ADD NEW ADMIN
 const addNewAdmin = async (req, res) => {
-    const { email, password, img, role, name, sex, age, contact, adminEmail } = await req.body
+    const { email, password, img, role, name, sex, contact, adminEmail, birthDate } = await req.body
 
     try {
         const match = await Admin.findOne({ email })
@@ -77,7 +77,8 @@ const addNewAdmin = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
+
+        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, birthDate, contact } })
 
         // activity log
         await ActivityLog.create({ adminEmail, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })
@@ -116,7 +117,7 @@ const deleteAdmin = async (req, res) => {
 
 // UPDATE ADMIN PROFILE
 const updateAdmin = async (req, res) => {
-    const { _id, email, role, img, name, sex, age, contact, adminEmail } = await req.body
+    const { _id, email, role, img, name, sex, birthDate, contact, adminEmail } = await req.body
     let editedParts = []
 
     try {
@@ -125,7 +126,7 @@ const updateAdmin = async (req, res) => {
 
         const oldAdmin = await Admin.findOne({ _id })
 
-        const admin = await Admin.findOneAndUpdate({ _id }, { email, img, role, personalData: { name, sex, age, contact } }, { new: true })
+        const admin = await Admin.findOneAndUpdate({ _id }, { email, img, role, personalData: { name, sex, birthDate, contact } }, { new: true })
 
         // activity log
         JSON.stringify(oldAdmin.role) !== JSON.stringify(role) && editedParts.push("role")
@@ -133,7 +134,7 @@ const updateAdmin = async (req, res) => {
         oldAdmin.email !== email && editedParts.push("email")
         oldAdmin.personalData.name !== name && editedParts.push("name")
         oldAdmin.personalData.sex !== sex && editedParts.push("sex")
-        oldAdmin.personalData.age !== age && editedParts.push("age")
+        oldAdmin.personalData.birthDate !== birthDate && editedParts.push("birthDate")
         oldAdmin.personalData.contact !== contact && editedParts.push("contact")
 
         if (editedParts.length > 0) {
@@ -152,8 +153,8 @@ const updateAdmin = async (req, res) => {
                             return ` changed name from "${oldAdmin.personalData.name}" to "${name}"`
                         case "sex":
                             return ` changed sex from "${oldAdmin.personalData.sex}" to "${sex}"`
-                        case "age":
-                            return ` changed age from "${oldAdmin.personalData.age}" to "${age}"`
+                        case "birthDate":
+                            return ` changed birth date from "${oldAdmin.personalData.birthDate}" to "${birthDate}"`
                         case "contact":
                             return ` changed contact from "${oldAdmin.personalData.contact}" to "${contact}"`
                     }
@@ -342,7 +343,7 @@ const deleteInviteLink = async (req, res) => {
 
 // ADD ADMIN USING LINK
 const addNewAdminLink = async (req, res) => {
-    const { email, password, img, role, name, sex, age, contact, token } = await req.body
+    const { email, password, img, role, name, sex, birthDate, contact, token } = await req.body
 
     try {
         const decoded = jwt.verify(token, process.env.PASSWORD)
@@ -354,7 +355,7 @@ const addNewAdminLink = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
-        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, age, contact } })
+        const admin = await Admin.create({ email, password: hash, img, role, personalData: { name, sex, birthDate, contact } })
 
         // activity log
         await ActivityLog.create({ adminEmail: email, action: [Actions.ADMIN, Actions.CREATED], activity: `Added a new admin with the email of "${email}"` })

@@ -59,37 +59,39 @@ const AboutUs = () => {
                     </MapContainer>
                     <div className="contacts">
                         <h1>GET IN TOUCH</h1>
-                        {phoneNumbers.length > 0 &&
-                            <div className="contacts2">
-                                <h2>Contact us via mobile</h2>
-                                {phoneNumbers.map(item => (
-                                    <div key={item._id} className="mobile-number-list">
-                                        <p><i className="fa-solid fa-phone" /> {item.sim}</p>
-                                        <p>{item.number}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        }
-                        {emails.length > 0 &&
-                            <div className="contacts2">
-                                <h2>Emails Us</h2>
-                                {emails.map(item => (
-                                    <p key={item._id} className="email"><i className="fa-solid fa-envelope" /> {item.url}</p>
-                                ))}
-                            </div>
-                        }
-                        {socials.length > 0 &&
-                            <div className="contacts2">
-                                <h2>Follow us on social media</h2>
-                                <div className="links">
-                                    {socials.map(item => (
-                                        <a target="_blank" href={item.link}>
-                                            <i className={`fa-brands fa-${item.app}`} />
-                                        </a>
+                        <div className="contacts-wrapper">
+                            {phoneNumbers.length > 0 &&
+                                <div className="contacts2">
+                                    <h2>Contact us via mobile</h2>
+                                    {phoneNumbers.map(item => (
+                                        <div key={item._id} className="mobile-number-list">
+                                            <p><i className="fa-solid fa-phone" /> {item.sim}</p>
+                                            <p>{item.number}</p>
+                                        </div>
                                     ))}
                                 </div>
-                            </div>
-                        }
+                            }
+                            {emails.length > 0 &&
+                                <div className="contacts2">
+                                    <h2>Emails Us</h2>
+                                    {emails.map(item => (
+                                        <p key={item._id} className="email"><i className="fa-solid fa-envelope" /> {item.url}</p>
+                                    ))}
+                                </div>
+                            }
+                            {socials.length > 0 &&
+                                <div className="contacts2">
+                                    <h2>Follow us on social media</h2>
+                                    <div className="links">
+                                        {socials.map(item => (
+                                            <a target="_blank" href={item.link}>
+                                                <i className={`fa-brands fa-${item.app}`} />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             }

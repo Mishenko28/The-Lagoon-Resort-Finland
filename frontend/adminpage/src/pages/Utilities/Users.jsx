@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import useAdmin from "../../hooks/useAdmin"
 import Loader2 from "../../components/Loader2"
 import axios from "axios"
-import { format } from 'date-fns'
+import { format, differenceInYears } from 'date-fns'
 import useConvertBase64 from "../../hooks/useConvertBase64"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSearchParams, useNavigate } from "react-router-dom"
@@ -27,7 +27,7 @@ const Users = () => {
         email: "",
         password: "",
         name: "",
-        age: "",
+        birthDate: "",
         sex: "",
         contact: "",
         img: base64
@@ -69,7 +69,7 @@ const Users = () => {
             email: "",
             password: "",
             name: "",
-            age: "",
+            birthDate: "",
             sex: "",
             contact: "",
             img: "/profile.webp"
@@ -84,7 +84,7 @@ const Users = () => {
             return
         }
 
-        if (!newUser.email || !newUser.password || !newUser.name || !newUser.age || !newUser.sex || !newUser.contact) {
+        if (!newUser.email || !newUser.password || !newUser.name || !newUser.birthDate || !newUser.sex || !newUser.contact) {
             dispatch({ type: 'FAILED', payload: "please fill all fields" })
             return
         }
@@ -155,7 +155,7 @@ const Users = () => {
                                                 ))}
                                             </td>
                                             <td>{user.details?.name}</td>
-                                            <td>{user.details?.age}</td>
+                                            <td>{differenceInYears(new Date(), user.details?.birthDate) || ""}</td>
                                             <td>{user.details?.sex}</td>
                                             <td>{user.details?.contact}</td>
                                             <td>{user.totalBookings}</td>
@@ -181,7 +181,8 @@ const Users = () => {
                                     <img src={newUser.img} />
                                     <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
                                     <input type="text" placeholder="name" value={newUser.name} onChange={e => setNewUser(prev => ({ ...prev, name: e.target.value }))} />
-                                    <input type="number" placeholder="age" value={newUser.age} onChange={e => setNewUser(prev => ({ ...prev, age: e.target.value }))} />
+                                    <label>Birth Date:</label>
+                                    <input type="date" value={newUser.birthDate} onChange={e => setNewUser(prev => ({ ...prev, birthDate: e.target.value }))} />
                                     <select value={newUser.sex} onChange={e => setNewUser(prev => ({ ...prev, sex: e.target.value }))}>
                                         <option value="">--select--</option>
                                         <option value="Male">Male</option>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format } from "date-fns"
+import { format, differenceInYears } from "date-fns"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
 import Note from "../../../components/Note"
@@ -100,7 +100,7 @@ const Cancelled = ({ convertToNight }) => {
                                             </span>
                                         ))}
                                         <br />
-                                        {book.user.details.sex}, {book.user.details.age}yrs old
+                                        {book.user.details.sex}, {differenceInYears(new Date(), book.user.details.birthDate)}yrs old
                                     </td>
                                     <td>{book.user.details.contact}</td>
                                     <td>

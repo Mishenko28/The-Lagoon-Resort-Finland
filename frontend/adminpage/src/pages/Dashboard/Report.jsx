@@ -9,7 +9,7 @@ import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import useAdmin from '../../hooks/useAdmin'
 import Loader2 from '../../components/Loader2'
-import { format, startOfWeek, endOfWeek } from 'date-fns'
+import { format, startOfWeek, endOfWeek, differenceInYears } from 'date-fns'
 
 
 const Report = () => {
@@ -153,7 +153,7 @@ const Report = () => {
                     { text: i + 1, fontSize: 10 },
                     { text: book.user.details.name, fontSize: 10 },
                     { text: book.user.details.sex, fontSize: 10, position: "some value" },
-                    { text: book.user.details.age, fontSize: 10 },
+                    { text: differenceInYears(new Date(), book.user.details.birthDate), fontSize: 10 },
                     { text: book.user.details.contact, fontSize: 10 },
                     { text: book.room.map(r => `${r.roomType} R${r.roomNo}`).join(", "), fontSize: 10 },
                     { text: book.payed.toLocaleString(), fontSize: 10, alignment: "right" },
@@ -215,6 +215,7 @@ const Report = () => {
                 return [
                     { text: i + 1, fontSize: 10, alignment: "center" },
                     { text: payment.userId.details.name, fontSize: 10 },
+                    { text: payment.type, alignment: "center", fontSize: 10 },
                     { text: parseInt(payment.amount).toLocaleString(), fontSize: 10, alignment: "right" }
                 ]
             })
@@ -397,19 +398,20 @@ const Report = () => {
                     },
                 {
                     table: {
-                        widths: ["auto", "*", 100],
+                        widths: ["auto", "*", 100, 100],
                         body: [
                             [
-                                { text: "Payments", alignment: 'center', colSpan: 3, fontSize: 12, bold: true }, "", ""
+                                { text: "Payments", alignment: 'center', colSpan: 4, fontSize: 12, bold: true }, "", "", ""
                             ],
                             [
                                 { text: "No.", alignment: 'center', fontSize: 10 },
                                 { text: "Guest", alignment: 'center', fontSize: 10 },
+                                { text: "Type of Payment", alignment: 'center', fontSize: 10 },
                                 { text: "Amount", alignment: 'center', fontSize: 10 }
                             ],
                             ...dailyPaymentTable(payments),
                             [
-                                { text: "Total", alignment: 'center', colSpan: 2, fontSize: 10, bold: true }, "",
+                                { text: "Total", alignment: 'center', colSpan: 3, fontSize: 10, bold: true }, "", "",
                                 { text: payments.reduce((total, payment) => total + parseInt(payment.amount), 0).toLocaleString(), alignment: 'right', fontSize: 10, bold: true }
                             ]
                         ]

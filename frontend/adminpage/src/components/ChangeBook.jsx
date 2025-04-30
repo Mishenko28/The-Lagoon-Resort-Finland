@@ -5,6 +5,7 @@ import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
+import { differenceInYears } from 'date-fns'
 
 
 const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChange }) => {
@@ -177,7 +178,7 @@ const ChangeBook = ({ fetchTotals, convertToNight, setBooks, setToChange, toChan
                         <h1>Change Reservation</h1>
                         <hr />
                         <div className="info">
-                            <h2>{toChange.user.details.name} ({toChange.user.details.sex + ", " + toChange.user.details.age})</h2>
+                            <h2>{toChange.user.details.name} ({toChange.user.details.sex + ", " + differenceInYears(new Date(), toChange.user.details.birthDate)})</h2>
                             <h3>{toChange.user.email}</h3>
                             <h4>{toChange.user.details.contact}</h4>
                         </div>

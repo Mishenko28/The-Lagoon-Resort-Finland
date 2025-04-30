@@ -4,6 +4,7 @@ import '../styles/profile.css'
 import axios from 'axios'
 import Loader2 from '../components/Loader2'
 import useConvertBase64 from '../hooks/useConvertBase64'
+import { differenceInYears } from 'date-fns'
 
 export default function Profile() {
     const { state, dispatch } = useAdmin()
@@ -43,7 +44,7 @@ export default function Profile() {
             img: admin.img,
             email: admin.email,
             name: admin.personalData.name,
-            age: admin.personalData.age,
+            birthDate: new Date(admin.personalData.birthDate).toISOString().split('T')[0],
             sex: admin.personalData.sex,
             contact: admin.personalData.contact,
             role: admin.role
@@ -56,7 +57,7 @@ export default function Profile() {
         if (editProfile.img === ''
             || editProfile.email === ''
             || editProfile.name === ''
-            || editProfile.age === ''
+            || editProfile.birthDate === ''
             || editProfile.sex === ''
             || editProfile.contact === '') {
             dispatch({ type: 'FAILED', payload: 'Please fill all fields' })
@@ -103,8 +104,8 @@ export default function Profile() {
                                 <input type="text" value={editProfile.name} onChange={(e) => setEditProfile(prev => ({ ...prev, name: e.target.value }))} />
                             </h2>
                             <h2>
-                                <span>Age: </span>
-                                <input type="number" value={editProfile.age} onChange={(e) => setEditProfile(prev => ({ ...prev, age: e.target.value }))} />
+                                <span>Birth Date: </span>
+                                <input type="date" value={editProfile.birthDate} onChange={(e) => setEditProfile(prev => ({ ...prev, birthDate: e.target.value }))} />
                             </h2>
                             <h2>
                                 <span>Sex: </span>
@@ -136,7 +137,7 @@ export default function Profile() {
                                 <div className='info'>
                                     <h2>
                                         <span>Age: </span>
-                                        <span>{admin.personalData.age}</span>
+                                        <span>{differenceInYears(new Date(), admin.personalData.birthDate)}</span>
                                     </h2>
                                     <h2>
                                         <span>Sex: </span>

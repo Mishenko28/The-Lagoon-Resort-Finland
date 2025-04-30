@@ -26,7 +26,11 @@ const User = () => {
                 let userPersonalData = {}
 
                 if (Math.random() < personalDataChance / 100) {
-                    userPersonalData.age = Math.floor(Math.random() * (60 - 20 + 1)) + 20
+                    userPersonalData.birthDate = new Date(
+                        Math.floor(Math.random() * (2003 - 1970 + 1)) + 1970,
+                        Math.floor(Math.random() * (12 - 1 + 1)) + 1,
+                        Math.floor(Math.random() * (31 - 1 + 1)) + 1
+                    ).toISOString().split("T")[0]
                     userPersonalData.sex = Math.random() > 0.5 ? "Male" : "Female"
                     userPersonalData.contact = `09${Math.floor(Math.random() * 1000000000)}`
                     userPersonalData.img = '/profile.webp'
@@ -45,9 +49,9 @@ const User = () => {
 
                 populatedNames.push(email)
 
-                const year = Math.random() > 0.3 ? 2024 : 2025
-                const month = year === 2025 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 12) + 1
-                const day = month === 3 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * (31 - 1 + 1)) + 1
+                const year = Math.random() > 0.2 ? 2024 : 2025
+                const month = year === 2025 ? Math.floor(Math.random() * 4) + 1 : Math.floor(Math.random() * 12) + 1
+                const day = month === 4 ? Math.floor(Math.random() * 4) + 1 : Math.floor(Math.random() * (31)) + 1
                 const hour = Math.floor(Math.random() * (23 - 0 + 1)) + 0
                 const minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0
                 const createdAt = new Date(year, month, day, hour, minute)

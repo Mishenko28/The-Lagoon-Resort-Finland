@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useAdmin from "../hooks/useAdmin";
-import { format } from "date-fns";
+import { format, differenceInYears } from "date-fns";
 import Loader2 from "./Loader2";
 
 const status = [
@@ -41,7 +41,7 @@ const UserDetails = ({ props: { userToShow, setUserToShow } }) => {
                         <img src={userToShow.details?.img} />
                         <div className="info">
                             <p>{userToShow.details?.name}</p>
-                            <p>{userToShow.details?.age}</p>
+                            <p>{differenceInYears(new Date(), userToShow.details?.birthDate)}</p>
                             <p>{userToShow.details?.sex}</p>
                             <p>{userToShow.details?.contact}</p>
                         </div>

@@ -5,6 +5,7 @@ import useAdmin from '../hooks/useAdmin'
 import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 import AvailableRooms from "./AvailableRooms"
+import { differenceInYears } from 'date-fns'
 
 
 export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toConfirm, setToConfirm }) {
@@ -180,7 +181,7 @@ export default function ConfirmBook({ fetchTotals, convertToNight, setBooks, toC
                         <h1>Confirm Reservation</h1>
                         <hr />
                         <div className="info">
-                            <h2>{toConfirm.user.details.name} ({toConfirm.user.details.sex + ", " + toConfirm.user.details.age})</h2>
+                            <h2>{toConfirm.user.details.name} ({toConfirm.user.details.sex + ", " + differenceInYears(new Date(), toConfirm.user.details.birthDate)})</h2>
                             <h3>{toConfirm.user.email}</h3>
                             <h4>{toConfirm.user.details.contact}</h4>
                         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { format, formatDistanceToNow } from "date-fns"
+import { format, formatDistanceToNow, differenceInYears } from "date-fns"
 import ConfirmBook from "../../../components/ConfirmBook"
 import Loader2 from "../../../components/Loader2"
 import { motion, AnimatePresence } from "framer-motion"
@@ -114,7 +114,7 @@ export default function Pending({ fetchTotals, convertToNight }) {
                                             </span>
                                         ))}
                                         <br />
-                                        {book.user.details.sex}, {book.user.details.age}yrs old
+                                        {book.user.details.sex}, {differenceInYears(new Date(), book.user.details.birthDate)}yrs old
                                     </td>
                                     <td>{book.user.details.contact}</td>
                                     <td>

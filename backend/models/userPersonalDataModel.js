@@ -9,8 +9,8 @@ module.exports = mongoose.model('UserPersonalData', new mongoose.Schema({
         type: String,
         required: true,
     },
-    age: {
-        type: Number,
+    birthDate: {
+        type: Date,
         required: true
     },
     sex: {

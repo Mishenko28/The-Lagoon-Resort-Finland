@@ -181,8 +181,8 @@ export default function Gallery() {
                                         exit={{ opacity: 0, scale: 0.8 }}
                                         transition={{ duration: 0.3 }}
                                         key={photo._id}
-                                        onClick={() => setEditPhoto(photo)}
                                         className='photo'
+                                        onClick={() => setEditPhoto(photo)}
                                     >
                                         <img src={photo.img} />
                                         <p>{photo.caption}</p>

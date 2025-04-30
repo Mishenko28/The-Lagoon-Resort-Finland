@@ -197,6 +197,7 @@
     position: relative;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
     min-height: 100px;
     padding: 5px;
@@ -206,9 +207,11 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
     width: 100px;
-    padding: 5px;
+    min-height: 100px;
+    padding: 10px;
     border-radius: 4px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
     color: var(--primary);
@@ -1310,13 +1313,13 @@
 
     .room-cont .room-type-content .room {
         width: 200px;
-        padding: 10px;
+        min-height: 200px;
         transition: all 0.1s;
         cursor: pointer;
     }
 
     .room-cont .room-type-content .room:hover {
-        transform: scale(1.02);
+        scale: 1.02;
     }
 
     .room-cont .room-type-content .room h1 {
@@ -1442,7 +1445,7 @@
     }
 
     .amenity-card:hover {
-        transform: scale(1.02);
+        scale: 1.02;
     }
 
     .amenity-card h1 {
@@ -1539,11 +1542,11 @@
         overflow: hidden;
         border: 1px solid var(--light-gray);
         width: min-content;
+        transition: all 0.1s;
     }
 
     .gallery-cont .photo:hover {
-        transform: scale(1.02);
-        transition: all 0.1s;
+        scale: 1.02;
         cursor: pointer;
     }
 
@@ -1601,7 +1604,7 @@
 
     .room-gallery .pics .room-typess .room-pics i:hover,
     .room-gallery .pics .room-typess .room-pics img:hover {
-        transform: scale(1.02);
+        scale: 1.02;
         transition: all 0.1s;
         cursor: pointer;
     }

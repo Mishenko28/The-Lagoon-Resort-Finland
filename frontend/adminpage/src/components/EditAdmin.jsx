@@ -19,7 +19,7 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
         img: base64,
         role: editAdmin.role,
         name: editAdmin.personalData.name,
-        age: editAdmin.personalData.age,
+        birthDate: new Date(editAdmin.personalData.birthDate).toISOString().split('T')[0],
         sex: editAdmin.personalData.sex,
         contact: editAdmin.personalData.contact
     })
@@ -60,7 +60,7 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
         if (newAdmin.img === ''
             || newAdmin.email === ''
             || newAdmin.name === ''
-            || newAdmin.age === ''
+            || newAdmin.birthDate === ''
             || newAdmin.sex === ''
             || newAdmin.contact === ''
             || newAdmin.role.length === 0) {
@@ -163,8 +163,8 @@ export default function ({ setAdmins, editAdmin, setEditAdmin }) {
                                     </select>
                                 </div>
                                 <div className="input-group">
-                                    <label>Age</label>
-                                    <input type="number" value={newAdmin.age} onChange={(e) => setNewAdmin(prev => ({ ...prev, age: e.target.value }))} />
+                                    <label>Birth Date</label>
+                                    <input type="date" value={newAdmin.birthDate} onChange={(e) => setNewAdmin(prev => ({ ...prev, birthDate: e.target.value }))} />
                                 </div>
                                 <div className="input-group">
                                     <label>Contact Number</label>

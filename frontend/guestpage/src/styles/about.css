@@ -28,7 +28,7 @@
         & .contacts {
             display: flex;
             flex-direction: column;
-            gap: 50px;
+            gap: 20px;
             background-color: var(--light-8);
             padding: 20px 8px;
 
@@ -37,64 +37,59 @@
                 font-family: 'Cinzel';
             }
 
-            & .contacts2 {
+            & .contacts-wrapper {
                 display: flex;
                 flex-direction: column;
-                gap: 6px;
+                gap: 10px;
+                align-items: center;
 
-                & h2 {
-                    font-size: var(--small);
-                    margin-bottom: 10px;
-                    font-family: "M PLUS Rounded 1c";
-                }
-
-                & .email {
+                & .contacts2 {
                     display: flex;
-                    align-items: center;
-                    gap: 5px;
-                    width: fit-content;
-                    font-size: var(--small);
-                    background-image: linear-gradient(90deg,
-                            var(--light-8) 0%,
-                            var(--light) 50%,
-                            var(--light-9) 100%);
-                    padding: 2px 8px;
-                }
+                    flex-direction: column;
+                    gap: 6px;
+                    border: 2px solid var(--light-7);
+                    background-color: var(--light-9);
+                    border-radius: 10px;
+                    padding: 10px;
+                    width: 85svw;
 
-                & .links {
-                    display: flex;
-                    gap: 10px;
-
-                    & i {
-                        font-size: var(--x-large);
-                        color: var(--dark);
+                    & h2 {
+                        font-size: var(--small);
+                        margin-bottom: 10px;
+                        font-weight: 500;
                     }
-                }
 
-                & .mobile-number-list {
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 10px;
-                    max-width: 270px;
-                    background-image: linear-gradient(90deg,
-                            var(--light-8) 0%,
-                            var(--light) 50%,
-                            var(--light-9) 100%);
-                    padding: 2px 10px;
-
-                    & p {
+                    & .email {
                         display: flex;
                         align-items: center;
-                        gap: 15px;
-                        font-size: var(--medium);
+                        gap: 5px;
+                        width: fit-content;
+                        font-size: var(--small);
+                        padding: 2px 8px;
+                    }
+
+                    & .links {
+                        display: flex;
+                        gap: 10px;
 
                         & i {
-                            font-size: var(--small);
+                            font-size: var(--x-large);
+                            color: var(--dark);
                         }
                     }
 
-                    & p:first-of-type {
-                        font-weight: 600;
+                    & .mobile-number-list {
+                        display: flex;
+                        gap: 5px;
+                        max-width: 270px;
+                        padding: 2px 10px;
+
+                        & p {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                            font-size: var(--small);
+                        }
                     }
                 }
             }
@@ -122,23 +117,27 @@
                 font-size: var(--x-large);
             }
 
-            & .contacts2 {
-                & h2 {
-                    font-size: var(--medium);
-                }
+            & .contacts-wrapper {
+                flex-direction: row;
+                gap: 10px;
+                align-items: flex-start;
+                height: 200px;
 
-                & .email {
-                    font-size: var(--medium);
-                }
+                & .contacts2 {
+                    min-height: 200px;
+                    padding: 20px;
 
-                & .mobile-number-list {
-                    max-width: 360px;
+                    & .email {
+                        font-size: var(--medium);
+                        gap: 15px;
+                    }
 
-                    & p {
-                        font-size: var(--large);
+                    & .mobile-number-list {
+                        gap: 10px;
 
-                        & i {
+                        & p {
                             font-size: var(--medium);
+                            gap: 15px;
                         }
                     }
                 }

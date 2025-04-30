@@ -95,7 +95,7 @@ const getUsers = async (req, res) => {
 
 // ADD USER PERSONAL DATA
 const addUserData = async (req, res) => {
-    const { email, name, age, sex, contact, img } = await req.body
+    const { email, name, birthDate, sex, contact, img } = await req.body
 
     try {
         const exist = await UserPersonalData.findOne({ email })
@@ -104,7 +104,7 @@ const addUserData = async (req, res) => {
             throw Error("user already has data")
         }
 
-        const personalData = await UserPersonalData.create({ email, name, age, sex, contact, img })
+        const personalData = await UserPersonalData.create({ email, name, birthDate, sex, contact, img })
         await User.findOneAndUpdate({ email }, { personalData: true, details: personalData._id })
 
         res.status(200).json(personalData)
@@ -128,10 +128,10 @@ const getUserData = async (req, res) => {
 
 // UPDATE USER PERSONAL DATA
 const updateUserData = async (req, res) => {
-    const { email, name, age, sex, contact, img } = await req.body
+    const { email, name, birthDate, sex, contact, img } = await req.body
 
     try {
-        const personalData = await UserPersonalData.findOneAndUpdate({ email }, { name, age, sex, contact, img }, { new: true })
+        const personalData = await UserPersonalData.findOneAndUpdate({ email }, { name, birthDate, sex, contact, img }, { new: true })
 
         res.status(200).json(personalData)
     } catch (error) {
@@ -140,14 +140,14 @@ const updateUserData = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-    const { email, password, age, contact, img, name, sex, adminEmail } = await req.body
+    const { email, password, birthDate, contact, img, name, sex, adminEmail } = await req.body
 
     try {
         if (!validator.isStrongPassword(password, { minUppercase: 0, minNumbers: 0, minSymbols: 0 })) {
             throw Error("password must atleast 8 characters")
         }
 
-        const personalData = await UserPersonalData.create({ email, age, contact, img, name, sex, })
+        const personalData = await UserPersonalData.create({ email, birthDate, contact, img, name, sex, })
 
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
@@ -165,7 +165,7 @@ const addUser = async (req, res) => {
 }
 
 const populateUser = async (req, res) => {
-    const { email, password, createdAt, userPersonalData: { name, age, contact, img, sex } } = req.body
+    const { email, password, createdAt, userPersonalData: { name, birthDate, contact, img, sex } } = req.body
 
     try {
 
@@ -181,7 +181,7 @@ const populateUser = async (req, res) => {
         let personalData = null
 
         if (name) {
-            personalData = await UserPersonalData.create({ email, name, age, contact, img, sex, createdAt })
+            personalData = await UserPersonalData.create({ email, name, birthDate, contact, img, sex, createdAt })
         }
 
         await User.create({ email, password: hash, personalData: personalData ? true : false, details: personalData ? personalData._id : null, createdAt })

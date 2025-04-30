@@ -218,12 +218,12 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
                                     transition={{ duration: 0.3 }}
-                                    key={room._id} onClick={() => setEditRoom(room)}
                                     className='room'
+                                    key={room._id} onClick={() => setEditRoom(room)}
                                 >
                                     <h1>{room.roomNo}</h1>
-                                    <img src={room.img || null} />
-                                    <h5>{room.caption}{!room.caption && "no caption"}</h5>
+                                    {room.img && <img src={room.img || null} />}
+                                    {room.caption && <h5>{room.caption}</h5>}
                                     {!room.active && <span>not active</span>}
                                 </motion.div>
                             ))}
@@ -255,7 +255,7 @@ export default function RoomTypes({ roomType, rooms, setRooms, setRoomTypes, isC
                                                     {room.roomNo}
                                                     {!room.active && <span>not active</span>}
                                                 </td>
-                                                <td><img src={room.img} /></td>
+                                                <td><img src={room.img || null} /></td>
                                                 <td>{room.caption}</td>
                                             </motion.tr>
                                         ))}

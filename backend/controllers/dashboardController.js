@@ -36,7 +36,7 @@ const getAllData = async (_, res) => {
 
         const totalBook = await Book.countDocuments({ status: { $nin: ['pending', 'cancelled', "expired"] }, createdAt: { $gte: startOfMonth } })
         const newUsers = await User.countDocuments({ createdAt: { $gte: startOfMonth } })
-        const recentSales = await Payment.find({}).populate({ path: 'userId', populate: 'details' }).sort({ createdAt: -1 }).limit(20)
+        const recentSales = await Payment.find({}).populate({ path: 'userId', populate: 'details' }).sort({ createdAt: -1 }).limit(30)
 
         const bookings = {
             previousYear: {

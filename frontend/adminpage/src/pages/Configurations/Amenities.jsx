@@ -112,8 +112,8 @@ export default function Amenities() {
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.8 }}
                                         transition={{ duration: 0.3 }}
-                                        key={amenity._id} onClick={() => setEditAmenity(amenity)}
                                         className='amenity-card'
+                                        key={amenity._id} onClick={() => setEditAmenity(amenity)}
                                     >
                                         <h1>{amenity.name}</h1>
                                         <img src={amenity.img} />

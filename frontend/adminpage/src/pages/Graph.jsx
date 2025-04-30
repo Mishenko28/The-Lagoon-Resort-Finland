@@ -152,7 +152,10 @@ const Graph = () => {
                                                 <h4>{sale.userId.email}</h4>
                                             </div>
                                         </div>
-                                        <h5>+₱{parseInt(sale.amount).toLocaleString()}</h5>
+                                        <div className="right">
+                                            <h6>{sale.type}</h6>
+                                            <h5>+₱{parseInt(sale.amount).toLocaleString()}</h5>
+                                        </div>
                                     </motion.div>
                                 ))}
                                 {recentSales.length === 0 && <div className="sale">No recent sales</div>}

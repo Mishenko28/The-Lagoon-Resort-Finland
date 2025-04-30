@@ -53,7 +53,7 @@ const Accommodation = () => {
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ duration: 1 }}
-                            viewport={{ once: 1, amount: 0.5 }}
+                            viewport={{ once: 1, amount: 0.4 }}
                             className="roomType"
                             key={roomType._id}
                         >
