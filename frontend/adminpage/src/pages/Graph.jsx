@@ -164,8 +164,8 @@ const Graph = () => {
                         <div className="room-availability">
                             <h1>Room Occupancy Today</h1>
                             <div className="labels">
-                                <h2>available</h2>
-                                <h2>occupied</h2>
+                                <h2><p></p>available</h2>
+                                <h2><p></p>occupied</h2>
                             </div>
                             <div className="room-wrapper">
                                 {roomAvailability.map((room, i) => (
@@ -173,7 +173,7 @@ const Graph = () => {
                                         <h2>{room.roomType} ROOMS</h2>
                                         <div className="rooms">
                                             {room.rooms.map((r, i) => (
-                                                <h3 key={i} onClick={() => navigate("/dashboard/booking?page=ongoing")} style={{ cursor: r.available ? "" : "pointer", backgroundColor: r.available ? "var(--light-green)" : "var(--light-red)" }}>{r.roomNo}</h3>
+                                                <h3 key={i} onClick={() => r.available ? null : navigate("/dashboard/booking?page=ongoing")} style={{ cursor: r.available ? "" : "pointer", backgroundColor: r.available ? "var(--light-green)" : "var(--light-red)" }}>{r.roomNo}</h3>
                                             ))}
                                         </div>
                                     </div>

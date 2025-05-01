@@ -173,22 +173,29 @@
 
             & .labels {
                 display: flex;
-                gap: 5px;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 20px;
 
                 & h2 {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
                     font-size: 0.9rem;
-                    padding: 6px;
-                    border-radius: 5px;
-                    font-weight: 700;
-                    margin-bottom: 20px;
+                    font-weight: 400;
 
-                    &:nth-child(1) {
-                        background-color: var(--light-green);
+                    & p {
+                        width: 30px;
+                        height: 30px;
                     }
+                }
 
-                    &:nth-child(2) {
-                        background-color: var(--light-red);
-                    }
+                & h2:nth-child(1) p {
+                    background-color: var(--light-green);
+                }
+
+                & h2:nth-child(2) p {
+                    background-color: var(--light-red);
                 }
             }
 
@@ -225,6 +232,7 @@
                             width: calc(12.5% - 8.75px);
                             aspect-ratio: 1/1;
                             font-size: 1.2rem;
+                            font-weight: 400;
                         }
                     }
                 }

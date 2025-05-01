@@ -732,6 +732,7 @@
         display: flex;
         align-items: center;
         gap: 20px;
+        flex-wrap: wrap;
 
         & input.search {
             padding: 12px 15px;
@@ -752,7 +753,6 @@
 
         & .page-wrapper {
             display: flex;
-            align-items: center;
 
             & button {
                 min-width: max-content;
@@ -771,11 +771,11 @@
                 padding: 5px;
                 width: 40px;
                 font-size: 1.5rem;
-                font-weight: 800;
+                font-weight: 400;
                 color: var(--primary);
                 text-align: center;
                 background-color: #fff;
-                border: none;
+                border: 1px solid var(--primary);
             }
         }
     }
