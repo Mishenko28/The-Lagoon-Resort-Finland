@@ -51,7 +51,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
                 <h3>ADD {roomType.name} ROOM</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="room-add-input">
-                        <label>Image:</label>
+                        <label>Image (optional):</label>
                         <img src={newRoom.img} />
                         <input onChange={(e) => convertToBase64(e.target.files[0])} accept=".png, .jpeg, .jpg" type="file" />
                     </div>
@@ -59,7 +59,7 @@ export default function AddRoom({ roomType, setAddRoomTogg, setRooms }) {
                         <label>Room Number:</label>
                         <input onChange={(e) => setNewRoom(prev => ({ ...prev, roomNo: e.target.value }))} value={newRoom.roomNo} type="number" />
                     </div>
-                    <textarea onChange={(e) => setNewRoom(prev => ({ ...prev, caption: e.target.value }))} value={newRoom.caption} rows={4} placeholder="caption" />
+                    <textarea onChange={(e) => setNewRoom(prev => ({ ...prev, caption: e.target.value }))} value={newRoom.caption} rows={4} placeholder="caption (optional)" />
                     <div className="room-add-input">
                         <label>Set as active:</label>
                         <input onChange={(e) => setNewRoom(prev => ({ ...prev, active: e.target.checked }))} checked={newRoom.active} type="checkbox" />

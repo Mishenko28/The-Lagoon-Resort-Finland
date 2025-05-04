@@ -126,6 +126,14 @@ const updateAdmin = async (req, res) => {
 
         const oldAdmin = await Admin.findOne({ _id })
 
+        const admins = await Admin.find({})
+
+        const adminRole = admins.filter(admin => admin.role.includes("admins"))
+
+        if (adminRole.length === 1 && adminRole[0]._id.toString() === _id) {
+            if (!role.includes("admins")) throw Error("The role 'admins' must have at least 1 admin")
+        }
+
         const admin = await Admin.findOneAndUpdate({ _id }, { email, img, role, personalData: { name, sex, birthDate, contact } }, { new: true })
 
         // activity log

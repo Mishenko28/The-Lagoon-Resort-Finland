@@ -108,7 +108,7 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
                                 <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                             </div>
                             <div className="input-group">
-                                <label>Name</label>
+                                <label>Full Name</label>
                                 <input type="text" value={newAdmin.name} onChange={(e) => setNewAdmin(prev => ({ ...prev, name: e.target.value }))} />
                             </div>
                             <div className="input-group">

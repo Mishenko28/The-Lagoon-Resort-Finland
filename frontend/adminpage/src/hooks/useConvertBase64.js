@@ -4,6 +4,11 @@ const useConvertBase64 = (initialValue) => {
     const [base64, setBase64] = useState(initialValue)
 
     const convertToBase64 = (file) => {
+        if (file === null) {
+            setBase64(null)
+            return
+        }
+
         return new Promise((resolve, reject) => {
             const reader = new FileReader()
             reader.readAsDataURL(file)

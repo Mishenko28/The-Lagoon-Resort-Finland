@@ -27,7 +27,7 @@ export default function Navigations() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    }, [])
+    }, [path])
 
 
     const handleOpenNav = (nav) => {

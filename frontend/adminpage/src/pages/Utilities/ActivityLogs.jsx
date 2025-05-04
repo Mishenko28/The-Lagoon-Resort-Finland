@@ -113,23 +113,17 @@ export default function ActivityLogs() {
                                     <th>Date</th>
                                 </tr>
                             </thead>
-                            {logsLoading ?
-                                <tbody>
-                                    <tr><td colSpan="3">Loading...</td></tr>
-                                </tbody>
-                                :
-                                <tbody>
-                                    {logs.length === 0 && <tr><td colSpan="3">No logs found</td></tr>}
-                                    {logs.map(log => (
-                                        <tr key={log._id}>
-                                            <td>{log.name}</td>
-                                            <td>{log.activity}</td>
-                                            <td>{format(new Date(log.createdAt), 'PP - h:mm a')}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            }
-
+                            <tbody>
+                                {logsLoading && <tr><td colSpan="3">Loading...</td></tr>}
+                                {logs.length === 0 && <tr><td colSpan="3">No logs found</td></tr>}
+                                {logs.map(log => (
+                                    <tr key={log._id}>
+                                        <td>{log.name}</td>
+                                        <td>{log.activity}</td>
+                                        <td>{format(new Date(log.createdAt), 'PP - h:mm a')}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
                     <div className="page-bttns">

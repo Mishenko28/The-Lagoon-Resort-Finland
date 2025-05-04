@@ -283,7 +283,7 @@ const setCancelled = async (req, res) => {
         const book = await Book.findOneAndUpdate({ _id }, { status: "cancelled", reasonToCancel, cancelledDate: new Date() }, { new: true }).populate('user')
 
         // activity log
-        await ActivityLog.create({ adminEmail: adminEmail || email + "(guest)", action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${book.user.email}` })
+        await ActivityLog.create({ adminEmail: adminEmail || "(guest)", action: [Actions.BOOKING, Actions.UPDATED], activity: `Cancelled a book of ${book.user.email}` })
 
         res.status(200).json(book)
     } catch (error) {

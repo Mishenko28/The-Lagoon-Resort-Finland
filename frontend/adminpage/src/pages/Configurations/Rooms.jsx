@@ -34,7 +34,6 @@ export default function Rooms() {
     const newDownPaymentRef = useRef()
 
     const [newTime, setNewTime] = useState(null)
-    const newTimeRef = useRef()
 
     const [newRoomTypeTogg, setNewRoomTypeTogg] = useState(false)
     const [newRoomType, setNewRoomType] = useState({
@@ -146,8 +145,7 @@ export default function Rooms() {
             .then((res) => {
                 setRoomTypes(prev => [res.data.roomType, ...prev])
                 dispatch({ type: 'SUCCESS', payload: true })
-                setNewRoomType({})
-                setNewRoomTypeTogg(false)
+                cancelNewRoomType()
             })
             .catch((err) => {
                 dispatch({ type: 'FAILED', payload: err.response.data.error })
@@ -201,7 +199,15 @@ export default function Rooms() {
 
     const cancelNewRoomType = () => {
         setNewRoomTypeTogg(false)
-        setNewRoomType({})
+        setNewRoomType({
+            name: '',
+            img: base64,
+            rate: '',
+            caption: '',
+            addFeePerPerson: '',
+            maxPerson: ''
+        })
+        convertToBase64(null)
     }
 
     const handleChangeTime = () => {

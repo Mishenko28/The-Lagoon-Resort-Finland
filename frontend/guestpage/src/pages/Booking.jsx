@@ -164,7 +164,10 @@ const Booking = () => {
                 :
                 <>
                     {!(!state.user || !userHasDetails) &&
-                        <p className="note"><i className="fa-solid fa-circle-info" />To ensure a secure booking system for All guest, The Lagoon Finland Resort Inc. request for a minimum of {downPayment * 100}% down payment to help us gurantee the availability of your room/s. Our team will contact you within 24 hours to process your request. We appreciate your understanding and We are happy to assist you!</p>
+                        <>
+                            <p className="note"><i className="fa-solid fa-circle-info" />To ensure a secure booking system for All guest, The Lagoon Finland Resort Inc. request for a minimum of {downPayment * 100}% down payment to help us gurantee the availability of your room/s. Our team will contact you within 24 hours to process your request. We appreciate your understanding and We are happy to assist you!</p>
+                            <p className="note"><i className="fa-solid fa-circle-info" />Children under the age of seven do not count and are exempt from additional person fees.</p>
+                        </>
                     }
                     {(state.user && userHasDetails) &&
                         <div ref={formRef} className="reservation-form">

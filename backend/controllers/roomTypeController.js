@@ -7,7 +7,7 @@ const Book = require('../models/bookModel')
 // GET ALL ROOMTYPE
 const getRoomTypes = async (_, res) => {
     try {
-        const roomTypes = await RoomType.find({})
+        const roomTypes = (await RoomType.find({})).reverse()
 
         res.status(200).json({ roomTypes })
     } catch (error) {

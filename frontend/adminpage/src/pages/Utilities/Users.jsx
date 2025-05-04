@@ -44,6 +44,7 @@ const Users = () => {
     useEffect(() => {
         fetchUsers()
         setUsers(prev => prev.filter(user => new RegExp(`(${search})`, 'gi').test(user.email)))
+        search && setPage(1)
     }, [page, search])
 
     const fetchUsers = async () => {
@@ -111,7 +112,7 @@ const Users = () => {
                 :
                 <>
                     <div className="header">
-                        <input className="search" value={search} onChange={e => navigate(`?search=${e.target.value}`)} type="text" placeholder="Search Email" />
+                        <input className="search" value={search} onChange={e => e.target.value ? navigate(`?search=${e.target.value}`) : navigate("")} type="text" placeholder="Search Email" />
                         <div className="page-wrapper">
                             <button onClick={() => setPage(prev => Math.max(1, prev - 1))} className="prev"><i className="fa-solid fa-caret-left" /></button>
                             <input onBlur={() => page === "" && setPage(1)} type="number" onChange={e => setPage(e.target.value === "" ? "" : Math.min(Math.ceil(totalUsers / 30), e.target.value))} value={page} />

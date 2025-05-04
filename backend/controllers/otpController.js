@@ -17,7 +17,7 @@ const createOTP = async (req, res) => {
             to: email,
             subject: "Hello from The Lagoon Resort Finland Inc.!",
             html: `<h3>Dear ${email},<h3>
-                <p>Your One-Time Password (OTP) for verification is: ${otp}</p>
+                <p>Your One-Time Password (OTP) for verification is: <h1>${otp}</h2></p>
                 <p>This code is valid for 5 minutes. Please do not share this code with anyone for security reasons.</p>
                 <p>Best Regards,</p>
                 <p>The Lagoon Resort Finland Inc.</p>`
