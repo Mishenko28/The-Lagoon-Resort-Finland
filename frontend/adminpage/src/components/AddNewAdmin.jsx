@@ -125,7 +125,7 @@ export default function AddNewAdmin({ setAdmins, setNewAdminTogg }) {
                             </div>
                             <div className="input-group">
                                 <label>Contact Number</label>
-                                <input type="number" value={newAdmin.contact} onChange={(e) => setNewAdmin(prev => ({ ...prev, contact: e.target.value }))} />
+                                <input type="number" value={newAdmin.contact} onChange={(e) => e.target.value.length > 11 ? null : setNewAdmin(prev => ({ ...prev, contact: e.target.value }))} />
                             </div>
                             <div className="input-group">
                                 <label>Profile Picture</label>

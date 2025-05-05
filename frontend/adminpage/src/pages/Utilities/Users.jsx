@@ -189,7 +189,7 @@ const Users = () => {
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
-                                    <input type="number" placeholder="contact number" value={newUser.contact} onChange={e => setNewUser(prev => ({ ...prev, contact: e.target.value }))} />
+                                    <input type="number" placeholder="contact number" value={newUser.contact} onChange={e => e.target.value.length > 11 ? null : setNewUser(prev => ({ ...prev, contact: e.target.value }))} />
                                     <div className="bttns">
                                         <button className="submit" disabled={addUserLoading} type="submit">Confirm</button>
                                         <button className="cancel" onClick={handleCloseAddUser} type="button">Cancel</button>

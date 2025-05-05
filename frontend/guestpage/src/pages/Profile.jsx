@@ -183,7 +183,7 @@ const Profile = () => {
                             </div>
                             <div className="info-wrapper">
                                 <p>Contact Number:</p>
-                                <input value={formData.contact} onChange={(e) => setFormData(prev => ({ ...prev, contact: e.target.value }))} type="number" />
+                                <input value={formData.contact} onChange={(e) => e.target.value.length > 11 ? null : setFormData(prev => ({ ...prev, contact: e.target.value }))} type="number" />
                             </div>
                             <div className="bttns">
                                 {!noData && <button onClick={() => setIsEditing(false)} className="cancel">Cancel</button>}
