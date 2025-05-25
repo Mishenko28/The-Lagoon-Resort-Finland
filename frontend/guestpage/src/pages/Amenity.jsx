@@ -4,8 +4,6 @@ import axios from "axios"
 import Loader from "../components/Loader"
 import { motion } from "framer-motion"
 
-
-
 const Amenity = () => {
     const [isLoading, setIsLoading] = useState(true)
 

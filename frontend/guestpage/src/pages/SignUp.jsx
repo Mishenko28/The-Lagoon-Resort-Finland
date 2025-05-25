@@ -4,8 +4,6 @@ import Loader from '../components/Loader'
 import axios from 'axios'
 import useAdmin from '../hooks/useAdmin'
 
-
-
 const SignUp = () => {
     const { dispatch } = useAdmin()
     const book = new URLSearchParams(window.location.search).get('book')
@@ -66,7 +64,6 @@ const SignUp = () => {
             .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
-
 
     return (
         <div className="sign-up">

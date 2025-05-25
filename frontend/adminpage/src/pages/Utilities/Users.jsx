@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import UserDetails from "../../components/UserDetails"
 
-
 const Users = () => {
     const search = useSearchParams()[0].get('search') || ""
     const navigate = useNavigate()

@@ -4,7 +4,6 @@ const { ActivityLog, Actions } = require('../models/activityLogModel')
 const InviteLink = require('../models/inviteLinkModel')
 const sendMail = require('../Utility/nodeMailer')
 
-
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
@@ -12,9 +11,6 @@ const jwt = require('jsonwebtoken')
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.PASSWORD, { expiresIn: '1d' })
 }
-
-
-
 
 // LOGIN
 let attempts = {}
@@ -373,7 +369,6 @@ const addNewAdminLink = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
-
 
 module.exports = {
     loginAdmin,

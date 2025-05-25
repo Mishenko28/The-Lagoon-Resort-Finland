@@ -16,7 +16,6 @@ const colors = {
     email: "linear-gradient(20deg, #002761, #0046b0)",
 }
 
-
 const Archive = () => {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)

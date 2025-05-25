@@ -5,8 +5,6 @@ import axios from 'axios'
 import useAdmin from '../hooks/useAdmin'
 import Loader from '../components/Loader'
 
-
-
 const Login = () => {
     const { dispatch } = useAdmin()
     const book = new URLSearchParams(window.location.search).get('book')
@@ -28,7 +26,6 @@ const Login = () => {
             .catch(err => setError(err.response.data.error))
             .finally(() => setIsLoading(false))
     }
-
 
     return (
         <div className="login">
@@ -52,7 +49,6 @@ const Login = () => {
                         <h2>Need an account? <Link to={'/sign-up' + (book ? "?book=true" : "")}>SIGNUP</Link></h2>
                     </>
                 }
-
             </form>
         </div>
     )

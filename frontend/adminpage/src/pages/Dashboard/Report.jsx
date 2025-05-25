@@ -11,7 +11,6 @@ import useAdmin from '../../hooks/useAdmin'
 import Loader2 from '../../components/Loader2'
 import { format, startOfWeek, endOfWeek, differenceInYears } from 'date-fns'
 
-
 const Report = () => {
     const { state, dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(false)
@@ -132,7 +131,6 @@ const Report = () => {
 
         }
     }
-
 
     const generatePDF = ({
         date = new Date().toLocaleDateString(),

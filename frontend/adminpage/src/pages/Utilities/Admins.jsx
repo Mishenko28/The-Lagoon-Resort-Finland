@@ -28,7 +28,6 @@ export default function Admins() {
     const [inviteOptionTogg, setInviteOptionTogg] = useState(null)
     const [inviteNewAdmin, setInviteNewAdmin] = useState(false)
 
-
     useEffect(() => {
         const fetchAdmins = async () => {
             axios.get('admin/all')

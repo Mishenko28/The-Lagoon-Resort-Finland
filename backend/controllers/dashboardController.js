@@ -55,7 +55,6 @@ const getAllData = async (_, res) => {
     }
 }
 
-
 module.exports = {
     getAllData
 }

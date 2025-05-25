@@ -6,7 +6,6 @@ const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const { Actions, ActivityLog } = require("../models/activityLogModel")
 
-
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.PASSWORD, { expiresIn: '1d' })
 }

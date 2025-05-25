@@ -15,9 +15,6 @@ import Profile from "./pages/Profile"
 import Error from "./components/Error"
 import MyBookings from "./pages/MyBookings"
 
-
-
-
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route errorElement={<Error />} path="/" element={<RootLayout />}>

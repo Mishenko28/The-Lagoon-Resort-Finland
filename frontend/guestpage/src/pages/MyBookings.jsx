@@ -10,8 +10,6 @@ import Confirmed from "../components/Confirmed"
 import Ongoing from "../components/Ongoing"
 import Completed from "../components/Completed"
 
-
-
 const MyBookings = () => {
     const { state } = useAdmin()
     const navigate = useNavigate()

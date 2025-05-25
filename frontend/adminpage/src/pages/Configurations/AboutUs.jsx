@@ -19,7 +19,6 @@ export default function AboutUs() {
     const [coordinates, setCoordinates] = useState([14.849517906581863, 120.25145817187875])
     const [address, setAddress] = useState("62 Baloy Long Beach Rd, Olongapo, 2200 Zambales")
 
-
     useEffect(() => {
         const fetchData = async () => {
             await axios.get('/admin-settings/all')
@@ -40,11 +39,6 @@ export default function AboutUs() {
 
         fetchData()
     }, [])
-
-
-
-
-
 
     return (
         <>

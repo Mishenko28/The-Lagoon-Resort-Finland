@@ -57,7 +57,6 @@ const getReport = async (start, end) => {
         return { status, totalBooks, totalAmount }
     }))
 
-
     return { payments, revenue, totalPerStatus }
 }
 

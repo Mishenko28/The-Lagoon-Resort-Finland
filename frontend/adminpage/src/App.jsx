@@ -32,7 +32,6 @@ import Profile from './pages/Profile'
 import Success from './components/Success'
 import Failed from './components/Failed'
 
-
 function App() {
     const { state } = useAdmin()
 

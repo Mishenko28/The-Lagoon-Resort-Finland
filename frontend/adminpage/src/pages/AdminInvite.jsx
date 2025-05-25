@@ -6,7 +6,6 @@ import Loader2 from '../components/Loader2'
 import useConvertBase64 from '../hooks/useConvertBase64'
 import { useNavigate } from 'react-router-dom'
 
-
 export default function AdminInvite() {
     const { dispatch } = useAdmin()
     const [base64, convertToBase64] = useConvertBase64('')

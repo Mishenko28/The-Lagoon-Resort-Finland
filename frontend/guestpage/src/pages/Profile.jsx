@@ -6,9 +6,6 @@ import axios from "axios"
 import Loader from "../components/Loader"
 import { differenceInYears } from 'date-fns'
 
-
-
-
 const Profile = () => {
     const { state, dispatch } = useAdmin()
     const navigate = useNavigate()
@@ -37,7 +34,6 @@ const Profile = () => {
         axios.get('user/data', { params: { email: state.user.email } })
             .then(res => {
                 setUserDetails(res.data)
-                console.log(res.data)
                 if (res.data) {
                     setIsEditing(false)
                     setNoData(false)

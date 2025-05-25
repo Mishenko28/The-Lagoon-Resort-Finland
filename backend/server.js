@@ -25,7 +25,6 @@ const app = express()
 const server = createServer(app)
 const io = new Server(server, { cors: { origin: '*' } })
 
-
 // MIDDLEWARE
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -39,13 +38,6 @@ app.use((req, res, next) => {
 })
 app.use(express.json({ limit: '100gb' }))
 app.use(express.urlencoded({ limit: '100gb', extended: true }))
-
-// app.use((req, res, next) => {
-//     setTimeout(() => {
-//         next()
-//     }, 200)
-// })
-
 
 // ROUTES
 app.use('/user', userRoute)
@@ -64,8 +56,6 @@ app.use('/database', databaseRoute)
 app.use('/feedback', feedbackRoute)
 app.use('/report', reportRoute)
 
-
-
 // WEB SOCKET
 io.on('connection', socket => {
     socket.on('new-booking', data => {
@@ -76,9 +66,6 @@ io.on('connection', socket => {
         io.emit('cancel-booking', data)
     })
 })
-
-
-
 
 // CONNECTION
 mongoose.connect(process.env.DB_CONNECTIONSTING)

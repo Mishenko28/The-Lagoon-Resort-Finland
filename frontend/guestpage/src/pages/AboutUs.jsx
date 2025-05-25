@@ -18,7 +18,6 @@ const AboutUs = () => {
         fetchAbout()
     }, [])
 
-
     const fetchAbout = async () => {
         axios.get("admin-settings/all")
             .then(res => {

@@ -4,9 +4,6 @@ import axios from "axios"
 import "../styles/gallery.css"
 import { motion } from "framer-motion"
 
-
-
-
 const Gallery = () => {
     const [isLoading, setIsLoading] = useState(true)
 
@@ -23,7 +20,6 @@ const Gallery = () => {
             })
             .finally(() => setIsLoading(false))
     }
-
 
     return (
         <div className="gallery">

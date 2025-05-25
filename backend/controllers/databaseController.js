@@ -7,7 +7,6 @@ const zlib = require("zlib")
 
 const { Actions, ActivityLog } = require("../models/activityLogModel")
 
-
 function reviveDates(obj) {
     if (Array.isArray(obj)) {
         return obj.map(reviveDates)
@@ -32,8 +31,6 @@ function reviveDates(obj) {
     }
     return obj
 }
-
-
 
 function encryptJSON(jsonData) {
     const compressed = zlib.gzipSync(JSON.stringify(jsonData))
@@ -172,7 +169,6 @@ const importCollection = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
-
 
 module.exports = {
     getAllCollections,

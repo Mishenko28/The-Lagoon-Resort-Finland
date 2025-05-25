@@ -154,7 +154,6 @@ export default function Rooms() {
             .finally(() => {
                 setNewRoomTypeIsLoading(false)
             })
-
     }
 
     const updateCheckInOut = async (e) => {

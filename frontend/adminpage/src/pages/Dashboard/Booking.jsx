@@ -11,9 +11,6 @@ import { useEffect } from "react"
 import axios from "axios"
 import { useSearchParams, useNavigate } from "react-router-dom"
 
-
-
-
 export default function Booking() {
     const page = useSearchParams()[0].get('page')
     const navigate = useNavigate()

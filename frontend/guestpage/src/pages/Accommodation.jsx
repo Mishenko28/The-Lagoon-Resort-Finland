@@ -13,7 +13,6 @@ const Accommodation = () => {
     const [roomTypes, setRoomTypes] = useState([])
     const [subImgToShow, setSubImgToShow] = useState(null)
 
-
     useEffect(() => {
         fetchRoomTypes()
     }, [])

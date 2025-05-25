@@ -9,7 +9,6 @@ function camelCaseToNormal(str) {
     return result.charAt(0).toUpperCase() + result.slice(1)
 }
 
-
 const Database = () => {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)

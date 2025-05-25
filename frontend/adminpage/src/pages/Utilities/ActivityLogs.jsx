@@ -15,7 +15,6 @@ export default function ActivityLogs() {
     const [Actions, setActions] = useState([])
     const [maxPage, setMaxPage] = useState(0)
 
-
     const [page, setPage] = useState(1)
     const [filter, setFilter] = useState({
         email: 'all',

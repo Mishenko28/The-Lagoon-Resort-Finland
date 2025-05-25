@@ -8,9 +8,6 @@ import useAdmin from "../hooks/useAdmin"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 
-
-
-
 const Graph = () => {
     const { dispatch } = useAdmin()
     const [isLoading, setIsLoading] = useState(true)
